@@ -1,6 +1,6 @@
 <%-- 
-    Document   : home
-    Created on : Oct 1, 2025, 8:36:48 AM
+    Document   : report
+    Created on : Oct 1, 2025, 8:37:14 AM
     Author     : Admin
 --%>
 
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Home</h1>
+        <h1>Hello World!</h1>
     </body>
 </html>

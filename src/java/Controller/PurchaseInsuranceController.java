@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package controller;
 
 import dal.ApplicationDBContext;
 import dal.InsuranceBenefitDBContext;
@@ -15,23 +15,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
+import java.sql.Date;
 import java.util.List;
-import java.util.Set;
-import Model.Application;
-import Model.ApplicationTraveler;
-import Model.BuyerInfo;
-import Model.InsuranceBenefit;
-import Model.InsuranceProduct;
-import Model.InsurancePurchase;
-import Model.Traveler;
-import Model.User;
+import model.Application;
+import model.ApplicationTraveler;
+import model.viewmodel.BuyerInfo;
+import model.InsuranceBenefit;
+import model.InsuranceProduct;
+import model.viewmodel.InsurancePurchase;
+import model.viewmodel.Traveler;
 import utils.Validation;
 
 /**
@@ -53,15 +48,6 @@ public class PurchaseInsuranceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-//        HttpSession session = request.getSession();
-//        User user = (User) session.getAttribute("user");
-//        
-//        if(user == null){
-//            response.sendRedirect("./TestLoginServlet");
-//            return;
-//        }
-
         String idRaw = request.getParameter("id");
         Integer id = Validation.validInt(idRaw);
 
@@ -92,6 +78,103 @@ public class PurchaseInsuranceController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        request.setCharacterEncoding("UTF-8");
+//        response.setCharacterEncoding("UTF-8");
+//
+//        try {
+//            String insuranceIdStr = request.getParameter("insuranceId");
+//            String type = request.getParameter("type");
+//            String destination = request.getParameter("destination"); // thêm nếu có
+//            String startDateStr = request.getParameter("startDate");
+//            String endDateStr = request.getParameter("endDate");
+//            String totalPriceStr = request.getParameter("totalPrice");
+//            String travelerQuantityStr = request.getParameter("travelerQuantity");
+//
+//            // Parse dữ liệu
+//            int insuranceId = 0;
+//            int travelerQuantity = 0;
+//            BigDecimal totalPrice = BigDecimal.ZERO;
+//            Date startDate = null;
+//            Date endDate = null;
+//
+//// Tạo object Application
+//            Application app = new Application();
+//            app.setPurchaser_id(1); // lấy từ session
+//            app.setProduct_id(insuranceId);
+//            app.setType("Car");
+//            app.setDestination("Ha long");
+//            app.setStartDate(startDate);
+//            app.setEndDate(endDate);
+//            app.setTraveler_quantity(4);
+//            app.setTotal_price(totalPrice);
+//
+//            // Lấy thông tin người mua bảo hiểm
+//            String buyerType = request.getParameter("buyerType");
+//            BuyerInfo buyerInfo = new BuyerInfo();
+//            buyerInfo.setType(buyerType);
+//
+//            if ("individual".equals(buyerType)) {
+//                buyerInfo.setIdNumber(request.getParameter("buyerIdNumber"));
+//                buyerInfo.setFullName(request.getParameter("buyerFullName"));
+//                buyerInfo.setGender(request.getParameter("buyerGender"));
+//                buyerInfo.setBirthDate(request.getParameter("buyerBirthDate"));
+//                buyerInfo.setPhoneNumber(request.getParameter("buyerPhoneNumber"));
+//                buyerInfo.setEmail(request.getParameter("buyerEmail"));
+//                buyerInfo.setAddress(request.getParameter("buyerAddress"));
+//            } else {
+//                buyerInfo.setTaxCode(request.getParameter("buyerTaxCode"));
+//                buyerInfo.setOrgName(request.getParameter("buyerOrgName"));
+//                buyerInfo.setRepresentative(request.getParameter("buyerRepresentative"));
+//                buyerInfo.setPhoneNumber(request.getParameter("buyerPhoneNumber"));
+//                buyerInfo.setEmail(request.getParameter("buyerEmail"));
+//                buyerInfo.setAddress(request.getParameter("buyerAddress"));
+//            }
+//
+//            // Lấy danh sách người được bảo hiểm
+//            int travelersCount = Integer.parseInt(request.getParameter("travelersCount"));
+//            List<ApplicationTraveler> travelers = new ArrayList<>();
+//
+//            for (int i = 0; i < travelersCount; i++) {
+//                ApplicationTraveler traveler = new ApplicationTraveler();
+//
+//                // cccd có thể là số => parse sang long
+//                String cccdParam = request.getParameter("traveler[" + i + "].cccd");
+//                if (cccdParam != null && !cccdParam.isEmpty()) {
+//                    traveler.setCccd(Long.parseLong(cccdParam));
+//                }
+//
+//                traveler.setName(request.getParameter("traveler[" + i + "].name"));
+//                traveler.setGender(request.getParameter("traveler[" + i + "].gender"));
+//
+//                // birthDate là Date => parse từ String
+//                String birthDateParam = request.getParameter("traveler[" + i + "].birthDate");
+//                if (birthDateParam != null && !birthDateParam.isEmpty()) {
+//                    java.sql.Date birthDate = java.sql.Date.valueOf(birthDateParam); // format yyyy-MM-dd
+//                    traveler.setBirthDate(birthDate);
+//                }
+//
+//                traveler.setPhoneNumber(request.getParameter("traveler[" + i + "].phoneNumber"));
+//                traveler.setEmail(request.getParameter("traveler[" + i + "].email"));
+//
+//                travelers.add(traveler);
+//            }
+//
+//            //Insert data
+//            ApplicationDBContext adb = new ApplicationDBContext();
+//            TravelerDBContext tdb = new TravelerDBContext();
+//            tdb.insert(travelers.get(0));
+//            adb.insertApplicationWithTravelers(app, travelers);
+//
+//            request.setAttribute("purchase", app);
+//            request.getRequestDispatcher("success.jsp").forward(request, response);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.sendRedirect("error.jsp?message=" + e.getMessage());
+//        }
+//    }
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -106,9 +189,6 @@ public class PurchaseInsuranceController extends HttpServlet {
             String endDateStr = request.getParameter("endDate");
             String totalPriceStr = request.getParameter("totalPrice");
             String travelerQuantityStr = request.getParameter("travelersCount");
-
-            HttpSession session = request.getSession();
-            User user = (User) session.getAttribute("user");
 
             // ===== VALIDATE VÀ PARSE =====
             int insuranceId = (insuranceIdStr != null && !insuranceIdStr.isEmpty())
@@ -128,18 +208,14 @@ public class PurchaseInsuranceController extends HttpServlet {
 
             // ===== TẠO OBJECT APPLICATION =====
             Application app = new Application();
-
-            if (user != null) {
-                app.setPurchaser_id(user.getId());
-            }
-
-            app.setInsuranceId(insuranceId);
+            app.setPurchaser_id(1); // TODO: lấy từ session user
+            app.setProduct_id(insuranceId);
             app.setType(type);
             app.setDestination(destination);
             app.setStartDate(startDate);
             app.setEndDate(endDate);
-            app.setTraveler_quantity(travelerQuantity);
-            app.setPrice(totalPrice);
+            app.setTravelers_quantity(travelerQuantity);
+            app.setTotal_price(totalPrice);
 
             // ===== TẠO OBJECT BUYER =====
             String buyerType = request.getParameter("buyerType");
@@ -165,56 +241,24 @@ public class PurchaseInsuranceController extends HttpServlet {
 
             // ===== LẤY DANH SÁCH TRAVELERS =====
             List<ApplicationTraveler> travelers = new ArrayList<>();
-
-// Tập hợp để check trùng lặp
-            Set<Long> cccdSet = new HashSet<>();
-            Set<String> emailSet = new HashSet<>();
-            Set<String> phoneSet = new HashSet<>();
-
             for (int i = 0; i < travelerQuantity; i++) {
                 ApplicationTraveler traveler = new ApplicationTraveler();
 
-                // CCCD
                 String cccdParam = request.getParameter("traveler[" + i + "].idNumber");
                 if (cccdParam != null && !cccdParam.isEmpty()) {
-                    Long cccd = Long.parseLong(cccdParam);
-                    if (!cccdSet.add(cccd)) {
-                        // Nếu add fail -> đã tồn tại
-                        response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate CCCD found: " + cccd, "UTF-8"));
-                        return; // Dừng hẳn
-                    }
-                    traveler.setCccd(cccd);
+                    traveler.setCccd_id(Integer.parseInt(cccdParam));
                 }
 
-                // Name + gender
                 traveler.setName(request.getParameter("traveler[" + i + "].fullName"));
                 traveler.setGender(request.getParameter("traveler[" + i + "].gender"));
 
-                // Birthdate
                 String birthDateParam = request.getParameter("traveler[" + i + "].birthDate");
                 if (birthDateParam != null && !birthDateParam.isEmpty()) {
-                    traveler.setBirthDate(java.sql.Date.valueOf(birthDateParam));
+                    traveler.setDob(java.sql.Date.valueOf(birthDateParam));
                 }
 
-                // Phone
-                String phone = request.getParameter("traveler[" + i + "].phoneNumber");
-                if (phone != null && !phone.isEmpty()) {
-                    if (!phoneSet.add(phone)) {
-                        response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate phone number found: " + phone, "UTF-8"));
-                        return;
-                    }
-                    traveler.setPhoneNumber(phone);
-                }
-
-                // Email
-                String email = request.getParameter("traveler[" + i + "].email");
-                if (email != null && !email.isEmpty()) {
-                    if (!emailSet.add(email)) {
-                        response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate email found: " + email, "UTF-8"));
-                        return;
-                    }
-                    traveler.setEmail(email);
-                }
+                traveler.setPhone(request.getParameter("traveler[" + i + "].phoneNumber"));
+                traveler.setEmail(request.getParameter("traveler[" + i + "].email"));
 
                 travelers.add(traveler);
             }
@@ -224,8 +268,11 @@ public class PurchaseInsuranceController extends HttpServlet {
             int appId = adb.insertApplicationWithTravelers(app, travelers); // đã insert cả app và travelers
             app.setId(appId);
 
-            // REDIRECT (không dùng forward)
-            response.sendRedirect("InsuranceList?success=true&id="+ appId);
+            // ===== TRẢ VỀ =====
+            request.setAttribute("purchase", app);
+            request.setAttribute("buyer", buyerInfo);
+            request.setAttribute("travelers", travelers);
+            request.getRequestDispatcher("success.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

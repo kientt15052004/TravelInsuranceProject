@@ -1,20 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package dal;
 
-import java.math.BigDecimal;
-import Model.InsuranceProduct;
+import model.Product;
+import model.InsuranceProduct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.time.LocalDate;
-import Model.InsuranceBenefit;
-import Model.User;
+import model.InsuranceBenefit;
 
 /**
  *
@@ -22,14 +14,14 @@ import Model.User;
  */
 public class InsuranceDBContext extends DBContext {
 
-    public ArrayList<InsuranceProduct> getAll() {
+    public ArrayList<Product> getAll() {
         String sql = "select * from products";
-        ArrayList<InsuranceProduct> insurances = new ArrayList<>();
+        ArrayList<Product> insurances = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
+                Product insurance = new Product();
                 insurance.setId(rs.getInt("id"));
                 insurance.setBenefit_id(rs.getInt("benefit_id"));
                 insurance.setName(rs.getString("name"));
@@ -72,7 +64,7 @@ public class InsuranceDBContext extends DBContext {
                     benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
                     benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
                     benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
-                    benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
+                    benefit.setLost_bank_card(rs.getBigDecimal("lost_bank_card"));
                     benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
                     benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
                     benefit.setIs_deleted(rs.getBoolean("is_deleted"));
@@ -88,102 +80,14 @@ public class InsuranceDBContext extends DBContext {
         return insurances;
     }
 
-    public ArrayList<InsuranceProduct> getAllPaging(int page, int pageSize, String searchName, String searchType) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
-        ArrayList<InsuranceProduct> insurances = new ArrayList<>();
-
-        // Thêm điều kiện search by name (tìm trong cả description)
-        if (searchName != null && !searchName.trim().isEmpty()) {
-            sql.append(" AND (name LIKE ? OR description LIKE ?)");
-        }
-
-        // Thêm điều kiện search by type
-        if (searchType != null && !searchType.trim().isEmpty()) {
-            sql.append(" AND type = ?");
-        }
-
-        // Thêm phân trang
-        sql.append(" ORDER BY id LIMIT ? OFFSET ?");
-
-        try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
-            int paramIndex = 1;
-
-            // Set parameters cho search name
-            if (searchName != null && !searchName.trim().isEmpty()) {
-                String searchPattern = "%" + searchName.trim() + "%";
-                stm.setString(paramIndex++, searchPattern);
-                stm.setString(paramIndex++, searchPattern);
-            }
-
-            // Set parameter cho search type
-            if (searchType != null && !searchType.trim().isEmpty()) {
-                stm.setString(paramIndex++, searchType.trim());
-            }
-
-            // Set parameters cho paging
-            stm.setInt(paramIndex++, pageSize);
-            stm.setInt(paramIndex++, (page - 1) * pageSize);
-
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
-                insurance.setId(rs.getInt("id"));
-                insurance.setBenefit_id(rs.getInt("benefit_id"));
-                insurance.setName(rs.getString("name"));
-                insurance.setImg(rs.getString("img"));
-                insurance.setType(rs.getString("type"));
-                insurance.setDescription(rs.getString("description"));
-                insurances.add(insurance);
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return insurances;
-    }
-
-// Hàm hỗ trợ để đếm tổng số records (cần cho pagination)
-    public int getTotalRecords(String searchName, String searchType) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) as total FROM products WHERE 1=1");
-
-        if (searchName != null && !searchName.trim().isEmpty()) {
-            sql.append(" AND (name LIKE ? OR description LIKE ?)");
-        }
-
-        if (searchType != null && !searchType.trim().isEmpty()) {
-            sql.append(" AND type = ?");
-        }
-
-        try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
-            int paramIndex = 1;
-
-            if (searchName != null && !searchName.trim().isEmpty()) {
-                String searchPattern = "%" + searchName.trim() + "%";
-                stm.setString(paramIndex++, searchPattern);
-                stm.setString(paramIndex++, searchPattern);
-            }
-
-            if (searchType != null && !searchType.trim().isEmpty()) {
-                stm.setString(paramIndex++, searchType.trim());
-            }
-
-            ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("total");
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return 0;
-    }
-
-    public InsuranceProduct getById(int id) {
+    public Product getById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
+                Product insurance = new Product();
                 insurance.setId(rs.getInt("id"));
                 insurance.setBenefit_id(rs.getInt("benefit_id"));
                 insurance.setName(rs.getString("name"));
@@ -229,7 +133,7 @@ public class InsuranceDBContext extends DBContext {
                     benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
                     benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
                     benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
-                    benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
+                    benefit.setLost_bank_card(rs.getBigDecimal("lost_bank_card"));
                     benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
                     benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
                     benefit.setIs_deleted(rs.getBoolean("is_deleted"));
@@ -242,52 +146,5 @@ public class InsuranceDBContext extends DBContext {
         }
         return insurance;
     }
-
-    public ArrayList<String> getAllType() {
-        ArrayList<String> types = new ArrayList<>();
-        String sql = "SELECT DISTINCT type FROM products";
-
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                types.add(rs.getString("type"));
-            }
-        } catch (Exception e) {
-            System.out.println("Error in getAllType(): " + e.getMessage());
-        }
-
-        return types;
-    }
-
-    public User login(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, username);
-            stm.setString(2, password);
-            ResultSet rs = stm.executeQuery();
-
-            if (rs.next()) {
-                User u = new User();
-                u.setId(rs.getInt("id"));
-                u.setUsername(rs.getString("username"));
-                u.setPassword(rs.getString("password"));
-                u.setFullname(rs.getString("fullname"));
-                u.setMail(rs.getString("mail"));
-                u.setDob(rs.getDate("dob").toLocalDate());
-                u.setAddress(rs.getString("address"));
-                u.setPhone(rs.getString("phone"));
-                u.setCccd(rs.getString("cccd"));
-                u.setAvatar(rs.getString("avatar"));
-                u.setRole(rs.getString("role"));
-                u.setCccd_img(rs.getString("cccd_img"));
-                u.setStatus(rs.getString("status"));
-                
-                return u;
-            }
-        } catch (Exception e) {
-            System.out.println("Login error: " + e.getMessage());
-        }
-        return null;
-    }
-
+    
 }

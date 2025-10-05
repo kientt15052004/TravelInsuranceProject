@@ -11,73 +11,38 @@ let state = {
     buyerInfo: {},
     insuredPersons: []
 };
+
 let currentStep = 1;
 
 // Initialize
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     initPackageSelection();
     initPassengerInput();
     initDateInputs();
     initBottomBar();
     initTabSwitching();
-    initBirthDateValidation();
-
+    
     // Set default values
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('startDate').value = today;
     document.getElementById('endDate').value = today;
     document.getElementById('startDate').setAttribute('min', today);
     document.getElementById('endDate').setAttribute('min', today);
-
+    
     state.startDate = today;
     state.endDate = today;
-
+    
     // Update initial display
     updateTotalAmount();
     updateBenefitsDisplay();
 });
 
-// Initialize birth date validation
-function initBirthDateValidation() {
-    const today = new Date().toISOString().split('T')[0];
-
-    // Buyer's birth date
-    const buyerBirthDate = document.getElementById('birthDate');
-    if (buyerBirthDate) {
-        buyerBirthDate.setAttribute('max', today);
-    }
-
-    // Insured person's birth date in modal
-    const personBirthDate = document.getElementById('personBirthDate');
-    if (personBirthDate) {
-        personBirthDate.setAttribute('max', today);
-    }
-}
-
-// Validate birth date (not in the future)
-function validateBirthDate(birthDate) {
-    if (!birthDate)
-        return false;
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const selectedDate = new Date(birthDate);
-    selectedDate.setHours(0, 0, 0, 0);
-
-    if (selectedDate > today) {
-        alert('Date of birth cannot be in the future');
-        return false;
-    }
-
-    return true;
-}
-
 // Package Selection
 function initPackageSelection() {
     const packageCards = document.querySelectorAll('.package-card');
-
+    
     packageCards.forEach(card => {
-        card.addEventListener('click', function () {
+        card.addEventListener('click', function() {
             selectPackage(this);
         });
     });
@@ -87,18 +52,18 @@ function selectPackage(selectedCard) {
     document.querySelectorAll('.package-card').forEach(card => {
         card.classList.remove('selected');
     });
-
+    
     selectedCard.classList.add('selected');
-
+    
     const price = parseInt(selectedCard.getAttribute('data-price'));
     const benefit = parseInt(selectedCard.getAttribute('data-benefit'));
-
+    
     state.selectedPackage = {
         price: price,
         benefit: benefit,
         name: selectedCard.querySelector('.package-name').textContent
     };
-
+    
     updateTotalAmount();
     updateBenefitsDisplay();
 }
@@ -106,8 +71,8 @@ function selectPackage(selectedCard) {
 // Passenger Input
 function initPassengerInput() {
     const passengerInput = document.getElementById('passengerInput');
-
-    passengerInput.addEventListener('input', function () {
+    
+    passengerInput.addEventListener('input', function() {
         let value = parseInt(this.value);
         if (value < 1) {
             value = 1;
@@ -122,20 +87,16 @@ function initPassengerInput() {
 function initDateInputs() {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
-
-    startDateInput.addEventListener('change', function () {
+    
+    startDateInput.addEventListener('change', function() {
         state.startDate = this.value;
         endDateInput.setAttribute('min', this.value);
-        if (validateDates()) {
-            updateTotalAmount();
-        }
+        validateDates();
     });
-
-    endDateInput.addEventListener('change', function () {
+    
+    endDateInput.addEventListener('change', function() {
         state.endDate = this.value;
-        if (validateDates()) {
-            updateTotalAmount();
-        }
+        validateDates();
     });
 }
 
@@ -144,52 +105,29 @@ function validateDates() {
         const start = new Date(state.startDate);
         const end = new Date(state.endDate);
         const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-
+        
         if (diffDays > 180) {
-            alert('Insurance period cannot exceed 180 days');
+            alert('The insurance period shall not exceed 180 days.');
             return false;
         } else if (diffDays < 0) {
-            alert('End date must be after start date');
+            alert('The end date must be after the start date.');
             return false;
         }
     }
     return true;
 }
 
-// Calculate number of days
-function calculateDays() {
-    if (!state.startDate || !state.endDate)
-        return 1;
-
-    const start = new Date(state.startDate);
-    const end = new Date(state.endDate);
-    const diffTime = end - start;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end date
-
-    return diffDays > 0 ? diffDays : 1;
-}
-
 // Update total amount display
 function updateTotalAmount() {
     const totalElement = document.getElementById('totalAmount');
-    const days = calculateDays();
-    // Use at least 1 person for calculation (even if no travelers added yet)
-    const numberOfPeople = state.insuredPersons.length > 0 ? state.insuredPersons.length : 1;
-    const total = state.selectedPackage.price * numberOfPeople * days;
+    const total = state.selectedPackage.price * state.insuredPersons.length;
     totalElement.textContent = formatCurrency(total) + ' VNĐ';
 }
-
-//// Update total amount display
-//function updateTotalAmount() {
-//    const totalElement = document.getElementById('totalAmount');
-//    const total = state.selectedPackage.price * state.insuredPersons.length;
-//    totalElement.textContent = formatCurrency(total) + ' VNĐ';
-//}
 
 // Update benefits display
 function updateBenefitsDisplay() {
     const benefitAmounts = document.querySelectorAll('.benefit-amount');
-
+    
     benefitAmounts.forEach(el => {
         const baseAmount = parseFloat(el.getAttribute('data-base')) || 0;
         const newAmount = baseAmount * state.selectedPackage.benefit;
@@ -207,14 +145,14 @@ function initTabSwitching() {
     const tabBtns = document.querySelectorAll('.tab-btn');
     const individualForm = document.getElementById('individualForm');
     const organizationForm = document.getElementById('organizationForm');
-
+    
     tabBtns.forEach(btn => {
-        btn.addEventListener('click', function () {
+        btn.addEventListener('click', function() {
             const tab = this.dataset.tab;
-
+            
             tabBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
-
+            
             if (tab === 'individual') {
                 individualForm.style.display = 'block';
                 organizationForm.style.display = 'none';
@@ -230,7 +168,7 @@ function initTabSwitching() {
 function initBottomBar() {
     const backBtn = document.getElementById('backBtn');
     const continueBtn = document.getElementById('continueBtn');
-
+    
     backBtn.addEventListener('click', handleBack);
     continueBtn.addEventListener('click', handleContinue);
 }
@@ -243,7 +181,7 @@ function handleBack() {
     } else if (currentStep === 4) {
         moveToStep(3);
     } else if (currentStep === 1) {
-        if (confirm('Are you sure you want to go back? Selected information will be lost.')) {
+        if (confirm('Are you sure you want to go back? The selected information will be lost.')) {
             window.history.back();
         }
     }
@@ -267,31 +205,29 @@ function moveToStep(step) {
     // Hide all steps
     for (let i = 1; i <= 4; i++) {
         const content = document.getElementById(`step${i}Content`);
-        if (content)
-            content.style.display = 'none';
+        if (content) content.style.display = 'none';
     }
-
+    
     // Show target step
     const targetContent = document.getElementById(`step${step}Content`);
     if (targetContent) {
         targetContent.style.display = step === 1 ? 'grid' : 'block';
     }
-
+    
     // Update progress indicators
     updateProgressIndicator(step);
-
+    
     currentStep = step;
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateProgressIndicator(step) {
     for (let i = 1; i <= 4; i++) {
         const indicator = document.getElementById(`step${i}`);
-        if (!indicator)
-            continue;
-
+        if (!indicator) continue;
+        
         const circle = indicator.querySelector('.progress-circle');
-
+        
         if (i < step) {
             indicator.classList.remove('active');
             indicator.classList.add('completed');
@@ -312,27 +248,27 @@ function validateStep1() {
         alert('Please select insurance start date');
         return false;
     }
-
+    
     if (!state.endDate) {
         alert('Please select insurance end date');
         return false;
     }
-
+    
     if (!validateDates()) {
         return false;
     }
-
+    
     if (!state.selectedPackage) {
-        alert('Please select an insurance package');
+        alert('Please select insurance package');
         return false;
     }
-
+    
     return true;
 }
 
 function validateStep2() {
     const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
-
+    
     if (activeTab === 'individual') {
         const idNumber = document.getElementById('idNumber').value.trim();
         const fullName = document.getElementById('fullName').value.trim();
@@ -340,23 +276,18 @@ function validateStep2() {
         const phoneNumber = document.getElementById('phoneNumber').value.trim();
         const email = document.getElementById('email').value.trim();
         const address = document.getElementById('address').value.trim();
-
+        
         if (!idNumber || !fullName || !birthDate || !phoneNumber || !email || !address) {
-            alert('Please fill in all required fields (*)');
+            alert('Please fill in all required information (*)');
             return false;
         }
-
-        // Validate birth date
-        if (!validateBirthDate(birthDate)) {
-            return false;
-        }
-
+        
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert('Invalid email address');
+            alert('Invalid email');
             return false;
         }
-
+        
         const phoneRegex = /^(0|\+84)[0-9]{9}$/;
         if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
             alert('Invalid phone number');
@@ -366,25 +297,25 @@ function validateStep2() {
         const inputs = document.getElementById('organizationForm').querySelectorAll('.form-input');
         for (let input of inputs) {
             if (!input.value.trim()) {
-                alert('Please fill in all required fields (*)');
+                alert('Please fill in all required information (*)');
                 return false;
             }
         }
     }
-
+    
     return true;
 }
 
 function saveBuyerInfo() {
     const activeTab = document.querySelector('.tab-btn.active').dataset.tab;
-
+    
     if (activeTab === 'individual') {
-        const gender = document.querySelector('input[name="gender"]').value;
+        const gender = document.querySelector('input[name="gender"]:checked').value;
         state.buyerInfo = {
             type: 'individual',
             idNumber: document.getElementById('idNumber').value.trim(),
             fullName: document.getElementById('fullName').value.trim(),
-            gender: gender === 'male' ? 'Male' : 'Female',
+            gender: gender === 'male' ? 'Nam' : 'Nữ',
             birthDate: document.getElementById('birthDate').value,
             phoneNumber: document.getElementById('phoneNumber').value.trim(),
             email: document.getElementById('email').value.trim(),
@@ -429,27 +360,22 @@ function saveInsuredPerson() {
     const birthDate = document.getElementById('personBirthDate').value;
     const phoneNumber = document.getElementById('personPhoneNumber').value.trim();
     const email = document.getElementById('personEmail').value.trim();
-
+    
     if (!fullName || !idNumber || !birthDate || !phoneNumber || !email) {
-        alert('Please fill in all required fields (*)');
+        alert('Please fill in all required information (*)');
         return;
     }
-
-    // Validate birth date
-    if (!validateBirthDate(birthDate)) {
-        return;
-    }
-
+    
     const person = {
         id: Date.now(),
         fullName,
         idNumber,
-        gender: gender === 'male' ? 'Male' : 'Female',
+        gender: gender === 'male' ? 'male' : 'female',
         birthDate,
         phoneNumber,
         email
     };
-
+    
     state.insuredPersons.push(person);
     renderInsuredPersonsList();
     closeAddPersonModal();
@@ -457,7 +383,7 @@ function saveInsuredPerson() {
 }
 
 function removeInsuredPerson(id) {
-    if (confirm('Are you sure you want to remove this person?')) {
+    if (confirm('Are you sure you want to delete this person??')) {
         state.insuredPersons = state.insuredPersons.filter(p => p.id !== id);
         renderInsuredPersonsList();
         updateTotalAmount();
@@ -466,12 +392,12 @@ function removeInsuredPerson(id) {
 
 function renderInsuredPersonsList() {
     const container = document.getElementById('insuredPersonsList');
-
+    
     if (state.insuredPersons.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No insured persons yet. Click "Add Insured Person" button to add.</p>';
+        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No insured person yet. Click "Add Insured" button to add.</p>';
         return;
     }
-
+    
     container.innerHTML = state.insuredPersons.map((person, index) => `
         <div class="insured-person-card">
             <div class="person-header">
@@ -484,19 +410,19 @@ function renderInsuredPersonsList() {
             </div>
             <div class="person-details">
                 <div class="detail-row">
-                    <span class="detail-label">Gender:</span>
+                    <span class="detail-label">Giới tính:</span>
                     <span class="detail-value">${person.gender}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">ID Number:</span>
+                    <span class="detail-label">Số CMND/CCCD:</span>
                     <span class="detail-value">${person.idNumber}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Date of Birth:</span>
+                    <span class="detail-label">Ngày sinh:</span>
                     <span class="detail-value">${person.birthDate}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Phone Number:</span>
+                    <span class="detail-label">Số điện thoại:</span>
                     <span class="detail-value">${person.phoneNumber}</span>
                 </div>
                 <div class="detail-row">
@@ -511,40 +437,40 @@ function renderInsuredPersonsList() {
 // Step 4: Render confirmation
 function renderConfirmation() {
     const container = document.getElementById('confirmationContent');
-
+    
     const buyerInfoHtml = state.buyerInfo.type === 'individual' ? `
-        <div class="detail-row"><span class="detail-label">Full Name:</span><span class="detail-value">${state.buyerInfo.fullName}</span></div>
-        <div class="detail-row"><span class="detail-label">Gender:</span><span class="detail-value">${state.buyerInfo.gender}</span></div>
-        <div class="detail-row"><span class="detail-label">ID Number:</span><span class="detail-value">${state.buyerInfo.idNumber}</span></div>
-        <div class="detail-row"><span class="detail-label">Date of Birth:</span><span class="detail-value">${state.buyerInfo.birthDate}</span></div>
-        <div class="detail-row"><span class="detail-label">Phone Number:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
+        <div class="detail-row"><span class="detail-label">Full name:</span><span class="detail-value">${state.buyerInfo.fullName}</span></div>
+        <div class="detail-row"><span class="detail-label">Sex:</span><span class="detail-value">${state.buyerInfo.gender}</span></div>
+        <div class="detail-row"><span class="detail-label">Document number:</span><span class="detail-value">${state.buyerInfo.idNumber}</span></div>
+        <div class="detail-row"><span class="detail-label">Date of birth:</span><span class="detail-value">${state.buyerInfo.birthDate}</span></div>
+        <div class="detail-row"><span class="detail-label">Phone number:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${state.buyerInfo.email}</span></div>
         <div class="detail-row"><span class="detail-label">Address:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
     ` : `
-        <div class="detail-row"><span class="detail-label">Organization Name:</span><span class="detail-value">${state.buyerInfo.orgName}</span></div>
-        <div class="detail-row"><span class="detail-label">Tax Code:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
+        <div class="detail-row"><span class="detail-label">Organization name:</span><span class="detail-value">${state.buyerInfo.orgName}</span></div>
+        <div class="detail-row"><span class="detail-label">Tax code:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
         <div class="detail-row"><span class="detail-label">Representative:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
-        <div class="detail-row"><span class="detail-label">Phone Number:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
+        <div class="detail-row"><span class="detail-label">Phone number:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${state.buyerInfo.email}</span></div>
         <div class="detail-row"><span class="detail-label">Address:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
     `;
-
+    
     container.innerHTML = `
         <div class="confirmation-section">
-            <h3 class="section-title">Insurance Package Information</h3>
-            <div class="detail-row"><span class="detail-label">Package Name:</span><span class="detail-value">${state.selectedPackage.name}</span></div>
-            <div class="detail-row"><span class="detail-label">Start Date:</span><span class="detail-value">${state.startDate}</span></div>
-            <div class="detail-row"><span class="detail-label">End Date:</span><span class="detail-value">${state.endDate}</span></div>
-            <div class="detail-row"><span class="detail-label">Fee/Person:</span><span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span></div>
+            <h3 class="section-title">Insurance package information</h3>
+            <div class="detail-row"><span class="detail-label">Tên gói:</span><span class="detail-value">${state.selectedPackage.name}</span></div>
+            <div class="detail-row"><span class="detail-label">Ngày bắt đầu:</span><span class="detail-value">${state.startDate}</span></div>
+            <div class="detail-row"><span class="detail-label">Ngày kết thúc:</span><span class="detail-value">${state.endDate}</span></div>
+            <div class="detail-row"><span class="detail-label">Phí/người:</span><span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span></div>
         </div>
         
         <div class="confirmation-section">
-            <h3 class="section-title">Insurance Buyer Information</h3>
+            <h3 class="section-title">Insurance buyer information</h3>
             ${buyerInfoHtml}
         </div>
         
         <div class="confirmation-section">
-            <h3 class="section-title">Insured Persons List (${state.insuredPersons.length})</h3>
+            <h3 class="section-title">List of insured persons (${state.insuredPersons.length})</h3>
             ${state.insuredPersons.map((person, index) => `
                 <div class="insured-summary">
                     <strong>${index + 1}. ${person.fullName}</strong> - ${person.gender} - ${person.idNumber}
@@ -555,46 +481,42 @@ function renderConfirmation() {
 }
 
 function submitForm() {
-    // Check terms agreement checkbox
+    // Kiểm tra checkbox đồng ý điều khoản
     const agreeTerms = document.getElementById('agreeTerms');
     if (!agreeTerms.checked) {
-        alert('Please agree to the Personal Data Protection Policy');
+        alert('Please agree to the personal data protection policy');
         return;
     }
-
-    // Get InsuranceId from URL
+    
+    // Lấy InsuranceId từ URL
     const urlParams = new URLSearchParams(window.location.search);
     const insuranceId = urlParams.get('insuranceId') || urlParams.get('id');
-
+    
     if (!insuranceId) {
-        alert('Insurance ID not found');
+        alert('Not found Insurance ID');
         return;
     }
-
-    // Create form to submit
+    
+    // Tạo form để submit
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'PurchaseInsurance'; // Change to your servlet URL
-
-    // Add InsuranceId
+    form.action = 'PurchaseInsurance'; // Thay đổi URL servlet của bạn
+    
+    // Thêm InsuranceId
     addHiddenField(form, 'insuranceId', insuranceId);
-
-    // Add Type (package name)
+    
+    // Thêm Type (package name)
     addHiddenField(form, 'type', state.selectedPackage.name);
-
-    // Add StartDate and EndDate
+    
+    // Thêm StartDate và EndDate
     addHiddenField(form, 'startDate', state.startDate);
     addHiddenField(form, 'endDate', state.endDate);
-
-    // Add TotalPrice
-//    const totalPrice = state.selectedPackage.price * state.insuredPersons.length;
-
-// MỚI (đã có số ngày)
-    const days = calculateDays();
-    const totalPrice = state.selectedPackage.price * state.insuredPersons.length * days;
+    
+    // Thêm TotalPrice
+    const totalPrice = state.selectedPackage.price * state.insuredPersons.length;
     addHiddenField(form, 'totalPrice', totalPrice);
-
-    // Add buyer information
+    
+    // Thêm thông tin người mua bảo hiểm
     if (state.buyerInfo.type === 'individual') {
         addHiddenField(form, 'buyerType', 'individual');
         addHiddenField(form, 'buyerIdNumber', state.buyerInfo.idNumber);
@@ -613,10 +535,10 @@ function submitForm() {
         addHiddenField(form, 'buyerEmail', state.buyerInfo.email);
         addHiddenField(form, 'buyerAddress', state.buyerInfo.address);
     }
-
-    // Add insured persons list
+    
+    // Thêm danh sách người được bảo hiểm
     addHiddenField(form, 'travelersCount', state.insuredPersons.length);
-
+    
     state.insuredPersons.forEach((person, index) => {
         addHiddenField(form, `traveler[${index}].fullName`, person.fullName);
         addHiddenField(form, `traveler[${index}].idNumber`, person.idNumber);
@@ -625,8 +547,8 @@ function submitForm() {
         addHiddenField(form, `traveler[${index}].phoneNumber`, person.phoneNumber);
         addHiddenField(form, `traveler[${index}].email`, person.email);
     });
-
-    // Add form to body and submit
+    
+    // Thêm form vào body và submit
     document.body.appendChild(form);
     form.submit();
 }
@@ -637,53 +559,4 @@ function addHiddenField(form, name, value) {
     input.name = name;
     input.value = value;
     form.appendChild(input);
-}
-
-// Thêm vào cuối file
-window.addEventListener('pageshow', function (event) {
-    // Kiểm tra nếu trang được load từ cache (bấm back)
-    if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-        // Reset về step 1
-        resetForm();
-    }
-});
-
-function resetForm() {
-    // Reset state
-    state = {
-        passengers: 1,
-        selectedPackage: {
-            price: 5000,
-            benefit: 50,
-            name: 'Car'
-        },
-        startDate: '',
-        endDate: '',
-        buyerInfo: {},
-        insuredPersons: []
-    };
-
-    currentStep = 1;
-
-    // Reset form inputs
-    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"]').forEach(input => {
-        input.value = '';
-    });
-
-    // Reset date inputs to today
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('startDate').value = today;
-    document.getElementById('endDate').value = today;
-    state.startDate = today;
-    state.endDate = today;
-
-    // Clear insured persons list
-    renderInsuredPersonsList();
-
-    // Move to step 1
-    moveToStep(1);
-
-    // Update display
-    updateTotalAmount();
-    updateBenefitsDisplay();
 }

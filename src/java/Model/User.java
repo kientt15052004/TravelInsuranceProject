@@ -1,16 +1,22 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package model;
 
-package Model;
+import java.sql.Date;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
-public class User implements Serializable {
+/**
+ *
+ * @author FPTSHOP
+ */
+public class User {
     private int id;
     private String username;
     private String password;
     private String fullname;
     private String mail;
-    private LocalDate dob;
+    private Date dob;
     private String address;
     private String phone;
     private String cccd;
@@ -22,7 +28,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(int id, String username, String password, String fullname, String mail, LocalDate dob, String address, String phone, String cccd, String avatar, String role, String cccd_img, String status) {
+    public User(int id, String username, String password, String fullname, String mail, Date dob, String address, String phone, String cccd, String avatar, String role, String cccd_img, String status) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,8 +43,6 @@ public class User implements Serializable {
         this.cccd_img = cccd_img;
         this.status = status;
     }
-
-    
 
     public int getId() {
         return id;
@@ -80,11 +84,11 @@ public class User implements Serializable {
         this.mail = mail;
     }
 
-    public LocalDate getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(LocalDate dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
     }
 
@@ -143,6 +147,4 @@ public class User implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
 }

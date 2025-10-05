@@ -4,25 +4,22 @@
  */
 package model;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author FPTSHOP
  */
-public class InsuranceProduct {
+public class Product {
     private int id;
-    private int benefit_id ;
+    private int benefit_id;
     private String type;
     private String name;
     private String img;
     private String description;
-    private InsuranceBenefit benefit = new InsuranceBenefit();
 
-    public InsuranceProduct() {
+    public Product() {
     }
 
-    public InsuranceProduct(int id, int benefit_id, String type, String name, String img, String description) {
+    public Product(int id, int benefit_id, String type, String name, String img, String description) {
         this.id = id;
         this.benefit_id = benefit_id;
         this.type = type;
@@ -78,14 +75,4 @@ public class InsuranceProduct {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    public InsuranceBenefit getBenefit() {
-        return benefit;
-    }
-
-    public void setBenefit(InsuranceBenefit benefit) {
-        this.benefit = benefit;
-    }
-
-   
 }
