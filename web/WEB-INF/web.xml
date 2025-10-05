@@ -1,42 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <servlet>
-        <servlet-name>navigate</servlet-name>
-        <servlet-class>controller.dashboard_navigate</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>CreateProduct</servlet-name>
-        <servlet-class>controller.CreateProduct</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>CreateContractServlet</servlet-name>
-        <servlet-class>controller.CreateContractServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>navigate</servlet-name>
-        <url-pattern>/navigate</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CreateProduct</servlet-name>
-        <url-pattern>/create_product</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>CreateContractServlet</servlet-name>
-        <url-pattern>/CreateContractServlet</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>navigate</servlet-name>
-        <url-pattern>/Staff</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>navigate</servlet-name>
-        <url-pattern>/Staff/CreateContract</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>navigate</servlet-name>
-        <url-pattern>/Staff/ContractManagement</url-pattern>
-    </servlet-mapping>
+
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+	 version="6.0">
+
+    <!-- Welcome file list -->
     <welcome-file-list>
-        <welcome-file>dashboard.jsp</welcome-file>
+        <welcome-file>login.jsp</welcome-file>
+        <welcome-file>home.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
+    <!-- Servlet Mappings -->
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>Controller.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>Controller.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>InsuranceListController</servlet-name>
+        <servlet-class>Controller.InsuranceListController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>InsuranceListController</servlet-name>
+        <url-pattern>/insurance-list</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PurchaseInsuranceController</servlet-name>
+        <servlet-class>Controller.PurchaseInsuranceController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PurchaseInsuranceController</servlet-name>
+        <url-pattern>/purchase-insurance</url-pattern>
+    </servlet-mapping>
+
+    <!-- Session timeout (30 minutes) -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
 </web-app>

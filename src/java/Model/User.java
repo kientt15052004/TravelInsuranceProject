@@ -1,3 +1,4 @@
+
 package Model;
 
 import java.io.Serializable;
@@ -36,6 +37,8 @@ public class User implements Serializable {
         this.cccd_img = cccd_img;
         this.status = status;
     }
+
+    
 
     public int getId() {
         return id;
@@ -140,4 +143,6 @@ public class User implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    
 }

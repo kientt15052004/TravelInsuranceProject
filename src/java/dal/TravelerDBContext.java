@@ -29,11 +29,11 @@ public class TravelerDBContext extends DBContext {
                 ApplicationTraveler traveler = new ApplicationTraveler();
                 traveler.setId(rs.getInt("id"));
                 traveler.setApplication_id(rs.getInt("application_id"));
-                traveler.setCccd_id(rs.getLong("cccd_id"));
+                traveler.setCccd(rs.getLong("cccd_id"));
                 traveler.setName(rs.getString("name"));
                 traveler.setGender(rs.getString("gender"));
-                traveler.setDob(rs.getDate("dob"));
-                traveler.setPhone(rs.getString("phone"));
+                traveler.setBirthDate(rs.getDate("dob"));
+                traveler.setPhoneNumber(rs.getString("phone"));
                 traveler.setEmail(rs.getString("email"));
 
                 travelers.add(traveler);
@@ -51,11 +51,11 @@ public class TravelerDBContext extends DBContext {
 
         try (PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stm.setInt(1, traveler.getApplication_id());
-            stm.setLong(2, traveler.getCccd_id());
+            stm.setLong(2, traveler.getCccd());
             stm.setString(3, traveler.getName());
             stm.setString(4, traveler.getGender());
-            stm.setDate(5, traveler.getDob());
-            stm.setString(6, traveler.getPhone());
+            stm.setDate(5, new java.sql.Date(traveler.getBirthDate().getTime()));
+            stm.setString(6, traveler.getPhoneNumber());
             stm.setString(7, traveler.getEmail());
 
             int affectedRows = stm.executeUpdate();

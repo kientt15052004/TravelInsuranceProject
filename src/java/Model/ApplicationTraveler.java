@@ -4,7 +4,7 @@
  */
 package Model;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  *
@@ -13,26 +13,13 @@ import java.sql.Date;
 public class ApplicationTraveler {
     private int id;
     private int application_id;
-    private long cccd_id;
+    private long cccd;
     private String name;
     private String gender;
-    private Date dob;
-    private String phone;
+    private Date birthDate;
+    private String phoneNumber;
     private String email;
 
-    public ApplicationTraveler() {
-    }
-
-    public ApplicationTraveler(int id, int application_id, long cccd_id, String name, String gender, Date dob, String phone, String email) {
-        this.id = id;
-        this.application_id = application_id;
-        this.cccd_id = cccd_id;
-        this.name = name;
-        this.gender = gender;
-        this.dob = dob;
-        this.phone = phone;
-        this.email = email;
-    }
     public int getId() {
         return id;
     }
@@ -49,12 +36,12 @@ public class ApplicationTraveler {
         this.application_id = application_id;
     }
 
-    public long getCccd_id() {
-        return cccd_id;
+    public long getCccd() {
+        return cccd;
     }
 
-    public void setCccd_id(long cccd_id) {
-        this.cccd_id = cccd_id;
+    public void setCccd(long cccd) {
+        this.cccd = cccd;
     }
 
     public String getName() {
@@ -73,20 +60,20 @@ public class ApplicationTraveler {
         this.gender = gender;
     }
 
-    public Date getDob() {
-        return dob;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -96,4 +83,5 @@ public class ApplicationTraveler {
     public void setEmail(String email) {
         this.email = email;
     }
+    
 }

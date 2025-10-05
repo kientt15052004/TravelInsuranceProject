@@ -4,6 +4,7 @@
  */
 package dal;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import Model.Application;
 import java.sql.PreparedStatement;
@@ -30,13 +31,18 @@ public class ApplicationDBContext extends DBContext {
                 Application app = new Application();
                 app.setId(rs.getInt("id"));
                 app.setPurchaser_id(rs.getInt("purchaser_id"));
-                app.setProduct_id(rs.getInt("product_id"));
+                app.setInsuranceId(rs.getInt("product_id"));
                 app.setType(rs.getString("type"));
                 app.setDestination(rs.getString("destination"));
                 app.setStartDate(rs.getDate("startDate"));
                 app.setEndDate(rs.getDate("endDate"));
-                app.setTravelers_quantity(rs.getInt("travelers_quantity"));
-                app.setTotal_price(rs.getBigDecimal("total_price"));
+                app.setTraveler_quantity(rs.getInt("travelers_quantity"));
+                app.setPrice(rs.getBigDecimal("total_price"));
+
+                // Chưa load travelers và buyerInfo (vì có thể là bảng khác)
+                app.setTravelers(new ArrayList<>());
+                app.setBuyerInfo(null);
+                app.setInsurance(null);
 
                 applications.add(app);
             }
@@ -53,13 +59,13 @@ public class ApplicationDBContext extends DBContext {
 
         try (PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stm.setInt(1, app.getPurchaser_id());
-            stm.setInt(2, app.getProduct_id());
+            stm.setInt(2, app.getInsuranceId());
             stm.setString(3, app.getType());
             stm.setString(4, app.getDestination());
-            stm.setDate(5, app.getStartDate());
-            stm.setDate(6, app.getEndDate());
-            stm.setInt(7, app.getTravelers_quantity());
-            stm.setBigDecimal(8, app.getTotal_price());
+            stm.setDate(5, new java.sql.Date(app.getStartDate().getTime()));
+            stm.setDate(6, new java.sql.Date(app.getEndDate().getTime()));
+            stm.setInt(7, app.getTraveler_quantity());
+            stm.setBigDecimal(8, app.getPrice());
 
             int affectedRows = stm.executeUpdate();
 
@@ -93,13 +99,13 @@ public class ApplicationDBContext extends DBContext {
             // 1. Insert Application
             try (PreparedStatement stm = connection.prepareStatement(appSql, Statement.RETURN_GENERATED_KEYS)) {
                 stm.setInt(1, app.getPurchaser_id());
-                stm.setInt(2, app.getProduct_id());
+                stm.setInt(2, app.getInsuranceId());
                 stm.setString(3, app.getType());
                 stm.setString(4, app.getDestination());
-                stm.setDate(5, app.getStartDate());
-                stm.setDate(6, app.getEndDate());
-                stm.setInt(7, app.getTravelers_quantity());
-                stm.setBigDecimal(8, app.getTotal_price());
+                stm.setDate(5, new java.sql.Date(app.getStartDate().getTime()));
+                stm.setDate(6, new java.sql.Date(app.getEndDate().getTime()));
+                stm.setInt(7, app.getTraveler_quantity());
+                stm.setBigDecimal(8, app.getPrice());
 
                 int affectedRows = stm.executeUpdate();
                 if (affectedRows == 0) {
@@ -119,11 +125,11 @@ public class ApplicationDBContext extends DBContext {
             try (PreparedStatement stm = connection.prepareStatement(travelerSql)) {
                 for (ApplicationTraveler traveler : travelers) {
                     stm.setInt(1, applicationId);
-                    stm.setLong(2, traveler.getCccd_id());
+                    stm.setLong(2, traveler.getCccd());
                     stm.setString(3, traveler.getName());
                     stm.setString(4, traveler.getGender());
-                    stm.setDate(5, traveler.getDob());
-                    stm.setString(6, traveler.getPhone());
+                    stm.setDate(5, new java.sql.Date(traveler.getBirthDate().getTime()));
+                    stm.setString(6, traveler.getPhoneNumber());
                     stm.setString(7, traveler.getEmail());
                     stm.addBatch();
                 }

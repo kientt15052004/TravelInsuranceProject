@@ -141,4 +141,6 @@ public class Application {
     public void setInsurance(InsuranceProduct insurance) {
         this.insurance = insurance;
     }
+
+   
 }

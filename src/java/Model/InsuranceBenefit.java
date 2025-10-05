@@ -98,4 +98,5 @@ public class InsuranceBenefit {
         this.is_deleted = is_deleted;
     }
 
+    
 }
