@@ -8,6 +8,10 @@
         <servlet-name>CreateProduct</servlet-name>
         <servlet-class>controller.CreateProduct</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CreateContractServlet</servlet-name>
+        <servlet-class>controller.CreateContractServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>navigate</servlet-name>
         <url-pattern>/navigate</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>CreateProduct</servlet-name>
         <url-pattern>/create_product</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateContractServlet</servlet-name>
+        <url-pattern>/CreateContractServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>navigate</servlet-name>

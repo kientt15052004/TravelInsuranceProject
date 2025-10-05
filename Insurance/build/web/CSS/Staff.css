@@ -25,11 +25,11 @@
 }
 
 li:hover{
-    background: #ffd700;
-    color: #333;
-    font-weight: 500;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
-    transform: translateX(3px);
+    background: #ffd700 !important;
+    color: #333 !important;
+    font-weight: 500 !important;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3) !important;
+    transform: translateX(3px) !important;
 }
 
 li:hover::before {

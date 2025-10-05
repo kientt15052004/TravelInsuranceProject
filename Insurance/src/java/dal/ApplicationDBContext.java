@@ -119,7 +119,7 @@ public class ApplicationDBContext extends DBContext {
             try (PreparedStatement stm = connection.prepareStatement(travelerSql)) {
                 for (ApplicationTraveler traveler : travelers) {
                     stm.setInt(1, applicationId);
-                    stm.setInt(2, traveler.getCccd_id());
+                    stm.setLong(2, traveler.getCccd_id());
                     stm.setString(3, traveler.getName());
                     stm.setString(4, traveler.getGender());
                     stm.setDate(5, traveler.getDob());

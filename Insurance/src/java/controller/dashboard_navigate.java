@@ -20,7 +20,7 @@ public class dashboard_navigate extends HttpServlet {
             request.getRequestDispatcher("/Staff.jsp").forward(request, response);
             return;
         } else if (requestURI.contains("/Staff/CreateContract")) {
-            request.getRequestDispatcher("/CreateContract.jsp").forward(request, response);
+            request.getRequestDispatcher("/CreateContractServlet").forward(request, response);
             return;
         } else if (requestURI.contains("/Staff/ContractManagement")) {
             request.getRequestDispatcher("/ContractManagement.jsp").forward(request, response);

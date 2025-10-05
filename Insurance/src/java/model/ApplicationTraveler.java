@@ -7,7 +7,7 @@ public class ApplicationTraveler {
     private int application_id;
     private String name;
     private String gender;
-    private int cccd_id;
+    private long cccd_id;
     private Date dob;
     private int age;
     private String phone;
@@ -16,7 +16,7 @@ public class ApplicationTraveler {
     public ApplicationTraveler() {
     }
 
-    public ApplicationTraveler(int id, int application_id, String name, String gender, int cccd_id, Date dob, int age, String phone, String email) {
+    public ApplicationTraveler(int id, int application_id, String name, String gender, long cccd_id, Date dob, int age, String phone, String email) {
         this.id = id;
         this.application_id = application_id;
         this.name = name;
@@ -60,11 +60,11 @@ public class ApplicationTraveler {
         this.gender = gender;
     }
 
-    public int getCccd_id() {
+    public long getCccd_id() {
         return cccd_id;
     }
 
-    public void setCccd_id(int cccd_id) {
+    public void setCccd_id(long cccd_id) {
         this.cccd_id = cccd_id;
     }
 

@@ -27,7 +27,7 @@ public class TravelerDBContext extends DBContext {
                 ApplicationTraveler traveler = new ApplicationTraveler();
                 traveler.setId(rs.getInt("id"));
                 traveler.setApplication_id(rs.getInt("application_id"));
-                traveler.setCccd_id(rs.getInt("cccd_id"));
+                traveler.setCccd_id(rs.getLong("cccd_id"));
                 traveler.setName(rs.getString("name"));
                 traveler.setGender(rs.getString("gender"));
                 traveler.setDob(rs.getDate("dob"));
@@ -49,7 +49,7 @@ public class TravelerDBContext extends DBContext {
 
         try (PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stm.setInt(1, traveler.getApplication_id());
-            stm.setInt(2, traveler.getCccd_id());
+            stm.setLong(2, traveler.getCccd_id());
             stm.setString(3, traveler.getName());
             stm.setString(4, traveler.getGender());
             stm.setDate(5, traveler.getDob());

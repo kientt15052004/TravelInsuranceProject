@@ -1,10 +1,13 @@
 package dal;
 
+import model.Product;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDBContext extends DBContext{
 
@@ -81,5 +84,73 @@ public class ProductDBContext extends DBContext{
             System.out.println("Lỗi khi query database: " + e.getMessage());
         }
         return id;
+    }
+    
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM products";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setBenefit_id(rs.getInt("benefit_id"));
+                product.setType(rs.getString("type"));
+                product.setName(rs.getString("name"));
+                product.setImg(rs.getString("img"));
+                product.setDescription(rs.getString("description"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy danh sách products: " + e.getMessage());
+        }
+        return products;
+    }
+    
+    public List<Product> getProductsByType(String type) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT * FROM products WHERE type = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            
+            ps.setString(1, type);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setBenefit_id(rs.getInt("benefit_id"));
+                product.setType(rs.getString("type"));
+                product.setName(rs.getString("name"));
+                product.setImg(rs.getString("img"));
+                product.setDescription(rs.getString("description"));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy danh sách products theo loại: " + e.getMessage());
+        }
+        return products;
+    }
+    
+    public Product getProductById(int productId) {
+        String sql = "SELECT * FROM products WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("id"));
+                product.setBenefit_id(rs.getInt("benefit_id"));
+                product.setType(rs.getString("type"));
+                product.setName(rs.getString("name"));
+                product.setImg(rs.getString("img"));
+                product.setDescription(rs.getString("description"));
+                return product;
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy product theo ID: " + e.getMessage());
+        }
+        return null;
     }
 }
