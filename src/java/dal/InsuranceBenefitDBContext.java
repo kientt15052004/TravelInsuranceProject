@@ -5,7 +5,7 @@
 package dal;
 
 import java.util.ArrayList;
-import model.InsuranceBenefit;
+import Model.InsuranceBenefit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 

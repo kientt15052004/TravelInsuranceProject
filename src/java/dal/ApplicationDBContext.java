@@ -5,12 +5,12 @@
 package dal;
 
 import java.util.ArrayList;
-import model.Application;
+import Model.Application;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.List;
-import model.ApplicationTraveler;
+import Model.ApplicationTraveler;
 import java.sql.*;
 
 /**
