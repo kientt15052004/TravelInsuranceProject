@@ -1,14 +1,11 @@
 
 package dal;
 
-import java.math.BigDecimal;
+import model.Product;
 import model.InsuranceProduct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import model.InsuranceBenefit;
 
 /**
@@ -17,14 +14,14 @@ import model.InsuranceBenefit;
  */
 public class InsuranceDBContext extends DBContext {
 
-    public ArrayList<InsuranceProduct> getAll() {
+    public ArrayList<Product> getAll() {
         String sql = "select * from products";
-        ArrayList<InsuranceProduct> insurances = new ArrayList<>();
+        ArrayList<Product> insurances = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
+                Product insurance = new Product();
                 insurance.setId(rs.getInt("id"));
                 insurance.setBenefit_id(rs.getInt("benefit_id"));
                 insurance.setName(rs.getString("name"));
@@ -67,7 +64,7 @@ public class InsuranceDBContext extends DBContext {
                     benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
                     benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
                     benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
-                    benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
+                    benefit.setLost_bank_card(rs.getBigDecimal("lost_bank_card"));
                     benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
                     benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
                     benefit.setIs_deleted(rs.getBoolean("is_deleted"));
@@ -83,14 +80,14 @@ public class InsuranceDBContext extends DBContext {
         return insurances;
     }
 
-    public InsuranceProduct getById(int id) {
+    public Product getById(int id) {
         String sql = "SELECT * FROM products WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
+                Product insurance = new Product();
                 insurance.setId(rs.getInt("id"));
                 insurance.setBenefit_id(rs.getInt("benefit_id"));
                 insurance.setName(rs.getString("name"));
@@ -136,7 +133,7 @@ public class InsuranceDBContext extends DBContext {
                     benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
                     benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
                     benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
-                    benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
+                    benefit.setLost_bank_card(rs.getBigDecimal("lost_bank_card"));
                     benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
                     benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
                     benefit.setIs_deleted(rs.getBoolean("is_deleted"));
