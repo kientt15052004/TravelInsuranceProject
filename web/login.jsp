@@ -19,12 +19,12 @@
                 border-radius: 12px;
                 box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
                 padding: 38px 28px 18px 28px;
-                transition: all 0.3s ease; /* thêm hiệu ứng mượt */
+                transition: all 0.3s ease;
             }
             .login-container:hover {
-                transform: translateY(-5px); /* nổi lên */
-                box-shadow: 0 12px 36px rgba(0,0,0,0.2); /* bóng đổ đậm hơn */
-                background: #fffef5; /* hơi sáng hơn 1 chút */
+                transform: translateY(-5px);
+                box-shadow: 0 12px 36px rgba(0,0,0,0.2);
+                background: #fffef5;
             }
 
             .login-icon {
@@ -102,14 +102,14 @@
                 border: none;
                 color: #333;
                 font-weight: 600;
-                transition: all 0.3s ease; /* hiệu ứng mượt */
+                transition: all 0.3s ease;
             }
 
             .btn-signin:hover {
-                background-color: #e6b800; /* đổi màu khi hover */
-                color: #fff;               /* đổi màu chữ */
-                transform: translateY(-2px); /* nổi lên nhẹ */
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* thêm bóng đổ */
+                background-color: #e6b800;
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
 
         </style>
@@ -119,20 +119,36 @@
             <div class="login-icon"><span>&#9889;</span></div>
             <div class="login-title">Welcome Back</div>
             <div class="login-text">Sign in to your account to continue</div>
-            <form>
+            <form action="${pageContext.request.contextPath}/login" method="POST">
                 <div class="form-group">
                     <label for="username" class="small mb-1">Username</label>
-                    <input type="username" class="form-control" id="username" placeholder="Enter your username"/>
+                    <input type="username" class="form-control" id="username" name="username" placeholder="Enter your username" 
+                           value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>"/>
+                    <% String usernameError = (String) request.getAttribute("usernameError");
+                    if (usernameError != null) { %>
+                    <div class="text-danger" style="font-size: 13px;"><%= usernameError %></div>
+                    <% } %>
                 </div>
                 <div class="form-group">
                     <label for="password" class="small mb-1">Password</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password"/>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" 
+                               value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>"/>
                         <div class="input-group-append">
                             <span class="input-group-text" style="background: #fff;"><i class="fa fa-eye"></i></span>
                         </div>
+
                     </div>
+                    <% String passwordError = (String) request.getAttribute("passwordError");
+                        if (passwordError != null) { %>
+                    <div class="text-danger" style="font-size: 13px;"><%= passwordError %></div>
+                    <% } %>
+
                 </div>
+                <% String loginError = (String) request.getAttribute("loginError");
+                    if (loginError != null) { %>
+                <div class="alert alert-danger mt-2"><%= loginError %></div>
+                <% } %>
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <div class="form-check">
                         <input type="checkbox" class="form-check-input" id="rememberMe"/>
