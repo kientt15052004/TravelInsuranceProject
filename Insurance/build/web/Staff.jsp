@@ -32,8 +32,8 @@
             <div class="col-2 position-fixed sidebar" style="margin-top: 57.5px; height: 100vh; padding: 0; z-index: 100">
                 <ul class="list-unstyled">
                     <a class="text-decoration-none text-reset" href="/Insurance/Staff"><li class="py-3 text-center fs-5" style="color: #333; font-weight: 600; background: #ffd700;">Dashboard</li></a>
-                    <a class="text-decoration-none text-reset" href="/Insurance/CreateContract"><li class="py-3 text-center fs-5" style="color: #666; font-weight: 400">Tạo Hợp Đồng</li></a>
-                    <a class="text-decoration-none text-reset" href="/Insurance/ContractManagement"><li class="py-3 text-center fs-5" style="color: #666; font-weight: 400">Quản Lý Hợp Đồng</li></a>
+                    <a class="text-decoration-none text-reset" href="/Insurance/Staff/CreateContract"><li class="py-3 text-center fs-5" style="color: #666; font-weight: 400">Tạo Hợp Đồng</li></a>
+                    <a class="text-decoration-none text-reset" href="/Insurance/Staff/ContractManagement"><li class="py-3 text-center fs-5" style="color: #666; font-weight: 400">Quản Lý Hợp Đồng</li></a>
                 </ul>
             </div>
 

@@ -13,6 +13,20 @@ public class dashboard_navigate extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String page = request.getParameter("page");
+        String requestURI = request.getRequestURI();
+        
+        // Handle /Staff routes
+        if (requestURI.endsWith("/Staff")) {
+            request.getRequestDispatcher("/Staff.jsp").forward(request, response);
+            return;
+        } else if (requestURI.contains("/Staff/CreateContract")) {
+            request.getRequestDispatcher("/CreateContract.jsp").forward(request, response);
+            return;
+        } else if (requestURI.contains("/Staff/ContractManagement")) {
+            request.getRequestDispatcher("/ContractManagement.jsp").forward(request, response);
+            return;
+        }
+        
         if ("home".equals(page)) {
             request.setAttribute("page", "home.jsp");
         } else if ("user".equals(page)) {
