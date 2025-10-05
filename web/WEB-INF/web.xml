@@ -50,6 +50,15 @@
         <url-pattern>/purchase-insurance</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>StaffServlet</servlet-name>
+        <servlet-class>Controller.StaffServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StaffServlet</servlet-name>
+        <url-pattern>/staff</url-pattern>
+    </servlet-mapping>
+
     <!-- Session timeout (30 minutes) -->
     <session-config>
         <session-timeout>30</session-timeout>
