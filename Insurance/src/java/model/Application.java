@@ -4,11 +4,8 @@
  */
 package model;
 
-import model.viewmodel.Traveler;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import model.viewmodel.BuyerInfo;
+import java.sql.Date;
 
 /**
  *
@@ -17,33 +14,27 @@ import model.viewmodel.BuyerInfo;
 public class Application {
     private int id;
     private int purchaser_id;
-    private int insuranceId;
+    private int product_id;
     private String type;
     private String destination;
     private Date startDate;
     private Date endDate;
-    private int traveler_quantity;
-    private BigDecimal price;
-    private List<Traveler> travelers;
-    private BuyerInfo buyerInfo;
-    private InsuranceProduct insurance;
+    private int travelers_quantity;
+    private BigDecimal total_price;
 
     public Application() {
     }
 
-    public Application(int id, int purchaser_id, int insuranceId, String type, String destination, Date startDate, Date endDate, int traveler_quantity, BigDecimal price, List<Traveler> travelers, BuyerInfo buyerInfo, InsuranceProduct insurance) {
+    public Application(int id, int purchaser_id, int product_id, String type, String destination, Date startDate, Date endDate, int travelers_quantity, BigDecimal total_price) {
         this.id = id;
         this.purchaser_id = purchaser_id;
-        this.insuranceId = insuranceId;
+        this.product_id = product_id;
         this.type = type;
         this.destination = destination;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.traveler_quantity = traveler_quantity;
-        this.price = price;
-        this.travelers = travelers;
-        this.buyerInfo = buyerInfo;
-        this.insurance = insurance;
+        this.travelers_quantity = travelers_quantity;
+        this.total_price = total_price;
     }
 
     public int getId() {
@@ -62,12 +53,12 @@ public class Application {
         this.purchaser_id = purchaser_id;
     }
 
-    public int getInsuranceId() {
-        return insuranceId;
+    public int getProduct_id() {
+        return product_id;
     }
 
-    public void setInsuranceId(int insuranceId) {
-        this.insuranceId = insuranceId;
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
     }
 
     public String getType() {
@@ -102,45 +93,19 @@ public class Application {
         this.endDate = endDate;
     }
 
-    public int getTraveler_quantity() {
-        return traveler_quantity;
+    public int getTravelers_quantity() {
+        return travelers_quantity;
     }
 
-    public void setTraveler_quantity(int traveler_quantity) {
-        this.traveler_quantity = traveler_quantity;
+    public void setTravelers_quantity(int travelers_quantity) {
+        this.travelers_quantity = travelers_quantity;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getTotal_price() {
+        return total_price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setTotal_price(BigDecimal total_price) {
+        this.total_price = total_price;
     }
-
-    public List<Traveler> getTravelers() {
-        return travelers;
-    }
-
-    public void setTravelers(List<Traveler> travelers) {
-        this.travelers = travelers;
-    }
-
-    public BuyerInfo getBuyerInfo() {
-        return buyerInfo;
-    }
-
-    public void setBuyerInfo(BuyerInfo buyerInfo) {
-        this.buyerInfo = buyerInfo;
-    }
-
-    public InsuranceProduct getInsurance() {
-        return insurance;
-    }
-
-    public void setInsurance(InsuranceProduct insurance) {
-        this.insurance = insurance;
-    }
-
-   
 }
