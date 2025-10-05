@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import model.Application;
 import model.ApplicationTraveler;
@@ -102,13 +102,13 @@ public class PurchaseInsuranceController extends HttpServlet {
 //// Tạo object Application
 //            Application app = new Application();
 //            app.setPurchaser_id(1); // lấy từ session
-//            app.setInsuranceId(insuranceId);
+//            app.setProduct_id(insuranceId);
 //            app.setType("Car");
 //            app.setDestination("Ha long");
 //            app.setStartDate(startDate);
 //            app.setEndDate(endDate);
 //            app.setTraveler_quantity(4);
-//            app.setPrice(totalPrice);
+//            app.setTotal_price(totalPrice);
 //
 //            // Lấy thông tin người mua bảo hiểm
 //            String buyerType = request.getParameter("buyerType");
@@ -209,13 +209,13 @@ public class PurchaseInsuranceController extends HttpServlet {
             // ===== TẠO OBJECT APPLICATION =====
             Application app = new Application();
             app.setPurchaser_id(1); // TODO: lấy từ session user
-            app.setInsuranceId(insuranceId);
+            app.setProduct_id(insuranceId);
             app.setType(type);
             app.setDestination(destination);
             app.setStartDate(startDate);
             app.setEndDate(endDate);
-            app.setTraveler_quantity(travelerQuantity);
-            app.setPrice(totalPrice);
+            app.setTravelers_quantity(travelerQuantity);
+            app.setTotal_price(totalPrice);
 
             // ===== TẠO OBJECT BUYER =====
             String buyerType = request.getParameter("buyerType");
@@ -246,7 +246,7 @@ public class PurchaseInsuranceController extends HttpServlet {
 
                 String cccdParam = request.getParameter("traveler[" + i + "].idNumber");
                 if (cccdParam != null && !cccdParam.isEmpty()) {
-                    traveler.setCccd(Long.parseLong(cccdParam));
+                    traveler.setCccd_id(Integer.parseInt(cccdParam));
                 }
 
                 traveler.setName(request.getParameter("traveler[" + i + "].fullName"));
@@ -254,10 +254,10 @@ public class PurchaseInsuranceController extends HttpServlet {
 
                 String birthDateParam = request.getParameter("traveler[" + i + "].birthDate");
                 if (birthDateParam != null && !birthDateParam.isEmpty()) {
-                    traveler.setBirthDate(java.sql.Date.valueOf(birthDateParam));
+                    traveler.setDob(java.sql.Date.valueOf(birthDateParam));
                 }
 
-                traveler.setPhoneNumber(request.getParameter("traveler[" + i + "].phoneNumber"));
+                traveler.setPhone(request.getParameter("traveler[" + i + "].phoneNumber"));
                 traveler.setEmail(request.getParameter("traveler[" + i + "].email"));
 
                 travelers.add(traveler);

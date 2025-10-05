@@ -42,7 +42,7 @@ public class ProductDBContext extends DBContext{
             if (connection == null) {
                 System.out.println("Ko thể kết nối database!");
             }
-            String sql = "INSERT INTO insurance_benefits (death_or_permanent_disability, death_due_to_illness, third_party_liability, lost_bank_card, kidnap_and_hostage, lost_or_damaged_golf_equipment,is_deleted) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO insurance_benefits (death_or_permanent_disability, death_due_to_illness, third_party_liability, lost_bank_card, kidnap_and_hostage, lost_or_damaged_golf_equipment, is_deleted, medical_cost, emergency_transport, repatriation_vn, repatriation_abroad, hospital_visit, funeral_arrangement, child_care, hospital_allowance, accident_death_injury, trip_cancellation, companion_support, delayed_baggage, travel_documents, trip_delay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             prepare = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             prepare.setBigDecimal(1, new BigDecimal(deathOrDisability));
             prepare.setBigDecimal(2, new BigDecimal(deathByIllness));
@@ -60,9 +60,11 @@ public class ProductDBContext extends DBContext{
             prepare.setBigDecimal(14, new BigDecimal(child_care));
             prepare.setBigDecimal(15, new BigDecimal(hospital_allowance));
             prepare.setBigDecimal(16, new BigDecimal(accident_death_injury));
-            prepare.setBigDecimal(17, new BigDecimal(companion_support));
-            prepare.setBigDecimal(18, new BigDecimal(delayed_baggage));
-            prepare.setBigDecimal(19, new BigDecimal(trip_delay));
+            prepare.setBigDecimal(17, new BigDecimal(trip_cancellation));
+            prepare.setBigDecimal(18, new BigDecimal(companion_support));
+            prepare.setBigDecimal(19, new BigDecimal(delayed_baggage));
+            prepare.setBigDecimal(20, new BigDecimal(travel_documents));
+            prepare.setBigDecimal(21, new BigDecimal(trip_delay));
 
             rows = prepare.executeUpdate();
             if (rows > 0) {

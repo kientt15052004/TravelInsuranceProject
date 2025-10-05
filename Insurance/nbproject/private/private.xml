@@ -3,8 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Desktop/SWP/git_project/TravelInsuranceProject-main/Insurance/web/dashboard.jsp</file>
-            <file>file:/C:/Users/Admin/Desktop/SWP/git_project/TravelInsuranceProject-main/Insurance/web/META-INF/context.xml</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/model/InsuranceBenefit.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/dal/DBContext.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/dal/TravelerDBContext.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/model/User.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/model/viewmodel/InsurancePurchase.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/dal/ApplicationDBContext.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/model/viewmodel/Traveler.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/model/ApplicationTraveler.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/dal/InsuranceDBContext.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/model/viewmodel/BuyerInfo.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/src/java/controller/PurchaseInsuranceController.java</file>
+            <file>file:/D:/Study/SWP/TravelInsuranceProject/Insurance/nbproject/build-impl.xml</file>
         </group>
     </open-files>
 </project-private>
