@@ -207,11 +207,11 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Identification number*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input" id="idNumber">
+                                    <input type="text" placeholder="123456789" class="form-input" id="idNumber">
                                 </div>
                                 <div class="form-group">
                                     <label>Full name*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input" id="fullName">
+                                    <input type="text" placeholder="Nguyen Van A" class="form-input" id="fullName">
                                 </div>
                             </div>
 
@@ -238,17 +238,17 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Phone number*</label>
-                                    <input type="tel" placeholder="Nhập" class="form-input" id="phoneNumber">
+                                    <input type="tel" placeholder="0987654321" class="form-input" id="phoneNumber">
                                 </div>
                                 <div class="form-group">
                                     <label>Email*</label>
-                                    <input type="email" placeholder="Nhập" class="form-input" id="email">
+                                    <input type="email" placeholder="nguyenvana@gmail.com" class="form-input" id="email">
                                 </div>
                             </div>
 
                             <div class="form-group full-width">
                                 <label>Address*</label>
-                                <input type="text" placeholder="Nhập" class="form-input" id="address">
+                                <input type="text" placeholder="1 Huynh Thuc Khang, Ha Noi" class="form-input" id="address">
                             </div>
                         </div>
 
@@ -257,33 +257,33 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Tax code*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input">
+                                    <input type="text" placeholder="0123456789" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label>Organization name*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input">
+                                    <input type="text" placeholder="InsureTravel Group" class="form-input">
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Representative*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input">
+                                    <input type="text" placeholder="Nguyen Van A" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label>Phone number*</label>
-                                    <input type="tel" placeholder="Nhập" class="form-input">
+                                    <input type="tel" placeholder="0123456789" class="form-input">
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Email*</label>
-                                    <input type="email" placeholder="Nhập" class="form-input">
+                                    <input type="email" placeholder="nguyenvana@gmail.com" class="form-input">
                                 </div>
                                 <div class="form-group">
                                     <label>Address*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input">
+                                    <input type="text" placeholder="1 Huynh Thuc Khang, Ha Noi" class="form-input">
                                 </div>
                             </div>
                         </div>
@@ -353,7 +353,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Full name*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input" id="personFullName">
+                                    <input type="text" placeholder="Nguyen Van A" class="form-input" id="personFullName">
                                 </div>
                                 <div class="form-group">
                                     <label>Sex*</label>
@@ -373,7 +373,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Identification number*</label>
-                                    <input type="text" placeholder="Nhập" class="form-input" id="personIdNumber">
+                                    <input type="text" placeholder="0123456789" class="form-input" id="personIdNumber">
                                 </div>
                                 <div class="form-group">
                                     <label>Date of birth*</label>
@@ -384,11 +384,11 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Phone number*</label>
-                                    <input type="tel" placeholder="Nhập" class="form-input" id="personPhoneNumber">
+                                    <input type="tel" placeholder="0123456789" class="form-input" id="personPhoneNumber">
                                 </div>
                                 <div class="form-group">
                                     <label>Email*</label>
-                                    <input type="email" placeholder="Nhập" class="form-input" id="personEmail">
+                                    <input type="email" placeholder="nguyenvana@gmail.com" class="form-input" id="personEmail">
                                 </div>
                             </div>
 
