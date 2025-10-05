@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
+        <link rel="stylesheet" href="CSS/Staff.css">
             /* Sidebar styling */
             .sidebar {
                 background: #f8f9fa;
@@ -216,7 +216,6 @@
                 background: linear-gradient(135deg, #dc3545, #fd7e14);
                 color: white;
             }
-        </style>
     </head>
     <body style="height: 100vh">
         <div class="container-fluid d-flex justify-content-between" style="position: fixed; background: #fff700; border-bottom: 1px solid #e0e0e0; z-index: 999">
