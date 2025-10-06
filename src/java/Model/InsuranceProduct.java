@@ -4,7 +4,7 @@
  */
 package Model;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 
 /**
  *
@@ -17,6 +17,7 @@ public class InsuranceProduct {
     private String name;
     private String img;
     private String description;
+    private BigDecimal price;
     private InsuranceBenefit benefit = new InsuranceBenefit();
 
     public InsuranceProduct() {
@@ -29,6 +30,16 @@ public class InsuranceProduct {
         this.name = name;
         this.img = img;
         this.description = description;
+    }
+    
+    public InsuranceProduct(int id, int benefit_id, String type, String name, String img, String description, BigDecimal price) {
+        this.id = id;
+        this.benefit_id = benefit_id;
+        this.type = type;
+        this.name = name;
+        this.img = img;
+        this.description = description;
+        this.price = price;
     }
 
     public int getId() {
@@ -85,6 +96,14 @@ public class InsuranceProduct {
 
     public void setBenefit(InsuranceBenefit benefit) {
         this.benefit = benefit;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
    

@@ -166,15 +166,18 @@ public class CreateContractServlet extends HttpServlet {
     
     /**
      * Calculate insurance price based on product, travelers, and duration
-     * This is a simplified calculation - you may need to implement more complex logic
+     * Now uses actual price from database instead of hardcoded value
      */
     private BigDecimal calculatePrice(InsuranceProduct product, int travelersQuantity, Date startDate, Date endDate) {
         // Calculate number of days
         long diffInMillies = endDate.getTime() - startDate.getTime();
         long diffInDays = diffInMillies / (24 * 60 * 60 * 1000);
         
-        // Base price per day per person (simplified)
-        BigDecimal basePricePerDay = new BigDecimal("50000"); // 50,000 VND per day
+        // Use actual price from database if available, otherwise fallback to default
+        BigDecimal basePricePerDay = product.getPrice();
+        if (basePricePerDay == null) {
+            basePricePerDay = new BigDecimal("50000"); // Fallback to 50,000 VND per day
+        }
         
         // Calculate total price
         BigDecimal totalPrice = basePricePerDay

@@ -4,15 +4,10 @@
  */
 package dal;
 
-import java.math.BigDecimal;
 import Model.InsuranceProduct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.time.LocalDate;
 import Model.InsuranceBenefit;
 import Model.User;
 
@@ -29,14 +24,7 @@ public class InsuranceDBContext extends DBContext {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
-                insurance.setId(rs.getInt("id"));
-                insurance.setBenefit_id(rs.getInt("benefit_id"));
-                insurance.setName(rs.getString("name"));
-                insurance.setImg(rs.getString("img"));
-                insurance.setType(rs.getString("type"));
-                insurance.setDescription(rs.getString("description"));
-
+                InsuranceProduct insurance = mapResultSetToInsuranceProduct(rs);
                 insurances.add(insurance);
             }
         } catch (Exception e) {
@@ -46,10 +34,14 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public ArrayList<InsuranceProduct> getAllWithBenefit() {
-        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, "
+        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.price, "
                 + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
                 + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
-                + "b.lost_or_damaged_golf_equipment, b.is_deleted "
+                + "b.lost_or_damaged_golf_equipment, b.is_deleted, "
+                + "b.medical_cost, b.emergency_transport, b.repatriation_vn, b.repatriation_abroad, "
+                + "b.hospital_visit, b.funeral_arrangement, b.child_care, b.hospital_allowance, "
+                + "b.accident_death_injury, b.trip_cancellation, b.companion_support, "
+                + "b.delayed_baggage, b.travel_documents, b.trip_delay "
                 + "FROM products p "
                 + "LEFT JOIN insurance_benefits b ON p.benefit_id = b.id";
 
@@ -64,20 +56,12 @@ public class InsuranceDBContext extends DBContext {
                 insurance.setImg(rs.getString("img"));
                 insurance.setType(rs.getString("type"));
                 insurance.setDescription(rs.getString("description"));
+                insurance.setPrice(rs.getBigDecimal("price"));
 
                 int benefitId = rs.getInt("benefit_id");
                 if (benefitId > 0) {
-                    InsuranceBenefit benefit = new InsuranceBenefit();
-                    benefit.setId(benefitId);
-                    benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
-                    benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
-                    benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
-                    benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
-                    benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
-                    benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
-                    benefit.setIs_deleted(rs.getBoolean("is_deleted"));
-
-                    insurance.setBenefit(benefit); // chỉ set 1 object
+                    InsuranceBenefit benefit = mapResultSetToInsuranceBenefit(rs);
+                    insurance.setBenefit(benefit);
                 }
 
                 insurances.add(insurance);
@@ -126,13 +110,7 @@ public class InsuranceDBContext extends DBContext {
 
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
-                insurance.setId(rs.getInt("id"));
-                insurance.setBenefit_id(rs.getInt("benefit_id"));
-                insurance.setName(rs.getString("name"));
-                insurance.setImg(rs.getString("img"));
-                insurance.setType(rs.getString("type"));
-                insurance.setDescription(rs.getString("description"));
+                InsuranceProduct insurance = mapResultSetToInsuranceProduct(rs);
                 insurances.add(insurance);
             }
         } catch (Exception e) {
@@ -183,15 +161,7 @@ public class InsuranceDBContext extends DBContext {
             ResultSet rs = stm.executeQuery();
 
             if (rs.next()) {
-                InsuranceProduct insurance = new InsuranceProduct();
-                insurance.setId(rs.getInt("id"));
-                insurance.setBenefit_id(rs.getInt("benefit_id"));
-                insurance.setName(rs.getString("name"));
-                insurance.setImg(rs.getString("img"));
-                insurance.setType(rs.getString("type"));
-                insurance.setDescription(rs.getString("description"));
-
-                return insurance;
+                return mapResultSetToInsuranceProduct(rs);
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -200,10 +170,14 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public InsuranceProduct getByIdWithBenefit(int id) {
-        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, "
+        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.price, "
                 + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
                 + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
-                + "b.lost_or_damaged_golf_equipment, b.is_deleted "
+                + "b.lost_or_damaged_golf_equipment, b.is_deleted, "
+                + "b.medical_cost, b.emergency_transport, b.repatriation_vn, b.repatriation_abroad, "
+                + "b.hospital_visit, b.funeral_arrangement, b.child_care, b.hospital_allowance, "
+                + "b.accident_death_injury, b.trip_cancellation, b.companion_support, "
+                + "b.delayed_baggage, b.travel_documents, b.trip_delay "
                 + "FROM products p "
                 + "LEFT JOIN insurance_benefits b ON p.benefit_id = b.id "
                 + "WHERE p.id = ?";
@@ -221,20 +195,12 @@ public class InsuranceDBContext extends DBContext {
                 insurance.setImg(rs.getString("img"));
                 insurance.setType(rs.getString("type"));
                 insurance.setDescription(rs.getString("description"));
+                insurance.setPrice(rs.getBigDecimal("price"));
 
                 int benefitId = rs.getInt("benefit_id");
                 if (benefitId > 0) {
-                    InsuranceBenefit benefit = new InsuranceBenefit();
-                    benefit.setId(benefitId);
-                    benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
-                    benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
-                    benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
-                    benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
-                    benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
-                    benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
-                    benefit.setIs_deleted(rs.getBoolean("is_deleted"));
-
-                    insurance.setBenefit(benefit); // chỉ set 1 object
+                    InsuranceBenefit benefit = mapResultSetToInsuranceBenefit(rs);
+                    insurance.setBenefit(benefit);
                 }
             }
         } catch (Exception e) {
@@ -288,6 +254,50 @@ public class InsuranceDBContext extends DBContext {
             System.out.println("Login error: " + e.getMessage());
         }
         return null;
+    }
+    
+    // Helper method to map ResultSet to InsuranceProduct object
+    private InsuranceProduct mapResultSetToInsuranceProduct(ResultSet rs) throws Exception {
+        InsuranceProduct insurance = new InsuranceProduct();
+        insurance.setId(rs.getInt("id"));
+        insurance.setBenefit_id(rs.getInt("benefit_id"));
+        insurance.setName(rs.getString("name"));
+        insurance.setImg(rs.getString("img"));
+        insurance.setType(rs.getString("type"));
+        insurance.setDescription(rs.getString("description"));
+        insurance.setPrice(rs.getBigDecimal("price"));
+        return insurance;
+    }
+    
+    // Helper method to map ResultSet to InsuranceBenefit object
+    private InsuranceBenefit mapResultSetToInsuranceBenefit(ResultSet rs) throws Exception {
+        InsuranceBenefit benefit = new InsuranceBenefit();
+        benefit.setId(rs.getInt("benefit_id"));
+        benefit.setDeath_or_permanent_disability(rs.getBigDecimal("death_or_permanent_disability"));
+        benefit.setDeath_due_to_illness(rs.getBigDecimal("death_due_to_illness"));
+        benefit.setThird_party_liability(rs.getBigDecimal("third_party_liability"));
+        benefit.setLost_bank_car(rs.getBigDecimal("lost_bank_card"));
+        benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
+        benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
+        benefit.setIs_deleted(rs.getBoolean("is_deleted"));
+        
+        // Map new fields
+        benefit.setMedical_cost(rs.getBigDecimal("medical_cost"));
+        benefit.setEmergency_transport(rs.getBigDecimal("emergency_transport"));
+        benefit.setRepatriation_vn(rs.getBigDecimal("repatriation_vn"));
+        benefit.setRepatriation_abroad(rs.getBigDecimal("repatriation_abroad"));
+        benefit.setHospital_visit(rs.getBigDecimal("hospital_visit"));
+        benefit.setFuneral_arrangement(rs.getBigDecimal("funeral_arrangement"));
+        benefit.setChild_care(rs.getBigDecimal("child_care"));
+        benefit.setHospital_allowance(rs.getBigDecimal("hospital_allowance"));
+        benefit.setAccident_death_injury(rs.getBigDecimal("accident_death_injury"));
+        benefit.setTrip_cancellation(rs.getBigDecimal("trip_cancellation"));
+        benefit.setCompanion_support(rs.getBigDecimal("companion_support"));
+        benefit.setDelayed_baggage(rs.getBigDecimal("delayed_baggage"));
+        benefit.setTravel_documents(rs.getBigDecimal("travel_documents"));
+        benefit.setTrip_delay(rs.getBigDecimal("trip_delay"));
+        
+        return benefit;
     }
 
 }
