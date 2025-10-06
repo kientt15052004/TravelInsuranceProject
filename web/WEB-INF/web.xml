@@ -69,6 +69,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>ContractManagementServlet</servlet-name>
+        <servlet-class>Controller.ContractManagementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContractManagementServlet</servlet-name>
+        <url-pattern>/ContractManagementServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>TestCreateContract</servlet-name>
         <servlet-class>Controller.TestCreateContract</servlet-class>
     </servlet>

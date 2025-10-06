@@ -84,4 +84,80 @@ public class ContractDBContext extends DBContext {
             e.printStackTrace();
         }
     }
+    
+    public List<Contract> searchContracts(String searchTerm) {
+        List<Contract> contracts = new ArrayList<>();
+        String sql = "SELECT * FROM Contract WHERE description LIKE ? OR contract_id LIKE ? OR application_id LIKE ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            String searchPattern = "%" + searchTerm + "%";
+            ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ps.setString(3, searchPattern);
+            
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Contract contract = new Contract();
+                contract.setContract_id(rs.getInt("contract_id"));
+                contract.setCurrent_benefit_id(rs.getInt("current_benefit_id"));
+                contract.setApplication_id(rs.getInt("application_id"));
+                contract.setDescription(rs.getString("description"));
+                contract.setContract_status(rs.getString("contract_status"));
+                contracts.add(contract);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contracts;
+    }
+    
+    public List<Contract> getContractsByStatus(String status) {
+        List<Contract> contracts = new ArrayList<>();
+        String sql = "SELECT * FROM Contract WHERE contract_status = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Contract contract = new Contract();
+                contract.setContract_id(rs.getInt("contract_id"));
+                contract.setCurrent_benefit_id(rs.getInt("current_benefit_id"));
+                contract.setApplication_id(rs.getInt("application_id"));
+                contract.setDescription(rs.getString("description"));
+                contract.setContract_status(rs.getString("contract_status"));
+                contracts.add(contract);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contracts;
+    }
+    
+    public int getTotalContracts() {
+        String sql = "SELECT COUNT(*) FROM Contract";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int getContractsByStatusCount(String status) {
+        String sql = "SELECT COUNT(*) FROM Contract WHERE contract_status = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
