@@ -54,7 +54,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/staff/create-contract" class="nav-link">
+                        <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
                             <i class="fas fa-plus-circle"></i>
                             <span>Tạo hợp đồng mới</span>
                         </a>

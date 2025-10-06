@@ -10,7 +10,7 @@ public abstract class DBContext {
     protected Connection connection;
     public DBContext() {
         try {
-            String url = "jdbc:mysql://localhost:3306/insurancesystem";
+            String url = "jdbc:mysql://localhost:3306/insuranceSystem";
             String username = "root";
             String password = "12345678";
             Class.forName("com.mysql.cj.jdbc.Driver");
