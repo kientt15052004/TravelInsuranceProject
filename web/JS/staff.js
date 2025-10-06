@@ -133,8 +133,6 @@ function setupFormInteractions() {
     
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             // Basic validation
             const requiredFields = form.querySelectorAll('input[required], textarea[required], select[required]');
             let isValid = true;
@@ -148,11 +146,11 @@ function setupFormInteractions() {
                 }
             });
             
-            if (isValid) {
-                showNotification('Form submitted successfully!', 'success');
-            } else {
+            if (!isValid) {
+                e.preventDefault();
                 showNotification('Please fill in all required fields', 'error');
             }
+            // If valid, let the form submit normally to the servlet
         });
     });
     

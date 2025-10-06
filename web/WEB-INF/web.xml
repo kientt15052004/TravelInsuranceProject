@@ -59,6 +59,108 @@
         <url-pattern>/staff</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>CreateContractServlet</servlet-name>
+        <servlet-class>Controller.CreateContractServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateContractServlet</servlet-name>
+        <url-pattern>/CreateContractServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TestCreateContract</servlet-name>
+        <servlet-class>Controller.TestCreateContract</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestCreateContract</servlet-name>
+        <url-pattern>/TestCreateContract</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DebugForm</servlet-name>
+        <servlet-class>Controller.DebugForm</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugForm</servlet-name>
+        <url-pattern>/DebugForm</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SimpleCreateContract</servlet-name>
+        <servlet-class>Controller.SimpleCreateContract</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimpleCreateContract</servlet-name>
+        <url-pattern>/SimpleCreateContract</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SimpleCreateContractGet</servlet-name>
+        <servlet-class>Controller.SimpleCreateContractGet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimpleCreateContractGet</servlet-name>
+        <url-pattern>/SimpleCreateContractGet</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>SimpleCreateContractServlet</servlet-name>
+        <servlet-class>Controller.SimpleCreateContractServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimpleCreateContractServlet</servlet-name>
+        <url-pattern>/SimpleCreateContractServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TestApplicationInsert</servlet-name>
+        <servlet-class>Controller.TestApplicationInsert</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestApplicationInsert</servlet-name>
+        <url-pattern>/TestApplicationInsert</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TestContractInsert</servlet-name>
+        <servlet-class>Controller.TestContractInsert</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestContractInsert</servlet-name>
+        <url-pattern>/TestContractInsert</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DebugRealData</servlet-name>
+        <servlet-class>Controller.DebugRealData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugRealData</servlet-name>
+        <url-pattern>/DebugRealData</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>TestDBConnection</servlet-name>
+        <servlet-class>Controller.TestDBConnection</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestDBConnection</servlet-name>
+        <url-pattern>/TestDBConnection</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DebugProducts</servlet-name>
+        <servlet-class>Controller.DebugProducts</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugProducts</servlet-name>
+        <url-pattern>/DebugProducts</url-pattern>
+    </servlet-mapping>
+
     <!-- Session timeout (30 minutes) -->
     <session-config>
         <session-timeout>30</session-timeout>
