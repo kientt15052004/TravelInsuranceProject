@@ -82,6 +82,31 @@ public class ApplicationDBContext extends DBContext {
         return -1; // thất bại
     }
 
+    public Application getById(int id) {
+        String sql = "SELECT * FROM applications WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                Application app = new Application();
+                app.setId(rs.getInt("id"));
+                app.setPurchaser_id(rs.getInt("purchaser_id"));
+                app.setInsuranceId(rs.getInt("product_id"));
+                app.setType(rs.getString("type"));
+                app.setDestination(rs.getString("destination"));
+                app.setStartDate(rs.getDate("startDate"));
+                app.setEndDate(rs.getDate("endDate"));
+                app.setTraveler_quantity(rs.getInt("travelers_quantity"));
+                app.setPrice(rs.getBigDecimal("total_price"));
+                return app;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public int insertApplicationWithTravelers(Application app, List<ApplicationTraveler> travelers) {
         String appSql = "INSERT INTO applications "
                 + "(purchaser_id, product_id, type, destination, startDate, endDate, travelers_quantity, total_price) "

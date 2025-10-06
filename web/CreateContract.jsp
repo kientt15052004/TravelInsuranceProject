@@ -15,7 +15,6 @@
     <div class="top-header">
         <div class="header-left">
             <div class="logo">
-                <i class="fas fa-briefcase"></i>
                 <div class="logo-text">
                     <span class="logo-main">Logo</span>
                 </div>
@@ -45,19 +44,16 @@
                 <ul>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/staff" class="nav-link">
-                            <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item active">
                         <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
-                            <i class="fas fa-plus-circle"></i>
                             <span>Tạo hợp đồng mới</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/staff/manage-contracts" class="nav-link">
-                            <i class="fas fa-file-contract"></i>
                             <span>Quản lý hợp đồng</span>
                         </a>
                     </li>
@@ -68,7 +64,7 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
-                <h1><i class="fas fa-file-contract" style="color: #FFD700; margin-right: 15px;"></i>Tạo Hợp Đồng Bảo Hiểm</h1>
+                <h1>Tạo Hợp Đồng Bảo Hiểm</h1>
                 <p style="color: #666; font-size: 14px;">Nhập thông tin khách hàng và sản phẩm bảo hiểm để tạo hợp đồng mới</p>
             </div>
             
@@ -98,7 +94,6 @@
                 <div class="form-row">
                     <div class="form-section">
                         <div class="form-title">
-                            <i class="fas fa-user"></i>
                             <span>Thông tin khách hàng</span>
                         </div>
                         
@@ -135,7 +130,6 @@
                     
                     <div class="form-section">
                         <div class="form-title">
-                            <i class="fas fa-shield-alt"></i>
                             <span>Thông tin bảo hiểm</span>
                         </div>
                         
