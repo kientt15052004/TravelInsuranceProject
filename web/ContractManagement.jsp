@@ -59,9 +59,6 @@
                     </li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <!-- Empty footer for now -->
-            </div>
         </div>
 
         <!-- Main Content -->
@@ -69,6 +66,36 @@
             <div class="content-header">
                 <h1>Quản Lý Hợp Đồng Bảo Hiểm</h1>
                 <p>Xem và quản lý tất cả hợp đồng bảo hiểm</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <h3>${totalContracts}</h3>
+                            <p>Tổng hợp đồng</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <h3>${activeContracts}</h3>
+                            <p>Đang hoạt động</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <h3>${pendingContracts}</h3>
+                            <p>Chờ xử lý</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-content">
+                            <h3>${expiredContracts}</h3>
+                            <p>Hết hạn</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Search and Filter Section -->
@@ -85,6 +112,10 @@
                             <label for="status">Trạng thái:</label>
                             <select id="status" name="status">
                                 <option value="">Tất cả trạng thái</option>
+                                <option value="Active" ${statusFilter == 'Active' ? 'selected' : ''}>Đang hoạt động</option>
+                                <option value="Pending" ${statusFilter == 'Pending' ? 'selected' : ''}>Chờ xử lý</option>
+                                <option value="Expired" ${statusFilter == 'Expired' ? 'selected' : ''}>Hết hạn</option>
+                                <option value="Cancelled" ${statusFilter == 'Cancelled' ? 'selected' : ''}>Đã hủy</option>
                             </select>
                         </div>
                         
@@ -100,13 +131,6 @@
                             </select>
                         </div>
                         
-                        <div class="filter-group">
-                            
-                        </div>
-                        
-                        <div class="filter-group">
-
-                        </div>
                         
                         <div class="button-group">
                             <button type="submit" class="btn btn-search">
@@ -121,8 +145,73 @@
                     </div>
                 </form>
             </div>
+
             <!-- Contracts Table -->
             <div class="contracts-table-section">
+                <div class="table-header">
+                    <h3>Danh sách hợp đồng bảo hiểm</h3>
+                    <p>Tổng cộng: ${contracts.size()} hợp đồng</p>
+                </div>
+                
+                <c:if test="${not empty error}">
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        ${error}
+                    </div>
+                </c:if>
+                
+                <c:if test="${not empty success}">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        ${success}
+                    </div>
+                </c:if>
+                
+                <div class="table-container">
+                    <c:choose>
+                        <c:when test="${not empty contracts}">
+                            <table class="contracts-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID Hợp đồng</th>
+                                        <th>ID Đơn đăng ký</th>
+                                        <th>Mô tả</th>
+                                        <th>Trạng thái</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="contract" items="${contracts}">
+                                        <tr>
+                                            <td>#${contract.contract_id}</td>
+                                            <td>#${contract.application_id}</td>
+                                            <td class="description-cell">${contract.description}</td>
+                                            <td>
+                                                <span class="status-text status-${contract.contract_status.toLowerCase()}">
+                                                    ${contract.contract_status}
+                                                </span>
+                                            </td>
+                                            <td class="actions-cell">
+                                                <div class="action-buttons">
+                                                    <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}" class="btn-sm btn-info" title="Xem chi tiết">
+                                                        Xem chi tiết
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="no-data">
+                                <i class="fas fa-file-contract"></i>
+                                <h3>Không có hợp đồng nào</h3>
+                                <p>Không tìm thấy hợp đồng nào phù hợp với tiêu chí tìm kiếm.</p>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </div>
     </div>

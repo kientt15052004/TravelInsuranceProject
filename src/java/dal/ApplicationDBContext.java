@@ -179,5 +179,33 @@ public class ApplicationDBContext extends DBContext {
         }
         return -1; // thất bại
     }
+    
+    public Application getApplicationById(int id) {
+        return getById(id);
+    }
+    
+    public List<ApplicationTraveler> getTravelersByApplicationId(int applicationId) {
+        List<ApplicationTraveler> travelers = new ArrayList<>();
+        String sql = "SELECT * FROM application_traveler WHERE application_id = ?";
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, applicationId);
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                ApplicationTraveler traveler = new ApplicationTraveler();
+                traveler.setCccd_id(rs.getLong("cccd_id"));
+                traveler.setName(rs.getString("name"));
+                traveler.setGender(rs.getString("gender"));
+                traveler.setDob(rs.getDate("dob"));
+                traveler.setPhone(rs.getString("phone"));
+                traveler.setEmail(rs.getString("email"));
+                travelers.add(traveler);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return travelers;
+    }
 
 }

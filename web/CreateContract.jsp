@@ -71,7 +71,7 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
-                <h1><i class="fas fa-file-contract"></i> Tạo Hợp Đồng Bảo Hiểm Mới</h1>
+                <h1></i> Tạo Hợp Đồng Bảo Hiểm Mới</h1>
                 <p>Tạo hợp đồng bảo hiểm du lịch cho khách hàng tại quầy</p>
             </div>
 
@@ -116,7 +116,6 @@
                 <!-- Customer Information Section -->
                 <div class="form-section">
                     <h2 class="form-title">
-                        <i class="fas fa-user"></i>
                         Thông tin khách hàng
                     </h2>
                     
@@ -202,7 +201,6 @@
                 <!-- Insurance Package Selection -->
                 <div class="form-section">
                     <h2 class="form-title">
-                        <i class="fas fa-shield-alt"></i>
                         Chọn gói bảo hiểm
                     </h2>
                     
@@ -237,7 +235,6 @@
                 <!-- Contract Period -->
                 <div class="form-section">
                     <h2 class="form-title">
-                        <i class="fas fa-calendar-alt"></i>
                         Thời gian bảo hiểm
                     </h2>
                     
@@ -280,11 +277,9 @@
                 <!-- Action Buttons -->
                 <div class="button-container">
                     <button type="submit" class="btn-create">
-                        <i class="fas fa-file-contract"></i>
                         Tạo hợp đồng
                     </button>
                     <button type="reset" class="btn-secondary">
-                        <i class="fas fa-undo"></i>
                         Làm mới
                     </button>
                 </div>
