@@ -126,48 +126,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/JS/staff.js"></script>
-    <script>
-        function viewContract(contractId) {
-            // Implement view contract functionality
-            alert('Xem chi tiết hợp đồng ID: ' + contractId);
-        }
-        
-        function editContract(contractId) {
-            // Implement edit contract functionality
-            alert('Chỉnh sửa hợp đồng ID: ' + contractId);
-        }
-        
-        function toggleStatusDropdown(contractId) {
-            const dropdown = document.getElementById('statusDropdown' + contractId);
-            const allDropdowns = document.querySelectorAll('.dropdown-menu');
-            
-            // Close all other dropdowns
-            allDropdowns.forEach(d => {
-                if (d.id !== 'statusDropdown' + contractId) {
-                    d.style.display = 'none';
-                }
-            });
-            
-            // Toggle current dropdown
-            if (dropdown.style.display === 'block') {
-                dropdown.style.display = 'none';
-            } else {
-                dropdown.style.display = 'block';
-            }
-        }
-        
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.status-dropdown')) {
-                document.querySelectorAll('.dropdown-menu').forEach(dropdown => {
-                    dropdown.style.display = 'none';
-                });
-            }
-        });
-    </script>
 </body>
 </html>
