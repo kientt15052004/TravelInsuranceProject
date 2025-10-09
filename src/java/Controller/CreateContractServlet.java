@@ -109,21 +109,21 @@ public class CreateContractServlet extends HttpServlet {
             // Create application (using default user ID for manual contracts)
             Application application = new Application();
             application.setPurchaser_id(1); // Use a default user ID for manual contracts
-            application.setInsuranceId(productId);
+            application.setProduct_id(productId);
             application.setType("manual"); // Mark as manual creation
             application.setDestination(destination);
             application.setStartDate(startDate);
             application.setEndDate(endDate);
-            application.setTraveler_quantity(travelersQuantity);
-            application.setPrice(totalPrice);
+            application.setTravelers_quantity(travelersQuantity);
+            application.setTotal_price(totalPrice);
             
             // Create application traveler (customer information)
             ApplicationTraveler traveler = new ApplicationTraveler();
             traveler.setName(fullname);
             traveler.setGender("Male"); // Default gender
-            traveler.setCccd(Long.parseLong(cccd)); // Convert CCCD to long
-            traveler.setBirthDate(dob);
-            traveler.setPhoneNumber(phone);
+            traveler.setCccd_id(Long.parseLong(cccd)); // Convert CCCD to long
+            traveler.setDob(dob);
+            traveler.setPhone(phone);
             traveler.setEmail(email);
             
             List<ApplicationTraveler> travelers = new ArrayList<>();
