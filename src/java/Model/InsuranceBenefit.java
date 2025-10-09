@@ -15,7 +15,7 @@ public class InsuranceBenefit {
     private BigDecimal death_or_permanent_disability;
     private BigDecimal death_due_to_illness;
     private BigDecimal third_party_liability;
-    private BigDecimal lost_bank_car;
+    private BigDecimal lost_bank_card;
     private BigDecimal kidnap_and_hostage;
     private BigDecimal lost_or_damaged_golf_equipment;
     private Boolean is_deleted;
@@ -37,12 +37,12 @@ public class InsuranceBenefit {
     public InsuranceBenefit() {
     }
 
-    public InsuranceBenefit(int id, BigDecimal death_or_permanent_disability, BigDecimal death_due_to_illness, BigDecimal third_party_liability, BigDecimal lost_bank_car, BigDecimal kidnap_and_hostage, BigDecimal lost_or_damaged_golf_equipment, Boolean is_deleted) {
+    public InsuranceBenefit(int id, BigDecimal death_or_permanent_disability, BigDecimal death_due_to_illness, BigDecimal third_party_liability, BigDecimal lost_bank_card, BigDecimal kidnap_and_hostage, BigDecimal lost_or_damaged_golf_equipment, Boolean is_deleted) {
         this.id = id;
         this.death_or_permanent_disability = death_or_permanent_disability;
         this.death_due_to_illness = death_due_to_illness;
         this.third_party_liability = third_party_liability;
-        this.lost_bank_car = lost_bank_car;
+        this.lost_bank_card = lost_bank_card;
         this.kidnap_and_hostage = kidnap_and_hostage;
         this.lost_or_damaged_golf_equipment = lost_or_damaged_golf_equipment;
         this.is_deleted = is_deleted;
@@ -61,7 +61,7 @@ public class InsuranceBenefit {
         this.death_or_permanent_disability = death_or_permanent_disability;
         this.death_due_to_illness = death_due_to_illness;
         this.third_party_liability = third_party_liability;
-        this.lost_bank_car = lost_bank_car;
+        this.lost_bank_card = lost_bank_card;
         this.kidnap_and_hostage = kidnap_and_hostage;
         this.lost_or_damaged_golf_equipment = lost_or_damaged_golf_equipment;
         this.is_deleted = is_deleted;
@@ -113,12 +113,12 @@ public class InsuranceBenefit {
         this.third_party_liability = third_party_liability;
     }
 
-    public BigDecimal getLost_bank_car() {
-        return lost_bank_car;
+    public BigDecimal getLost_bank_card() {
+        return lost_bank_card;
     }
 
-    public void setLost_bank_car(BigDecimal lost_bank_car) {
-        this.lost_bank_car = lost_bank_car;
+    public void setLost_bank_card(BigDecimal lost_bank_card) {
+        this.lost_bank_card = lost_bank_card;
     }
 
     public BigDecimal getKidnap_and_hostage() {
