@@ -16,68 +16,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/staff.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/createcontract.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* CSS-only animations and interactions */
-        .form-section {
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .nav-link:hover {
-            background-color: #FFD700;
-            transform: scale(1.05);
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: #FFD700;
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
-        }
-        
-        .btn-create:hover {
-            background-color: #ffed4e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-        }
-        
-        /* Auto-hide alerts */
-        .alert {
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        
-        /* Price calculation display */
-        .price-display {
-            background: linear-gradient(135deg, #FFD700, #ffed4e);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            text-align: center;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
 </head>
 <body>
     <!-- Top Header -->
