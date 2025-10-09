@@ -133,13 +133,13 @@ public class PurchaseInsuranceController extends HttpServlet {
                 app.setPurchaser_id(user.getId());
             }
 
-            app.setInsuranceId(insuranceId);
+            app.setProduct_id(insuranceId);
             app.setType(type);
             app.setDestination(destination);
             app.setStartDate(startDate);
             app.setEndDate(endDate);
-            app.setTraveler_quantity(travelerQuantity);
-            app.setPrice(totalPrice);
+            app.setTravelers_quantity(travelerQuantity);
+            app.setTotal_price(totalPrice);
 
             // ===== TẠO OBJECT BUYER =====
             String buyerType = request.getParameter("buyerType");
@@ -183,7 +183,7 @@ public class PurchaseInsuranceController extends HttpServlet {
                         response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate CCCD found: " + cccd, "UTF-8"));
                         return; // Dừng hẳn
                     }
-                    traveler.setCccd(cccd);
+                    traveler.setCccd_id(cccd);
                 }
 
                 // Name + gender
@@ -193,7 +193,7 @@ public class PurchaseInsuranceController extends HttpServlet {
                 // Birthdate
                 String birthDateParam = request.getParameter("traveler[" + i + "].birthDate");
                 if (birthDateParam != null && !birthDateParam.isEmpty()) {
-                    traveler.setBirthDate(java.sql.Date.valueOf(birthDateParam));
+                    traveler.setDob(java.sql.Date.valueOf(birthDateParam));
                 }
 
                 // Phone
@@ -203,7 +203,7 @@ public class PurchaseInsuranceController extends HttpServlet {
                         response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate phone number found: " + phone, "UTF-8"));
                         return;
                     }
-                    traveler.setPhoneNumber(phone);
+                    traveler.setPhone(phone);
                 }
 
                 // Email
