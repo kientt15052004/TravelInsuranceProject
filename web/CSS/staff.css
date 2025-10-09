@@ -1,4 +1,224 @@
-/* Staff Dashboard CSS - Yellow & White Theme */
+/* CSS-only interactions to replace JavaScript */
+
+/* Navigation hover effects */
+.nav-link:hover {
+    background-color: #FFD700;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.nav-item.active .nav-link {
+    background-color: #FFD700;
+    color: #000;
+}
+
+/* User dropdown - CSS-only */
+.user-dropdown {
+    position: relative;
+    cursor: pointer;
+}
+
+.user-dropdown:hover .dropdown-menu {
+    display: block;
+    animation: fadeInDown 0.3s ease;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    min-width: 150px;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form interactions */
+.form-control:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.form-control:invalid {
+    border-color: #dc3545;
+}
+
+.form-control:valid {
+    border-color: #28a745;
+}
+
+/* Button hover effects */
+.btn-create:hover {
+    background-color: #ffed4e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Auto-hide alerts with CSS animation */
+.alert {
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Auto-hide alerts after 5 seconds */
+.alert {
+    animation: slideInRight 0.3s ease-out, fadeOut 0.3s ease-in 4.7s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Loading animations for form sections */
+.form-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive sidebar without JavaScript */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0);
+    }
+}
+
+/* File upload styling */
+.file-info {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+/* Price calculation display */
+.price-display {
+    background: linear-gradient(135deg, #FFD700, #ffed4e);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Success message styling */
+.success-info {
+    margin-top: 10px;
+    font-size: 13px;
+    background: rgba(40, 167, 69, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid #28a745;
+}
+
+.success-info strong {
+    color: #28a745;
+}
+
+/* Form validation styling */
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* Input validation states */
+input:invalid {
+    border-color: #dc3545;
+}
+
+input:valid {
+    border-color: #28a745;
+}
+
+/* Focus states */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #FFD700;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+/* Hover effects for interactive elements */
+button:hover,
+.nav-link:hover,
+.dropdown-item:hover {
+    transform: translateY(-1px);
+    transition: all 0.3s ease;
+}
+
+/* Loading state for buttons */
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
 * {
     margin: 0;
     padding: 0;
