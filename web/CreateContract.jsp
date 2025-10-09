@@ -1,5 +1,12 @@
+<%-- 
+    Document   : CreateContractSimple
+    Created on : Dec 8, 2024
+    Author     : Staff Contract Creation - No JavaScript Version
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@page import="java.util.List"%>
+<%@page import="Model.InsuranceProduct"%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -53,7 +60,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/staff/manage-contracts" class="nav-link">
+                        <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
                             <span>Quản lý hợp đồng</span>
                         </a>
                     </li>
@@ -64,175 +71,227 @@
         <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
-                <h1>Tạo Hợp Đồng Bảo Hiểm</h1>
-                <p style="color: #666; font-size: 14px;">Nhập thông tin khách hàng và sản phẩm bảo hiểm để tạo hợp đồng mới</p>
+                <h1><i class="fas fa-file-contract"></i> Tạo Hợp Đồng Bảo Hiểm Mới</h1>
+                <p>Tạo hợp đồng bảo hiểm du lịch cho khách hàng tại quầy</p>
             </div>
-            
-            <c:if test="${not empty success}">
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle"></i> ${success}
-                    <c:if test="${not empty contractId}">
-                        <div class="success-info">
-                            <strong>Mã hợp đồng:</strong> ${contractId}
-                        </div>
-                    </c:if>
-                    <c:if test="${not empty applicationId}">
-                        <div class="success-info">
-                            <strong>Mã đơn đăng ký:</strong> ${applicationId}
-                        </div>
-                    </c:if>
+
+            <!-- Success Message -->
+            <% if (request.getAttribute("success") != null && (Boolean) request.getAttribute("success")) { %>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <strong>Thành công!</strong> Hợp đồng bảo hiểm đã được tạo thành công.
+                <div class="success-info">
+                    <strong>Mã hợp đồng:</strong> #<%= request.getAttribute("contractId") %><br>
+                    <strong>Khách hàng:</strong> <%= request.getAttribute("customerName") %><br>
+                    <strong>Gói bảo hiểm:</strong> <%= ((InsuranceProduct) request.getAttribute("insuranceProduct")).getName() %><br>
+                    <strong>Thời gian:</strong> <%= request.getAttribute("startDate") %> - <%= request.getAttribute("endDate") %><br>
+                    <strong>Tổng phí:</strong> <%= request.getAttribute("totalPrice") %> VNĐ
                 </div>
-            </c:if>
-            
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-circle"></i> ${error}
-                </div>
-            </c:if>
+            </div>
+            <% } %>
+
+            <!-- Error Messages -->
+            <% if (request.getAttribute("error") != null) { %>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Lỗi!</strong> <%= request.getAttribute("error") %>
+            </div>
+            <% } %>
+
+            <% if (request.getAttribute("errors") != null) { %>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Có lỗi xảy ra:</strong>
+                <ul style="margin: 10px 0 0 20px;">
+                    <% for (String error : (List<String>) request.getAttribute("errors")) { %>
+                    <li><%= error %></li>
+                    <% } %>
+                </ul>
+            </div>
+            <% } %>
+
+            <!-- Contract Creation Form -->
+            <form action="${pageContext.request.contextPath}/CreateContractServlet" method="POST" class="contract-form">
                 
-            <form action="${pageContext.request.contextPath}/CreateContractServlet" method="POST" class="needs-validation" novalidate>
-                <div class="form-row">
-                    <div class="form-section">
-                        <div class="form-title">
-                            <span>Thông tin khách hàng</span>
+                <!-- Customer Information Section -->
+                <div class="form-section">
+                    <h2 class="form-title">
+                        <i class="fas fa-user"></i>
+                        Thông tin khách hàng
+                    </h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerName" class="required-field">Họ và tên</label>
+                            <input type="text" 
+                                   id="customerName" 
+                                   name="customerName" 
+                                   class="form-control" 
+                                   placeholder="Nhập họ và tên đầy đủ"
+                                   value="<%= request.getParameter("customerName") != null ? request.getParameter("customerName") : "" %>"
+                                   required
+                                   pattern="[a-zA-ZÀ-ỹ\s]{2,50}"
+                                   title="Tên phải có từ 2-50 ký tự và chỉ chứa chữ cái">
                         </div>
                         
                         <div class="form-group">
-                            <label for="fullname" class="required-field">Họ và tên</label>
-                            <input type="text" class="form-control" id="fullname" name="fullname" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="required-field">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone" class="required-field">Số điện thoại</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="cccd" class="required-field">CCCD/CMND</label>
-                            <input type="text" class="form-control" id="cccd" name="cccd" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="address">Địa chỉ</label>
-                            <textarea class="form-control" id="address" name="address" rows="2"></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="dob">Ngày sinh</label>
-                            <input type="date" class="form-control" id="dob" name="dob">
+                            <label for="customerId" class="required-field">Số CCCD/CMND</label>
+                            <input type="text" 
+                                   id="customerId" 
+                                   name="customerId" 
+                                   class="form-control" 
+                                   placeholder="Nhập số CCCD/CMND"
+                                   value="<%= request.getParameter("customerId") != null ? request.getParameter("customerId") : "" %>"
+                                   required
+                                   pattern="[0-9]{9,12}"
+                                   title="Số CCCD/CMND phải có 9-12 chữ số">
                         </div>
                     </div>
                     
-                    <div class="form-section">
-                        <div class="form-title">
-                            <span>Thông tin bảo hiểm</span>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerPhone" class="required-field">Số điện thoại</label>
+                            <input type="tel" 
+                                   id="customerPhone" 
+                                   name="customerPhone" 
+                                   class="form-control" 
+                                   placeholder="Nhập số điện thoại"
+                                   value="<%= request.getParameter("customerPhone") != null ? request.getParameter("customerPhone") : "" %>"
+                                   required
+                                   pattern="0[0-9]{9,10}"
+                                   title="Số điện thoại phải có 10-11 số và bắt đầu bằng 0">
                         </div>
                         
                         <div class="form-group">
-                            <label for="productId" class="required-field">Sản phẩm bảo hiểm</label>
-                            <select class="form-select" id="productId" name="productId" required>
-                                <option value="">-- Chọn sản phẩm bảo hiểm --</option>
-                                <c:forEach var="product" items="${products}">
-                                    <option value="${product.id}">
-                                        ${product.name} - 
-                                        <c:choose>
-                                            <c:when test="${product.type == 'domestic'}">Trong Nước</c:when>
-                                            <c:when test="${product.type == 'international'}">Quốc Tế</c:when>
-                                            <c:otherwise>${product.type}</c:otherwise>
-                                        </c:choose>
-                                    </option>
-                                </c:forEach>
+                            <label for="customerEmail" class="required-field">Email</label>
+                            <input type="email" 
+                                   id="customerEmail" 
+                                   name="customerEmail" 
+                                   class="form-control" 
+                                   placeholder="Nhập địa chỉ email"
+                                   value="<%= request.getParameter("customerEmail") != null ? request.getParameter("customerEmail") : "" %>"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customerGender" class="required-field">Giới tính</label>
+                            <select id="customerGender" name="customerGender" class="form-select" required>
+                                <option value="">-- Chọn giới tính --</option>
+                                <option value="Nam" <%= "Nam".equals(request.getParameter("customerGender")) ? "selected" : "" %>>Nam</option>
+                                <option value="Nữ" <%= "Nữ".equals(request.getParameter("customerGender")) ? "selected" : "" %>>Nữ</option>
+                                <option value="Khác" <%= "Khác".equals(request.getParameter("customerGender")) ? "selected" : "" %>>Khác</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
-                            <label for="destination">Điểm đến</label>
-                            <input type="text" class="form-control" id="destination" name="destination" placeholder="Ví dụ: Thái Lan, Singapore...">
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="startDate" class="required-field">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" id="startDate" name="startDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="endDate" class="required-field">Ngày kết thúc</label>
-                                <input type="date" class="form-control" id="endDate" name="endDate" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="travelersQuantity" class="required-field">Số lượng người tham gia</label>
-                            <input type="number" class="form-control" id="travelersQuantity" name="travelersQuantity" min="1" value="1" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="contractDescription">Mô tả hợp đồng</label>
-                            <textarea class="form-control" id="contractDescription" name="contractDescription" rows="3" placeholder="Mô tả chi tiết về hợp đồng bảo hiểm..."></textarea>
+                            <label for="customerBirthDate" class="required-field">Ngày sinh</label>
+                            <input type="date" 
+                                   id="customerBirthDate" 
+                                   name="customerBirthDate" 
+                                   class="form-control"
+                                   value="<%= request.getParameter("customerBirthDate") != null ? request.getParameter("customerBirthDate") : "" %>"
+                                   required
+                                   max="<%= java.time.LocalDate.now().toString() %>"
+                                   title="Ngày sinh không được trong tương lai">
                         </div>
                     </div>
                 </div>
-                
+
+                <!-- Insurance Package Selection -->
+                <div class="form-section">
+                    <h2 class="form-title">
+                        <i class="fas fa-shield-alt"></i>
+                        Chọn gói bảo hiểm
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label for="insuranceProductId" class="required-field">Gói bảo hiểm</label>
+                        <select id="insuranceProductId" name="insuranceProductId" class="form-select" required>
+                            <option value="">-- Chọn gói bảo hiểm --</option>
+                            <% if (request.getAttribute("insuranceProducts") != null) { %>
+                                <% for (InsuranceProduct product : (List<InsuranceProduct>) request.getAttribute("insuranceProducts")) { %>
+                                <option value="<%= product.getId() %>" 
+                                        <%= String.valueOf(product.getId()).equals(request.getParameter("insuranceProductId")) ? "selected" : "" %>>
+                                    <%= product.getName() %> - <%= product.getType().equals("domestic") ? "Trong nước" : "Quốc tế" %> 
+                                    (<%= product.getPrice() %> VNĐ/ngày)
+                                </option>
+                                <% } %>
+                            <% } %>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="destination" class="required-field">Điểm đến</label>
+                        <input type="text" 
+                               id="destination" 
+                               name="destination" 
+                               class="form-control" 
+                               placeholder="Nhập điểm đến du lịch"
+                               value="<%= request.getParameter("destination") != null ? request.getParameter("destination") : "" %>"
+                               required>
+                    </div>
+                </div>
+
+                <!-- Contract Period -->
+                <div class="form-section">
+                    <h2 class="form-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Thời gian bảo hiểm
+                    </h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate" class="required-field">Ngày bắt đầu</label>
+                            <input type="date" 
+                                   id="startDate" 
+                                   name="startDate" 
+                                   class="form-control"
+                                   value="<%= request.getParameter("startDate") != null ? request.getParameter("startDate") : "" %>"
+                                   required
+                                   min="<%= java.time.LocalDate.now().toString() %>"
+                                   title="Ngày bắt đầu không được trong quá khứ">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="endDate" class="required-field">Ngày kết thúc</label>
+                            <input type="date" 
+                                   id="endDate" 
+                                   name="endDate" 
+                                   class="form-control"
+                                   value="<%= request.getParameter("endDate") != null ? request.getParameter("endDate") : "" %>"
+                                   required
+                                   min="<%= java.time.LocalDate.now().toString() %>"
+                                   title="Ngày kết thúc phải sau ngày bắt đầu">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contractDescription">Ghi chú thêm</label>
+                        <textarea id="contractDescription" 
+                                  name="contractDescription" 
+                                  class="form-control" 
+                                  rows="3" 
+                                  placeholder="Nhập ghi chú thêm về hợp đồng (không bắt buộc)"><%= request.getParameter("contractDescription") != null ? request.getParameter("contractDescription") : "" %></textarea>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
                 <div class="button-container">
                     <button type="submit" class="btn-create">
-                        <i class="fas fa-save" style="margin-right: 8px;"></i>Tạo Hợp Đồng
+                        <i class="fas fa-file-contract"></i>
+                        Tạo hợp đồng
                     </button>
                     <button type="reset" class="btn-secondary">
-                        <i class="fas fa-undo" style="margin-right: 8px;"></i>Làm mới
+                        <i class="fas fa-undo"></i>
+                        Làm mới
                     </button>
                 </div>
             </form>
-            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="${pageContext.request.contextPath}/JS/staff.js"></script>
-    <script>
-        // Form validation
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-        
-        // Date validation
-        document.getElementById('endDate').addEventListener('change', function() {
-            var startDate = document.getElementById('startDate').value;
-            var endDate = this.value;
-            
-            if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
-                this.setCustomValidity('Ngày kết thúc phải sau ngày bắt đầu');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-        
-        document.getElementById('startDate').addEventListener('change', function() {
-            var startDate = this.value;
-            var endDate = document.getElementById('endDate').value;
-            
-            if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
-                document.getElementById('endDate').setCustomValidity('Ngày kết thúc phải sau ngày bắt đầu');
-            } else {
-                document.getElementById('endDate').setCustomValidity('');
-            }
-        });
-    </script>
+    <!-- Meta refresh removed - was causing infinite reload loop -->
 </body>
 </html>

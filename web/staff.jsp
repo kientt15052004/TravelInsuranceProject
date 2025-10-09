@@ -175,7 +175,5 @@ Ut ut commodo nibh, non tempor augue. Ut vehicula fringilla purus, non condiment
             </div>
         </div>
     </div>
-
-    <script src="${pageContext.request.contextPath}/JS/staff.js"></script>
 </body>
 </html>
