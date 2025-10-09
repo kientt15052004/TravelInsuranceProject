@@ -13,11 +13,12 @@ import java.util.Date;
 public class ApplicationTraveler {
     private int id;
     private int application_id;
-    private long cccd;
+    private long cccd_id;
     private String name;
     private String gender;
-    private Date birthDate;
-    private String phoneNumber;
+    private Date dob;
+    private int age;
+    private String phone;
     private String email;
 
     public int getId() {
@@ -36,12 +37,12 @@ public class ApplicationTraveler {
         this.application_id = application_id;
     }
 
-    public long getCccd() {
-        return cccd;
+    public long getCccd_id() {
+        return cccd_id;
     }
 
-    public void setCccd(long cccd) {
-        this.cccd = cccd;
+    public void setCccd_id(long cccd_id) {
+        this.cccd_id = cccd_id;
     }
 
     public String getName() {
@@ -60,20 +61,28 @@ public class ApplicationTraveler {
         this.gender = gender;
     }
 
-    public Date getBirthDate() {
-        return birthDate;
+    public Date getDob() {
+        return dob;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public int getAge() {
+        return age;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getEmail() {
