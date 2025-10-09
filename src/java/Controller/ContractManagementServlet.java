@@ -27,18 +27,6 @@ public class ContractManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Load all contracts
-            List<Contract> contracts = contractDB.getAllContracts();
-            request.setAttribute("contracts", contracts);
-            
-            // Load contract statistics
-            int totalContracts = contractDB.getTotalContracts();
-            int activeContracts = contractDB.getContractsByStatusCount("ACTIVE");
-            int pendingContracts = contractDB.getContractsByStatusCount("PENDING");
-            
-            request.setAttribute("totalContracts", totalContracts);
-            request.setAttribute("activeContracts", activeContracts);
-            request.setAttribute("pendingContracts", pendingContracts);
             
             request.getRequestDispatcher("ContractManagement.jsp").forward(request, response);
         } catch (Exception e) {
