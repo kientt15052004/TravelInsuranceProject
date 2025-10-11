@@ -17,17 +17,30 @@ import jakarta.servlet.http.HttpServletResponse;
 public class InsuranceListController extends HttpServlet {
 
     private static final int DEFAULT_PAGE_SIZE = 6; // Số sản phẩm mỗi trang
-    
-    @Override
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        // Lấy parameters từ request
+
         String searchName = request.getParameter("searchName");
         String searchType = request.getParameter("searchType");
         String pageParam = request.getParameter("page");
-        
-        // Xử lý page number
+        String priceMinParam = request.getParameter("minPrice");
+        String priceMaxParam = request.getParameter("maxPrice");
+
+        Double priceMin = null;
+        Double priceMax = null;
+
+        try {
+            if (priceMinParam != null && !priceMinParam.trim().isEmpty()) {
+                priceMin = Double.parseDouble(priceMinParam);
+            }
+            if (priceMaxParam != null && !priceMaxParam.trim().isEmpty()) {
+                priceMax = Double.parseDouble(priceMaxParam);
+            }
+        } catch (NumberFormatException e) {
+            // bỏ qua nếu không hợp lệ
+        }
+
         int currentPage = 1;
         try {
             if (pageParam != null && !pageParam.trim().isEmpty()) {
@@ -39,42 +52,35 @@ public class InsuranceListController extends HttpServlet {
         } catch (NumberFormatException e) {
             currentPage = 1;
         }
-        
-        // Khởi tạo DAO
+
         InsuranceDBContext insuranceDAO = new InsuranceDBContext();
-        
-        // Lấy tổng số records để tính số trang
-        int totalRecords = insuranceDAO.getTotalRecords(searchName, searchType);
+
+        int totalRecords = insuranceDAO.getTotalRecords(searchName, searchType, priceMin, priceMax);
         int totalPages = (int) Math.ceil((double) totalRecords / DEFAULT_PAGE_SIZE);
-        
-        // Đảm bảo currentPage không vượt quá totalPages
+
         if (currentPage > totalPages && totalPages > 0) {
             currentPage = totalPages;
         }
-        
-        // Lấy danh sách insurance products
+
         ArrayList<InsuranceProduct> insurances = insuranceDAO.getAllPaging(
-            currentPage, 
-            DEFAULT_PAGE_SIZE, 
-            searchName, 
-            searchType
+                currentPage, DEFAULT_PAGE_SIZE, searchName, searchType, priceMin, priceMax
         );
-        
+
         ArrayList<String> types = insuranceDAO.getAllType();
-        
-        // Set attributes để truyền sang JSP
+
         request.setAttribute("types", types);
         request.setAttribute("insurances", insurances);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("totalRecords", totalRecords);
         request.setAttribute("pageSize", DEFAULT_PAGE_SIZE);
-        
-        // Giữ lại search parameters
+
+        // giữ lại giá trị filter để hiển thị lại
         request.setAttribute("searchName", searchName != null ? searchName : "");
         request.setAttribute("searchType", searchType != null ? searchType : "");
-        
-        // Forward đến JSP
+        request.setAttribute("priceMin", priceMinParam != null ? priceMinParam : "");
+        request.setAttribute("priceMax", priceMaxParam != null ? priceMaxParam : "");
+
         request.getRequestDispatcher("InsuranceList.jsp").forward(request, response);
     }
 

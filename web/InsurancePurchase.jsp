@@ -1,8 +1,3 @@
-<%-- 
-    Document   : InsurancePurchase
-    Created on : Oct 2, 2025, 5:11:15 PM
-    Author     : FPTSHOP
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -59,6 +54,7 @@
                         <h2 class="card-title">
                             <span class="icon">🛡️</span>
                             ${requestScope.insurance.name}
+                            <span data-insurance-price="${requestScope.insurance.price}" style="display: none;"></span>
                         </h2>
 
                         <!-- Date Inputs -->
@@ -142,7 +138,7 @@
                             <div class="benefit-item">
                                 <div class="benefit-number">4</div>
                                 <div class="benefit-text">Lost bank card</div>
-                                <div class="benefit-amount" data-base="${benefit.lost_bank_car}">${benefit.lost_bank_car} VNĐ</div>
+                                <div class="benefit-amount" data-base="${benefit.lost_bank_card}">${benefit.lost_bank_card} VNĐ</div>
                             </div>
                             <div class="benefit-item">
                                 <div class="benefit-number">5</div>

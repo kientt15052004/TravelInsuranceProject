@@ -86,7 +86,7 @@ public class ApplicationDBContext extends DBContext {
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             if (rs.next()) {
                 Application app = new Application();
                 app.setId(rs.getInt("id"));
@@ -105,7 +105,7 @@ public class ApplicationDBContext extends DBContext {
         }
         return null;
     }
-    
+
     public int insertApplicationWithTravelers(Application app, List<ApplicationTraveler> travelers) {
         String appSql = "INSERT INTO applications "
                 + "(purchaser_id, product_id, type, destination, startDate, endDate, travelers_quantity, total_price) "
@@ -163,10 +163,11 @@ public class ApplicationDBContext extends DBContext {
             connection.commit(); // commit transaction
             return applicationId;
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            System.err.println("SQL Error: " + e.getMessage() + " | SQLState: " + e.getSQLState());
             e.printStackTrace();
             try {
-                connection.rollback(); // rollback nếu có lỗi
+                connection.rollback();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -179,19 +180,19 @@ public class ApplicationDBContext extends DBContext {
         }
         return -1; // thất bại
     }
-    
+
     public Application getApplicationById(int id) {
         return getById(id);
     }
-    
+
     public List<ApplicationTraveler> getTravelersByApplicationId(int applicationId) {
         List<ApplicationTraveler> travelers = new ArrayList<>();
         String sql = "SELECT * FROM application_traveler WHERE application_id = ?";
-        
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, applicationId);
             ResultSet rs = stm.executeQuery();
-            
+
             while (rs.next()) {
                 ApplicationTraveler traveler = new ApplicationTraveler();
                 traveler.setCccd_id(rs.getLong("cccd_id"));

@@ -574,7 +574,7 @@ function submitForm() {
     // Create form to submit
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'PurchaseInsurance'; // Change to your servlet URL
+    form.action = 'purchase-insurance'; // Change to your servlet URL
 
     // Add InsuranceId
     addHiddenField(form, 'insuranceId', insuranceId);
