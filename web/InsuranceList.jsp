@@ -1,8 +1,4 @@
-<%-- 
-    Document   : InsuranceList
-    Created on : Oct 4, 2025
-    Author     : FPTSHOP
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -36,27 +32,38 @@
                 <!-- Filter Section -->
                 <div class="filter-section">
                     <form action="InsuranceList" method="GET" class="filter-form">
+                        <!-- Search by name -->
                         <div class="form-group">
                             <label>Search by Name</label>
-                            <input type="text" 
-                                   class="form-input" 
-                                   name="searchName" 
-                                   value="${param.searchName}" 
-                                   placeholder="Enter insurance name...">
+                            <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Enter insurance name...">
                         </div>
+
+                        <!-- Filter by type -->
                         <div class="form-group">
                             <label>Filter by Type</label>
                             <select class="form-select" name="searchType">
                                 <option value="">All Types</option>
-
                                 <c:forEach var="t" items="${types}">
                                     <option value="${t}" ${param.searchType == t ? 'selected' : ''}>${t}</option>
                                 </c:forEach>
                             </select>
                         </div>
-                        <button type="submit" class="search-btn">
-                            🔍 Search
-                        </button>
+
+                        <!-- Filter by price -->
+                        <div class="form-group price-filter">
+                            <label>Filter by Price (USD)</label>
+                            <div class="price-range">
+                                <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Min" min="0" step="1">
+                                <span>-</span>
+                                <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Max" min="0" step="1">
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="form-buttons">
+                            <button type="submit" class="search-btn">🔍 Search</button>
+                            <a href="InsuranceList" class="search-btn">🧹 Clear</a>
+                        </div>
                     </form>
                 </div>
 
@@ -81,7 +88,7 @@
                         </c:when>
                         <c:otherwise>
                             <c:forEach items="${insurances}" var="insurance">
-                                <a href="PurchaseInsurance?id=${insurance.id}" class="insurance-card">
+                                <a href="purchase-insurance?id=${insurance.id}" class="insurance-card">
                                     <div class="insurance-icon">
                                         <img src="${pageContext.request.contextPath}/Image/${insurance.img}" 
                                              alt="${insurance.name}" class="insurance-img"/>
@@ -89,6 +96,12 @@
                                     <span class="insurance-type">${insurance.type}</span>
                                     <div class="insurance-name">${insurance.name}</div>
                                     <div class="insurance-description">${insurance.description}</div>
+
+                                    <!-- Added Price Display -->
+                                    <div class="insurance-price">
+                                        💰 Price: <strong>$${insurance.price}</strong>
+                                    </div>
+
                                     <button class="view-details-btn">Purchase Now</button>
                                 </a>
                             </c:forEach>
@@ -102,7 +115,7 @@
                         <!-- Previous Button -->
                         <c:choose>
                             <c:when test="${currentPage > 1}">
-                                <a href="InsuranceList?page=${currentPage - 1}&searchName=${param.searchName}&searchType=${param.searchType}" 
+                                <a href="InsuranceList?page=${currentPage - 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
                                    class="page-btn">← Previous</a>
                             </c:when>
                             <c:otherwise>
@@ -114,7 +127,7 @@
                         <c:forEach begin="1" end="${totalPages}" var="i">
                             <c:choose>
                                 <c:when test="${i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1)}">
-                                    <a href="InsuranceList?page=${i}&searchName=${param.searchName}&searchType=${param.searchType}" 
+                                    <a href="InsuranceList?page=${i}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
                                        class="page-btn ${i == currentPage ? 'active' : ''}">${i}</a>
                                 </c:when>
                                 <c:when test="${i == currentPage - 2 || i == currentPage + 2}">
@@ -126,7 +139,7 @@
                         <!-- Next Button -->
                         <c:choose>
                             <c:when test="${currentPage < totalPages}">
-                                <a href="InsuranceList?page=${currentPage + 1}&searchName=${param.searchName}&searchType=${param.searchType}" 
+                                <a href="InsuranceList?page=${currentPage + 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
                                    class="page-btn">Next →</a>
                             </c:when>
                             <c:otherwise>
@@ -138,10 +151,8 @@
             </div>
         </div>
 
-
         <!-- SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <!-- Custom Alert -->
         <script src="./JS/SweetAlert.js"></script>
     </body>
 </html>

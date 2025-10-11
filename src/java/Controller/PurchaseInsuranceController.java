@@ -54,13 +54,13 @@ public class PurchaseInsuranceController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-//        HttpSession session = request.getSession();
-//        User user = (User) session.getAttribute("user");
-//        
-//        if(user == null){
-//            response.sendRedirect("./TestLoginServlet");
-//            return;
-//        }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            response.sendRedirect("./login");
+            return;
+        }
 
         String idRaw = request.getParameter("id");
         Integer id = Validation.validInt(idRaw);
@@ -74,6 +74,11 @@ public class PurchaseInsuranceController extends HttpServlet {
 
         if (id != null) {
             insurance = insuranceDB.getByIdWithBenefit(id);
+        }
+
+        if (!insurance.getIs_active()) {
+            response.sendRedirect("./InsuranceList");
+            return;
         }
 
         request.setAttribute("insurances", insurances);
@@ -224,8 +229,15 @@ public class PurchaseInsuranceController extends HttpServlet {
             int appId = adb.insertApplicationWithTravelers(app, travelers); // đã insert cả app và travelers
             app.setId(appId);
 
-            // REDIRECT (không dùng forward)
-            response.sendRedirect("InsuranceList?success=true&id="+ appId);
+            String mess = "";
+
+            if(appId > 0){
+                mess += "success=true";
+            }else{
+                mess += "error=Fail to purchase!";
+            }
+//             REDIRECT (không dùng forward)
+            response.sendRedirect("InsuranceList?"+ mess);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -72,39 +72,52 @@ public class InsuranceDBContext extends DBContext {
         return insurances;
     }
 
-    public ArrayList<InsuranceProduct> getAllPaging(int page, int pageSize, String searchName, String searchType) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1");
+    public ArrayList<InsuranceProduct> getAllPaging(
+            int page, int pageSize, String searchName, String searchType,
+            Double priceMin, Double priceMax) {
+
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE 1=1 AND is_active = 1");
         ArrayList<InsuranceProduct> insurances = new ArrayList<>();
 
-        // Thêm điều kiện search by name (tìm trong cả description)
         if (searchName != null && !searchName.trim().isEmpty()) {
             sql.append(" AND (name LIKE ? OR description LIKE ?)");
         }
 
-        // Thêm điều kiện search by type
         if (searchType != null && !searchType.trim().isEmpty()) {
             sql.append(" AND type = ?");
         }
 
-        // Thêm phân trang
+        if (priceMin != null) {
+            sql.append(" AND price >= ?");
+        }
+
+        if (priceMax != null) {
+            sql.append(" AND price <= ?");
+        }
+
         sql.append(" ORDER BY id LIMIT ? OFFSET ?");
 
         try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
 
-            // Set parameters cho search name
             if (searchName != null && !searchName.trim().isEmpty()) {
-                String searchPattern = "%" + searchName.trim() + "%";
-                stm.setString(paramIndex++, searchPattern);
-                stm.setString(paramIndex++, searchPattern);
+                String pattern = "%" + searchName.trim() + "%";
+                stm.setString(paramIndex++, pattern);
+                stm.setString(paramIndex++, pattern);
             }
 
-            // Set parameter cho search type
             if (searchType != null && !searchType.trim().isEmpty()) {
                 stm.setString(paramIndex++, searchType.trim());
             }
 
-            // Set parameters cho paging
+            if (priceMin != null) {
+                stm.setDouble(paramIndex++, priceMin);
+            }
+
+            if (priceMax != null) {
+                stm.setDouble(paramIndex++, priceMax);
+            }
+
             stm.setInt(paramIndex++, pageSize);
             stm.setInt(paramIndex++, (page - 1) * pageSize);
 
@@ -120,8 +133,8 @@ public class InsuranceDBContext extends DBContext {
     }
 
 // Hàm hỗ trợ để đếm tổng số records (cần cho pagination)
-    public int getTotalRecords(String searchName, String searchType) {
-        StringBuilder sql = new StringBuilder("SELECT COUNT(*) as total FROM products WHERE 1=1");
+    public int getTotalRecords(String searchName, String searchType, Double priceMin, Double priceMax) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) as total FROM products WHERE 1=1 AND is_active = 1 ");
 
         if (searchName != null && !searchName.trim().isEmpty()) {
             sql.append(" AND (name LIKE ? OR description LIKE ?)");
@@ -131,17 +144,33 @@ public class InsuranceDBContext extends DBContext {
             sql.append(" AND type = ?");
         }
 
+        if (priceMin != null) {
+            sql.append(" AND price >= ?");
+        }
+
+        if (priceMax != null) {
+            sql.append(" AND price <= ?");
+        }
+
         try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
 
             if (searchName != null && !searchName.trim().isEmpty()) {
-                String searchPattern = "%" + searchName.trim() + "%";
-                stm.setString(paramIndex++, searchPattern);
-                stm.setString(paramIndex++, searchPattern);
+                String pattern = "%" + searchName.trim() + "%";
+                stm.setString(paramIndex++, pattern);
+                stm.setString(paramIndex++, pattern);
             }
 
             if (searchType != null && !searchType.trim().isEmpty()) {
                 stm.setString(paramIndex++, searchType.trim());
+            }
+
+            if (priceMin != null) {
+                stm.setDouble(paramIndex++, priceMin);
+            }
+
+            if (priceMax != null) {
+                stm.setDouble(paramIndex++, priceMax);
             }
 
             ResultSet rs = stm.executeQuery();
@@ -170,7 +199,7 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public InsuranceProduct getByIdWithBenefit(int id) {
-        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.price, "
+        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.is_active, p.price, "
                 + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
                 + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
                 + "b.lost_or_damaged_golf_equipment, b.is_deleted, "
@@ -196,6 +225,7 @@ public class InsuranceDBContext extends DBContext {
                 insurance.setType(rs.getString("type"));
                 insurance.setDescription(rs.getString("description"));
                 insurance.setPrice(rs.getBigDecimal("price"));
+                insurance.setIs_active(rs.getBoolean("is_active"));
 
                 int benefitId = rs.getInt("benefit_id");
                 if (benefitId > 0) {
@@ -247,7 +277,7 @@ public class InsuranceDBContext extends DBContext {
                 u.setRole(rs.getString("role"));
                 u.setCccd_img(rs.getString("cccd_img"));
                 u.setStatus(rs.getString("status"));
-                
+
                 return u;
             }
         } catch (Exception e) {
@@ -255,7 +285,7 @@ public class InsuranceDBContext extends DBContext {
         }
         return null;
     }
-    
+
     // Helper method to map ResultSet to InsuranceProduct object
     private InsuranceProduct mapResultSetToInsuranceProduct(ResultSet rs) throws Exception {
         InsuranceProduct insurance = new InsuranceProduct();
@@ -268,7 +298,7 @@ public class InsuranceDBContext extends DBContext {
         insurance.setPrice(rs.getBigDecimal("price"));
         return insurance;
     }
-    
+
     // Helper method to map ResultSet to InsuranceBenefit object
     private InsuranceBenefit mapResultSetToInsuranceBenefit(ResultSet rs) throws Exception {
         InsuranceBenefit benefit = new InsuranceBenefit();
@@ -280,7 +310,7 @@ public class InsuranceDBContext extends DBContext {
         benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
         benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
         benefit.setIs_deleted(rs.getBoolean("is_deleted"));
-        
+
         // Map new fields
         benefit.setMedical_cost(rs.getBigDecimal("medical_cost"));
         benefit.setEmergency_transport(rs.getBigDecimal("emergency_transport"));
@@ -296,7 +326,7 @@ public class InsuranceDBContext extends DBContext {
         benefit.setDelayed_baggage(rs.getBigDecimal("delayed_baggage"));
         benefit.setTravel_documents(rs.getBigDecimal("travel_documents"));
         benefit.setTrip_delay(rs.getBigDecimal("trip_delay"));
-        
+
         return benefit;
     }
 

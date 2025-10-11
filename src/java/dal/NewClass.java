@@ -36,9 +36,9 @@ public class NewClass extends DBContext{
         at.setApplication_id(1);
         at.setName("Manh");
         at.setGender("Male");
-        at.setCccd(015204222111);
-        at.setBirthDate(new java.util.Date());
-        at.setPhoneNumber("01234381689");
+        at.setCccd_id(015204222111);
+        at.setDob(new java.util.Date());
+        at.setPhone("01234381689");
         at.setEmail("manh");
         
         list.add(at);
@@ -47,13 +47,13 @@ public class NewClass extends DBContext{
         
         Application app = new Application();
         app.setPurchaser_id(1);
-        app.setInsuranceId(1);
+        app.setProduct_id(1);
         app.setType("Car");
         app.setDestination("Ha long");
         app.setStartDate(new java.util.Date());
         app.setEndDate(new java.util.Date());
-        app.setTraveler_quantity(4);
-        app.setPrice(BigDecimal.ONE);
+        app.setTravelers_quantity(4);
+        app.setTotal_price(BigDecimal.ONE);
 
         System.out.println(adb.insertApplicationWithTravelers(app, list));
     }
