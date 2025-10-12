@@ -134,9 +134,7 @@
                     <div class="input-group">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" 
                                value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>"/>
-                        <div class="input-group-append">
-                            <span class="input-group-text" style="background: #fff;"><i class="fa fa-eye"></i></span>
-                        </div>
+                        
 
                     </div>
                     <% String passwordError = (String) request.getAttribute("passwordError");
@@ -166,7 +164,7 @@
                 </div>
                 <div class="text-center mt-2" style="font-size: 14px;">
                     Don't have an account?
-                    <a class="sign-up-link" href="#">Sign up</a>
+                    <a class="sign-up-link" href="register">Sign up</a>
                 </div>
             </form>
         </div>
