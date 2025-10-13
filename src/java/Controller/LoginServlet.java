@@ -59,7 +59,8 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user); // lưu object user vào session
-            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            session.setAttribute("loginMessage", "Chào mừng, " + user.getFullname() + "!");
+            response.sendRedirect(request.getContextPath() + "/home");
         } else {
             request.setAttribute("loginError", "Sai tên đăng nhập hoặc mật khẩu.");
             request.setAttribute("username", username);

@@ -46,6 +46,39 @@ public class UserDAO extends DBContext {
         }
         return null; // login thất bại
     }
+    public boolean checkUserExists(String username) {
+    String sql = "SELECT * FROM users WHERE username = ?";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, username);
+        ResultSet rs = st.executeQuery();
+        return rs.next();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
+public void insertUser(User u) {
+    String sql = "INSERT INTO users(username, password, fullname, mail, dob, address, phone, role, status) "
+               + "VALUES(?,?,?,?,?,?,?,?,?)";
+    try {
+        PreparedStatement st = connection.prepareStatement(sql);
+        st.setString(1, u.getUsername());
+        st.setString(2, u.getPassword());
+        st.setString(3, u.getFullname());
+        st.setString(4, u.getMail());
+        st.setDate(5, java.sql.Date.valueOf(u.getDob()));
+        st.setString(6, u.getAddress());
+        st.setString(7, u.getPhone());
+        st.setString(8, u.getRole());
+        st.setString(9, u.getStatus());
+        st.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
     
     // Get user by CCCD number
     public User getUserByCccd(String cccd) {
