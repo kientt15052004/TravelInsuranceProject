@@ -151,4 +151,42 @@ public class UserDAO extends DBContext {
         return -1; // Failed to insert
     }
     
+    // Get user by ID
+    public User getUserById(int userId) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, userId);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    User u = new User();
+                    u.setId(rs.getInt("id"));
+                    u.setUsername(rs.getString("username"));
+                    u.setPassword(rs.getString("password"));
+                    u.setFullname(rs.getString("fullname"));
+                    u.setMail(rs.getString("mail"));
+
+                    Date dobSql = rs.getDate("dob");
+                    if (dobSql != null) {
+                        LocalDate dobLocal = dobSql.toLocalDate();
+                        u.setDob(dobLocal);
+                    } else {
+                        u.setDob(null);
+                    }
+
+                    u.setAddress(rs.getString("address"));
+                    u.setPhone(rs.getString("phone"));
+                    u.setCccd(rs.getString("cccd"));
+                    u.setAvatar(rs.getString("avatar"));
+                    u.setRole(rs.getString("role"));
+                    u.setCccd_img(rs.getString("cccd_img"));
+                    u.setStatus(rs.getString("status"));
+                    return u;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
 }

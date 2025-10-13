@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -66,36 +67,6 @@
             <div class="content-header">
                 <h1>Quản Lý Hợp Đồng Bảo Hiểm</h1>
                 <p>Xem và quản lý tất cả hợp đồng bảo hiểm</p>
-            </div>
-
-            <!-- Statistics Cards -->
-            <div class="stats-section">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <h3>${totalContracts}</h3>
-                            <p>Tổng hợp đồng</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <h3>${activeContracts}</h3>
-                            <p>Đang hoạt động</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <h3>${pendingContracts}</h3>
-                            <p>Chờ xử lý</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-content">
-                            <h3>${expiredContracts}</h3>
-                            <p>Hết hạn</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!-- Search and Filter Section -->
@@ -174,8 +145,11 @@
                                 <thead>
                                     <tr>
                                         <th>ID Hợp đồng</th>
-                                        <th>ID Đơn đăng ký</th>
-                                        <th>Mô tả</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Ngày bắt đầu</th>
+                                        <th>Ngày kết thúc</th>
+                                        <th>Thông tin người mua</th>
+                                        <th>Tổng số tiền</th>
                                         <th>Trạng thái</th>
                                         <th>Thao tác</th>
                                     </tr>
@@ -184,8 +158,32 @@
                                     <c:forEach var="contract" items="${contracts}">
                                         <tr>
                                             <td>#${contract.contract_id}</td>
-                                            <td>#${contract.application_id}</td>
-                                            <td class="description-cell">${contract.description}</td>
+                                            <td>
+                                                <div class="product-info">
+                                                    <strong>${contract.productName}</strong>
+                                                    <small class="product-type">${contract.productType}</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <fmt:formatDate value="${contract.startDate}" pattern="dd/MM/yyyy"/>
+                                            </td>
+                                            <td>
+                                                <fmt:formatDate value="${contract.endDate}" pattern="dd/MM/yyyy"/>
+                                            </td>
+                                            <td>
+                                                <div class="buyer-info">
+                                                    <div class="buyer-name"><strong>${contract.buyerName}</strong></div>
+                                                    <div class="buyer-contact">
+                                                        <small>📞 ${contract.buyerPhone}</small><br>
+                                                        <small>📧 ${contract.buyerEmail}</small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="price-amount">
+                                                    <fmt:formatNumber value="${contract.totalPrice}" type="currency" currencyCode="VND"/>
+                                                </span>
+                                            </td>
                                             <td>
                                                 <span class="status-text status-${contract.contract_status.toLowerCase()}">
                                                     ${contract.contract_status}

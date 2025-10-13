@@ -4,6 +4,9 @@
  */
 package Model;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  *
  * @author FPTSHOP
@@ -14,6 +17,22 @@ public class Contract {
     private int application_id;
     private String description;
     private String contract_status;
+    
+    // Thông tin sản phẩm
+    private String productName;
+    private String productType;
+    
+    // Thông tin ngày
+    private Date startDate;
+    private Date endDate;
+    
+    // Thông tin người mua
+    private String buyerName;
+    private String buyerPhone;
+    private String buyerEmail;
+    
+    // Tổng số tiền
+    private BigDecimal totalPrice;
 
     public Contract() {
     }
@@ -64,5 +83,70 @@ public class Contract {
 
     public void setContract_status(String contract_status) {
         this.contract_status = contract_status;
+    }
+
+    // Getters and Setters for new fields
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getBuyerName() {
+        return buyerName;
+    }
+
+    public void setBuyerName(String buyerName) {
+        this.buyerName = buyerName;
+    }
+
+    public String getBuyerPhone() {
+        return buyerPhone;
+    }
+
+    public void setBuyerPhone(String buyerPhone) {
+        this.buyerPhone = buyerPhone;
+    }
+
+    public String getBuyerEmail() {
+        return buyerEmail;
+    }
+
+    public void setBuyerEmail(String buyerEmail) {
+        this.buyerEmail = buyerEmail;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
