@@ -7,6 +7,7 @@ package Controller;
 import dal.ContractDBContext;
 import dal.InsuranceDBContext;
 import dal.ApplicationDBContext;
+import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,9 +16,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import Model.Contract;
 import Model.InsuranceProduct;
 import Model.Application;
+import Model.User;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.math.BigDecimal;
 
 /**
  *
@@ -29,6 +32,7 @@ public class ContractManagementServlet extends HttpServlet {
     private ContractDBContext contractDB = new ContractDBContext();
     private InsuranceDBContext insuranceDB = new InsuranceDBContext();
     private ApplicationDBContext applicationDB = new ApplicationDBContext();
+    private UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -78,7 +82,43 @@ public class ContractManagementServlet extends HttpServlet {
     }
     
     private List<Contract> getFilteredContracts(String searchTerm, String statusFilter, String productFilter) {
-        // Sử dụng phương thức mới để lọc với các điều kiện (không có ngày)
-        return contractDB.getContractsWithFilters(searchTerm, statusFilter, productFilter, null, null);
+        // Lấy danh sách contracts cơ bản
+        List<Contract> contracts = contractDB.getContractsWithFilters(searchTerm, statusFilter, productFilter, null, null);
+        
+        // Bổ sung thông tin chi tiết cho mỗi contract
+        for (Contract contract : contracts) {
+            try {
+                // Lấy thông tin application
+                Application application = applicationDB.getApplicationById(contract.getApplication_id());
+                if (application != null) {
+                    // Lấy thông tin sản phẩm
+                    InsuranceProduct product = insuranceDB.getById(application.getProduct_id());
+                    if (product != null) {
+                        contract.setProductName(product.getName());
+                        contract.setProductType(product.getType());
+                    }
+                    
+                    // Lấy thông tin ngày
+                    contract.setStartDate(application.getStartDate());
+                    contract.setEndDate(application.getEndDate());
+                    
+                    // Lấy tổng số tiền
+                    contract.setTotalPrice(application.getTotal_price());
+                    
+                    // Lấy thông tin người mua
+                    User buyer = userDAO.getUserById(application.getPurchaser_id());
+                    if (buyer != null) {
+                        contract.setBuyerName(buyer.getFullname());
+                        contract.setBuyerPhone(buyer.getPhone());
+                        contract.setBuyerEmail(buyer.getMail());
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Error loading details for contract " + contract.getContract_id() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        
+        return contracts;
     }
 }
