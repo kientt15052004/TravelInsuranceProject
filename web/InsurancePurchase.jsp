@@ -83,25 +83,25 @@
                         <!-- Insurance Packages -->
                         <h3 class="section-title">Select Insurance Package</h3>
                         <div class="packages-grid">
-                            <div class="package-card" data-price="1000" data-benefit="10">
+                            <div class="package-card" data-price="1000" data-benefit="1">
                                 <div class="package-icon">🚲</div>
                                 <div class="package-name">Program 1</div>
                                 <div class="package-price">1,000 VNĐ/person</div>
                                 <div class="package-benefit">Benefits up to 10 million</div>
                             </div>
-                            <div class="package-card selected" data-price="5000" data-benefit="50">
+                            <div class="package-card selected" data-price="5000" data-benefit="5">
                                 <div class="package-icon">🚗</div>
                                 <div class="package-name">Program 2</div>
                                 <div class="package-price">5,000 VNĐ/person</div>
                                 <div class="package-benefit">Benefits up to 50 million</div>
                             </div>
-                            <div class="package-card" data-price="12000" data-benefit="120">
+                            <div class="package-card" data-price="12000" data-benefit="12">
                                 <div class="package-icon">🚆</div>
                                 <div class="package-name">Program 3</div>
                                 <div class="package-price">12,000 VNĐ/person</div>
                                 <div class="package-benefit">Benefits up to 120 million</div>
                             </div>
-                            <div class="package-card" data-price="20000" data-benefit="200">
+                            <div class="package-card" data-price="20000" data-benefit="20">
                                 <div class="package-icon">✈️</div>
                                 <div class="package-name">Program 4</div>
                                 <div class="package-price">20,000 VNĐ/person</div>

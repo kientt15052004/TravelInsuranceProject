@@ -37,7 +37,7 @@ public class InsuranceDBContext extends DBContext {
         String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.price, "
                 + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
                 + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
-                + "b.lost_or_damaged_golf_equipment, b.is_deleted, "
+                + "b.lost_or_damaged_golf_equipment, "
                 + "b.medical_cost, b.emergency_transport, b.repatriation_vn, b.repatriation_abroad, "
                 + "b.hospital_visit, b.funeral_arrangement, b.child_care, b.hospital_allowance, "
                 + "b.accident_death_injury, b.trip_cancellation, b.companion_support, "
@@ -202,7 +202,7 @@ public class InsuranceDBContext extends DBContext {
         String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.is_active, p.price, "
                 + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
                 + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
-                + "b.lost_or_damaged_golf_equipment, b.is_deleted, "
+                + "b.lost_or_damaged_golf_equipment, "
                 + "b.medical_cost, b.emergency_transport, b.repatriation_vn, b.repatriation_abroad, "
                 + "b.hospital_visit, b.funeral_arrangement, b.child_care, b.hospital_allowance, "
                 + "b.accident_death_injury, b.trip_cancellation, b.companion_support, "
@@ -309,7 +309,7 @@ public class InsuranceDBContext extends DBContext {
         benefit.setLost_bank_card(rs.getBigDecimal("lost_bank_card"));
         benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
         benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
-        benefit.setIs_deleted(rs.getBoolean("is_deleted"));
+        
 
         // Map new fields
         benefit.setMedical_cost(rs.getBigDecimal("medical_cost"));
