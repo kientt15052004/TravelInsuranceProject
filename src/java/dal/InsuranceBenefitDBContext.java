@@ -57,7 +57,6 @@ public class InsuranceBenefitDBContext extends DBContext {
         benefit.setLost_bank_card(rs.getBigDecimal("lost_bank_card"));
         benefit.setKidnap_and_hostage(rs.getBigDecimal("kidnap_and_hostage"));
         benefit.setLost_or_damaged_golf_equipment(rs.getBigDecimal("lost_or_damaged_golf_equipment"));
-        benefit.setIs_deleted(rs.getBoolean("is_deleted"));
         
         // Map new fields
         benefit.setMedical_cost(rs.getBigDecimal("medical_cost"));

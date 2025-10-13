@@ -18,7 +18,6 @@ public class InsuranceBenefit {
     private BigDecimal lost_bank_card;
     private BigDecimal kidnap_and_hostage;
     private BigDecimal lost_or_damaged_golf_equipment;
-    private Boolean is_deleted;
     private BigDecimal medical_cost;
     private BigDecimal emergency_transport;
     private BigDecimal repatriation_vn;
@@ -37,7 +36,7 @@ public class InsuranceBenefit {
     public InsuranceBenefit() {
     }
 
-    public InsuranceBenefit(int id, BigDecimal death_or_permanent_disability, BigDecimal death_due_to_illness, BigDecimal third_party_liability, BigDecimal lost_bank_card, BigDecimal kidnap_and_hostage, BigDecimal lost_or_damaged_golf_equipment, Boolean is_deleted) {
+    public InsuranceBenefit(int id, BigDecimal death_or_permanent_disability, BigDecimal death_due_to_illness, BigDecimal third_party_liability, BigDecimal lost_bank_card, BigDecimal kidnap_and_hostage, BigDecimal lost_or_damaged_golf_equipment) {
         this.id = id;
         this.death_or_permanent_disability = death_or_permanent_disability;
         this.death_due_to_illness = death_due_to_illness;
@@ -45,13 +44,12 @@ public class InsuranceBenefit {
         this.lost_bank_card = lost_bank_card;
         this.kidnap_and_hostage = kidnap_and_hostage;
         this.lost_or_damaged_golf_equipment = lost_or_damaged_golf_equipment;
-        this.is_deleted = is_deleted;
     }
     
     // Full constructor with all fields
     public InsuranceBenefit(int id, BigDecimal death_or_permanent_disability, BigDecimal death_due_to_illness, 
-                           BigDecimal third_party_liability, BigDecimal lost_bank_car, BigDecimal kidnap_and_hostage, 
-                           BigDecimal lost_or_damaged_golf_equipment, Boolean is_deleted, BigDecimal medical_cost,
+                           BigDecimal third_party_liability, BigDecimal lost_bank_card, BigDecimal kidnap_and_hostage, 
+                           BigDecimal lost_or_damaged_golf_equipment, BigDecimal medical_cost,
                            BigDecimal emergency_transport, BigDecimal repatriation_vn, BigDecimal repatriation_abroad,
                            BigDecimal hospital_visit, BigDecimal funeral_arrangement, BigDecimal child_care,
                            BigDecimal hospital_allowance, BigDecimal accident_death_injury, BigDecimal trip_cancellation,
@@ -64,7 +62,6 @@ public class InsuranceBenefit {
         this.lost_bank_card = lost_bank_card;
         this.kidnap_and_hostage = kidnap_and_hostage;
         this.lost_or_damaged_golf_equipment = lost_or_damaged_golf_equipment;
-        this.is_deleted = is_deleted;
         this.medical_cost = medical_cost;
         this.emergency_transport = emergency_transport;
         this.repatriation_vn = repatriation_vn;
@@ -137,13 +134,6 @@ public class InsuranceBenefit {
         this.lost_or_damaged_golf_equipment = lost_or_damaged_golf_equipment;
     }
 
-    public Boolean getIs_deleted() {
-        return is_deleted;
-    }
-
-    public void setIs_deleted(Boolean is_deleted) {
-        this.is_deleted = is_deleted;
-    }
 
     // Getter and setter methods for new fields
     public BigDecimal getMedical_cost() {

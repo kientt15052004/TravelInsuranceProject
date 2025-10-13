@@ -113,10 +113,84 @@
             <!-- Contract Creation Form -->
             <form action="${pageContext.request.contextPath}/CreateContractServlet" method="POST" class="contract-form">
                 
-                <!-- Customer Information Section -->
+                <!-- Buyer Information Section -->
                 <div class="form-section">
                     <h2 class="form-title">
-                        Thông tin khách hàng
+                        Thông tin người mua
+                    </h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="buyerId" class="required-field">Số CCCD/CMND</label>
+                            <input type="text" 
+                                   id="buyerId" 
+                                   name="buyerId" 
+                                   class="form-control" 
+                                   placeholder="Nhập số CCCD/CMND"
+                                   value="<%= request.getParameter("buyerId") != null ? request.getParameter("buyerId") : "" %>"
+                                   required
+                                   pattern="[0-9]{9,12}"
+                                   title="Số CCCD/CMND phải có 9-12 chữ số">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="buyerName" class="required-field">Họ và tên</label>
+                            <input type="text" 
+                                   id="buyerName" 
+                                   name="buyerName" 
+                                   class="form-control" 
+                                   placeholder="Nhập họ và tên đầy đủ"
+                                   value="<%= request.getParameter("buyerName") != null ? request.getParameter("buyerName") : "" %>"
+                                   required
+                                   pattern="[a-zA-ZÀ-ỹ\s]{2,50}"
+                                   title="Tên phải có từ 2-50 ký tự và chỉ chứa chữ cái">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="buyerPhone" class="required-field">Số điện thoại</label>
+                            <input type="tel" 
+                                   id="buyerPhone" 
+                                   name="buyerPhone" 
+                                   class="form-control" 
+                                   placeholder="Nhập số điện thoại"
+                                   value="<%= request.getParameter("buyerPhone") != null ? request.getParameter("buyerPhone") : "" %>"
+                                   required
+                                   pattern="0[0-9]{9,10}"
+                                   title="Số điện thoại phải có 10-11 số và bắt đầu bằng 0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="buyerEmail" class="required-field">Email</label>
+                            <input type="email" 
+                                   id="buyerEmail" 
+                                   name="buyerEmail" 
+                                   class="form-control" 
+                                   placeholder="Nhập địa chỉ email"
+                                   value="<%= request.getParameter("buyerEmail") != null ? request.getParameter("buyerEmail") : "" %>"
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="buyerAddress" class="required-field">Địa chỉ</label>
+                            <input type="text" 
+                                   id="buyerAddress" 
+                                   name="buyerAddress" 
+                                   class="form-control" 
+                                   placeholder="Nhập địa chỉ đầy đủ"
+                                   value="<%= request.getParameter("buyerAddress") != null ? request.getParameter("buyerAddress") : "" %>"
+                                   required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer/Traveler Information Section -->
+                <div class="form-section">
+                    <h2 class="form-title">
+                        Thông tin khách hàng (người được bảo hiểm)
                     </h2>
                     
                     <div class="form-row">
@@ -288,5 +362,122 @@
     </div>
 
     <!-- Meta refresh removed - was causing infinite reload loop -->
+    
+    <script>
+        // Auto-fill functionality for BUYER when CCCD is entered
+        document.getElementById('buyerId').addEventListener('blur', function() {
+            const cccd = this.value.trim();
+            if (cccd.length >= 9) { // Minimum CCCD length
+                checkBuyerByCccd(cccd);
+            }
+        });
+        
+        function checkBuyerByCccd(cccd) {
+            fetch('${pageContext.request.contextPath}/CheckUserServlet?cccd=' + encodeURIComponent(cccd))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.exists) {
+                        // Tim thay user thi gan data vao cac truong
+                        document.getElementById('buyerName').value = data.fullname || '';
+                        document.getElementById('buyerPhone').value = data.phone || '';
+                        document.getElementById('buyerEmail').value = data.email || '';
+                        document.getElementById('buyerAddress').value = data.address || '';
+                        
+                        // Chuyen sang trang thai read only
+                        document.getElementById('buyerName').readOnly = true;
+                        document.getElementById('buyerPhone').readOnly = true;
+                        document.getElementById('buyerEmail').readOnly = true;
+                        document.getElementById('buyerAddress').readOnly = true;
+                        
+                        // Add visual indicator
+                        showBuyerFoundIndicator();
+                        
+                        // Show message
+                        showMessage('Tìm thấy dữ liệu người mua.', 'success');
+                    } else {
+                        // Buyer not found - enable buyer fields for manual input
+                        enableBuyerFields();
+                        hideBuyerFoundIndicator();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking buyer:', error);
+                    enableBuyerFields();
+                    hideBuyerFoundIndicator();
+                });
+        }
+        
+        function enableBuyerFields() {
+            document.getElementById('buyerName').readOnly = false;
+            document.getElementById('buyerPhone').readOnly = false;
+            document.getElementById('buyerEmail').readOnly = false;
+            document.getElementById('buyerAddress').readOnly = false;
+        }
+        
+        function showBuyerFoundIndicator() {
+            const buyerIdField = document.getElementById('buyerId');
+            buyerIdField.style.borderColor = '#28a745';
+            buyerIdField.style.backgroundColor = '#f8fff9';
+            
+            // Add checkmark icon
+            if (!document.getElementById('buyerFoundIcon')) {
+                const icon = document.createElement('i');
+                icon.id = 'buyerFoundIcon';
+                icon.className = 'fas fa-check-circle';
+                icon.style.color = '#28a745';
+                icon.style.marginLeft = '10px';
+                buyerIdField.parentNode.appendChild(icon);
+            }
+        }
+        
+        function hideBuyerFoundIndicator() {
+            const buyerIdField = document.getElementById('buyerId');
+            buyerIdField.style.borderColor = '';
+            buyerIdField.style.backgroundColor = '';
+            
+            const icon = document.getElementById('buyerFoundIcon');
+            if (icon) {
+                icon.remove();
+            }
+        }
+        
+        function showMessage(message, type) {
+            // Remove existing message
+            const existingMessage = document.getElementById('autoFillMessage');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message
+            const messageDiv = document.createElement('div');
+            messageDiv.id = 'autoFillMessage';
+            messageDiv.className = 'alert alert-' + (type === 'success' ? 'success' : 'info');
+            messageDiv.style.marginTop = '10px';
+            messageDiv.innerHTML = '<i class="fas fa-info-circle"></i> ' + message;
+            
+            // Insert after buyer information section
+            const buyerSection = document.querySelector('.form-section');
+            buyerSection.appendChild(messageDiv);
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        // Reset form functionality
+        document.querySelector('button[type="reset"]').addEventListener('click', function() {
+            setTimeout(() => {
+                enableBuyerFields();
+                hideBuyerFoundIndicator();
+                const message = document.getElementById('autoFillMessage');
+                if (message) {
+                    message.remove();
+                }
+            }, 100);
+        });
+    </script>
 </body>
 </html>

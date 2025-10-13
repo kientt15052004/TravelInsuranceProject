@@ -8,12 +8,15 @@ import dal.ApplicationDBContext;
 import dal.ContractDBContext;
 import dal.InsuranceDBContext;
 import dal.TravelerDBContext;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -25,6 +28,7 @@ import Model.Application;
 import Model.ApplicationTraveler;
 import Model.Contract;
 import Model.InsuranceProduct;
+import Model.User;
 import Model.Traveler;
 
 /**
@@ -38,6 +42,7 @@ public class CreateContractServlet extends HttpServlet {
     private ApplicationDBContext applicationDB = new ApplicationDBContext();
     private ContractDBContext contractDB = new ContractDBContext();
     private TravelerDBContext travelerDB = new TravelerDBContext();
+    private UserDAO userDAO = new UserDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,13 +64,22 @@ public class CreateContractServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Get form parameters
+            // Get form parameters - Buyer Information
+            String buyerName = request.getParameter("buyerName");
+            String buyerId = request.getParameter("buyerId");
+            String buyerPhone = request.getParameter("buyerPhone");
+            String buyerEmail = request.getParameter("buyerEmail");
+            String buyerAddress = request.getParameter("buyerAddress");
+            
+            // Get form parameters - Customer Information
             String customerName = request.getParameter("customerName");
             String customerId = request.getParameter("customerId");
             String customerPhone = request.getParameter("customerPhone");
             String customerEmail = request.getParameter("customerEmail");
             String customerGender = request.getParameter("customerGender");
             String customerBirthDate = request.getParameter("customerBirthDate");
+            
+            // Get form parameters - Contract Information
             String insuranceProductId = request.getParameter("insuranceProductId");
             String startDate = request.getParameter("startDate");
             String endDate = request.getParameter("endDate");
@@ -73,9 +87,9 @@ public class CreateContractServlet extends HttpServlet {
             String contractDescription = request.getParameter("contractDescription");
 
             // Validate required fields
-            List<String> errors = validateForm(customerName, customerId, customerPhone, 
-                    customerEmail, customerGender, customerBirthDate, insuranceProductId, 
-                    startDate, endDate, destination);
+            List<String> errors = validateForm(buyerName, buyerId, buyerPhone, buyerEmail, buyerAddress,
+                    customerName, customerId, customerPhone, customerEmail, customerGender, customerBirthDate,
+                    insuranceProductId, startDate, endDate, destination);
 
             if (!errors.isEmpty()) {
                 request.setAttribute("errors", errors);
@@ -88,7 +102,7 @@ public class CreateContractServlet extends HttpServlet {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date startDateParsed = new Date(sdf.parse(startDate).getTime());
             Date endDateParsed = new Date(sdf.parse(endDate).getTime());
-            Date birthDateParsed = new Date(sdf.parse(customerBirthDate).getTime());
+            Date customerBirthDateParsed = new Date(sdf.parse(customerBirthDate).getTime());
 
             // Get insurance product details
             InsuranceProduct selectedProduct = insuranceDB.getById(Integer.parseInt(insuranceProductId));
@@ -101,9 +115,39 @@ public class CreateContractServlet extends HttpServlet {
             // Calculate total price based on insurance type and duration
             BigDecimal totalPrice = calculatePrice(selectedProduct, startDateParsed, endDateParsed);
 
+            // Check if BUYER exists by CCCD, if not create new user
+            User buyer = userDAO.getUserByCccd(buyerId);
+            int purchaserId;
+            
+            if (buyer == null) {
+                // Create new buyer user
+                buyer = new User();
+                buyer.setUsername(buyerPhone); // Use phone as username
+                buyer.setPassword("123456789a"); // Default password
+                buyer.setFullname(buyerName);
+                buyer.setMail(buyerEmail);
+                buyer.setDob(null); // Buyer doesn't need birth date
+                buyer.setAddress(buyerAddress);
+                buyer.setPhone(buyerPhone);
+                buyer.setCccd(buyerId);
+                buyer.setAvatar(null);
+                buyer.setRole("buyer"); // Set role as buyer
+                buyer.setCccd_img(null);
+                buyer.setStatus("active");
+                
+                purchaserId = userDAO.insertUser(buyer);
+                if (purchaserId == -1) {
+                    request.setAttribute("error", "Không thể tạo tài khoản người mua");
+                    doGet(request, response);
+                    return;
+                }
+            } else {
+                purchaserId = buyer.getId();
+            }
+
             // Create Application
             Application application = new Application();
-            application.setPurchaser_id(1); // Default purchaser ID for manual contracts
+            application.setPurchaser_id(purchaserId); // Use actual purchaser ID
             application.setProduct_id(selectedProduct.getId());
             application.setType(selectedProduct.getType());
             application.setDestination(destination);
@@ -112,12 +156,12 @@ public class CreateContractServlet extends HttpServlet {
             application.setTravelers_quantity(1);
             application.setTotal_price(totalPrice);
 
-            // Create ApplicationTraveler
+            // Create ApplicationTraveler (Customer information)
             ApplicationTraveler traveler = new ApplicationTraveler();
             traveler.setCccd_id(Long.parseLong(customerId));
             traveler.setName(customerName);
             traveler.setGender(customerGender);
-            traveler.setDob(birthDateParsed);
+            traveler.setDob(customerBirthDateParsed);
             traveler.setPhone(customerPhone);
             traveler.setEmail(customerEmail);
 
@@ -167,37 +211,64 @@ public class CreateContractServlet extends HttpServlet {
         }
     }
 
-    private List<String> validateForm(String customerName, String customerId, 
-            String customerPhone, String customerEmail, String customerGender, 
-            String customerBirthDate, String insuranceProductId, String startDate, 
-            String endDate, String destination) {
+    private List<String> validateForm(String buyerName, String buyerId, String buyerPhone, String buyerEmail, String buyerAddress,
+            String customerName, String customerId, String customerPhone, String customerEmail, String customerGender, 
+            String customerBirthDate, String insuranceProductId, String startDate, String endDate, String destination) {
         
         List<String> errors = new ArrayList<>();
 
+        // Validate Buyer Information
+        if (buyerName == null || buyerName.trim().isEmpty()) {
+            errors.add("Tên người mua không được để trống");
+        }
+
+        if (buyerId == null || buyerId.trim().isEmpty()) {
+            errors.add("Số CCCD/CMND người mua không được để trống");
+        } else if (!isValidIdNumber(buyerId)) {
+            errors.add("Số CCCD/CMND người mua không hợp lệ");
+        }
+
+        if (buyerPhone == null || buyerPhone.trim().isEmpty()) {
+            errors.add("Số điện thoại người mua không được để trống");
+        } else if (!isValidPhoneNumber(buyerPhone)) {
+            errors.add("Số điện thoại người mua không hợp lệ");
+        }
+
+        if (buyerEmail == null || buyerEmail.trim().isEmpty()) {
+            errors.add("Email người mua không được để trống");
+        } else if (!isValidEmail(buyerEmail)) {
+            errors.add("Email người mua không hợp lệ");
+        }
+
+        if (buyerAddress == null || buyerAddress.trim().isEmpty()) {
+            errors.add("Địa chỉ người mua không được để trống");
+        }
+
+        // Validate Customer Information
         if (customerName == null || customerName.trim().isEmpty()) {
             errors.add("Tên khách hàng không được để trống");
         }
 
         if (customerId == null || customerId.trim().isEmpty()) {
-            errors.add("Số CCCD/CMND không được để trống");
+            errors.add("Số CCCD/CMND khách hàng không được để trống");
         } else if (!isValidIdNumber(customerId)) {
-            errors.add("Số CCCD/CMND không hợp lệ");
+            errors.add("Số CCCD/CMND khách hàng không hợp lệ");
         }
 
         if (customerPhone == null || customerPhone.trim().isEmpty()) {
-            errors.add("Số điện thoại không được để trống");
+            errors.add("Số điện thoại khách hàng không được để trống");
         } else if (!isValidPhoneNumber(customerPhone)) {
-            errors.add("Số điện thoại không hợp lệ");
+            errors.add("Số điện thoại khách hàng không hợp lệ");
         }
 
         if (customerEmail == null || customerEmail.trim().isEmpty()) {
-            errors.add("Email không được để trống");
+            errors.add("Email khách hàng không được để trống");
         } else if (!isValidEmail(customerEmail)) {
-            errors.add("Email không hợp lệ");
+            errors.add("Email khách hàng không hợp lệ");
         }
 
         if (customerGender == null || customerGender.trim().isEmpty()) {
-            errors.add("Giới tính không được để trống");
+            errors.add("Giới tính khách hàng không được để trống");
         }
 
         if (customerBirthDate == null || customerBirthDate.trim().isEmpty()) {
