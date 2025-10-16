@@ -47,24 +47,6 @@
                         </a>
                     </div>
                 </li>
-                <li class="nav-item ${param.activePage == 'create-contract' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Tạo hợp đồng mới</span>
-                    </a>
-                </li>
-                <li class="nav-item ${param.activePage == 'contract-management' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
-                        <i class="fas fa-file-contract"></i>
-                        <span>Quản lý hợp đồng</span>
-                    </a>
-                </li>
-                <li class="nav-item ${param.activePage == 'claims-management' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/ClaimsManagementServlet" class="nav-link">
-                        <i class="fas fa-file-medical"></i>
-                        <span>Quản lý bồi thường</span>
-                    </a>
-                </li>
             </ul>
         </nav>
         <div class="sidebar-footer">
