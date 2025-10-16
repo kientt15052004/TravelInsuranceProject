@@ -1,4 +1,4 @@
-/* User Management Styles */
+/* Claims Management Styles */
 
 /* Statistics Section */
 .stats-section {
@@ -181,7 +181,7 @@
     gap: 8px;
 }
 
-.users-table-section {
+.claims-table-section {
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -308,22 +308,21 @@
 }
 
 /* Sort icons and visual feedback */
-.users-table th {
+.claims-table th {
     position: relative;
     user-select: none;
     transition: background-color 0.2s ease;
 }
 
-.users-table th:hover {
+.claims-table th:hover {
     background-color: #e9ecef;
 }
 
 /* Chỉ hiển thị cursor pointer cho các cột có thể sort */
-.users-table th:nth-child(1), /* ID User */
-.users-table th:nth-child(2), /* Full Name */
-.users-table th:nth-child(3), /* Email */
-.users-table th:nth-child(4), /* Phone */
-.users-table th:nth-child(5)  /* Role */ {
+.claims-table th:nth-child(1), /* ID Claim */
+.claims-table th:nth-child(2), /* Contract ID */
+.claims-table th:nth-child(3), /* Ngày yêu cầu */
+.claims-table th:nth-child(6)  /* Trạng thái */ {
     cursor: pointer;
 }
 
@@ -331,20 +330,20 @@
     overflow-x: auto;
 }
 
-.users-table {
+.claims-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
 
-.users-table th,
-.users-table td {
+.claims-table th,
+.claims-table td {
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
 }
 
-.users-table td {
+.claims-table td {
     font-size: 14px;
     color: #666;
 }
@@ -354,32 +353,19 @@
     word-wrap: break-word;
 }
 
-/* User Info Styles */
-.user-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.user-name {
-    color: #333;
-    font-size: 14px;
+/* Contract Link */
+.contract-link {
+    color: #007bff;
+    text-decoration: none;
     font-weight: 600;
 }
 
-.user-contact {
-    color: #666;
-    font-size: 12px;
-    line-height: 1.3;
+.contract-link:hover {
+    text-decoration: underline;
 }
 
-.user-contact small {
-    display: block;
-    margin-bottom: 2px;
-}
-
-/* Role Badge */
-.role-badge {
+/* Claim Type */
+.claim-type {
     background-color: #e9ecef;
     color: #495057;
     padding: 4px 8px;
@@ -388,14 +374,58 @@
     font-weight: 500;
 }
 
-.role-staff {
-    background-color: #d1ecf1;
-    color: #0c5460;
+/* Description Cell */
+.description-cell {
+    max-width: 200px;
+    position: relative;
 }
 
-.role-customer {
+.description-preview,
+.description-full {
+    display: block;
+    word-wrap: break-word;
+}
+
+.btn-toggle-description {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    padding: 2px 4px;
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.btn-toggle-description:hover {
+    color: #0056b3;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-approved {
     background-color: #d4edda;
     color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 /* Action Buttons */
@@ -435,28 +465,6 @@
     text-decoration: none;
 }
 
-.btn-warning {
-    background-color: #ffc107;
-    color: #212529;
-}
-
-.btn-warning:hover {
-    background-color: #e0a800;
-    color: #212529;
-    text-decoration: none;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    color: white;
-    text-decoration: none;
-}
-
 .no-data {
     text-align: center;
     padding: 60px 20px;
@@ -481,12 +489,12 @@
 }
 
 /* Table responsive adjustments */
-.users-table {
+.claims-table {
     min-width: 1000px; /* Ensure table doesn't get too cramped */
 }
 
-.users-table th,
-.users-table td {
+.claims-table th,
+.claims-table td {
     padding: 12px 8px;
     vertical-align: top;
 }
@@ -497,28 +505,24 @@
         overflow-x: auto;
     }
     
-    .users-table {
+    .claims-table {
         min-width: 800px;
     }
 }
 
 @media (max-width: 768px) {
-    .users-table th,
-    .users-table td {
+    .claims-table th,
+    .claims-table td {
         padding: 8px 6px;
         font-size: 12px;
     }
     
-    .user-name {
-        font-size: 12px;
+    .description-cell {
+        max-width: 150px;
     }
     
-    .user-contact {
-        font-size: 10px;
-    }
-    
-    .role-badge {
-        padding: 3px 6px;
+    .status-badge {
+        padding: 4px 8px;
         font-size: 10px;
     }
 }
@@ -550,12 +554,12 @@
         justify-content: center;
     }
     
-    .users-table {
+    .claims-table {
         font-size: 12px;
     }
     
-    .users-table th,
-    .users-table td {
+    .claims-table th,
+    .claims-table td {
         padding: 10px 8px;
     }
 }
