@@ -68,6 +68,12 @@
                             <span>Quản lý User</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/navigate?page=product" class="nav-link">
+                            <i class="fas fa-box"></i>
+                            <span>Quản lý Sản phẩm</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
