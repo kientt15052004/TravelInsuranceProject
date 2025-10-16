@@ -57,6 +57,105 @@ public class ClaimsDBContext extends DBContext {
         return claims;
     }
     
+    // Method để lấy tất cả claims với bộ lọc
+    public List<Claims> getAllClaimsWithFilters(String searchTerm, String statusFilter, String typeFilter) {
+        List<Claims> claims = new ArrayList<>();
+        
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return claims;
+        }
+        
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT c.* FROM claims c ");
+        sql.append("WHERE 1=1 ");
+        
+        List<Object> parameters = new ArrayList<>();
+        
+        // Tìm kiếm theo contract ID hoặc description
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            sql.append("AND (c.contract_id LIKE ? OR c.description LIKE ?) ");
+            String searchPattern = "%" + searchTerm.trim() + "%";
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+        }
+        
+        // Lọc theo trạng thái
+        if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+            sql.append("AND c.claim_status = ? ");
+            parameters.add(statusFilter);
+        }
+        
+        // Lọc theo loại claim
+        if (typeFilter != null && !typeFilter.trim().isEmpty()) {
+            sql.append("AND c.claim_type = ? ");
+            parameters.add(typeFilter);
+        }
+        
+        sql.append("ORDER BY c.requestDate DESC");
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                ps.setObject(i + 1, parameters.get(i));
+            }
+            
+            System.out.println("Executing SQL: " + sql.toString());
+            ResultSet rs = ps.executeQuery();
+            
+            int count = 0;
+            while (rs.next()) {
+                count++;
+                Claims claim = new Claims();
+                claim.setId(rs.getInt("id"));
+                claim.setContract_id(rs.getInt("contract_id"));
+                claim.setRequestDate(rs.getDate("requestDate"));
+                claim.setClaim_type(rs.getString("claim_type"));
+                claim.setDescription(rs.getString("description"));
+                claim.setPayment_bank(rs.getString("payment_bank"));
+                claim.setPayment_number(rs.getString("payment_number"));
+                claim.setRelated_img(rs.getString("related_img"));
+                claim.setRelated_file(rs.getString("related_file"));
+                claim.setClaim_status(rs.getString("claim_status"));
+                
+                claims.add(claim);
+            }
+            System.out.println("Found " + count + " claims with filters");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        
+        return claims;
+    }
+    
+    // Method để lấy tất cả loại claim unique
+    public List<String> getAllClaimTypes() {
+        List<String> claimTypes = new ArrayList<>();
+        
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return claimTypes;
+        }
+        
+        String sql = "SELECT DISTINCT claim_type FROM claims WHERE claim_type IS NOT NULL ORDER BY claim_type";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                String claimType = rs.getString("claim_type");
+                if (claimType != null && !claimType.trim().isEmpty()) {
+                    claimTypes.add(claimType);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        
+        return claimTypes;
+    }
+    
     // Method để test connection và kiểm tra bảng claims
     public boolean testConnection() {
         try {

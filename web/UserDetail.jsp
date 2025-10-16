@@ -50,8 +50,7 @@
             <div class="content-header">
                 <div class="header-actions">
                     <a href="${pageContext.request.contextPath}/usermanagement" class="btn-back">
-                        <i class="fas fa-arrow-left"></i>
-                        Quay lại danh sách
+                        Quay lại
                     </a>
                 </div>
                 <h1>Thông tin User</h1>
@@ -260,7 +259,6 @@
                                                         <c:if test="${contract.application_id == app.id}">
                                                             <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}&userId=${user.id}" 
                                                                class="btn-detail">
-                                                                <i class="fas fa-eye"></i>
                                                                 Xem hợp đồng
                                                             </a>
                                                         </c:if>
@@ -278,7 +276,7 @@
                 <!-- Claims Section -->
                 <div class="section">
                     <div class="section-header">
-                        <h2><i class="fas fa-exclamation-triangle"></i> Lịch sử Bồi thường (${claims.size()})</h2>
+                        <h2><i class="fas fa-exclamation-triangle"></i> Lịch sử Bồi thường</h2>
                     </div>
                     
                     <c:choose>
