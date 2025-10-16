@@ -96,7 +96,49 @@
                         </div>
                     </div>
 
-                    <!-- Application Info -->
+                    <!-- Buyer Info -->
+                    <c:if test="${not empty buyer}">
+                    <div class="detail-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user"></i> Thông tin người mua</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-row">
+                                <label>Họ tên:</label>
+                                <span>${not empty buyer.fullname ? buyer.fullname : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Email:</label>
+                                <span>${not empty buyer.mail ? buyer.mail : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Số điện thoại:</label>
+                                <span>${not empty buyer.phone ? buyer.phone : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Địa chỉ:</label>
+                                <span>${not empty buyer.address ? buyer.address : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>CCCD:</label>
+                                <span>${not empty buyer.cccd ? buyer.cccd : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Ngày sinh:</label>
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${not empty buyer.dob}">
+                                            ${buyer.dob}
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-muted">Chưa cập nhật</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    </c:if>
                     <c:if test="${not empty application}">
                     <div class="detail-card">
                         <div class="card-header">

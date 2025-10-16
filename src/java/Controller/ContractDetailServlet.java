@@ -7,10 +7,12 @@ package Controller;
 import dal.ContractDBContext;
 import dal.ApplicationDBContext;
 import dal.InsuranceDBContext;
+import dal.UserDAO;
 import Model.Contract;
 import Model.Application;
 import Model.InsuranceProduct;
 import Model.ApplicationTraveler;
+import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -55,6 +57,13 @@ public class ContractDetailServlet extends HttpServlet {
             // Get application details
             Application application = applicationDB.getById(contract.getApplication_id());
             
+            // Get buyer information
+            User buyer = null;
+            if (application != null) {
+                UserDAO userDAO = new UserDAO();
+                buyer = userDAO.getUserById(application.getPurchaser_id());
+            }
+            
             // Get insurance product details
             InsuranceProduct product = null;
             if (application != null) {
@@ -72,6 +81,7 @@ public class ContractDetailServlet extends HttpServlet {
             request.setAttribute("application", application);
             request.setAttribute("product", product);
             request.setAttribute("travelers", travelers);
+            request.setAttribute("buyer", buyer);
             request.setAttribute("userId", userIdStr); // Pass userId to JSP
             
             request.getRequestDispatcher("ContractDetail.jsp").forward(request, response);
