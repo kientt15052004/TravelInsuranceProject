@@ -140,7 +140,7 @@ public class UpdateProduct extends HttpServlet {
                 + UUID.randomUUID().toString() + "_"
                 + originalFileName.replaceAll("[^a-zA-Z0-9.-]", "_");
 
-        String uploadPath = getServletContext().getRealPath("") + File.separator + "upload_imgs";
+        String uploadPath = getServletContext().getRealPath("") + File.separator + "Image" + File.separator + "upload_imgs";
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
@@ -149,7 +149,7 @@ public class UpdateProduct extends HttpServlet {
         String filePath = uploadPath + File.separator + safeFileName;
         filePart.write(filePath);
 
-        return "upload_imgs/" + safeFileName;
+        return "Image/upload_imgs/" + safeFileName;
     }
 
     private InsuranceBenefit1 createInsuranceBenefit(HttpServletRequest request) {

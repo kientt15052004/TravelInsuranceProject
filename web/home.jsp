@@ -96,7 +96,7 @@
                     %>
                     <div class="col-lg-5 col-md-6">
                         <div class="product-card text-center">
-                            <img src="./Image/<%= p.getImg() %>" alt="<%= p.getName() %>" class="product-image">
+                            <img src="./<%= p.getImg() %>" alt="<%= p.getName() %>" class="product-image">
                             <button class="btn-select-plan"><%= p.getName() %></button>
                             <p class="product-desc mt-2"><%= p.getDescription() %></p>
                         </div>
