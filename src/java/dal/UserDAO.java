@@ -1,11 +1,17 @@
 package dal;
 
 import Model.User;
+import Model.Application;
+import Model.Contract;
+import Model.Claims;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.math.BigDecimal;
 
 public class UserDAO extends DBContext {
 
@@ -16,29 +22,7 @@ public class UserDAO extends DBContext {
             st.setString(2, password);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    User u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setUsername(rs.getString("username"));
-                    u.setPassword(rs.getString("password"));
-                    u.setFullname(rs.getString("fullname"));
-                    u.setMail(rs.getString("mail"));
-
-                    Date dobSql = rs.getDate("dob"); // java.sql.Date
-                    if (dobSql != null) {
-                        LocalDate dobLocal = dobSql.toLocalDate();
-                        u.setDob(dobLocal);
-                    } else {
-                        u.setDob(null);
-                    }
-
-                    u.setAddress(rs.getString("address"));
-                    u.setPhone(rs.getString("phone"));
-                    u.setCccd(rs.getString("cccd"));
-                    u.setAvatar(rs.getString("avatar"));
-                    u.setRole(rs.getString("role"));
-                    u.setCccd_img(rs.getString("cccd_img"));
-                    u.setStatus(rs.getString("status"));
-                    return u;
+                    return mapResultSetToUser(rs);
                 }
             }
         } catch (SQLException e) {
@@ -66,29 +50,7 @@ public class UserDAO extends DBContext {
             st.setString(1, cccd);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    User u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setUsername(rs.getString("username"));
-                    u.setPassword(rs.getString("password"));
-                    u.setFullname(rs.getString("fullname"));
-                    u.setMail(rs.getString("mail"));
-
-                    Date dobSql = rs.getDate("dob");
-                    if (dobSql != null) {
-                        LocalDate dobLocal = dobSql.toLocalDate();
-                        u.setDob(dobLocal);
-                    } else {
-                        u.setDob(null);
-                    }
-
-                    u.setAddress(rs.getString("address"));
-                    u.setPhone(rs.getString("phone"));
-                    u.setCccd(rs.getString("cccd"));
-                    u.setAvatar(rs.getString("avatar"));
-                    u.setRole(rs.getString("role"));
-                    u.setCccd_img(rs.getString("cccd_img"));
-                    u.setStatus(rs.getString("status"));
-                    return u;
+                    return mapResultSetToUser(rs);
                 }
             }
         } catch (SQLException e) {
@@ -158,35 +120,230 @@ public class UserDAO extends DBContext {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    User u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setUsername(rs.getString("username"));
-                    u.setPassword(rs.getString("password"));
-                    u.setFullname(rs.getString("fullname"));
-                    u.setMail(rs.getString("mail"));
-
-                    Date dobSql = rs.getDate("dob");
-                    if (dobSql != null) {
-                        LocalDate dobLocal = dobSql.toLocalDate();
-                        u.setDob(dobLocal);
-                    } else {
-                        u.setDob(null);
-                    }
-
-                    u.setAddress(rs.getString("address"));
-                    u.setPhone(rs.getString("phone"));
-                    u.setCccd(rs.getString("cccd"));
-                    u.setAvatar(rs.getString("avatar"));
-                    u.setRole(rs.getString("role"));
-                    u.setCccd_img(rs.getString("cccd_img"));
-                    u.setStatus(rs.getString("status"));
-                    return u;
+                    return mapResultSetToUser(rs);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
+    }
+    
+    // Get all users for staff management
+    public List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users ORDER BY id ASC";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    User u = mapResultSetToUser(rs);
+                    users.add(u);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    
+    // Search users with filters
+    public List<User> searchUsers(String keyword, String role, String status) {
+        List<User> users = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
+        List<Object> parameters = new ArrayList<>();
+        
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            sql.append(" AND (fullname LIKE ? OR mail LIKE ? OR username LIKE ?)");
+            String searchPattern = "%" + keyword.trim() + "%";
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+        }
+        
+        if (role != null && !role.trim().isEmpty() && !role.equals("all")) {
+            sql.append(" AND role = ?");
+            parameters.add(role.trim());
+        }
+        
+        if (status != null && !status.trim().isEmpty() && !status.equals("all")) {
+            sql.append(" AND status = ?");
+            parameters.add(status.trim());
+        }
+        
+        sql.append(" ORDER BY id ASC");
+        
+        try (PreparedStatement st = connection.prepareStatement(sql.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                st.setObject(i + 1, parameters.get(i));
+            }
+            
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    User u = mapResultSetToUser(rs);
+                    users.add(u);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    
+    // Update user info (only phone, address, status)
+    public boolean updateUserInfo(User user) {
+        String sql = "UPDATE users SET phone = ?, address = ?, status = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, user.getPhone());
+            st.setString(2, user.getAddress());
+            st.setString(3, user.getStatus());
+            st.setInt(4, user.getId());
+            
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Get applications by user ID
+    public List<Application> getApplicationsByUserId(int userId) {
+        List<Application> applications = new ArrayList<>();
+        String sql = "SELECT * FROM applications WHERE purchaser_id = ? ORDER BY id DESC";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, userId);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Application app = new Application();
+                    app.setId(rs.getInt("id"));
+                    app.setPurchaser_id(rs.getInt("purchaser_id"));
+                    app.setProduct_id(rs.getInt("product_id"));
+                    app.setType(rs.getString("type"));
+                    app.setDestination(rs.getString("destination"));
+                    app.setStartDate(rs.getDate("startDate"));
+                    app.setEndDate(rs.getDate("endDate"));
+                    app.setTravelers_quantity(rs.getInt("travelers_quantity"));
+                    app.setTotal_price(rs.getBigDecimal("total_price"));
+                    applications.add(app);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return applications;
+    }
+    
+    // Get contracts by user ID (through applications)
+    public List<Contract> getContractsByUserId(int userId) {
+        List<Contract> contracts = new ArrayList<>();
+        String sql = "SELECT c.* FROM contract c " +
+                    "INNER JOIN applications a ON c.application_id = a.id " +
+                    "WHERE a.purchaser_id = ? ORDER BY c.contract_id DESC";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, userId);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Contract contract = new Contract();
+                    contract.setContract_id(rs.getInt("contract_id"));
+                    contract.setCurrent_benefit_id(rs.getInt("current_benefit_id"));
+                    contract.setApplication_id(rs.getInt("application_id"));
+                    contract.setDescription(rs.getString("description"));
+                    contract.setContract_status(rs.getString("contract_status"));
+                    contracts.add(contract);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contracts;
+    }
+    
+    // Get claims by user ID (through contracts)
+    public List<Claims> getClaimsByUserId(int userId) {
+        List<Claims> claims = new ArrayList<>();
+        String sql = "SELECT c.* FROM claims c " +
+                    "INNER JOIN contract ct ON c.contract_id = ct.contract_id " +
+                    "INNER JOIN applications a ON ct.application_id = a.id " +
+                    "WHERE a.purchaser_id = ? ORDER BY c.requestDate DESC";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, userId);
+            try (ResultSet rs = st.executeQuery()) {
+                while (rs.next()) {
+                    Claims claim = new Claims();
+                    claim.setId(rs.getInt("id"));
+                    claim.setContract_id(rs.getInt("contract_id"));
+                    claim.setRequestDate(rs.getDate("requestDate"));
+                    claim.setClaim_type(rs.getString("claim_type"));
+                    claim.setDescription(rs.getString("description"));
+                    claim.setPayment_bank(rs.getString("payment_bank"));
+                    claim.setPayment_number(rs.getString("payment_number"));
+                    claim.setRelated_img(rs.getString("related_img"));
+                    claim.setRelated_file(rs.getString("related_file"));
+                    claim.setClaim_status(rs.getString("claim_status"));
+                    
+                    // Check if claim_amount column exists in the result set
+                    BigDecimal claimAmount = null;
+                    try {
+                        // Check if column exists by trying to get its index
+                        rs.findColumn("claim_amount");
+                        claimAmount = rs.getBigDecimal("claim_amount");
+                    } catch (SQLException e) {
+                        // Column doesn't exist, set to null
+                        claimAmount = null;
+                    }
+                    claim.setClaim_amount(claimAmount);
+                    
+                    claims.add(claim);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return claims;
+    }
+    
+    // Get total insurance amount by user ID
+    public BigDecimal getTotalInsuranceAmountByUserId(int userId) {
+        String sql = "SELECT SUM(total_price) FROM applications WHERE purchaser_id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setInt(1, userId);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    BigDecimal total = rs.getBigDecimal(1);
+                    return total != null ? total : BigDecimal.ZERO;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return BigDecimal.ZERO;
+    }
+    
+    // Helper method to map ResultSet to User object
+    private User mapResultSetToUser(ResultSet rs) throws SQLException {
+        User u = new User();
+        u.setId(rs.getInt("id"));
+        u.setUsername(rs.getString("username"));
+        u.setPassword(rs.getString("password"));
+        u.setFullname(rs.getString("fullname"));
+        u.setMail(rs.getString("mail"));
+
+        Date dobSql = rs.getDate("dob");
+        if (dobSql != null) {
+            LocalDate dobLocal = dobSql.toLocalDate();
+            u.setDob(dobLocal);
+        } else {
+            u.setDob(null);
+        }
+
+        u.setAddress(rs.getString("address"));
+        u.setPhone(rs.getString("phone"));
+        u.setCccd(rs.getString("cccd"));
+        u.setAvatar(rs.getString("avatar"));
+        u.setRole(rs.getString("role"));
+        u.setCccd_img(rs.getString("cccd_img"));
+        u.setStatus(rs.getString("status"));
+        return u;
     }
     
 }

@@ -61,6 +61,11 @@
                             <span>Quản lý hợp đồng</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
+                            <span>Quản lý User</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
