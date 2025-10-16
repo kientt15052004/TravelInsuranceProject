@@ -46,17 +46,26 @@
                 <ul>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/staff" class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
                             <span>Tạo hợp đồng mới</span>
                         </a>
                     </li>
-                    <li class="nav-item active">
+                    <li class="nav-item ${empty userId ? 'active' : ''}">
                         <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
+                            <i class="fas fa-file-contract"></i>
                             <span>Quản lý hợp đồng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ${not empty userId ? 'active' : ''}">
+                        <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Quản lý User</span>
                         </a>
                     </li>
                 </ul>
@@ -70,9 +79,18 @@
         <div class="main-content">
             <div class="content-header">
                 <div class="header-actions">
-                    <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="btn btn-secondary">
-                        Quay lại
-                    </a>
+                    <c:choose>
+                        <c:when test="${not empty userId}">
+                            <a href="${pageContext.request.contextPath}/usermanagement?action=detail&userId=${userId}" class="btn btn-secondary">
+                                Quay lại
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="btn btn-secondary">
+                                Quay lại
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <h1>Chi tiết hợp đồng #${contract.contract_id}</h1>
                 <p>Thông tin chi tiết về hợp đồng bảo hiểm</p>

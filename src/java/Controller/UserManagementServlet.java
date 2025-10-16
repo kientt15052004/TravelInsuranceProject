@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.math.BigDecimal;
 
 @WebServlet(name = "UserManagementServlet", urlPatterns = {"/usermanagement"})
 public class UserManagementServlet extends HttpServlet {
@@ -19,8 +20,8 @@ public class UserManagementServlet extends HttpServlet {
             throws ServletException, IOException {
         
         // Check if user is logged in and has staff role
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
@@ -77,6 +78,12 @@ public class UserManagementServlet extends HttpServlet {
         } else {
             // Get all users
             users = userDAO.getAllUsers();
+        }
+        
+        // Calculate total insurance amount for each user
+        for (User user : users) {
+            BigDecimal totalAmount = userDAO.getTotalInsuranceAmountByUserId(user.getId());
+            user.setTotalInsuranceAmount(totalAmount);
         }
         
         request.setAttribute("users", users);

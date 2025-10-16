@@ -277,4 +277,16 @@
         padding: 3px 8px;
         font-size: 10px;
     }
+    
+    .total-amount {
+        font-size: 12px;
+    }
+}
+
+/* Total Amount Column */
+.total-amount {
+    font-weight: 600;
+    color: #2e7d32;
+    text-align: right;
+    white-space: nowrap;
 }

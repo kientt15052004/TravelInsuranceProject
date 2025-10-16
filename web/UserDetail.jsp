@@ -46,21 +46,25 @@
                 <ul>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/staff" class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
                             <span>Tạo hợp đồng mới</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
+                            <i class="fas fa-file-contract"></i>
                             <span>Quản lý hợp đồng</span>
                         </a>
                     </li>
                     <li class="nav-item active">
                         <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
+                            <i class="fas fa-users"></i>
                             <span>Quản lý User</span>
                         </a>
                     </li>
@@ -77,8 +81,7 @@
                         Quay lại danh sách
                     </a>
                 </div>
-                <h1>Chi tiết User</h1>
-                <p>Thông tin chi tiết và lịch sử của người dùng</p>
+                <h1>Thông tin User</h1>
             </div>
 
             <!-- Success/Error Messages -->
@@ -219,7 +222,7 @@
                 <!-- Contracts & Applications Section -->
                 <div class="section">
                     <div class="section-header">
-                        <h2><i class="fas fa-file-contract"></i> Hợp đồng & Lịch sử Mua hàng</h2>
+                        <h2><i class="fas fa-file-contract"></i> Lịch sử Mua Bảo Hiểm</h2>
                     </div>
                     
                     <c:choose>
@@ -230,79 +233,71 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <!-- Applications Table -->
-                            <c:if test="${not empty applications}">
-                                <div class="subsection">
-                                    <h3><i class="fas fa-shopping-cart"></i> Lịch sử Mua hàng (${applications.size()})</h3>
-                                    <div class="table-container">
-                                        <table class="applications-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Application ID</th>
-                                                    <th>Loại</th>
-                                                    <th>Điểm đến</th>
-                                                    <th>Ngày bắt đầu</th>
-                                                    <th>Ngày kết thúc</th>
-                                                    <th>Số người</th>
-                                                    <th>Tổng tiền</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="app" items="${applications}">
-                                                    <tr>
-                                                        <td>${app.id}</td>
-                                                        <td>${app.type}</td>
-                                                        <td>${app.destination}</td>
-                                                        <td>
-                                                            <fmt:formatDate value="${app.startDate}" pattern="dd/MM/yyyy"/>
-                                                        </td>
-                                                        <td>
-                                                            <fmt:formatDate value="${app.endDate}" pattern="dd/MM/yyyy"/>
-                                                        </td>
-                                                        <td>${app.travelers_quantity}</td>
-                                                        <td>
-                                                            <fmt:formatNumber value="${app.total_price}" type="currency" currencyCode="VND"/>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </c:if>
-                            
-                            <!-- Contracts Table -->
-                            <c:if test="${not empty contracts}">
-                                <div class="subsection">
-                                    <h3><i class="fas fa-file-contract"></i> Danh sách Hợp đồng (${contracts.size()})</h3>
-                                    <div class="table-container">
-                                        <table class="contracts-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Contract ID</th>
-                                                    <th>Application ID</th>
-                                                    <th>Mô tả</th>
-                                                    <th>Trạng thái</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <c:forEach var="contract" items="${contracts}">
-                                                    <tr>
-                                                        <td>${contract.contract_id}</td>
-                                                        <td>${contract.application_id}</td>
-                                                        <td>${contract.description}</td>
-                                                        <td>
+                            <div class="table-container">
+                                <table class="combined-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Application ID</th>
+                                            <th>Contract ID</th>
+                                            <th>Loại bảo hiểm</th>
+                                            <th>Điểm đến</th>
+                                            <th>Ngày bắt đầu</th>
+                                            <th>Ngày kết thúc</th>
+                                            <th>Số người</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Trạng thái</th>
+                                            <th>Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Applications with Contract ID -->
+                                        <c:forEach var="app" items="${applications}">
+                                            <tr class="application-row">
+                                                <td>${app.id}</td>
+                                                <td>
+                                                    <c:forEach var="contract" items="${contracts}">
+                                                        <c:if test="${contract.application_id == app.id}">
+                                                            ${contract.contract_id}
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </td>
+                                                <td>${app.type}</td>
+                                                <td>${app.destination}</td>
+                                                <td>
+                                                    <fmt:formatDate value="${app.startDate}" pattern="dd/MM/yyyy"/>
+                                                </td>
+                                                <td>
+                                                    <fmt:formatDate value="${app.endDate}" pattern="dd/MM/yyyy"/>
+                                                </td>
+                                                <td>${app.travelers_quantity}</td>
+                                                <td>
+                                                    <fmt:formatNumber value="${app.total_price}" type="currency" currencyCode="VND"/>
+                                                </td>
+                                                <td>
+                                                    <c:forEach var="contract" items="${contracts}">
+                                                        <c:if test="${contract.application_id == app.id}">
                                                             <span class="status-badge status-${contract.contract_status}">
                                                                 ${contract.contract_status}
                                                             </span>
-                                                        </td>
-                                                    </tr>
-                                                </c:forEach>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </c:if>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </td>
+                                                <td>
+                                                    <c:forEach var="contract" items="${contracts}">
+                                                        <c:if test="${contract.application_id == app.id}">
+                                                            <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}&userId=${user.id}" 
+                                                               class="btn-detail">
+                                                                <i class="fas fa-eye"></i>
+                                                                Xem hợp đồng
+                                                            </a>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                         </c:otherwise>
                     </c:choose>
                 </div>

@@ -3,6 +3,7 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.math.BigDecimal;
 
 public class User implements Serializable {
     private int id;
@@ -18,6 +19,7 @@ public class User implements Serializable {
     private String role;
     private String cccd_img;
     private String status;
+    private BigDecimal totalInsuranceAmount;
 
     public User() {
     }
@@ -142,6 +144,14 @@ public class User implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public BigDecimal getTotalInsuranceAmount() {
+        return totalInsuranceAmount;
+    }
+
+    public void setTotalInsuranceAmount(BigDecimal totalInsuranceAmount) {
+        this.totalInsuranceAmount = totalInsuranceAmount;
     }
     
     

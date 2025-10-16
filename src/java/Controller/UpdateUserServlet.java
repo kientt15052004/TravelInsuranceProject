@@ -18,8 +18,8 @@ public class UpdateUserServlet extends HttpServlet {
             throws ServletException, IOException {
         
         // Check if user is logged in and has staff role
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }

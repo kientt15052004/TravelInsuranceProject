@@ -10,6 +10,17 @@
     gap: 15px;
 }
 
+.content-header h1 {
+    text-align: center;
+    flex: 1;
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    position: relative;
+    left: -50px; /* Compensate for sidebar width */
+}
+
 .header-actions {
     display: flex;
     gap: 10px;
@@ -319,21 +330,80 @@
     border-bottom: 1px solid #e1e5e9;
 }
 
-/* Table Styles */
+/* Table Container */
 .table-container {
     overflow-x: auto;
+    margin-top: 20px;
 }
 
-.contracts-table,
-.applications-table,
+/* Combined Table Styles */
+.combined-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.combined-table th {
+    background: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 2px solid #e1e5e9;
+    white-space: nowrap;
+}
+
+.combined-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #e1e5e9;
+    vertical-align: middle;
+}
+
+.combined-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Row styling */
+.application-row {
+    background-color: rgba(25, 118, 210, 0.05);
+}
+
+/* Action Buttons */
+.btn-detail {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-detail:hover {
+    background: #0056b3;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-detail i {
+    font-size: 11px;
+}
+
+/* Claims Table Styles */
 .claims-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
 }
 
-.contracts-table th,
-.applications-table th,
 .claims-table th {
     background: #f8f9fa;
     color: #333;
@@ -344,16 +414,12 @@
     white-space: nowrap;
 }
 
-.contracts-table td,
-.applications-table td,
 .claims-table td {
     padding: 15px 12px;
     border-bottom: 1px solid #e1e5e9;
     vertical-align: middle;
 }
 
-.contracts-table tbody tr:hover,
-.applications-table tbody tr:hover,
 .claims-table tbody tr:hover {
     background: #f8f9fa;
 }
@@ -363,6 +429,32 @@
     max-width: 200px;
     word-wrap: break-word;
     overflow-wrap: break-word;
+}
+
+/* Claims status badges */
+.claims-table .status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.claims-table .status-approved {
+    color: #2e7d32 !important;
+    background: transparent !important;
+}
+
+.claims-table .status-pending {
+    color: #f57c00 !important;
+    background: transparent !important;
+}
+
+.claims-table .status-rejected {
+    color: #c62828 !important;
+    background: transparent !important;
 }
 
 /* No Data State */
@@ -394,6 +486,12 @@
     .content-header {
         flex-direction: column;
         align-items: stretch;
+    }
+    
+    .content-header h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        left: 0; /* Reset left offset on mobile */
     }
     
     .header-actions {
@@ -436,23 +534,30 @@
         justify-content: center;
     }
     
-    .contracts-table,
-    .applications-table,
+    .combined-table,
     .claims-table {
         font-size: 12px;
     }
     
-    .contracts-table th,
-    .contracts-table td,
-    .applications-table th,
-    .applications-table td,
+    .combined-table th,
+    .combined-table td,
     .claims-table th,
     .claims-table td {
         padding: 10px 8px;
     }
     
+    .type-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    
+    .claims-table .status-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    
     .description-cell {
-        max-width: 150px;
+        max-width: 120px;
     }
 }
 
@@ -484,10 +589,8 @@
         padding: 20px;
     }
     
-    .contracts-table th,
-    .contracts-table td,
-    .applications-table th,
-    .applications-table td,
+    .combined-table th,
+    .combined-table td,
     .claims-table th,
     .claims-table td {
         padding: 8px 6px;
@@ -495,6 +598,15 @@
     
     .description-cell {
         max-width: 120px;
+    }
+    
+    .btn-detail {
+        padding: 4px 8px;
+        font-size: 10px;
+    }
+    
+    .btn-detail i {
+        font-size: 9px;
     }
     
     .role-badge,

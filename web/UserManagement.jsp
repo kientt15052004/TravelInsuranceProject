@@ -45,21 +45,25 @@
                 <ul>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/staff" class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
                             <span>Tạo hợp đồng mới</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
+                            <i class="fas fa-file-contract"></i>
                             <span>Quản lý hợp đồng</span>
                         </a>
                     </li>
                     <li class="nav-item active">
                         <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
+                            <i class="fas fa-users"></i>
                             <span>Quản lý User</span>
                         </a>
                     </li>
@@ -140,6 +144,7 @@
                                         <th>Số điện thoại</th>
                                         <th>Vai trò</th>
                                         <th>Trạng thái</th>
+                                        <th>Tổng số tiền mua bảo hiểm</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -169,6 +174,9 @@
                                                         <c:otherwise>${user.status}</c:otherwise>
                                                     </c:choose>
                                                 </span>
+                                            </td>
+                                            <td class="total-amount">
+                                                <fmt:formatNumber value="${user.totalInsuranceAmount}" type="currency" currencyCode="VND"/>
                                             </td>
                                             <td>
                                                 <a href="${pageContext.request.contextPath}/usermanagement?action=detail&userId=${user.id}" 

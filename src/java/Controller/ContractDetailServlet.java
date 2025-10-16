@@ -36,6 +36,7 @@ public class ContractDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             String contractIdStr = request.getParameter("id");
+            String userIdStr = request.getParameter("userId");
             
             if (contractIdStr == null || contractIdStr.trim().isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Contract ID is required");
@@ -71,6 +72,7 @@ public class ContractDetailServlet extends HttpServlet {
             request.setAttribute("application", application);
             request.setAttribute("product", product);
             request.setAttribute("travelers", travelers);
+            request.setAttribute("userId", userIdStr); // Pass userId to JSP
             
             request.getRequestDispatcher("ContractDetail.jsp").forward(request, response);
             
