@@ -164,7 +164,7 @@
                 </div>
                 <div class="text-center mt-2" style="font-size: 14px;">
                     Don't have an account?
-                    <a class="sign-up-link" href="register">Sign up</a>
+                    <a class="sign-up-link" href="#">Sign up</a>
                 </div>
             </form>
         </div>
