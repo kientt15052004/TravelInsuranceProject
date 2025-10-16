@@ -41,45 +41,9 @@
 
     <div class="container">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/staff" class="nav-link">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Tạo hợp đồng mới</span>
-                        </a>
-                    </li>
-                    <li class="nav-item ${empty userId ? 'active' : ''}">
-                        <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
-                            <i class="fas fa-file-contract"></i>
-                            <span>Quản lý hợp đồng</span>
-                        </a>
-                    </li>
-                    <li class="nav-item ${not empty userId ? 'active' : ''}">
-                        <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Quản lý User</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/navigate?page=product" class="nav-link">
-                            <i class="fas fa-box"></i>
-                            <span>Quản lý Sản phẩm</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <!-- Empty footer for now -->
-            </div>
-        </div>
+        <jsp:include page="component/staff-sidebar.jsp">
+            <jsp:param name="activePage" value="contract-management"/>
+        </jsp:include>
 
         <!-- Main Content -->
         <div class="main-content">
@@ -132,7 +96,49 @@
                         </div>
                     </div>
 
-                    <!-- Application Info -->
+                    <!-- Buyer Info -->
+                    <c:if test="${not empty buyer}">
+                    <div class="detail-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user"></i> Thông tin người mua</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="info-row">
+                                <label>Họ tên:</label>
+                                <span>${not empty buyer.fullname ? buyer.fullname : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Email:</label>
+                                <span>${not empty buyer.mail ? buyer.mail : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Số điện thoại:</label>
+                                <span>${not empty buyer.phone ? buyer.phone : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Địa chỉ:</label>
+                                <span>${not empty buyer.address ? buyer.address : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>CCCD:</label>
+                                <span>${not empty buyer.cccd ? buyer.cccd : 'Chưa cập nhật'}</span>
+                            </div>
+                            <div class="info-row">
+                                <label>Ngày sinh:</label>
+                                <span>
+                                    <c:choose>
+                                        <c:when test="${not empty buyer.dob}">
+                                            ${buyer.dob}
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-muted">Chưa cập nhật</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    </c:if>
                     <c:if test="${not empty application}">
                     <div class="detail-card">
                         <div class="card-header">
@@ -228,6 +234,61 @@
                     </table>
                 </div>
             </div>
+            </c:if>
+
+            <!-- Claims Section -->
+            <c:if test="${not empty claims}">
+                <div class="claims-section">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Danh sách yêu cầu bồi thường</h3>
+                    <p><strong>Tổng số yêu cầu:</strong> ${claims.size()} yêu cầu</p>
+                    
+                    <div class="claims-table">
+                        <table class="claims-list">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>ID Hợp đồng</th>
+                                    <th>Ngày yêu cầu</th>
+                                    <th>Loại bồi thường</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngân hàng</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="claim" items="${claims}">
+                                    <tr>
+                                        <td>#${claim.id}</td>
+                                        <td>#${claim.contract_id}</td>
+                                        <td><fmt:formatDate value="${claim.requestDate}" pattern="dd/MM/yyyy"/></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${claim.claim_type == 'lost_baggage'}">Mất hành lý</c:when>
+                                                <c:when test="${claim.claim_type == 'flight_delay'}">Chậm chuyến bay</c:when>
+                                                <c:when test="${claim.claim_type == 'third_party'}">Bên thứ ba</c:when>
+                                                <c:when test="${claim.claim_type == 'trip_cancellation'}">Hủy chuyến</c:when>
+                                                <c:when test="${claim.claim_type == 'medical'}">Y tế</c:when>
+                                                <c:otherwise>Khác</c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>${claim.description}</td>
+                                        <td>${claim.payment_bank}</td>
+                                        <td>
+                                            <span class="status-badge status-${claim.claim_status.toLowerCase()}">
+                                                <c:choose>
+                                                    <c:when test="${claim.claim_status == 'pending'}">Đang xử lý</c:when>
+                                                    <c:when test="${claim.claim_status == 'approved'}">Đã duyệt</c:when>
+                                                    <c:when test="${claim.claim_status == 'rejected'}">Từ chối</c:when>
+                                                    <c:otherwise>${claim.claim_status}</c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </c:if>
         </div>
     </div>
