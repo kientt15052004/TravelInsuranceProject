@@ -151,19 +151,24 @@ public class ContractDBContext extends DBContext {
         List<String> conditions = new ArrayList<>();
         List<Object> parameters = new ArrayList<>();
         
-        // Join với Application để lấy thông tin sản phẩm và ngày tháng (chỉ khi cần)
+        // Join với Application và các bảng liên quan để tìm kiếm
         boolean needJoin = (productFilter != null && !productFilter.trim().isEmpty()) || 
                           (dateFrom != null && !dateFrom.trim().isEmpty()) || 
-                          (dateTo != null && !dateTo.trim().isEmpty());
+                          (dateTo != null && !dateTo.trim().isEmpty()) ||
+                          (searchTerm != null && !searchTerm.trim().isEmpty());
         
         if (needJoin) {
             sql.append("LEFT JOIN applications a ON c.application_id = a.id ");
+            sql.append("LEFT JOIN products p ON a.product_id = p.id ");
+            sql.append("LEFT JOIN users u ON a.purchaser_id = u.id ");
         }
         
         // Điều kiện tìm kiếm
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-            conditions.add("(c.description LIKE ? OR CAST(c.contract_id AS CHAR) LIKE ? OR CAST(c.application_id AS CHAR) LIKE ?)");
+            conditions.add("(c.description LIKE ? OR CAST(c.contract_id AS CHAR) LIKE ? OR CAST(c.application_id AS CHAR) LIKE ? OR p.name LIKE ? OR u.fullname LIKE ?)");
             String searchPattern = "%" + searchTerm + "%";
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
             parameters.add(searchPattern);
             parameters.add(searchPattern);
             parameters.add(searchPattern);
@@ -177,8 +182,14 @@ public class ContractDBContext extends DBContext {
         
         // Điều kiện lọc theo sản phẩm
         if (productFilter != null && !productFilter.trim().isEmpty()) {
-            conditions.add("a.product_id = ?");
-            parameters.add(Integer.parseInt(productFilter));
+            try {
+                int productId = Integer.parseInt(productFilter);
+                conditions.add("a.product_id = ?");
+                parameters.add(productId);
+            } catch (NumberFormatException e) {
+                // Bỏ qua nếu productFilter không phải là số hợp lệ
+                System.err.println("Invalid product filter: " + productFilter);
+            }
         }
         
         // Điều kiện lọc theo ngày tháng

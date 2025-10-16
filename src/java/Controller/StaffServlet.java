@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.User;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +16,20 @@ public class StaffServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Forward directly to staff dashboard without role checking
+        // Check if user is logged in and has staff role
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        
+        User currentUser = (User) session.getAttribute("user");
+        if (!"staff".equals(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
+        
+        // Forward to staff dashboard
         request.getRequestDispatcher("/staff.jsp").forward(request, response);
     }
 

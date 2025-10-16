@@ -97,40 +97,75 @@
             <div class="register-text">Join us today and get started with your journey</div>
 
 
-            <form>
+            <form action="${pageContext.request.contextPath}/register" method="POST">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="small">Username</label>
-                        <input type="text" class="form-control" placeholder="Enter your username"/>
+                        <input type="text" class="form-control" placeholder="Enter your username" name="username"
+                               value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>"/>
+                        <% String usernameError = (String) request.getAttribute("usernameError");
+                       if (usernameError != null) { %>
+                        <div class="text-danger" style="font-size: 13px;"><%= usernameError %></div>
+                        <% } %>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="small">Full Name</label>
-                        <input type="text" class="form-control" placeholder="Enter your full name"/>
+                        <input type="text" class="form-control" placeholder="Enter your full name"
+                               name="fullname" value="<%= request.getAttribute("fullname") != null ? request.getAttribute("fullname") : "" %>"/>
+                        <% String fullnameError = (String) request.getAttribute("fullnameError");
+                       if (fullnameError != null) { %>
+                        <div class="text-danger" style="font-size: 13px;"><%= fullnameError %></div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="small">Email Address</label>
-                        <input type="email" class="form-control" placeholder="Enter your email"/>
+                        <input type="text" class="form-control" placeholder="Enter your email"
+                               name="email" value="<%= request.getAttribute("email") != null ? request.getAttribute("email") : "" %>"/>
+                        <% String emailError = (String) request.getAttribute("emailError");
+                       if (emailError != null) { %>
+                        <div class="text-danger" style="font-size: 13px;"><%= emailError %></div>
+                        <% } %>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="small">Phone Number</label>
-                        <input type="text" class="form-control" placeholder="Enter your phone number"/>
+                        <input type="text" class="form-control" placeholder="Enter your phone number" name="phone"
+                               value="<%= request.getAttribute("phone") != null ? request.getAttribute("phone") : "" %>"/>
+                        <% String phoneError = (String) request.getAttribute("phoneError");
+                       if (phoneError != null) { %>
+                        <div class="text-danger" style="font-size: 13px;"><%= phoneError %></div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="small">Password</label>
-                        <input type="password" class="form-control" placeholder="Enter your password"/>
+                        <input type="password" class="form-control" placeholder="Enter your password" name="password"
+                               value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>"/>
+                        <% String passwordError = (String) request.getAttribute("passwordError");
+                       if (passwordError != null) { %>
+                        <div class="text-danger" style="font-size: 13px;"><%= passwordError %></div>
+                        <% } %>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="small">Date of Birth</label>
-                        <input type="date" class="form-control"/>
+                        <input type="date" class="form-control" name="dob"
+                               value="<%= request.getAttribute("dob") != null ? request.getAttribute("dob") : "" %>"/>
+                        <% String dobError = (String) request.getAttribute("dobError");
+                       if (dobError != null) { %>
+                        <div class="text-danger" style="font-size: 13px;"><%= dobError %></div>
+                        <% } %>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="small">Address</label>
-                    <input type="text" class="form-control" placeholder="Enter your full address"/>
+                    <input type="text" class="form-control" placeholder="Enter your full address" name="address"
+                           value="<%= request.getAttribute("address") != null ? request.getAttribute("address") : "" %>"/>
+                    <% String addressError = (String) request.getAttribute("addressError");
+                       if (addressError != null) { %>
+                    <div class="text-danger" style="font-size: 13px;"><%= addressError %></div>
+                    <% } %>
                 </div>
 
                 <div class="form-check mb-3">
@@ -143,10 +178,10 @@
                 <button type="submit" class="btn btn-yellow btn-block">Create Account</button>
 
                 <div class="text-center mt-3" style="font-size: 14px;">
-                    Already have an account? <a href="login.jsp" class="sign-in-link">Sign in here</a>
+                    Already have an account? <a href="login.jsp" class="sign-in-link">Sign in</a>
                 </div>
 
-                <!-- Social login đưa vào trong form -->
+                <!-- Social login đưa vào trong form => phát triển sau -->
                 <div class="social-divider">Or register with</div>
                 <div class="d-flex justify-content-between">
                     <button type="button" class="btn btn-social">

@@ -304,3 +304,76 @@
     background-color: #f8d7da;
     color: #721c24;
 }
+
+/* Claims Section Styles */
+.claims-section {
+    margin-top: 20px;
+    width: 100%;
+    clear: both;
+    display: block;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 25px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.claims-section h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.claims-section p {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.claims-table {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.claims-list {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+.claims-list th {
+    background-color: #f2f2f2;
+    padding: 12px 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    font-weight: bold;
+}
+
+.claims-list td {
+    padding: 12px 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.claims-list tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.claims-list tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Claims Status Badges */
+.status-approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}

@@ -1,0 +1,427 @@
+/* User Management Styles */
+
+/* Search and Filter Section */
+.search-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.search-form {
+    width: 100%;
+}
+
+.search-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 20px;
+    align-items: end;
+}
+
+.search-group,
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-group label,
+.filter-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.search-group input,
+.filter-group select,
+.filter-group input {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.search-group input:focus,
+.filter-group select:focus,
+.filter-group input:focus {
+    outline: none;
+    border-color: #FFD700;
+}
+
+.button-group {
+    display: flex;
+    gap: 12px;
+    min-width: 280px;
+    justify-content: stretch;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+.button-group .btn.btn-search,
+.button-group .btn.btn-clear {
+    flex: 1;
+    justify-content: center;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.btn.btn-search {
+    background: linear-gradient(135deg, #FFD700, #ffed4e);
+    color: #000;
+    border: none;
+    padding: 12px 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+    flex-shrink: 1;
+    text-decoration: none;
+}
+
+.btn.btn-clear {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
+    flex-shrink: 1;
+}
+
+/* Users Table Section */
+.table-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 25px;
+}
+
+.table-header {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.table-title-section h3 {
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.table-title-section p {
+    color: #666;
+    font-size: 14px;
+    margin: 5px 0 0 0;
+}
+
+/* Page size selector styling */
+.page-size-container {
+    text-align: right;
+    padding: 5px 0;
+}
+
+.page-size-container label {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+.page-size-container select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin: 0 5px;
+    background: white;
+    cursor: pointer;
+}
+
+.page-size-container select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+}
+
+/* Pagination container */
+.pagination-container {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.page-btn {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 5px 10px;
+    margin: 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.page-btn.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.users-table th,
+.users-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.users-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    position: relative;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.users-table th:hover {
+    background-color: #e9ecef;
+}
+
+/* Chỉ hiển thị sort icons cho các cột có thể sort */
+.users-table th:nth-child(1), /* ID */
+.users-table th:nth-child(3), /* Họ tên */
+.users-table th:nth-child(6), /* Vai trò */
+.users-table th:nth-child(7), /* Trạng thái */
+.users-table th:nth-child(8)  /* Tổng số tiền */ {
+    cursor: pointer;
+}
+
+.users-table th:nth-child(1):not(.sorted-asc):not(.sorted-desc)::after,
+.users-table th:nth-child(3):not(.sorted-asc):not(.sorted-desc)::after,
+.users-table th:nth-child(6):not(.sorted-asc):not(.sorted-desc)::after,
+.users-table th:nth-child(7):not(.sorted-asc):not(.sorted-desc)::after,
+.users-table th:nth-child(8):not(.sorted-asc):not(.sorted-desc)::after {
+    content: " ↕";
+    color: #ccc;
+    margin-left: 5px;
+    opacity: 0.5;
+}
+
+.users-table th:nth-child(1):not(.sorted-asc):not(.sorted-desc):hover::after,
+.users-table th:nth-child(3):not(.sorted-asc):not(.sorted-desc):hover::after,
+.users-table th:nth-child(6):not(.sorted-asc):not(.sorted-desc):hover::after,
+.users-table th:nth-child(7):not(.sorted-asc):not(.sorted-desc):hover::after,
+.users-table th:nth-child(8):not(.sorted-asc):not(.sorted-desc):hover::after {
+    opacity: 1;
+    color: #666;
+}
+
+/* Sort icons and visual feedback */
+.users-table th.sorted-asc::after {
+    content: " ▲";
+    color: #007bff;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.users-table th.sorted-desc::after {
+    content: " ▼";
+    color: #007bff;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.users-table td {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Role and Status Badges */
+.role-badge,
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.role-customer {
+    color: #1976d2 !important;
+    background: transparent !important;
+}
+
+.role-staff {
+    color: #7b1fa2 !important;
+    background: transparent !important;
+}
+
+.role-admin {
+    color: #f57c00 !important;
+    background: transparent !important;
+}
+
+.status-active {
+    color: #2e7d32 !important;
+    background: transparent !important;
+}
+
+.status-inactive {
+    color: #c62828 !important;
+    background: transparent !important;
+}
+
+/* Action Buttons */
+.actions-cell {
+    white-space: nowrap;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    min-width: 60px;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-detail {
+    padding: 6px 12px;
+    background-color: #17a2b8;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+    min-width: 60px;
+}
+
+.btn-detail:hover {
+    background-color: #138496;
+    text-decoration: none;
+    color: white;
+}
+
+/* No Data State */
+.no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.no-data i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.no-data p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Table responsive adjustments */
+.users-table {
+    min-width: 1200px; /* Ensure table doesn't get too cramped */
+}
+
+.users-table th,
+.users-table td {
+    padding: 12px 8px;
+    vertical-align: top;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .search-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+    
+    .button-group {
+        grid-column: 1 / -1;
+        justify-content: center;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .users-table {
+        min-width: 1000px;
+    }
+}
+
+@media (max-width: 768px) {
+    .search-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-sm {
+        justify-content: center;
+    }
+    
+    .users-table {
+        font-size: 12px;
+    }
+    
+    .users-table th,
+    .users-table td {
+        padding: 10px 8px;
+    }
+}
+
+/* Total Amount Column */
+.total-amount {
+    font-weight: 600;
+    color: #2e7d32;
+    text-align: right;
+    white-space: nowrap;
+}
