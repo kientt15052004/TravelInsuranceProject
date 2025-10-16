@@ -341,29 +341,29 @@
                 <form class="form" action="${pageContext.request.contextPath}/update_product" enctype="multipart/form-data" method="POST" style="background: transparent;">
                     <!-- Hidden fields for IDs -->
                     <input type="hidden" name="product_id" value="${product.id}">
-                    <input type="hidden" name="benefit_id" value="${benefit.id}">
+                    <input type="hidden" name="benefit_id" value="${product.benefit_id}">
 
                     <!-- Thêm các hidden fields để lưu giá trị benefit hiện tại -->
-                    <input type="hidden" name="original_deathOrDisability" value="${benefit.deathOrPermanentDisability}">
-                    <input type="hidden" name="original_deathByIllness" value="${benefit.deathDueToIllness}">
-                    <input type="hidden" name="original_thirdPartyLiability" value="${benefit.thirdPartyLiability}">
-                    <input type="hidden" name="original_lostBankCard" value="${benefit.lostBankCard}">
-                    <input type="hidden" name="original_kidnapHostage" value="${benefit.kidnapAndHostage}">
-                    <input type="hidden" name="original_golfEquipLoss" value="${benefit.lostOrDamagedGolfEquipment}">
-                    <input type="hidden" name="original_medical_cost" value="${benefit.medicalCost}">
-                    <input type="hidden" name="original_emergency_transport" value="${benefit.emergencyTransport}">
-                    <input type="hidden" name="original_repatriation_vn" value="${benefit.repatriationVn}">
-                    <input type="hidden" name="original_repatriation_abroad" value="${benefit.repatriationAbroad}">
-                    <input type="hidden" name="original_hospital_visit" value="${benefit.hospitalVisit}">
-                    <input type="hidden" name="original_funeral_arrangement" value="${benefit.funeralArrangement}">
-                    <input type="hidden" name="original_child_care" value="${benefit.childCare}">
-                    <input type="hidden" name="original_hospital_allowance" value="${benefit.hospitalAllowance}">
-                    <input type="hidden" name="original_accident_death_injury" value="${benefit.accidentDeathInjury}">
-                    <input type="hidden" name="original_trip_cancellation" value="${benefit.tripCancellation}">
-                    <input type="hidden" name="original_companion_support" value="${benefit.companionSupport}">
-                    <input type="hidden" name="original_delayed_baggage" value="${benefit.delayedBaggage}">
-                    <input type="hidden" name="original_travel_documents" value="${benefit.travelDocuments}">
-                    <input type="hidden" name="original_trip_delay" value="${benefit.tripDelay}">
+                    <input type="hidden" name="original_deathOrDisability" value="${product.benefit.death_or_permanent_disability}">
+                    <input type="hidden" name="original_deathByIllness" value="${product.benefit.death_due_to_illness}">
+                    <input type="hidden" name="original_thirdPartyLiability" value="${product.benefit.third_party_liability}">
+                    <input type="hidden" name="original_lostBankCard" value="${product.benefit.lost_bank_card}">
+                    <input type="hidden" name="original_kidnapHostage" value="${product.benefit.kidnap_and_hostage}">
+                    <input type="hidden" name="original_golfEquipLoss" value="${product.benefit.lost_or_damaged_golf_equipment}">
+                    <input type="hidden" name="original_medical_cost" value="${product.benefit.medical_cost}">
+                    <input type="hidden" name="original_emergency_transport" value="${product.benefit.emergency_transport}">
+                    <input type="hidden" name="original_repatriation_vn" value="${product.benefit.repatriation_vn}">
+                    <input type="hidden" name="original_repatriation_abroad" value="${product.benefit.repatriation_abroad}">
+                    <input type="hidden" name="original_hospital_visit" value="${product.benefit.hospital_visit}">
+                    <input type="hidden" name="original_funeral_arrangement" value="${product.benefit.funeral_arrangement}">
+                    <input type="hidden" name="original_child_care" value="${product.benefit.child_care}">
+                    <input type="hidden" name="original_hospital_allowance" value="${product.benefit.hospital_allowance}">
+                    <input type="hidden" name="original_accident_death_injury" value="${product.benefit.accident_death_injury}">
+                    <input type="hidden" name="original_trip_cancellation" value="${product.benefit.trip_cancellation}">
+                    <input type="hidden" name="original_companion_support" value="${product.benefit.companion_support}">
+                    <input type="hidden" name="original_delayed_baggage" value="${product.benefit.delayed_baggage}">
+                    <input type="hidden" name="original_travel_documents" value="${product.benefit.travel_documents}">
+                    <input type="hidden" name="original_trip_delay" value="${product.benefit.trip_delay}">
 
                     <!-- Basic Information Section -->
                     <div class="section-wrapper">
@@ -378,10 +378,10 @@
                             <div class="col-md-3 mb-4">
                                 <label class="form-label">Chọn gói <span class="required-star">*</span></label>
                                 <select name="package_type" class="form-select">
-                                    <option value="basic" ${product.packageType == 'basic' ? 'selected' : ''}>Cơ bản</option>
-                                    <option value="standard" ${product.packageType == 'standard' ? 'selected' : ''}>Tiêu chuẩn</option>
-                                    <option value="advanced" ${product.packageType == 'advanced' ? 'selected' : ''}>Nâng cao</option>
-                                    <option value="comprehensive" ${product.packageType == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
+                                    <option value="basic" ${product.package_type == 'basic' ? 'selected' : ''}>Cơ bản</option>
+                                    <option value="standard" ${product.package_type == 'standard' ? 'selected' : ''}>Tiêu chuẩn</option>
+                                    <option value="advanced" ${product.package_type == 'advanced' ? 'selected' : ''}>Nâng cao</option>
+                                    <option value="comprehensive" ${product.package_type == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
                                 </select>
                             </div>
                         </div>
@@ -424,8 +424,8 @@
                         <div class="mt-4">
                             <label class="form-label">Trạng thái hoạt động</label>
                             <select class="active form-select" name="active">
-                                <option value="true" ${product.active ? 'selected' : ""}>Hoạt động</option>
-                                <option value="false" ${!product.active ? 'selected' : ""}>Chờ duyệt</option>
+                                <option value="true" ${product.is_active ? 'selected' : ""}>Hoạt động</option>
+                                <option value="false" ${!product.is_active ? 'selected' : ""}>Chờ duyệt</option>
                             </select>
                         </div>
                     </div>
@@ -437,7 +437,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Tử vong, thương tật vĩnh viễn</label>
-                                <fmt:formatNumber value="${benefit.deathOrPermanentDisability}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated1" />
+                                <fmt:formatNumber value="${product.benefit.death_or_permanent_disability}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated1" />
                                 <input name="deathOrDisability" type="number" class="form-control domestic_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated1}"/>
@@ -445,7 +445,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Tử vong do ốm đau, bệnh tật</label>
-                                <fmt:formatNumber value="${benefit.deathDueToIllness}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated2" />
+                                <fmt:formatNumber value="${product.benefit.death_due_to_illness}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated2" />
                                 <input name="deathByIllness" type="number" class="form-control domestic_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated2}">
@@ -455,7 +455,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Trách nhiệm cá nhân đối với bên thứ ba</label>
-                                <fmt:formatNumber value="${benefit.thirdPartyLiability}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated3" />
+                                <fmt:formatNumber value="${product.benefit.third_party_liability}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated3" />
                                 <input name="thirdPartyLiability" type="number" class="form-control domestic_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated3}">
@@ -463,7 +463,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Bảo hiểm thất lạc thẻ ngân hàng</label>
-                                <fmt:formatNumber value="${benefit.lostBankCard}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated4" />
+                                <fmt:formatNumber value="${product.benefit.lost_bank_card}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated4" />
                                 <input name="lostBankCard" type="number" class="form-control domestic_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated4}">
@@ -473,7 +473,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Bắt cóc và con tin</label>
-                                <fmt:formatNumber value="${benefit.kidnapAndHostage}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated5" />
+                                <fmt:formatNumber value="${product.benefit.kidnap_and_hostage}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated5" />
                                 <input name="kidnapHostage" type="number" class="form-control domestic_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated5}">
@@ -481,7 +481,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Mất hoặc hư hỏng dụng cụ chơi Golf</label>
-                                <fmt:formatNumber value="${benefit.lostOrDamagedGolfEquipment}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated6" />
+                                <fmt:formatNumber value="${product.benefit.lost_or_damaged_golf_equipment}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated6" />
                                 <input name="golfEquipLoss" type="number" class="form-control domestic_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated6}">
@@ -496,7 +496,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Chi phí y tế</label>
-                                <fmt:formatNumber value="${benefit.medicalCost}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated7" />
+                                <fmt:formatNumber value="${product.benefit.medical_cost}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated7" />
                                 <input name="medical_cost" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated7}">
@@ -504,7 +504,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Chi phí vận chuyển y tế khẩn cấp</label>
-                                <fmt:formatNumber value="${benefit.emergencyTransport}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated8" />
+                                <fmt:formatNumber value="${product.benefit.emergency_transport}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated8" />
                                 <input name="emergency_transport" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated8}">
@@ -514,7 +514,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Hồi hương thi hài về Việt Nam</label>
-                                <fmt:formatNumber value="${benefit.repatriationVn}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated9" />
+                                <fmt:formatNumber value="${product.benefit.repatriation_vn}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated9" />
                                 <input name="repatriation_vn" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated9}">
@@ -522,7 +522,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Hồi hương thi hài về quê hương (ngoài VN)</label>
-                                <fmt:formatNumber value="${benefit.repatriationAbroad}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated10" />
+                                <fmt:formatNumber value="${product.benefit.repatriation_abroad}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated10" />
                                 <input name="repatriation_abroad" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated10}">
@@ -532,7 +532,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Thăm Người được bảo hiểm tại bệnh viện</label>
-                                <fmt:formatNumber value="${benefit.hospitalVisit}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated11" />
+                                <fmt:formatNumber value="${product.benefit.hospital_visit}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated11" />
                                 <input name="hospital_visit" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated11}">
@@ -540,7 +540,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Thăm viếng để thu xếp tang lễ</label>
-                                <fmt:formatNumber value="${benefit.funeralArrangement}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated12" />
+                                <fmt:formatNumber value="${product.benefit.funeral_arrangement}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated12" />
                                 <input name="funeral_arrangement" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated12}">
@@ -550,7 +550,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Chăm sóc trẻ em</label>
-                                <fmt:formatNumber value="${benefit.childCare}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated13" />
+                                <fmt:formatNumber value="${product.benefit.child_care}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated13" />
                                 <input name="child_care" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated13}">
@@ -558,7 +558,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Trợ cấp nằm viện</label>
-                                <fmt:formatNumber value="${benefit.hospitalAllowance}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated14" />
+                                <fmt:formatNumber value="${product.benefit.hospital_allowance}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated14" />
                                 <input name="hospital_allowance" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated14}">
@@ -568,7 +568,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Tử vong và thương tật do tai nạn</label>
-                                <fmt:formatNumber value="${benefit.accidentDeathInjury}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated15" />
+                                <fmt:formatNumber value="${product.benefit.accident_death_injury}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated15" />
                                 <input name="accident_death_injury" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated15}">
@@ -576,7 +576,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Hủy bỏ chuyến đi</label>
-                                <fmt:formatNumber value="${benefit.tripCancellation}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated16" />
+                                <fmt:formatNumber value="${product.benefit.trip_cancellation}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated16" />
                                 <input name="trip_cancellation" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated16}">
@@ -586,7 +586,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Hỗ trợ người đi cùng</label>
-                                <fmt:formatNumber value="${benefit.companionSupport}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated17" />
+                                <fmt:formatNumber value="${product.benefit.companion_support}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated17" />
                                 <input name="companion_support" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated17}">
@@ -594,7 +594,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Hành lý đến chậm</label>
-                                <fmt:formatNumber value="${benefit.delayedBaggage}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated18" />
+                                <fmt:formatNumber value="${product.benefit.delayed_baggage}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated18" />
                                 <input name="delayed_baggage" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated18}">
@@ -604,7 +604,7 @@
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Giấy tờ đi đường</label>
-                                <fmt:formatNumber value="${benefit.travelDocuments}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated19" />
+                                <fmt:formatNumber value="${product.benefit.travel_documents}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated19" />
                                 <input name="travel_documents" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated19}">
@@ -612,7 +612,7 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Chuyến đi bị trì hoãn</label>
-                                <fmt:formatNumber value="${benefit.tripDelay}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated20" />
+                                <fmt:formatNumber value="${product.benefit.trip_delay}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated20" />
                                 <input name="trip_delay" type="number" class="form-control international_benefit" 
                                        min="0" step="100000" placeholder="Nhập số tiền..." 
                                        value="${formated20}">
@@ -625,7 +625,7 @@
                         <h2 class="section-title"><i class="fas fa-calculator"></i> Tính phí trong nước</h2>
                         <div class="formula-box text-center">
                             <h4>Công thức tính phí</h4>
-                            <p>Phí = <input class="coefficient_1 form-control coefficient-input" name="coefficient_1" placeholder="Nhập vào hệ số...." value="${product.domesticPercentageRate}">% × STBH × Số ngày × Số người</p>
+                            <p>Phí = <input class="coefficient_1 form-control coefficient-input" name="coefficient_1" placeholder="Nhập vào hệ số...." value="${product.domestic_percentage_rate}">% × STBH × Số ngày × Số người</p>
                         </div>
 
                         <div class="row mt-4">
@@ -663,14 +663,14 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="text-center">Khoảng thời gian</th>
-                                        <th scope="col" class="text-center">Gói <span class="package_column">${product.packageTypeDisplay}</span></th>
+                                        <th scope="col" class="text-center">Gói <span class="package_column">${product.package_type}</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td class="text-center">1-7 ngày</td>
                                         <td class="text-center">
-                                            <fmt:formatNumber value="${product.internationalRate1_7}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated21" />
+                                            <fmt:formatNumber value="${product.international_rate_1_7}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated21" />
                                             <input class="coefficient_1_7 form-control" name="international_rate_1_7" 
                                                    placeholder="Nhập vào biểu phí..." step="1000" type="number" 
                                                    value="${formated21}">
@@ -679,7 +679,7 @@
                                     <tr>
                                         <td class="text-center">8-30 ngày</td>
                                         <td class="text-center">
-                                            <fmt:formatNumber value="${product.internationalRate8_30}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated22"/>
+                                            <fmt:formatNumber value="${product.international_rate_8_30}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated22"/>
                                             <input class="coefficient_8_30 form-control" name="international_rate_8_30" 
                                                    placeholder="Nhập vào biểu phí..." step="1000" type="number" 
                                                    value="${formated22}">
@@ -688,7 +688,7 @@
                                     <tr>
                                         <td class="text-center">31-90 ngày</td>
                                         <td class="text-center">
-                                            <fmt:formatNumber value="${product.internationalRate31_90}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated23"/>
+                                            <fmt:formatNumber value="${product.international_rate_31_90}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated23"/>
                                             <input class="coefficient_31_90 form-control" name="international_rate_31_90" 
                                                    placeholder="Nhập vào biểu phí..." step="1000" type="number" 
                                                    value="${formated23}">
@@ -697,7 +697,7 @@
                                     <tr>
                                         <td class="text-center">91-180 ngày</td>
                                         <td class="text-center">
-                                            <fmt:formatNumber value="${product.internationalRate91_180}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated24"/>
+                                            <fmt:formatNumber value="${product.international_rate_91_365}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated24"/>
                                             <input class="coefficient_91_180 form-control" name="international_rate_91_180" 
                                                    placeholder="Nhập vào biểu phí..." step="1000" type="number" 
                                                    value="${formated24}">
@@ -746,35 +746,35 @@
 
                     <!-- Các input ẩn để lấy giá trị -->
                     <input type="hidden" name="price" class="price" value="${product.price}">
-                    <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate" value="${product.domesticPercentageRate}">
-                    <input type="hidden" name="international_rate_1_7" class="international_rate_1_7" value="${product.internationalRate1_7}">
-                    <input type="hidden" name="international_rate_8_30" class="international_rate_8_30" value="${product.internationalRate8_30}">
-                    <input type="hidden" name="international_rate_31_90" class="international_rate_31_90" value="${product.internationalRate31_90}">
-                    <input type="hidden" name="international_rate_91_180" class="international_rate_91_180" value="${product.internationalRate91_180}">
+                    <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate" value="${product.domestic_percentage_rate}">
+                    <input type="hidden" name="international_rate_1_7" class="international_rate_1_7" value="${product.international_rate_1_7}">
+                    <input type="hidden" name="international_rate_8_30" class="international_rate_8_30" value="${product.international_rate_8_30}">
+                    <input type="hidden" name="international_rate_31_90" class="international_rate_31_90" value="${product.international_rate_31_90}">
+                    <input type="hidden" name="international_rate_91_180" class="international_rate_91_180" value="${product.international_rate_91_365}">
                     <!-- Thêm các hidden fields để lưu giá trị benefit hiện tại -->
-                    <input type="hidden" name="original_deathOrDisability" value="${benefit.deathOrPermanentDisability}">
-                    <input type="hidden" name="original_deathByIllness" value="${benefit.deathDueToIllness}">
-                    <input type="hidden" name="original_thirdPartyLiability" value="${benefit.thirdPartyLiability}">
-                    <input type="hidden" name="original_lostBankCard" value="${benefit.lostBankCard}">
-                    <input type="hidden" name="original_kidnapHostage" value="${benefit.kidnapAndHostage}">
-                    <input type="hidden" name="original_golfEquipLoss" value="${benefit.lostOrDamagedGolfEquipment}">
-                    <input type="hidden" name="original_medical_cost" value="${benefit.medicalCost}">
-                    <input type="hidden" name="original_emergency_transport" value="${benefit.emergencyTransport}">
-                    <input type="hidden" name="original_repatriation_vn" value="${benefit.repatriationVn}">
-                    <input type="hidden" name="original_repatriation_abroad" value="${benefit.repatriationAbroad}">
-                    <input type="hidden" name="original_hospital_visit" value="${benefit.hospitalVisit}">
-                    <input type="hidden" name="original_funeral_arrangement" value="${benefit.funeralArrangement}">
-                    <input type="hidden" name="original_child_care" value="${benefit.childCare}">
-                    <input type="hidden" name="original_hospital_allowance" value="${benefit.hospitalAllowance}">
-                    <input type="hidden" name="original_accident_death_injury" value="${benefit.accidentDeathInjury}">
-                    <input type="hidden" name="original_trip_cancellation" value="${benefit.tripCancellation}">
-                    <input type="hidden" name="original_companion_support" value="${benefit.companionSupport}">
-                    <input type="hidden" name="original_delayed_baggage" value="${benefit.delayedBaggage}">
-                    <input type="hidden" name="original_travel_documents" value="${benefit.travelDocuments}">
-                    <input type="hidden" name="original_trip_delay" value="${benefit.tripDelay}">
+                    <input type="hidden" name="original_deathOrDisability" value="${product.benefit.death_or_permanent_disability}">
+                    <input type="hidden" name="original_deathByIllness" value="${product.benefit.death_due_to_illness}">
+                    <input type="hidden" name="original_thirdPartyLiability" value="${product.benefit.third_party_liability}">
+                    <input type="hidden" name="original_lostBankCard" value="${product.benefit.lost_bank_card}">
+                    <input type="hidden" name="original_kidnapHostage" value="${product.benefit.kidnap_and_hostage}">
+                    <input type="hidden" name="original_golfEquipLoss" value="${product.benefit.lost_or_damaged_golf_equipment}">
+                    <input type="hidden" name="original_medical_cost" value="${product.benefit.medical_cost}">
+                    <input type="hidden" name="original_emergency_transport" value="${product.benefit.emergency_transport}">
+                    <input type="hidden" name="original_repatriation_vn" value="${product.benefit.repatriation_vn}">
+                    <input type="hidden" name="original_repatriation_abroad" value="${product.benefit.repatriation_abroad}">
+                    <input type="hidden" name="original_hospital_visit" value="${product.benefit.hospital_visit}">
+                    <input type="hidden" name="original_funeral_arrangement" value="${product.benefit.funeral_arrangement}">
+                    <input type="hidden" name="original_child_care" value="${product.benefit.child_care}">
+                    <input type="hidden" name="original_hospital_allowance" value="${product.benefit.hospital_allowance}">
+                    <input type="hidden" name="original_accident_death_injury" value="${product.benefit.accident_death_injury}">
+                    <input type="hidden" name="original_trip_cancellation" value="${product.benefit.trip_cancellation}">
+                    <input type="hidden" name="original_companion_support" value="${product.benefit.companion_support}">
+                    <input type="hidden" name="original_delayed_baggage" value="${product.benefit.delayed_baggage}">
+                    <input type="hidden" name="original_travel_documents" value="${product.benefit.travel_documents}">
+                    <input type="hidden" name="original_trip_delay" value="${product.benefit.trip_delay}">
                     <!-- Hidden fields for IDs -->
                     <input type="hidden" name="product_id" value="${product.id}">
-                    <input type="hidden" name="benefit_id" value="${benefit.id}">
+                    <input type="hidden" name="benefit_id" value="${product.benefit_id}">
                         
 
                 </form>

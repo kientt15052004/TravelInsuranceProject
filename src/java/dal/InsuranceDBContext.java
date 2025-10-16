@@ -7,6 +7,7 @@ package dal;
 import Model.InsuranceProduct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import Model.InsuranceBenefit;
 import Model.User;
@@ -18,7 +19,7 @@ import Model.User;
 public class InsuranceDBContext extends DBContext {
 
     public ArrayList<InsuranceProduct> getAll() {
-        String sql = "select * from products";
+        String sql = "SELECT * FROM products WHERE is_delete = false";
         ArrayList<InsuranceProduct> insurances = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -295,7 +296,7 @@ public class InsuranceDBContext extends DBContext {
         insurance.setImg(rs.getString("img"));
         insurance.setType(rs.getString("type"));
         insurance.setDescription(rs.getString("description"));
-        insurance.setPackage_type(rs.getString("package"));
+        insurance.setPackage_type(rs.getString("package_type"));
         insurance.setPrice(rs.getBigDecimal("price"));
         insurance.setIs_active(rs.getBoolean("is_active"));
         insurance.setIs_delete(rs.getBoolean("is_delete"));
@@ -331,6 +332,221 @@ public class InsuranceDBContext extends DBContext {
         benefit.setTrip_delay(rs.getBigDecimal("trip_delay"));
 
         return benefit;
+    }
+
+    // ========== ADDITIONAL METHODS FOR COMPLETE CRUD OPERATIONS ==========
+    
+    public ArrayList<InsuranceProduct> getDomesticProducts() {
+        String sql = "SELECT * FROM products WHERE type = 'domestic' AND is_delete = false ORDER BY id DESC";
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                InsuranceProduct product = mapResultSetToInsuranceProduct(rs);
+                products.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting domestic products: " + e.getMessage());
+        }
+        return products;
+    }
+
+    public ArrayList<InsuranceProduct> getInternationalProducts() {
+        String sql = "SELECT * FROM products WHERE type = 'international' AND is_delete = false ORDER BY id DESC";
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                InsuranceProduct product = mapResultSetToInsuranceProduct(rs);
+                products.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting international products: " + e.getMessage());
+        }
+        return products;
+    }
+
+    public ArrayList<InsuranceProduct> getActiveProducts() {
+        String sql = "SELECT * FROM products WHERE is_active = true AND is_delete = false ORDER BY id DESC";
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                InsuranceProduct product = mapResultSetToInsuranceProduct(rs);
+                products.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting active products: " + e.getMessage());
+        }
+        return products;
+    }
+
+    public ArrayList<InsuranceProduct> getNonActiveProducts() {
+        String sql = "SELECT * FROM products WHERE is_active = false AND is_delete = false ORDER BY id DESC";
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                InsuranceProduct product = mapResultSetToInsuranceProduct(rs);
+                products.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting non-active products: " + e.getMessage());
+        }
+        return products;
+    }
+
+    public int createBenefit(InsuranceBenefit benefit) {
+        String sql = "INSERT INTO insurance_benefits (death_or_permanent_disability, death_due_to_illness, " +
+                    "third_party_liability, lost_bank_card, kidnap_and_hostage, lost_or_damaged_golf_equipment, " +
+                    "medical_cost, emergency_transport, repatriation_vn, repatriation_abroad, hospital_visit, " +
+                    "funeral_arrangement, child_care, hospital_allowance, accident_death_injury, trip_cancellation, " +
+                    "companion_support, delayed_baggage, travel_documents, trip_delay) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stm.setBigDecimal(1, benefit.getDeath_or_permanent_disability());
+            stm.setBigDecimal(2, benefit.getDeath_due_to_illness());
+            stm.setBigDecimal(3, benefit.getThird_party_liability());
+            stm.setBigDecimal(4, benefit.getLost_bank_card());
+            stm.setBigDecimal(5, benefit.getKidnap_and_hostage());
+            stm.setBigDecimal(6, benefit.getLost_or_damaged_golf_equipment());
+            stm.setBigDecimal(7, benefit.getMedical_cost());
+            stm.setBigDecimal(8, benefit.getEmergency_transport());
+            stm.setBigDecimal(9, benefit.getRepatriation_vn());
+            stm.setBigDecimal(10, benefit.getRepatriation_abroad());
+            stm.setBigDecimal(11, benefit.getHospital_visit());
+            stm.setBigDecimal(12, benefit.getFuneral_arrangement());
+            stm.setBigDecimal(13, benefit.getChild_care());
+            stm.setBigDecimal(14, benefit.getHospital_allowance());
+            stm.setBigDecimal(15, benefit.getAccident_death_injury());
+            stm.setBigDecimal(16, benefit.getTrip_cancellation());
+            stm.setBigDecimal(17, benefit.getCompanion_support());
+            stm.setBigDecimal(18, benefit.getDelayed_baggage());
+            stm.setBigDecimal(19, benefit.getTravel_documents());
+            stm.setBigDecimal(20, benefit.getTrip_delay());
+            
+            int rowsAffected = stm.executeUpdate();
+            if (rowsAffected > 0) {
+                ResultSet generatedKeys = stm.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error creating benefit: " + e.getMessage());
+        }
+        return -1;
+    }
+
+    public boolean createProduct(InsuranceProduct product) {
+        String sql = "INSERT INTO products (benefit_id, type, name, img, description, package_type, price, " +
+                    "domestic_percentage_rate, international_rate_1_7, international_rate_8_30, " +
+                    "international_rate_31_90, international_rate_91_365, is_active, is_delete) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, product.getBenefit_id());
+            stm.setString(2, product.getType());
+            stm.setString(3, product.getName());
+            stm.setString(4, product.getImg());
+            stm.setString(5, product.getDescription());
+            stm.setString(6, product.getPackage_type());
+            stm.setBigDecimal(7, product.getPrice());
+            stm.setBigDecimal(8, product.getDomestic_percentage_rate());
+            stm.setBigDecimal(9, product.getInternational_rate_1_7());
+            stm.setBigDecimal(10, product.getInternational_rate_8_30());
+            stm.setBigDecimal(11, product.getInternational_rate_31_90());
+            stm.setBigDecimal(12, product.getInternational_rate_91_365());
+            stm.setBoolean(13, product.getIs_active());
+            stm.setBoolean(14, product.getIs_delete());
+            
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("Error creating product: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateBenefit(InsuranceBenefit benefit) {
+        String sql = "UPDATE insurance_benefits SET death_or_permanent_disability=?, death_due_to_illness=?, " +
+                    "third_party_liability=?, lost_bank_card=?, kidnap_and_hostage=?, lost_or_damaged_golf_equipment=?, " +
+                    "medical_cost=?, emergency_transport=?, repatriation_vn=?, repatriation_abroad=?, hospital_visit=?, " +
+                    "funeral_arrangement=?, child_care=?, hospital_allowance=?, accident_death_injury=?, trip_cancellation=?, " +
+                    "companion_support=?, delayed_baggage=?, travel_documents=?, trip_delay=? WHERE id=?";
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setBigDecimal(1, benefit.getDeath_or_permanent_disability());
+            stm.setBigDecimal(2, benefit.getDeath_due_to_illness());
+            stm.setBigDecimal(3, benefit.getThird_party_liability());
+            stm.setBigDecimal(4, benefit.getLost_bank_card());
+            stm.setBigDecimal(5, benefit.getKidnap_and_hostage());
+            stm.setBigDecimal(6, benefit.getLost_or_damaged_golf_equipment());
+            stm.setBigDecimal(7, benefit.getMedical_cost());
+            stm.setBigDecimal(8, benefit.getEmergency_transport());
+            stm.setBigDecimal(9, benefit.getRepatriation_vn());
+            stm.setBigDecimal(10, benefit.getRepatriation_abroad());
+            stm.setBigDecimal(11, benefit.getHospital_visit());
+            stm.setBigDecimal(12, benefit.getFuneral_arrangement());
+            stm.setBigDecimal(13, benefit.getChild_care());
+            stm.setBigDecimal(14, benefit.getHospital_allowance());
+            stm.setBigDecimal(15, benefit.getAccident_death_injury());
+            stm.setBigDecimal(16, benefit.getTrip_cancellation());
+            stm.setBigDecimal(17, benefit.getCompanion_support());
+            stm.setBigDecimal(18, benefit.getDelayed_baggage());
+            stm.setBigDecimal(19, benefit.getTravel_documents());
+            stm.setBigDecimal(20, benefit.getTrip_delay());
+            stm.setInt(21, benefit.getId());
+            
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("Error updating benefit: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean updateProduct(InsuranceProduct product) {
+        String sql = "UPDATE products SET benefit_id=?, type=?, name=?, img=?, description=?, package_type=?, price=?, " +
+                    "domestic_percentage_rate=?, international_rate_1_7=?, international_rate_8_30=?, " +
+                    "international_rate_31_90=?, international_rate_91_365=?, is_active=?, is_delete=? WHERE id=?";
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, product.getBenefit_id());
+            stm.setString(2, product.getType());
+            stm.setString(3, product.getName());
+            stm.setString(4, product.getImg());
+            stm.setString(5, product.getDescription());
+            stm.setString(6, product.getPackage_type());
+            stm.setBigDecimal(7, product.getPrice());
+            stm.setBigDecimal(8, product.getDomestic_percentage_rate());
+            stm.setBigDecimal(9, product.getInternational_rate_1_7());
+            stm.setBigDecimal(10, product.getInternational_rate_8_30());
+            stm.setBigDecimal(11, product.getInternational_rate_31_90());
+            stm.setBigDecimal(12, product.getInternational_rate_91_365());
+            stm.setBoolean(13, product.getIs_active());
+            stm.setBoolean(14, product.getIs_delete());
+            stm.setInt(15, product.getId());
+            
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("Error updating product: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean deleteProduct(int id) {
+        String sql = "UPDATE products SET is_delete = true WHERE id = ?";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            int rowsAffected = stm.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            System.out.println("Error deleting product: " + e.getMessage());
+            return false;
+        }
     }
 
 }
