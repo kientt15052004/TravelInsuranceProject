@@ -52,7 +52,7 @@
             </div>
 
             <!-- Search and Filter Section -->
-            <div class="search-section">
+            <div class="search-filter-section">
                 <form method="GET" action="${pageContext.request.contextPath}/usermanagement" class="search-form">
                     <div class="search-row">
                         <div class="search-group">
@@ -96,7 +96,7 @@
             </div>
 
             <!-- Users Table -->
-            <div class="table-section">
+            <div class="users-table-section">
                 <div class="table-header">
                     <div class="table-title-section">
                         <h3>Danh sách User</h3>
@@ -188,6 +188,21 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+    // User dropdown functionality
+    const userDropdown = document.querySelector('.user-dropdown');
+    if (userDropdown) {
+        userDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('active');
+            }
+        });
+    }
     const table = document.querySelector(".users-table");
     if (!table) return;
 

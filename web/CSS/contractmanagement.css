@@ -199,6 +199,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
 }
 
 .table-title-section h3 {
@@ -322,47 +324,13 @@
     background-color: #e9ecef;
 }
 
-/* Chỉ hiển thị sort icons cho các cột có thể sort */
+/* Chỉ hiển thị cursor pointer cho các cột có thể sort */
 .contracts-table th:nth-child(1), /* ID Hợp đồng */
 .contracts-table th:nth-child(3), /* Ngày bắt đầu */
 .contracts-table th:nth-child(4), /* Ngày kết thúc */
 .contracts-table th:nth-child(6), /* Tổng số tiền */
 .contracts-table th:nth-child(7)  /* Trạng thái */ {
     cursor: pointer;
-}
-
-.contracts-table th:nth-child(1):not(.sorted-asc):not(.sorted-desc)::after,
-.contracts-table th:nth-child(3):not(.sorted-asc):not(.sorted-desc)::after,
-.contracts-table th:nth-child(4):not(.sorted-asc):not(.sorted-desc)::after,
-.contracts-table th:nth-child(6):not(.sorted-asc):not(.sorted-desc)::after,
-.contracts-table th:nth-child(7):not(.sorted-asc):not(.sorted-desc)::after {
-    content: " ↕";
-    color: #ccc;
-    margin-left: 5px;
-    opacity: 0.5;
-}
-
-.contracts-table th:nth-child(1):not(.sorted-asc):not(.sorted-desc):hover::after,
-.contracts-table th:nth-child(3):not(.sorted-asc):not(.sorted-desc):hover::after,
-.contracts-table th:nth-child(4):not(.sorted-asc):not(.sorted-desc):hover::after,
-.contracts-table th:nth-child(6):not(.sorted-asc):not(.sorted-desc):hover::after,
-.contracts-table th:nth-child(7):not(.sorted-asc):not(.sorted-desc):hover::after {
-    opacity: 1;
-    color: #666;
-}
-
-.contracts-table th.sorted-asc::after {
-    content: " ▲";
-    color: #007bff;
-    font-weight: bold;
-    margin-left: 5px;
-}
-
-.contracts-table th.sorted-desc::after {
-    content: " ▼";
-    color: #007bff;
-    font-weight: bold;
-    margin-left: 5px;
 }
 
 .table-container {

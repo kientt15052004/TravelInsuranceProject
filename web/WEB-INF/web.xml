@@ -261,6 +261,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>ClaimsManagementServlet</servlet-name>
+        <servlet-class>Controller.ClaimsManagementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimsManagementServlet</servlet-name>
+        <url-pattern>/ClaimsManagementServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UpdateUserServlet</servlet-name>
         <servlet-class>Controller.UpdateUserServlet</servlet-class>
     </servlet>

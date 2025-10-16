@@ -30,6 +30,12 @@
                         <span>Quản lý hợp đồng</span>
                     </a>
                 </li>
+                <li class="nav-item ${param.activePage == 'claims-management' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/ClaimsManagementServlet" class="nav-link">
+                        <i class="fas fa-file-medical"></i>
+                        <span>Quản lý bồi thường</span>
+                    </a>
+                </li>
                 <li class="nav-item ${param.activePage == 'user-management' ? 'active' : ''}">
                     <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
                         <i class="fas fa-users"></i>
