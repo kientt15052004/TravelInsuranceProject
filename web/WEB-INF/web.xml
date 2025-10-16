@@ -188,9 +188,9 @@
         <url-pattern>/DebugProducts</url-pattern>
     </servlet-mapping>
 
-    <!-- Session timeout (30 minutes) -->
+    <!-- Session timeout (120 minutes = 2 hours) -->
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>120</session-timeout>
     </session-config>
     
     

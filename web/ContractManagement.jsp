@@ -45,17 +45,26 @@
                 <ul>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/staff" class="nav-link">
+                            <i class="fas fa-tachometer-alt"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
+                            <i class="fas fa-plus-circle"></i>
                             <span>Tạo hợp đồng mới</span>
                         </a>
                     </li>
                     <li class="nav-item active">
                         <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
+                            <i class="fas fa-file-contract"></i>
                             <span>Quản lý hợp đồng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Quản lý User</span>
                         </a>
                     </li>
                 </ul>
@@ -76,7 +85,7 @@
                         <div class="search-group">
                             <label for="search">Tìm kiếm:</label>
                             <input type="text" id="search" name="search" value="${searchTerm}" 
-                                   placeholder="Tìm theo ID hợp đồng, ID đơn đăng ký, mô tả...">
+                                   placeholder="Tìm theo ID hợp đồng, tên sản phẩm, tên người mua...">
                         </div>
                         
                         <div class="filter-group">
@@ -95,7 +104,7 @@
                             <select id="product" name="product">
                                 <option value="">Tất cả sản phẩm</option>
                                 <c:forEach var="product" items="${products}">
-                                    <option value="${product.id}" ${productFilter == product.id ? 'selected' : ''}>
+                                    <option value="${product.id}" ${productFilter == product.id.toString() ? 'selected' : ''}>
                                         ${product.name}
                                     </option>
                                 </c:forEach>

@@ -5,6 +5,7 @@
 package Model;
 
 import java.util.Date;
+import java.math.BigDecimal;
 
 /**
  *
@@ -21,11 +22,12 @@ public class Claims {
     private String related_img;
     private String related_file;
     private String claim_status;
+    private BigDecimal claim_amount;
 
     public Claims() {
     }
 
-    public Claims(int id, int contract_id, Date requestDate, String claim_type, String description, String payment_bank, String payment_number, String related_img, String related_file, String claim_status) {
+    public Claims(int id, int contract_id, Date requestDate, String claim_type, String description, String payment_bank, String payment_number, String related_img, String related_file, String claim_status, BigDecimal claim_amount) {
         this.id = id;
         this.contract_id = contract_id;
         this.requestDate = requestDate;
@@ -36,6 +38,7 @@ public class Claims {
         this.related_img = related_img;
         this.related_file = related_file;
         this.claim_status = claim_status;
+        this.claim_amount = claim_amount;
     }
 
     public int getId() {
@@ -116,5 +119,13 @@ public class Claims {
 
     public void setClaim_status(String claim_status) {
         this.claim_status = claim_status;
+    }
+    
+    public BigDecimal getClaim_amount() {
+        return claim_amount;
+    }
+
+    public void setClaim_amount(BigDecimal claim_amount) {
+        this.claim_amount = claim_amount;
     }
 }
