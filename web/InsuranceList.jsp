@@ -90,7 +90,7 @@
                             <c:forEach items="${insurances}" var="insurance">
                                 <a href="purchase-insurance?id=${insurance.id}" class="insurance-card">
                                     <div class="insurance-icon">
-                                        <img src="${pageContext.request.contextPath}/Image/${insurance.img}" 
+                                        <img src="${pageContext.request.contextPath}/${insurance.img}" 
                                              alt="${insurance.name}" class="insurance-img"/>
                                     </div>
                                     <span class="insurance-type">${insurance.type}</span>
