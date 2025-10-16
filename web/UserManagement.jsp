@@ -51,7 +51,7 @@
                 <p>Xem và quản lý thông tin người dùng</p>
             </div>
 
-            <!-- Search Form -->
+            <!-- Search and Filter Section -->
             <div class="search-section">
                 <form method="GET" action="${pageContext.request.contextPath}/usermanagement" class="search-form">
                     <div class="search-row">
@@ -61,7 +61,8 @@
                                    placeholder="Tên, email hoặc username..." 
                                    value="${searchKeyword}">
                         </div>
-                        <div class="search-group">
+                        
+                        <div class="filter-group">
                             <label for="role">Vai trò:</label>
                             <select id="role" name="role">
                                 <option value="all" ${searchRole == 'all' ? 'selected' : ''}>Tất cả</option>
@@ -70,7 +71,8 @@
                                 <option value="admin" ${searchRole == 'admin' ? 'selected' : ''}>Quản trị</option>
                             </select>
                         </div>
-                        <div class="search-group">
+                        
+                        <div class="filter-group">
                             <label for="status">Trạng thái:</label>
                             <select id="status" name="status">
                                 <option value="all" ${searchStatus == 'all' ? 'selected' : ''}>Tất cả</option>
@@ -78,12 +80,13 @@
                                 <option value="inactive" ${searchStatus == 'inactive' ? 'selected' : ''}>Không hoạt động</option>
                             </select>
                         </div>
-                        <div class="search-group">
-                            <button type="submit" class="btn-search">
+                        
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-search">
                                 <i class="fas fa-search"></i>
                                 Tìm kiếm
                             </button>
-                            <a href="${pageContext.request.contextPath}/usermanagement" class="btn-clear">
+                            <a href="${pageContext.request.contextPath}/usermanagement" class="btn btn-clear">
                                 <i class="fas fa-times"></i>
                                 Xóa bộ lọc
                             </a>
@@ -95,7 +98,20 @@
             <!-- Users Table -->
             <div class="table-section">
                 <div class="table-header">
-                    <h3>Danh sách User (${users.size()} người dùng)</h3>
+                    <div class="table-title-section">
+                        <h3>Danh sách User</h3>
+                        <p>Tổng cộng: ${users.size()} người dùng</p>
+                    </div>
+                    <div class="page-size-container">
+                        <label>Hiển thị: 
+                            <select id="pageSizeSelect">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> người dùng/trang
+                        </label>
+                    </div>
                 </div>
                 
                 <c:choose>
@@ -151,12 +167,13 @@
                                             <td class="total-amount">
                                                 <fmt:formatNumber value="${user.totalInsuranceAmount}" type="currency" currencyCode="VND"/>
                                             </td>
-                                            <td>
-                                                <a href="${pageContext.request.contextPath}/usermanagement?action=detail&userId=${user.id}" 
-                                                   class="btn-detail">
-                                                    <i class="fas fa-eye"></i>
-                                                    Xem chi tiết
-                                                </a>
+                                            <td class="actions-cell">
+                                                <div class="action-buttons">
+                                                    <a href="${pageContext.request.contextPath}/usermanagement?action=detail&userId=${user.id}" 
+                                                       class="btn-sm btn-info">
+                                                        Xem chi tiết
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -168,5 +185,130 @@
             </div>
         </div>
     </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const table = document.querySelector(".users-table");
+    if (!table) return;
+
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const paginationContainer = document.createElement("div");
+    paginationContainer.classList.add("pagination-container");
+    table.parentNode.appendChild(paginationContainer);
+
+
+    let currentPage = 1;
+    let pageSize = 10;
+
+    function renderTable() {
+        tbody.innerHTML = "";
+        const start = (currentPage - 1) * pageSize;
+        const end = start + pageSize;
+        rows.slice(start, end).forEach(row => tbody.appendChild(row));
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(rows.length / pageSize);
+        paginationContainer.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.classList.add("page-btn");
+            if (i === currentPage) btn.classList.add("active");
+            btn.addEventListener("click", () => {
+                currentPage = i;
+                renderTable();
+            });
+            paginationContainer.appendChild(btn);
+        }
+    }
+
+    document.getElementById("pageSizeSelect").addEventListener("change", function () {
+        pageSize = parseInt(this.value);
+        currentPage = 1;
+        renderTable();
+    });
+
+    // ==== SORT ====
+    const headers = table.querySelectorAll("th");
+    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortedColumn = null;
+
+    headers.forEach((th, index) => {
+        // Chỉ cho phép sort các cột: ID (0), Họ tên (2), Vai trò (5), Trạng thái (6), Tổng số tiền (7)
+        const sortableColumns = [0, 2, 5, 6, 7];
+        
+        if (sortableColumns.includes(index)) {
+            th.style.cursor = "pointer";
+            th.addEventListener("click", () => {
+                if (sortedColumn === index) sortOrder *= -1;
+                else {
+                    sortedColumn = index;
+                    sortOrder = 1;
+                }
+
+                rows.sort((a, b) => {
+                    const aText = a.children[index].textContent.trim();
+                    const bText = b.children[index].textContent.trim();
+
+                    // Xử lý sort cho từng loại cột
+                    switch(index) {
+                        case 0: // ID
+                            const aId = parseInt(aText);
+                            const bId = parseInt(bText);
+                            return (aId - bId) * sortOrder;
+                        
+                        case 2: // Họ tên
+                        case 5: // Vai trò
+                        case 6: // Trạng thái
+                            return aText.localeCompare(bText, "vi") * sortOrder;
+                        
+                        case 7: // Tổng số tiền
+                            const aPrice = parsePrice(aText);
+                            const bPrice = parsePrice(bText);
+                            return (aPrice - bPrice) * sortOrder;
+                        
+                        default:
+                            return 0;
+                    }
+                });
+
+                renderTable();
+                updateSortIcons(th, headers);
+            });
+        } else {
+            // Các cột không sort được
+            th.style.cursor = "default";
+        }
+    });
+
+    // Helper functions for parsing different data types
+    function parsePrice(priceStr) {
+        // Remove currency symbols (₫) and spaces
+        let cleanPrice = priceStr.replace(/[₫\s]/g, '');
+        
+        // Handle Vietnamese number format: 1.234.567,89
+        // Replace dots (thousands separator) with empty string
+        // Replace comma (decimal separator) with dot
+        cleanPrice = cleanPrice.replace(/\./g, '').replace(',', '.');
+        
+        return parseFloat(cleanPrice) || 0;
+    }
+
+    function updateSortIcons(activeTh, allThs) {
+        allThs.forEach(th => {
+            th.classList.remove("sorted-asc", "sorted-desc");
+        });
+        activeTh.classList.add(sortOrder === 1 ? "sorted-asc" : "sorted-desc");
+    }
+
+    renderTable();
+});
+</script>
+
+
 </body>
 </html>

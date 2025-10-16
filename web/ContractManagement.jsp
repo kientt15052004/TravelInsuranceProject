@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/staff.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/contractmanagement.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
     <!-- Top Header -->
@@ -84,7 +85,6 @@
                             </select>
                         </div>
                         
-                        
                         <div class="button-group">
                             <button type="submit" class="btn btn-search">
                                 <i class="fas fa-search"></i>
@@ -102,8 +102,20 @@
             <!-- Contracts Table -->
             <div class="contracts-table-section">
                 <div class="table-header">
-                    <h3>Danh sách hợp đồng bảo hiểm</h3>
-                    <p>Tổng cộng: ${contracts.size()} hợp đồng</p>
+                    <div class="table-title-section">
+                        <h3>Danh sách hợp đồng bảo hiểm</h3>
+                        <p>Tổng cộng: ${contracts.size()} hợp đồng</p>
+                    </div>
+                    <div class="page-size-container">
+                        <label>Hiển thị: 
+                            <select id="pageSizeSelect">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> hợp đồng/trang
+                        </label>
+                    </div>
                 </div>
                 
                 <c:if test="${not empty error}">
@@ -146,12 +158,8 @@
                                                     <small class="product-type">${contract.productType}</small>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <fmt:formatDate value="${contract.startDate}" pattern="dd/MM/yyyy"/>
-                                            </td>
-                                            <td>
-                                                <fmt:formatDate value="${contract.endDate}" pattern="dd/MM/yyyy"/>
-                                            </td>
+                                            <td><fmt:formatDate value="${contract.startDate}" pattern="dd/MM/yyyy"/></td>
+                                            <td><fmt:formatDate value="${contract.endDate}" pattern="dd/MM/yyyy"/></td>
                                             <td>
                                                 <div class="buyer-info">
                                                     <div class="buyer-name"><strong>${contract.buyerName}</strong></div>
@@ -173,7 +181,7 @@
                                             </td>
                                             <td class="actions-cell">
                                                 <div class="action-buttons">
-                                                    <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}" class="btn-sm btn-info" title="Xem chi tiết">
+                                                    <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}" class="btn-sm btn-info">
                                                         Xem chi tiết
                                                     </a>
                                                 </div>
@@ -182,6 +190,8 @@
                                     </c:forEach>
                                 </tbody>
                             </table>
+
+
                         </c:when>
                         <c:otherwise>
                             <div class="no-data">
@@ -195,5 +205,149 @@
             </div>
         </div>
     </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const table = document.querySelector(".contracts-table");
+    if (!table) return;
+
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const paginationContainer = document.createElement("div");
+    paginationContainer.classList.add("pagination-container");
+    table.parentNode.appendChild(paginationContainer);
+
+
+    let currentPage = 1;
+    let pageSize = 10;
+
+    function renderTable() {
+        tbody.innerHTML = "";
+        const start = (currentPage - 1) * pageSize;
+        const end = start + pageSize;
+        rows.slice(start, end).forEach(row => tbody.appendChild(row));
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(rows.length / pageSize);
+        paginationContainer.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.classList.add("page-btn");
+            if (i === currentPage) btn.classList.add("active");
+            btn.addEventListener("click", () => {
+                currentPage = i;
+                renderTable();
+            });
+            paginationContainer.appendChild(btn);
+        }
+    }
+
+    document.getElementById("pageSizeSelect").addEventListener("change", function () {
+        pageSize = parseInt(this.value);
+        currentPage = 1;
+        renderTable();
+    });
+
+    // ==== SORT ====
+    const headers = table.querySelectorAll("th");
+    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortedColumn = null;
+
+    headers.forEach((th, index) => {
+        // Chỉ cho phép sort các cột: ID (0), Ngày bắt đầu (2), Ngày kết thúc (3), Tổng số tiền (5), Trạng thái (6)
+        const sortableColumns = [0, 2, 3, 5, 6];
+        
+        if (sortableColumns.includes(index)) {
+            th.style.cursor = "pointer";
+            th.addEventListener("click", () => {
+                if (sortedColumn === index) sortOrder *= -1;
+                else {
+                    sortedColumn = index;
+                    sortOrder = 1;
+                }
+
+                rows.sort((a, b) => {
+                    const aText = a.children[index].textContent.trim();
+                    const bText = b.children[index].textContent.trim();
+
+                    // Xử lý sort cho từng loại cột
+                    switch(index) {
+                        case 0: // ID Hợp đồng
+                            const aId = parseInt(aText.replace('#', ''));
+                            const bId = parseInt(bText.replace('#', ''));
+                            return (aId - bId) * sortOrder;
+                        
+                        case 2: // Ngày bắt đầu
+                        case 3: // Ngày kết thúc
+                            const aDate = parseDate(aText);
+                            const bDate = parseDate(bText);
+                            if (aDate && bDate) {
+                                return (aDate.getTime() - bDate.getTime()) * sortOrder;
+                            }
+                            return aText.localeCompare(bText, "vi") * sortOrder;
+                        
+                        case 5: // Tổng số tiền
+                            const aPrice = parsePrice(aText);
+                            const bPrice = parsePrice(bText);
+                            return (aPrice - bPrice) * sortOrder;
+                        
+                        case 6: // Trạng thái
+                            return aText.localeCompare(bText, "vi") * sortOrder;
+                        
+                        default:
+                            return 0;
+                    }
+                });
+
+                renderTable();
+                updateSortIcons(th, headers);
+            });
+        } else {
+            // Các cột không sort được
+            th.style.cursor = "default";
+        }
+    });
+
+    // Helper functions for parsing different data types
+    function parseDate(dateStr) {
+        // Format: dd/MM/yyyy
+        const parts = dateStr.split('/');
+        if (parts.length === 3) {
+            const day = parseInt(parts[0]);
+            const month = parseInt(parts[1]) - 1; // Month is 0-indexed
+            const year = parseInt(parts[2]);
+            return new Date(year, month, day);
+        }
+        return null;
+    }
+
+    function parsePrice(priceStr) {
+        // Remove currency symbols (₫) and spaces
+        let cleanPrice = priceStr.replace(/[₫\s]/g, '');
+        
+        // Handle Vietnamese number format: 1.234.567,89
+        // Replace dots (thousands separator) with empty string
+        // Replace comma (decimal separator) with dot
+        cleanPrice = cleanPrice.replace(/\./g, '').replace(',', '.');
+        
+        return parseFloat(cleanPrice) || 0;
+    }
+
+    function updateSortIcons(activeTh, allThs) {
+        allThs.forEach(th => {
+            th.classList.remove("sorted-asc", "sorted-desc");
+        });
+        activeTh.classList.add(sortOrder === 1 ? "sorted-asc" : "sorted-desc");
+    }
+
+    renderTable();
+});
+</script>
+
+
 </body>
 </html>
