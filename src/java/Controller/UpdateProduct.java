@@ -1,8 +1,8 @@
 package Controller;
 
-import dal.ProductDBController;
-import Model.Product;
-import Model.InsuranceBenefit1;
+import dal.InsuranceDBContext;
+import Model.InsuranceProduct;
+import Model.InsuranceBenefit;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Paths;
@@ -25,7 +25,7 @@ public class UpdateProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDBController productDB = new ProductDBController();
+        InsuranceDBContext insuranceDAO = new InsuranceDBContext();
 
         System.out.println("=== DEBUG: BẮT ĐẦU UPDATE PRODUCT ===");
         System.out.println("DEBUG: price parameter = " + request.getParameter("price"));
@@ -51,22 +51,22 @@ public class UpdateProduct extends HttpServlet {
             // Nếu không có ảnh mới, giữ ảnh cũ
             if (imgPath == null) {
                 // Lấy sản phẩm hiện tại để giữ ảnh cũ
-                Product currentProduct = productDB.getProductById(productId);
+                InsuranceProduct currentProduct = insuranceDAO.getById(productId);
                 if (currentProduct != null) {
                     imgPath = currentProduct.getImg();
                 }
             }
 
             // Kiểm tra xem benefit có thay đổi không
-            InsuranceBenefit1 newBenefit = createInsuranceBenefit(request);
-            InsuranceBenefit1 originalBenefit = createOriginalInsuranceBenefit(request);
+            InsuranceBenefit newBenefit = createInsuranceBenefit(request);
+            InsuranceBenefit originalBenefit = createOriginalInsuranceBenefit(request);
 
             // DEBUG: IN RA MỘT SỐ TRƯỜNG ĐẠI DIỆN ĐỂ SO SÁNH
             System.out.println("=== DEBUG: SO SÁNH BENEFIT ===");
-            System.out.println("DEBUG: deathOrDisability - NEW = " + newBenefit.getDeathOrPermanentDisability() + ", OLD = " + originalBenefit.getDeathOrPermanentDisability());
-            System.out.println("DEBUG: deathByIllness - NEW = " + newBenefit.getDeathDueToIllness() + ", OLD = " + originalBenefit.getDeathDueToIllness());
-            System.out.println("DEBUG: medical_cost - NEW = " + newBenefit.getMedicalCost() + ", OLD = " + originalBenefit.getMedicalCost());
-            System.out.println("DEBUG: trip_delay - NEW = " + newBenefit.getTripDelay() + ", OLD = " + originalBenefit.getTripDelay());
+            System.out.println("DEBUG: deathOrDisability - NEW = " + newBenefit.getDeath_or_permanent_disability() + ", OLD = " + originalBenefit.getDeath_or_permanent_disability());
+            System.out.println("DEBUG: deathByIllness - NEW = " + newBenefit.getDeath_due_to_illness() + ", OLD = " + originalBenefit.getDeath_due_to_illness());
+            System.out.println("DEBUG: medical_cost - NEW = " + newBenefit.getMedical_cost() + ", OLD = " + originalBenefit.getMedical_cost());
+            System.out.println("DEBUG: trip_delay - NEW = " + newBenefit.getTrip_delay() + ", OLD = " + originalBenefit.getTrip_delay());
 
             // DEBUG: IN RA CÁC THAM SỐ TỪ REQUEST
             System.out.println("=== DEBUG: REQUEST PARAMETERS ===");
@@ -89,7 +89,7 @@ public class UpdateProduct extends HttpServlet {
             // So sánh benefit mới với benefit gốc
             if (isBenefitChanged) {
                 System.out.println("DEBUG: Tạo benefit mới vì có thay đổi");
-                int newBenefitId = productDB.createBenefit(newBenefit);
+                int newBenefitId = insuranceDAO.createBenefit(newBenefit);
                 if (newBenefitId == -1) {
                     throw new Exception("Không thể tạo quyền lợi bảo hiểm mới");
                 }
@@ -98,17 +98,17 @@ public class UpdateProduct extends HttpServlet {
             } else {
                 System.out.println("DEBUG: Không có thay đổi, cập nhật benefit hiện tại");
                 newBenefit.setId(benefitId);
-                boolean benefitUpdated = productDB.updateBenefit(newBenefit);
+                boolean benefitUpdated = insuranceDAO.updateBenefit(newBenefit);
                 if (!benefitUpdated) {
                     throw new Exception("Không thể cập nhật quyền lợi bảo hiểm");
                 }
             }
 
-            // Cập nhật Product
-            Product product = createProduct(request, finalBenefitId, imgPath); // Bỏ qua ảnh cho debug
+            // Cập nhật InsuranceProduct
+            InsuranceProduct product = createInsuranceProduct(request, finalBenefitId, imgPath); // Bỏ qua ảnh cho debug
             product.setId(productId);
 
-            boolean productUpdated = productDB.updateProduct(product);
+            boolean productUpdated = insuranceDAO.updateProduct(product);
 
             if (productUpdated) {
                 System.out.println("DEBUG: Cập nhật sản phẩm thành công");
@@ -152,103 +152,103 @@ public class UpdateProduct extends HttpServlet {
         return "Image/upload_imgs/" + safeFileName;
     }
 
-    private InsuranceBenefit1 createInsuranceBenefit(HttpServletRequest request) {
-        InsuranceBenefit1 benefit = new InsuranceBenefit1();
+    private InsuranceBenefit createInsuranceBenefit(HttpServletRequest request) {
+        InsuranceBenefit benefit = new InsuranceBenefit();
 
         // Set các giá trị với default 0 nếu null
-        benefit.setDeathOrPermanentDisability(parseBigDecimal(request.getParameter("deathOrDisability")));
-        benefit.setDeathDueToIllness(parseBigDecimal(request.getParameter("deathByIllness")));
-        benefit.setThirdPartyLiability(parseBigDecimal(request.getParameter("thirdPartyLiability")));
-        benefit.setLostBankCard(parseBigDecimal(request.getParameter("lostBankCard")));
-        benefit.setKidnapAndHostage(parseBigDecimal(request.getParameter("kidnapHostage")));
-        benefit.setLostOrDamagedGolfEquipment(parseBigDecimal(request.getParameter("golfEquipLoss")));
+        benefit.setDeath_or_permanent_disability(parseBigDecimal(request.getParameter("deathOrDisability")));
+        benefit.setDeath_due_to_illness(parseBigDecimal(request.getParameter("deathByIllness")));
+        benefit.setThird_party_liability(parseBigDecimal(request.getParameter("thirdPartyLiability")));
+        benefit.setLost_bank_card(parseBigDecimal(request.getParameter("lostBankCard")));
+        benefit.setKidnap_and_hostage(parseBigDecimal(request.getParameter("kidnapHostage")));
+        benefit.setLost_or_damaged_golf_equipment(parseBigDecimal(request.getParameter("golfEquipLoss")));
         // Các benefits quốc tế
-        benefit.setMedicalCost(parseBigDecimal(request.getParameter("medical_cost")));
-        benefit.setEmergencyTransport(parseBigDecimal(request.getParameter("emergency_transport")));
-        benefit.setRepatriationVn(parseBigDecimal(request.getParameter("repatriation_vn")));
-        benefit.setRepatriationAbroad(parseBigDecimal(request.getParameter("repatriation_abroad")));
-        benefit.setHospitalVisit(parseBigDecimal(request.getParameter("hospital_visit")));
-        benefit.setFuneralArrangement(parseBigDecimal(request.getParameter("funeral_arrangement")));
-        benefit.setChildCare(parseBigDecimal(request.getParameter("child_care")));
-        benefit.setHospitalAllowance(parseBigDecimal(request.getParameter("hospital_allowance")));
-        benefit.setAccidentDeathInjury(parseBigDecimal(request.getParameter("accident_death_injury")));
-        benefit.setTripCancellation(parseBigDecimal(request.getParameter("trip_cancellation")));
-        benefit.setCompanionSupport(parseBigDecimal(request.getParameter("companion_support")));
-        benefit.setDelayedBaggage(parseBigDecimal(request.getParameter("delayed_baggage")));
-        benefit.setTravelDocuments(parseBigDecimal(request.getParameter("travel_documents")));
-        benefit.setTripDelay(parseBigDecimal(request.getParameter("trip_delay")));
+        benefit.setMedical_cost(parseBigDecimal(request.getParameter("medical_cost")));
+        benefit.setEmergency_transport(parseBigDecimal(request.getParameter("emergency_transport")));
+        benefit.setRepatriation_vn(parseBigDecimal(request.getParameter("repatriation_vn")));
+        benefit.setRepatriation_abroad(parseBigDecimal(request.getParameter("repatriation_abroad")));
+        benefit.setHospital_visit(parseBigDecimal(request.getParameter("hospital_visit")));
+        benefit.setFuneral_arrangement(parseBigDecimal(request.getParameter("funeral_arrangement")));
+        benefit.setChild_care(parseBigDecimal(request.getParameter("child_care")));
+        benefit.setHospital_allowance(parseBigDecimal(request.getParameter("hospital_allowance")));
+        benefit.setAccident_death_injury(parseBigDecimal(request.getParameter("accident_death_injury")));
+        benefit.setTrip_cancellation(parseBigDecimal(request.getParameter("trip_cancellation")));
+        benefit.setCompanion_support(parseBigDecimal(request.getParameter("companion_support")));
+        benefit.setDelayed_baggage(parseBigDecimal(request.getParameter("delayed_baggage")));
+        benefit.setTravel_documents(parseBigDecimal(request.getParameter("travel_documents")));
+        benefit.setTrip_delay(parseBigDecimal(request.getParameter("trip_delay")));
 
         return benefit;
     }
 
-    private InsuranceBenefit1 createOriginalInsuranceBenefit(HttpServletRequest request) {
-        InsuranceBenefit1 benefit = new InsuranceBenefit1();
+    private InsuranceBenefit createOriginalInsuranceBenefit(HttpServletRequest request) {
+        InsuranceBenefit benefit = new InsuranceBenefit();
 
         // Set các giá trị gốc từ hidden fields
-        benefit.setDeathOrPermanentDisability(parseBigDecimal(request.getParameter("original_deathOrDisability")));
-        benefit.setDeathDueToIllness(parseBigDecimal(request.getParameter("original_deathByIllness")));
-        benefit.setThirdPartyLiability(parseBigDecimal(request.getParameter("original_thirdPartyLiability")));
-        benefit.setLostBankCard(parseBigDecimal(request.getParameter("original_lostBankCard")));
-        benefit.setKidnapAndHostage(parseBigDecimal(request.getParameter("original_kidnapHostage")));
-        benefit.setLostOrDamagedGolfEquipment(parseBigDecimal(request.getParameter("original_golfEquipLoss")));
+        benefit.setDeath_or_permanent_disability(parseBigDecimal(request.getParameter("original_deathOrDisability")));
+        benefit.setDeath_due_to_illness(parseBigDecimal(request.getParameter("original_deathByIllness")));
+        benefit.setThird_party_liability(parseBigDecimal(request.getParameter("original_thirdPartyLiability")));
+        benefit.setLost_bank_card(parseBigDecimal(request.getParameter("original_lostBankCard")));
+        benefit.setKidnap_and_hostage(parseBigDecimal(request.getParameter("original_kidnapHostage")));
+        benefit.setLost_or_damaged_golf_equipment(parseBigDecimal(request.getParameter("original_golfEquipLoss")));
         // Các benefits quốc tế
-        benefit.setMedicalCost(parseBigDecimal(request.getParameter("original_medical_cost")));
-        benefit.setEmergencyTransport(parseBigDecimal(request.getParameter("original_emergency_transport")));
-        benefit.setRepatriationVn(parseBigDecimal(request.getParameter("original_repatriation_vn")));
-        benefit.setRepatriationAbroad(parseBigDecimal(request.getParameter("original_repatriation_abroad")));
-        benefit.setHospitalVisit(parseBigDecimal(request.getParameter("original_hospital_visit")));
-        benefit.setFuneralArrangement(parseBigDecimal(request.getParameter("original_funeral_arrangement")));
-        benefit.setChildCare(parseBigDecimal(request.getParameter("original_child_care")));
-        benefit.setHospitalAllowance(parseBigDecimal(request.getParameter("original_hospital_allowance")));
-        benefit.setAccidentDeathInjury(parseBigDecimal(request.getParameter("original_accident_death_injury")));
-        benefit.setTripCancellation(parseBigDecimal(request.getParameter("original_trip_cancellation")));
-        benefit.setCompanionSupport(parseBigDecimal(request.getParameter("original_companion_support")));
-        benefit.setDelayedBaggage(parseBigDecimal(request.getParameter("original_delayed_baggage")));
-        benefit.setTravelDocuments(parseBigDecimal(request.getParameter("original_travel_documents")));
-        benefit.setTripDelay(parseBigDecimal(request.getParameter("original_trip_delay")));
+        benefit.setMedical_cost(parseBigDecimal(request.getParameter("original_medical_cost")));
+        benefit.setEmergency_transport(parseBigDecimal(request.getParameter("original_emergency_transport")));
+        benefit.setRepatriation_vn(parseBigDecimal(request.getParameter("original_repatriation_vn")));
+        benefit.setRepatriation_abroad(parseBigDecimal(request.getParameter("original_repatriation_abroad")));
+        benefit.setHospital_visit(parseBigDecimal(request.getParameter("original_hospital_visit")));
+        benefit.setFuneral_arrangement(parseBigDecimal(request.getParameter("original_funeral_arrangement")));
+        benefit.setChild_care(parseBigDecimal(request.getParameter("original_child_care")));
+        benefit.setHospital_allowance(parseBigDecimal(request.getParameter("original_hospital_allowance")));
+        benefit.setAccident_death_injury(parseBigDecimal(request.getParameter("original_accident_death_injury")));
+        benefit.setTrip_cancellation(parseBigDecimal(request.getParameter("original_trip_cancellation")));
+        benefit.setCompanion_support(parseBigDecimal(request.getParameter("original_companion_support")));
+        benefit.setDelayed_baggage(parseBigDecimal(request.getParameter("original_delayed_baggage")));
+        benefit.setTravel_documents(parseBigDecimal(request.getParameter("original_travel_documents")));
+        benefit.setTrip_delay(parseBigDecimal(request.getParameter("original_trip_delay")));
 
         return benefit;
     }
 
-    private boolean hasBenefitChanged(InsuranceBenefit1 newBenefit, InsuranceBenefit1 originalBenefit) {
+    private boolean hasBenefitChanged(InsuranceBenefit newBenefit, InsuranceBenefit originalBenefit) {
         // So sánh từng trường của benefit bằng compareTo (so sánh giá trị số, bỏ qua scale)
-        return newBenefit.getDeathOrPermanentDisability().compareTo(originalBenefit.getDeathOrPermanentDisability()) != 0
-                || newBenefit.getDeathDueToIllness().compareTo(originalBenefit.getDeathDueToIllness()) != 0
-                || newBenefit.getThirdPartyLiability().compareTo(originalBenefit.getThirdPartyLiability()) != 0
-                || newBenefit.getLostBankCard().compareTo(originalBenefit.getLostBankCard()) != 0
-                || newBenefit.getKidnapAndHostage().compareTo(originalBenefit.getKidnapAndHostage()) != 0
-                || newBenefit.getLostOrDamagedGolfEquipment().compareTo(originalBenefit.getLostOrDamagedGolfEquipment()) != 0
-                || newBenefit.getMedicalCost().compareTo(originalBenefit.getMedicalCost()) != 0
-                || newBenefit.getEmergencyTransport().compareTo(originalBenefit.getEmergencyTransport()) != 0
-                || newBenefit.getRepatriationVn().compareTo(originalBenefit.getRepatriationVn()) != 0
-                || newBenefit.getRepatriationAbroad().compareTo(originalBenefit.getRepatriationAbroad()) != 0
-                || newBenefit.getHospitalVisit().compareTo(originalBenefit.getHospitalVisit()) != 0
-                || newBenefit.getFuneralArrangement().compareTo(originalBenefit.getFuneralArrangement()) != 0
-                || newBenefit.getChildCare().compareTo(originalBenefit.getChildCare()) != 0
-                || newBenefit.getHospitalAllowance().compareTo(originalBenefit.getHospitalAllowance()) != 0
-                || newBenefit.getAccidentDeathInjury().compareTo(originalBenefit.getAccidentDeathInjury()) != 0
-                || newBenefit.getTripCancellation().compareTo(originalBenefit.getTripCancellation()) != 0
-                || newBenefit.getCompanionSupport().compareTo(originalBenefit.getCompanionSupport()) != 0
-                || newBenefit.getDelayedBaggage().compareTo(originalBenefit.getDelayedBaggage()) != 0
-                || newBenefit.getTravelDocuments().compareTo(originalBenefit.getTravelDocuments()) != 0
-                || newBenefit.getTripDelay().compareTo(originalBenefit.getTripDelay()) != 0;
+        return newBenefit.getDeath_or_permanent_disability().compareTo(originalBenefit.getDeath_or_permanent_disability()) != 0
+                || newBenefit.getDeath_due_to_illness().compareTo(originalBenefit.getDeath_due_to_illness()) != 0
+                || newBenefit.getThird_party_liability().compareTo(originalBenefit.getThird_party_liability()) != 0
+                || newBenefit.getLost_bank_card().compareTo(originalBenefit.getLost_bank_card()) != 0
+                || newBenefit.getKidnap_and_hostage().compareTo(originalBenefit.getKidnap_and_hostage()) != 0
+                || newBenefit.getLost_or_damaged_golf_equipment().compareTo(originalBenefit.getLost_or_damaged_golf_equipment()) != 0
+                || newBenefit.getMedical_cost().compareTo(originalBenefit.getMedical_cost()) != 0
+                || newBenefit.getEmergency_transport().compareTo(originalBenefit.getEmergency_transport()) != 0
+                || newBenefit.getRepatriation_vn().compareTo(originalBenefit.getRepatriation_vn()) != 0
+                || newBenefit.getRepatriation_abroad().compareTo(originalBenefit.getRepatriation_abroad()) != 0
+                || newBenefit.getHospital_visit().compareTo(originalBenefit.getHospital_visit()) != 0
+                || newBenefit.getFuneral_arrangement().compareTo(originalBenefit.getFuneral_arrangement()) != 0
+                || newBenefit.getChild_care().compareTo(originalBenefit.getChild_care()) != 0
+                || newBenefit.getHospital_allowance().compareTo(originalBenefit.getHospital_allowance()) != 0
+                || newBenefit.getAccident_death_injury().compareTo(originalBenefit.getAccident_death_injury()) != 0
+                || newBenefit.getTrip_cancellation().compareTo(originalBenefit.getTrip_cancellation()) != 0
+                || newBenefit.getCompanion_support().compareTo(originalBenefit.getCompanion_support()) != 0
+                || newBenefit.getDelayed_baggage().compareTo(originalBenefit.getDelayed_baggage()) != 0
+                || newBenefit.getTravel_documents().compareTo(originalBenefit.getTravel_documents()) != 0
+                || newBenefit.getTrip_delay().compareTo(originalBenefit.getTrip_delay()) != 0;
     }
 
-    private Product createProduct(HttpServletRequest request, int benefitId, String imgPath) {
-        Product product = new Product();
-        product.setBenefitId(benefitId);
+    private InsuranceProduct createInsuranceProduct(HttpServletRequest request, int benefitId, String imgPath) {
+        InsuranceProduct product = new InsuranceProduct();
+        product.setBenefit_id(benefitId);
         product.setType(request.getParameter("choose"));
         product.setName(request.getParameter("name"));
         product.setImg(imgPath);
         product.setDescription(request.getParameter("description"));
-        product.setPackageType(request.getParameter("package_type"));
+        product.setPackage_type(request.getParameter("package_type"));
         product.setPrice(parseBigDecimal(request.getParameter("price")));
-        product.setDomesticPercentageRate(parseBigDecimal(request.getParameter("domestic_percentage_rate")));
-        product.setInternationalRate1_7(parseBigDecimal(request.getParameter("international_rate_1_7")));
-        product.setInternationalRate8_30(parseBigDecimal(request.getParameter("international_rate_8_30")));
-        product.setInternationalRate31_90(parseBigDecimal(request.getParameter("international_rate_31_90")));
-        product.setInternationalRate91_180(parseBigDecimal(request.getParameter("international_rate_91_180")));
-        product.setActive(request.getParameter("active").equals("true") ? true : false);
+        product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")));
+        product.setInternational_rate_1_7(parseBigDecimal(request.getParameter("international_rate_1_7")));
+        product.setInternational_rate_8_30(parseBigDecimal(request.getParameter("international_rate_8_30")));
+        product.setInternational_rate_31_90(parseBigDecimal(request.getParameter("international_rate_31_90")));
+        product.setInternational_rate_91_365(parseBigDecimal(request.getParameter("international_rate_91_180")));
+        product.setIs_active(request.getParameter("active").equals("true") ? true : false);
         return product;
     }
 
@@ -270,12 +270,12 @@ public class UpdateProduct extends HttpServlet {
         }
     }
 
-    private void setSuccessAttributes(HttpServletRequest request, Product product, String imgPath) {
+    private void setSuccessAttributes(HttpServletRequest request, InsuranceProduct product, String imgPath) {
         request.getSession().setAttribute("notification", "Cập nhật sản phẩm bảo hiểm thành công!");
         request.getSession().setAttribute("img_src", imgPath);
         request.getSession().setAttribute("name", product.getName());
         request.getSession().setAttribute("type", product.getType());
-        request.getSession().setAttribute("package_type", product.getPackageType());
+        request.getSession().setAttribute("package_type", product.getPackage_type());
         request.getSession().setAttribute("description", product.getDescription());
         request.getSession().setAttribute("price", product.getPrice() != null ? product.getPrice().toString() : "0");
     }
