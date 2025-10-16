@@ -408,4 +408,21 @@ public class UserDAO extends DBContext {
         return users;
     }
     
+    // Update user information (phone, address, status)
+    public boolean updateUserInfo(User user) {
+        String sql = "UPDATE users SET phone = ?, address = ?, status = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, user.getPhone());
+            st.setString(2, user.getAddress());
+            st.setString(3, user.getStatus());
+            st.setInt(4, user.getId());
+            
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
 }
