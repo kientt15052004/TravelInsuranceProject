@@ -295,7 +295,10 @@ public class InsuranceDBContext extends DBContext {
         insurance.setImg(rs.getString("img"));
         insurance.setType(rs.getString("type"));
         insurance.setDescription(rs.getString("description"));
+        insurance.setPackage_type(rs.getString("package"));
         insurance.setPrice(rs.getBigDecimal("price"));
+        insurance.setIs_active(rs.getBoolean("is_active"));
+        insurance.setIs_delete(rs.getBoolean("is_delete"));
         return insurance;
     }
 

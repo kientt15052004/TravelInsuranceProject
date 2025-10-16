@@ -143,17 +143,10 @@
         <servlet-name>TestDBConnection</servlet-name>
         <url-pattern>/TestDBConnection</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>DebugProducts</servlet-name>
-        <servlet-class>Controller.DebugProducts</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DebugProducts</servlet-name>
-        <url-pattern>/DebugProducts</url-pattern>
-    </servlet-mapping>
-    <!-- Session timeout (30 minutes) -->
+
+    <!-- Session timeout (120 minutes = 2 hours) -->
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>120</session-timeout>
     </session-config>
     <servlet>
         <servlet-name>navigate</servlet-name>
@@ -211,4 +204,33 @@
         <servlet-name>UpdateProduct</servlet-name>
         <url-pattern>/update_product</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserManagementServlet</servlet-name>
+        <servlet-class>Controller.UserManagementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserManagementServlet</servlet-name>
+        <url-pattern>/usermanagement</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ClaimsManagementServlet</servlet-name>
+        <servlet-class>Controller.ClaimsManagementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimsManagementServlet</servlet-name>
+        <url-pattern>/ClaimsManagementServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UpdateUserServlet</servlet-name>
+        <servlet-class>Controller.UpdateUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateUserServlet</servlet-name>
+        <url-pattern>/updateuser</url-pattern>
+    </servlet-mapping>
+
+
 </web-app>

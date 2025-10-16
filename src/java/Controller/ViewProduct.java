@@ -1,9 +1,9 @@
 package Controller;
 
-import dal.ProductDBController;
-import Model.Product;
+import dal.InsuranceDBContext;
+import Model.InsuranceProduct;
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +14,11 @@ public class ViewProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDBController productDB = new ProductDBController();
-        List<Product> products = productDB.getAllProducts();
-        request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
+        InsuranceDBContext insuranceDAO = new InsuranceDBContext();
+        ArrayList<InsuranceProduct> products = insuranceDAO.getAll();
+        
+        request.setAttribute("products", products);
         request.setAttribute("page", "view_product.jsp");
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);            
-}
+    }
 }

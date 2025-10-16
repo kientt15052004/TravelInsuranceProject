@@ -46,27 +46,9 @@
 
     <div class="container">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/staff" class="nav-link">
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item active">
-                        <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
-                            <span>Tạo hợp đồng mới</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
-                            <span>Quản lý hợp đồng</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <jsp:include page="component/staff-sidebar.jsp">
+            <jsp:param name="activePage" value="create-contract"/>
+        </jsp:include>
 
         <!-- Main Content -->
         <div class="main-content">
