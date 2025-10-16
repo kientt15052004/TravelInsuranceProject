@@ -179,15 +179,6 @@
         <url-pattern>/TestDBConnection</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>DebugProducts</servlet-name>
-        <servlet-class>Controller.DebugProducts</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>DebugProducts</servlet-name>
-        <url-pattern>/DebugProducts</url-pattern>
-    </servlet-mapping>
-
     <!-- Session timeout (120 minutes = 2 hours) -->
     <session-config>
         <session-timeout>120</session-timeout>

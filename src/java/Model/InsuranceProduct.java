@@ -17,6 +17,7 @@ public class InsuranceProduct {
     private String name;
     private String img;
     private String description;
+    private String package_type;
     private BigDecimal price;
     private BigDecimal domestic_percentage_rate;
     private BigDecimal international_rate_1_7;
@@ -95,6 +96,14 @@ public class InsuranceProduct {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getPackage_type() {
+        return package_type;
+    }
+
+    public void setPackage_type(String package_type) {
+        this.package_type = package_type;
     }
 
     public InsuranceBenefit getBenefit() {
