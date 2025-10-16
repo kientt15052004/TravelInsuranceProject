@@ -41,45 +41,9 @@
 
     <div class="container">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/staff" class="nav-link">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Tạo hợp đồng mới</span>
-                        </a>
-                    </li>
-                    <li class="nav-item ${empty userId ? 'active' : ''}">
-                        <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
-                            <i class="fas fa-file-contract"></i>
-                            <span>Quản lý hợp đồng</span>
-                        </a>
-                    </li>
-                    <li class="nav-item ${not empty userId ? 'active' : ''}">
-                        <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Quản lý User</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/navigate?page=product" class="nav-link">
-                            <i class="fas fa-box"></i>
-                            <span>Quản lý Sản phẩm</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <!-- Empty footer for now -->
-            </div>
-        </div>
+        <jsp:include page="component/staff-sidebar.jsp">
+            <jsp:param name="activePage" value="contract-management"/>
+        </jsp:include>
 
         <!-- Main Content -->
         <div class="main-content">

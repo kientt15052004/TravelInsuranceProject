@@ -16,72 +16,13 @@
 </head>
   <body>
       <!-- Top Header -->
-      <div class="top-header">
-          <div class="header-left">
-              <div class="logo">
-                  <div class="logo-text">
-                      <span class="logo-main">Logo</span>
-                  </div>
-              </div>
-          </div>
-          <div class="header-right">
-              <div class="user-dropdown">
-                  <div class="user-info">
-                      <i class="fas fa-user-circle"></i>
-                      <span>Staff</span>
-                  </div>
-                  <i class="fas fa-chevron-down dropdown-arrow"></i>
-                  <div class="dropdown-menu">
-                      <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
-                          <i class="fas fa-sign-out-alt"></i>
-                          Đăng xuất
-                      </a>
-                  </div>
-              </div>
-          </div>
-      </div>
+      <jsp:include page="component/staff-header.jsp"/>
 
       <div class="container">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="nav-item active">
-                        <a href="${pageContext.request.contextPath}/staff" class="nav-link">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/CreateContractServlet" class="nav-link">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Tạo hợp đồng mới</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/ContractManagementServlet" class="nav-link">
-                            <i class="fas fa-file-contract"></i>
-                            <span>Quản lý hợp đồng</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/usermanagement" class="nav-link">
-                            <i class="fas fa-users"></i>
-                            <span>Quản lý User</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${pageContext.request.contextPath}/navigate?page=product" class="nav-link">
-                            <i class="fas fa-box"></i>
-                            <span>Quản lý Sản phẩm</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <!-- Empty footer for now -->
-            </div>
-        </div>
+        <jsp:include page="component/staff-sidebar.jsp">
+            <jsp:param name="activePage" value="dashboard"/>
+        </jsp:include>
 
         <!-- Main Content -->
         <div class="main-content">
