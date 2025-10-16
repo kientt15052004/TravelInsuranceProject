@@ -235,6 +235,61 @@
                 </div>
             </div>
             </c:if>
+
+            <!-- Claims Section -->
+            <c:if test="${not empty claims}">
+                <div class="claims-section">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Danh sách yêu cầu bồi thường</h3>
+                    <p><strong>Tổng số yêu cầu:</strong> ${claims.size()} yêu cầu</p>
+                    
+                    <div class="claims-table">
+                        <table class="claims-list">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>ID Hợp đồng</th>
+                                    <th>Ngày yêu cầu</th>
+                                    <th>Loại bồi thường</th>
+                                    <th>Mô tả</th>
+                                    <th>Ngân hàng</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="claim" items="${claims}">
+                                    <tr>
+                                        <td>#${claim.id}</td>
+                                        <td>#${claim.contract_id}</td>
+                                        <td><fmt:formatDate value="${claim.requestDate}" pattern="dd/MM/yyyy"/></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${claim.claim_type == 'lost_baggage'}">Mất hành lý</c:when>
+                                                <c:when test="${claim.claim_type == 'flight_delay'}">Chậm chuyến bay</c:when>
+                                                <c:when test="${claim.claim_type == 'third_party'}">Bên thứ ba</c:when>
+                                                <c:when test="${claim.claim_type == 'trip_cancellation'}">Hủy chuyến</c:when>
+                                                <c:when test="${claim.claim_type == 'medical'}">Y tế</c:when>
+                                                <c:otherwise>Khác</c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>${claim.description}</td>
+                                        <td>${claim.payment_bank}</td>
+                                        <td>
+                                            <span class="status-badge status-${claim.claim_status.toLowerCase()}">
+                                                <c:choose>
+                                                    <c:when test="${claim.claim_status == 'pending'}">Đang xử lý</c:when>
+                                                    <c:when test="${claim.claim_status == 'approved'}">Đã duyệt</c:when>
+                                                    <c:when test="${claim.claim_status == 'rejected'}">Từ chối</c:when>
+                                                    <c:otherwise>${claim.claim_status}</c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </c:if>
         </div>
     </div>
 

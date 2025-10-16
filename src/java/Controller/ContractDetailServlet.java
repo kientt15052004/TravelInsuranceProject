@@ -7,11 +7,13 @@ package Controller;
 import dal.ContractDBContext;
 import dal.ApplicationDBContext;
 import dal.InsuranceDBContext;
+import dal.ClaimsDBContext;
 import dal.UserDAO;
 import Model.Contract;
 import Model.Application;
 import Model.InsuranceProduct;
 import Model.ApplicationTraveler;
+import Model.Claims;
 import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -32,6 +34,7 @@ public class ContractDetailServlet extends HttpServlet {
     private ContractDBContext contractDB = new ContractDBContext();
     private ApplicationDBContext applicationDB = new ApplicationDBContext();
     private InsuranceDBContext insuranceDB = new InsuranceDBContext();
+    private ClaimsDBContext claimsDB = new ClaimsDBContext();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -76,11 +79,15 @@ public class ContractDetailServlet extends HttpServlet {
                 travelers = applicationDB.getTravelersByApplicationId(application.getId());
             }
             
+            // Get claims for this contract
+            List<Claims> claims = claimsDB.getClaimsByContractId(contractId);
+            
             // Set attributes for JSP
             request.setAttribute("contract", contract);
             request.setAttribute("application", application);
             request.setAttribute("product", product);
             request.setAttribute("travelers", travelers);
+            request.setAttribute("claims", claims);
             request.setAttribute("buyer", buyer);
             request.setAttribute("userId", userIdStr); // Pass userId to JSP
             
