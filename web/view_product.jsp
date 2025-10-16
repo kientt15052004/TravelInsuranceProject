@@ -503,7 +503,7 @@
                                 </thead>
                                 <tbody>
                                     <c:forEach items="${products}" var="product">
-                                        <c:if test="${!product.deleted}">
+                                        <c:if test="${!product.is_delete}">
                                             <tr>
                                                 <td class="product-name">${product.name}</td>
                                                 <td class="product-type">${product.type == "domestic" ? "Trong nước" : "Quốc tế"}</td>
@@ -519,7 +519,7 @@
                                                 </td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${product.active}">
+                                                        <c:when test="${product.is_active}">
                                                             <span class="status-active">Hoạt động</span>
                                                         </c:when>
                                                         <c:otherwise>
@@ -529,33 +529,33 @@
                                                 </td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${product.packageType == 'basic'}">
+                                                        <c:when test="${product.package_type == 'basic'}">
                                                             <span class="package-badge package-basic">Cơ bản</span>
                                                         </c:when>
-                                                        <c:when test="${product.packageType == 'standard'}">
+                                                        <c:when test="${product.package_type == 'standard'}">
                                                             <span class="package-badge package-standard">Tiêu chuẩn</span>
                                                         </c:when>
-                                                        <c:when test="${product.packageType == 'advanced'}">
+                                                        <c:when test="${product.package_type == 'advanced'}">
                                                             <span class="package-badge package-advanced">Nâng cao</span>
                                                         </c:when>
-                                                        <c:when test="${product.packageType == 'comprehensive'}">
+                                                        <c:when test="${product.package_type == 'comprehensive'}">
                                                             <span class="package-badge package-comprehensive">Toàn diện</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="package-badge package-unknown">Chưa xác định</span>
+                                                            <span class="package-badge package-unknown">${product.package_type}</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex gap-2">
 
-                                                        <a href="${pageContext.request.contextPath}/edit_product?id=${product.id}&id_benefit=${product.benefitId}"> 
+                                                        <a href="${pageContext.request.contextPath}/edit_product?id=${product.id}&id_benefit=${product.benefit_id}"> 
                                                             <button type="button" class="btn btn-edit">
                                                                 <i class="fas fa-edit me-1"></i> Sửa
                                                             </button>
                                                         </a>
 
-                                                        <a href="${pageContext.request.contextPath}/delete_product?id=${product.id}&id_benefit=${product.benefitId}">                                                           
+                                                        <a href="${pageContext.request.contextPath}/delete_product?id=${product.id}&id_benefit=${product.benefit_id}">                                                           
                                                             <button class="btn btn-delete">
                                                                 <i class="fas fa-trash me-1"></i> Xóa
                                                             </button>
