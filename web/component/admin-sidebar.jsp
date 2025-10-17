@@ -39,7 +39,7 @@
                 <li class="nav-item ${param.activePage == 'view-products' ? 'active' : ''}">
                     <a href="${pageContext.request.contextPath}/view_product" class="nav-link">
                         <i class="fas fa-eye"></i>
-                        <span>Xem sản phẩm</span>
+                        <span>Quản lý sản phẩm</span>
                     </a>
                 </li>
             </ul>
