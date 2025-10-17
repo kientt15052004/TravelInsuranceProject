@@ -126,7 +126,7 @@ public class CreateProduct extends HttpServlet {
         product.setDescription(request.getParameter("description"));
         product.setPackage_type(request.getParameter("package_type"));
         product.setPrice(parseBigDecimal(request.getParameter("price")));
-        product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")));
+        product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")).multiply(new BigDecimal("100")));
         product.setInternational_rate_1_7(parseBigDecimal(request.getParameter("international_rate_1_7")));
         product.setInternational_rate_8_30(parseBigDecimal(request.getParameter("international_rate_8_30")));
         product.setInternational_rate_31_90(parseBigDecimal(request.getParameter("international_rate_31_90")));

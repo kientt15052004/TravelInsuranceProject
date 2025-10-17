@@ -378,11 +378,15 @@
                             <div class="col-md-3 mb-4">
                                 <label class="form-label">Chọn gói <span class="required-star">*</span></label>
                                 <select name="package_type" class="form-select">
-                                    <option value="basic" ${product.package_type == 'basic' ? 'selected' : ''}>Cơ bản</option>
-                                    <option value="standard" ${product.package_type == 'standard' ? 'selected' : ''}>Tiêu chuẩn</option>
-                                    <option value="advanced" ${product.package_type == 'advanced' ? 'selected' : ''}>Nâng cao</option>
-                                    <option value="comprehensive" ${product.package_type == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
+                                    <option value="basic" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'basic' ? 'selected' : ''}>Cơ bản</option>
+                                    <option value="standard" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'standard' ? 'selected' : ''}>Tiêu chuẩn</option>
+                                    <option value="advanced" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'advanced' ? 'selected' : ''}>Nâng cao</option>
+                                    <option value="comprehensive" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
                                 </select>
+                                <!-- Debug: Current package_type = '${product.package_type}' (length: ${product.package_type != null ? product.package_type.length() : 'null'}) -->
+                                <!-- Debug: package_type == 'standard': ${product.package_type == 'standard'} -->
+                                <!-- Debug: package_type == 'Standard': ${product.package_type == 'Standard'} -->
+                                <!-- Debug: package_type.trim() == 'standard': ${product.package_type != null && product.package_type.trim() == 'standard'} -->
                             </div>
                         </div>
 
@@ -390,11 +394,11 @@
                             <label class="form-label">Loại sản phẩm <span class="required-star">*</span></label>
                             <div class="radio-group-custom">
                                 <div>
-                                    <input type="radio" name="choose" id="option1" value="domestic" ${product.type == 'domestic' ? 'checked' : 'disabled'}>
+                                    <input type="radio" name="choose" id="option1" value="domestic" ${product.type == 'domestic' ? 'checked' : ''}>
                                     <label for="option1"><i class="fas fa-home"></i> Trong nước</label>
                                 </div>
                                 <div>
-                                    <input type="radio" name="choose" id="option2" value="international" ${product.type == 'international' ? 'checked' : 'disabled'}>
+                                    <input type="radio" name="choose" id="option2" value="international" ${product.type == 'international' ? 'checked' : ''}>
                                     <label for="option2"><i class="fas fa-globe"></i> Ngoài nước</label>
                                 </div>
                             </div>
@@ -625,7 +629,7 @@
                         <h2 class="section-title"><i class="fas fa-calculator"></i> Tính phí trong nước</h2>
                         <div class="formula-box text-center">
                             <h4>Công thức tính phí</h4>
-                            <p>Phí = <input class="coefficient_1 form-control coefficient-input" name="coefficient_1" placeholder="Nhập vào hệ số...." value="${product.domestic_percentage_rate}">% × STBH × Số ngày × Số người</p>
+                            <p>Phí = <input class="coefficient_1 form-control coefficient-input" name="domestic_percentage_rate" placeholder="Nhập vào hệ số...." value="${product.domestic_percentage_rate}">% × STBH × Số ngày × Số người</p>
                         </div>
 
                         <div class="row mt-4">
@@ -806,7 +810,7 @@
                 const op23 = document.querySelector('.op23');
                 const package_type = document.querySelector('select[name="package_type"]');
                 const price = document.querySelector('.price');
-                const domestic_percentage_rate = document.querySelector('.domestic_percentage_rate');
+                const domestic_percentage_rate = document.querySelector('input[name="domestic_percentage_rate"]');
                 const international_rate_1_7 = document.querySelector('.international_rate_1_7');
                 const international_rate_8_30 = document.querySelector('.international_rate_8_30');
                 const international_rate_31_90 = document.querySelector('.international_rate_31_90');
@@ -823,11 +827,15 @@
 
                 // Hàm thiết lập khi load trang - GIỮ NGUYÊN
                 window.onload = function () {
+                    const packageSelect = document.querySelector('select[name="package_type"]');
+                    console.log('Page loaded - package_type value:', packageSelect.value);
+                    console.log('Page loaded - package_type selectedIndex:', packageSelect.selectedIndex);
+                    console.log('Page loaded - package_type options:', Array.from(packageSelect.options).map(opt => opt.value + ':' + opt.selected));
                     toggleSections();
                 };
 
                 function formatNumber(num) {
-                    return num.toLocaleString('vi-VN');
+                    return Math.round(num).toLocaleString('vi-VN');
                 }
 
                 // Hàm hiển thị form nhập quyền lợi trong nước và ngoài nước - GIỮ NGUYÊN
@@ -837,13 +845,38 @@
                         international_div.style.display = "none";
                         domestic_preview.style.display = "block";
                         international_preview.style.display = "none";
+                        
+                        // Disable international inputs để tránh validation warning
+                        const internationalInputs = document.querySelectorAll('.international_benefit');
+                        internationalInputs.forEach(input => {
+                            input.disabled = true;
+                            input.removeAttribute('required');
+                        });
+                        
+                        // Enable domestic inputs
+                        const domesticInputs = document.querySelectorAll('.domestic_benefit');
+                        domesticInputs.forEach(input => {
+                            input.disabled = false;
+                        });
                     } else {
                         domestic_div.style.display = "none";
                         international_div.style.display = "block";
                         domestic_preview.style.display = "none";
                         international_preview.style.display = "block";
+                        
+                        // Disable domestic inputs để tránh validation warning
+                        const domesticInputs = document.querySelectorAll('.domestic_benefit');
+                        domesticInputs.forEach(input => {
+                            input.disabled = true;
+                            input.removeAttribute('required');
+                        });
+                        
+                        // Enable international inputs
+                        const internationalInputs = document.querySelectorAll('.international_benefit');
+                        internationalInputs.forEach(input => {
+                            input.disabled = false;
+                        });
                     }
-
                 }
 
                 function togglePackages() {
@@ -882,21 +915,35 @@
                         const value21 = Number(op21.value) || 1;
                         const coefficient_value_1 = Number(coefficient_1.value) || 0;
 
-                        if (value1 > 0 && value2 > 0 && value3 > 0 && value4 > 0 && value5 > 0 && value6 > 0 &&
-                                value20 <= 180 && value21 <= 100 && value20 > 0 && value21 > 0 &&
-                                coefficient_value_1 >= 0.0001 && coefficient_value_1 <= 0.1) {
+                        // Kiểm tra có ít nhất một benefit có giá trị
+                        const hasValidBenefit = value1 > 0 || value2 > 0 || value3 > 0 || value4 > 0 || value5 > 0 || value6 > 0;
+                        
+                        // Xử lý hệ số: chấp nhận cả % (1-10) và số thập phân (0.01-0.1)
+                        let actualCoefficient = coefficient_value_1;
+                        if (coefficient_value_1 >= 1 && coefficient_value_1 <= 10) {
+                            // Nếu nhập % (1-10), chuyển thành số thập phân
+                            actualCoefficient = coefficient_value_1 / 100;
+                        }
+                        
+                        
+                        if (hasValidBenefit && value20 <= 180 && value21 <= 100 && value20 > 0 && value21 > 0 &&
+                                ((coefficient_value_1 >= 0.0001 && coefficient_value_1 <= 0.1) || 
+                                 (coefficient_value_1 >= 1 && coefficient_value_1 <= 10))) {
+                            
 
                             let max = Math.max(value1, value2, value3, value4, value5, value6);
-                            fee = coefficient_value_1/100 * max * value20 * value21;
-                            base_price = coefficient_value_1/100 * max;
-                            domestic_percentage_rate.value = coefficient_value_1;
+                            fee = actualCoefficient * max * value20 * value21;
+                            base_price = actualCoefficient * max;
+                            // Cập nhật cả input hiển thị và hidden field
+                            coefficient_1.value = coefficient_value_1;
+                            domestic_percentage_rate.value = actualCoefficient;
 
                             result.textContent = formatNumber(fee);
                             result1.innerText = `Số tiền bảo hiểm(STBH): ` + formatNumber(max) + ' VNĐ';
                             result2.textContent = `Số ngày: ` + formatNumber(value20);
                             result3.textContent = `Số người đi: ` + formatNumber(value21);
                         } else {
-                            alert('Vui lòng nhập đầy đủ các trường và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10%!');
+                            alert('Vui lòng nhập ít nhất một quyền lợi bảo hiểm và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10% (hoặc 0.0001 - 0.1)!');
                             result.textContent = '0';
                             fee = 0;
                             base_price = 0;
@@ -949,12 +996,16 @@
 
                 // Kiểm tra trước khi submit - GIỮ NGUYÊN
                 form.addEventListener("submit", (e) => {
+                    console.log('Form submit event triggered');
                     calculate();
+                    console.log('After calculate - base_price:', base_price);
                     if (base_price !== 0) {
                         price.value = base_price;
+                        console.log('Form will submit');
                     } else {
+                        console.log('Form submission prevented - base_price is 0');
                         e.preventDefault();
-                        alert('Vui lòng nhập đầy đủ các trường và đảm bảo số ngày từ 1-180, số người từ 1-100, Các hệ số phải lớn hơn 0');
+                        alert('Vui lòng nhập ít nhất một quyền lợi bảo hiểm và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10% (hoặc 0.0001 - 0.1)!');
                     }
                 });
             </script>

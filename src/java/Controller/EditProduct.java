@@ -18,8 +18,9 @@ public class EditProduct extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             int benefitId = Integer.parseInt(request.getParameter("id_benefit"));
             
-            InsuranceProduct product = insuranceDAO.getById(id);
+            InsuranceProduct product = insuranceDAO.getByIdWithBenefit(id);
             if (product != null) {
+                System.out.println("DEBUG: Product loaded - package_type: " + product.getPackage_type());
                 request.setAttribute("product", product);
                 request.setAttribute("page", "edit_product.jsp");
                 request.getRequestDispatcher("dashboard.jsp").forward(request, response);
