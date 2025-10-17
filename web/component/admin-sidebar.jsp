@@ -30,22 +30,17 @@
                         <span>Daily Report</span>
                     </a>
                 </li>
-                <li class="nav-item has-dropdown ${param.activePage == 'product-management' ? 'active' : ''}">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-cube"></i>
-                        <span>Product Management</span>
-                        <i class="fas fa-chevron-down ms-auto"></i>
+                <li class="nav-item ${param.activePage == 'product-management' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/navigate?page=create" class="nav-link">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Tạo sản phẩm</span>
                     </a>
-                    <div class="nav-dropdown">
-                        <a href="${pageContext.request.contextPath}/navigate?page=create" class="nav-link">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Create Product</span>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/view_product" class="nav-link">
-                            <i class="fas fa-eye"></i>
-                            <span>View Products</span>
-                        </a>
-                    </div>
+                </li>
+                <li class="nav-item ${param.activePage == 'view-products' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/view_product" class="nav-link">
+                        <i class="fas fa-eye"></i>
+                        <span>Quản lý sản phẩm</span>
+                    </a>
                 </li>
             </ul>
         </nav>

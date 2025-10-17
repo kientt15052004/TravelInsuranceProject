@@ -21,38 +21,12 @@
 
             <!-- Main Content -->
             <div class="main-content">
-                <div style="height: 100%; overflow-y: auto; padding: 20px; background: linear-gradient(135deg, var(--light-yellow) 0%, var(--white) 100%); border-radius: 15px;">
+                <div>
                     <jsp:include page="${empty page ? 'home.jsp' : page}"/>
                 </div>
             </div>
         </div>
         
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        
-        <script>
-            // Handle dropdown menu toggle
-            document.addEventListener('DOMContentLoaded', function() {
-                const dropdownItems = document.querySelectorAll('.nav-item.has-dropdown');
-                
-                dropdownItems.forEach(item => {
-                    const link = item.querySelector('.nav-link');
-                    const dropdown = item.querySelector('.nav-dropdown');
-                    
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        
-                        // Close other dropdowns
-                        dropdownItems.forEach(otherItem => {
-                            if (otherItem !== item) {
-                                otherItem.classList.remove('active');
-                            }
-                        });
-                        
-                        // Toggle current dropdown
-                        item.classList.toggle('active');
-                    });
-                });
-            });
-        </script>
     </body>
 </html>
