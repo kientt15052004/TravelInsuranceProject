@@ -200,7 +200,9 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public InsuranceProduct getByIdWithBenefit(int id) {
-        String sql = "SELECT p.id AS product_id, p.name, p.img, p.type, p.description, p.is_active, p.price, "
+        String sql = "SELECT p.id AS product_id, p.benefit_id, p.name, p.img, p.type, p.description, p.package_type, "
+                + "p.price, p.domestic_percentage_rate, p.international_rate_1_7, p.international_rate_8_30, "
+                + "p.international_rate_31_90, p.international_rate_91_365, p.is_active, p.is_delete, "
                 + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
                 + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
                 + "b.lost_or_damaged_golf_equipment, "
@@ -221,12 +223,21 @@ public class InsuranceDBContext extends DBContext {
             if (rs.next()) {
                 insurance = new InsuranceProduct();
                 insurance.setId(rs.getInt("product_id"));
+                insurance.setBenefit_id(rs.getInt("benefit_id"));
                 insurance.setName(rs.getString("name"));
                 insurance.setImg(rs.getString("img"));
                 insurance.setType(rs.getString("type"));
                 insurance.setDescription(rs.getString("description"));
+                insurance.setPackage_type(rs.getString("package_type"));
+                System.out.println("DEBUG: Loaded package_type from DB: " + rs.getString("package_type"));
                 insurance.setPrice(rs.getBigDecimal("price"));
+                insurance.setDomestic_percentage_rate(rs.getBigDecimal("domestic_percentage_rate"));
+                insurance.setInternational_rate_1_7(rs.getBigDecimal("international_rate_1_7"));
+                insurance.setInternational_rate_8_30(rs.getBigDecimal("international_rate_8_30"));
+                insurance.setInternational_rate_31_90(rs.getBigDecimal("international_rate_31_90"));
+                insurance.setInternational_rate_91_365(rs.getBigDecimal("international_rate_91_365"));
                 insurance.setIs_active(rs.getBoolean("is_active"));
+                insurance.setIs_delete(rs.getBoolean("is_delete"));
 
                 int benefitId = rs.getInt("benefit_id");
                 if (benefitId > 0) {
@@ -513,6 +524,9 @@ public class InsuranceDBContext extends DBContext {
                     "international_rate_31_90=?, international_rate_91_365=?, is_active=?, is_delete=? WHERE id=?";
         
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            System.out.println("DEBUG: Updating product with ID: " + product.getId());
+            System.out.println("DEBUG: Product data: " + product.toString());
+            
             stm.setInt(1, product.getBenefit_id());
             stm.setString(2, product.getType());
             stm.setString(3, product.getName());
@@ -530,9 +544,11 @@ public class InsuranceDBContext extends DBContext {
             stm.setInt(15, product.getId());
             
             int rowsAffected = stm.executeUpdate();
+            System.out.println("DEBUG: Rows affected: " + rowsAffected);
             return rowsAffected > 0;
         } catch (Exception e) {
             System.out.println("Error updating product: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -547,6 +563,83 @@ public class InsuranceDBContext extends DBContext {
             System.out.println("Error deleting product: " + e.getMessage());
             return false;
         }
+    }
+    
+    public ArrayList<InsuranceProduct> getFilteredProducts(String searchTerm, String typeFilter, String packageFilter, String statusFilter) {
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+        
+        // Xây dựng SQL query động
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE is_delete = false");
+        ArrayList<Object> parameters = new ArrayList<>();
+        
+        // Thêm điều kiện search
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            sql.append(" AND (name LIKE ? OR description LIKE ? OR type LIKE ? OR package_type LIKE ?)");
+            String searchPattern = "%" + searchTerm.trim() + "%";
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+            parameters.add(searchPattern);
+        }
+        
+        // Thêm điều kiện type filter
+        if (typeFilter != null && !typeFilter.trim().isEmpty()) {
+            sql.append(" AND type = ?");
+            parameters.add(typeFilter.trim());
+        }
+        
+        // Thêm điều kiện package filter
+        if (packageFilter != null && !packageFilter.trim().isEmpty()) {
+            sql.append(" AND package_type = ?");
+            parameters.add(packageFilter.trim());
+        }
+        
+        // Thêm điều kiện status filter
+        if (statusFilter != null && !statusFilter.trim().isEmpty()) {
+            if ("active".equals(statusFilter.trim())) {
+                sql.append(" AND is_active = true");
+            } else if ("inactive".equals(statusFilter.trim())) {
+                sql.append(" AND is_active = false");
+            }
+        }
+        
+        sql.append(" ORDER BY id DESC");
+        
+        System.out.println("DEBUG: Filter SQL: " + sql.toString());
+        System.out.println("DEBUG: Parameters: " + parameters);
+        
+        try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
+            // Set parameters
+            for (int i = 0; i < parameters.size(); i++) {
+                stm.setObject(i + 1, parameters.get(i));
+            }
+            
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                InsuranceProduct product = new InsuranceProduct();
+                product.setId(rs.getInt("id"));
+                product.setBenefit_id(rs.getInt("benefit_id"));
+                product.setName(rs.getString("name"));
+                product.setImg(rs.getString("img"));
+                product.setType(rs.getString("type"));
+                product.setDescription(rs.getString("description"));
+                product.setPackage_type(rs.getString("package_type"));
+                product.setPrice(rs.getBigDecimal("price"));
+                product.setDomestic_percentage_rate(rs.getBigDecimal("domestic_percentage_rate"));
+                product.setInternational_rate_1_7(rs.getBigDecimal("international_rate_1_7"));
+                product.setInternational_rate_8_30(rs.getBigDecimal("international_rate_8_30"));
+                product.setInternational_rate_31_90(rs.getBigDecimal("international_rate_31_90"));
+                product.setInternational_rate_91_365(rs.getBigDecimal("international_rate_91_365"));
+                product.setIs_active(rs.getBoolean("is_active"));
+                product.setIs_delete(rs.getBoolean("is_delete"));
+                products.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error filtering products: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return products;
     }
 
 }

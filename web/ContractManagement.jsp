@@ -171,7 +171,7 @@
                                             </td>
                                             <td>
                                                 <span class="price-amount">
-                                                    <fmt:formatNumber value="${contract.totalPrice}" type="currency" currencyCode="VND"/>
+                                                    <fmt:formatNumber value="${contract.totalPrice}" type="number" maxFractionDigits="0" groupingUsed="true"/> ₫
                                                 </span>
                                             </td>
                                             <td>

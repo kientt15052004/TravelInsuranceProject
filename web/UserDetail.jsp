@@ -150,7 +150,7 @@
                         <div class="info-item">
                             <label>Tổng số tiền mua bảo hiểm:</label>
                             <span class="total-amount">
-                                <fmt:formatNumber value="${totalInsuranceAmount}" type="currency" currencyCode="VND"/>
+                                <fmt:formatNumber value="${totalInsuranceAmount}" type="number" maxFractionDigits="0" groupingUsed="true"/> ₫
                             </span>
                         </div>
                     </div>
@@ -243,7 +243,7 @@
                                                 </td>
                                                 <td>${app.travelers_quantity}</td>
                                                 <td>
-                                                    <fmt:formatNumber value="${app.total_price}" type="currency" currencyCode="VND"/>
+                                                    <fmt:formatNumber value="${app.total_price}" type="number" maxFractionDigits="0" groupingUsed="true"/> ₫
                                                 </td>
                                                 <td>
                                                     <c:forEach var="contract" items="${contracts}">
