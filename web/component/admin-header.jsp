@@ -1,13 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Header Component</title>
-</head>
 <body>
-    <!-- Top Header -->
     <div class="top-header">
         <div class="header-left">
             <div class="logo">

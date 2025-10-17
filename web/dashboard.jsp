@@ -9,9 +9,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="CSS/admin.css">
         <link rel="stylesheet" href="CSS/productmanagement.css">
+        <link rel="stylesheet" href="CSS/createproduct.css">
     </head>
     <body style="height: 100vh">
-        <!-- Top Header -->
         <jsp:include page="component/admin-header.jsp"/>
 
         <div class="main-container">
