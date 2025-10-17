@@ -64,7 +64,9 @@ public class UserDAO extends DBContext {
     }
     return false;
 }
- 
+
+
+    
     // Get user by CCCD number
     public User getUserByCccd(String cccd) {
         String sql = "SELECT * FROM users WHERE cccd = ?";
@@ -119,7 +121,7 @@ public class UserDAO extends DBContext {
         return false;
     }
     
-    // Insert new user into database
+     //Insert new user into database
     public int insertUser(User user) {
         String sql = "INSERT INTO users (username, password, fullname, mail, dob, address, phone, cccd, avatar, role, cccd_img, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement st = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
