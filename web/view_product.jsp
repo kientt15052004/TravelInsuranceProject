@@ -3,496 +3,120 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
-<html>
+<html lang="vi">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Quản Lý Sản Phẩm Bảo Hiểm Du Lịch</title>
-        <style>
-            :root {
-                --primary-yellow: #FFD700;
-                --light-yellow: #FFF9C4;
-                --dark-yellow: #FFC107;
-                --white: #FFFFFF;
-                --text-dark: #2C3E50;
-                --text-medium: #5D6D7E;
-                --text-light: #85929E;
-                --border-light: #EAEDED;
-                --sidebar-bg: #FFFDF5;
-                --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
-                --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.12);
-            }
-
-            .view-product-container {
-                background: transparent !important;
-                color: var(--text-dark);
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                line-height: 1.6;
-                margin: 0;
-                padding: 0;
-                min-height: auto;
-            }
-
-            .view-product-container .header {
-                background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--dark-yellow) 100%);
-                padding: 25px 30px;
-                border-radius: 16px;
-                margin-bottom: 25px;
-                box-shadow: var(--shadow-light);
-                border: 1px solid rgba(255, 255, 255, 0.4);
-                position: relative;
-                overflow: hidden;
-            }
-
-            .view-product-container .header::before {
-                content: '';
-                position: absolute;
-                top: -30px;
-                right: -30px;
-                width: 150px;
-                height: 150px;
-                background: rgba(255, 255, 255, 0.25);
-                border-radius: 50%;
-            }
-
-            .view-product-container .header h1 {
-                color: var(--text-dark);
-                margin: 0 0 8px 0;
-                font-weight: 700;
-                font-size: 28px;
-                position: relative;
-                text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
-            }
-
-            .view-product-container .header p {
-                margin: 4px 0;
-                color: var(--text-dark);
-                opacity: 0.9;
-                font-size: 15px;
-                position: relative;
-                font-weight: 500;
-            }
-
-            .view-product-container .header .product-count {
-                font-weight: 600;
-                background: rgba(255, 255, 255, 0.3);
-                padding: 4px 12px;
-                border-radius: 20px;
-                display: inline-block;
-                margin-top: 5px;
-            }
-
-            .view-product-container .filter-section {
-                background: var(--white);
-                padding: 20px;
-                border-radius: 12px;
-                margin-bottom: 25px;
-                box-shadow: var(--shadow-light);
-                border: 1px solid var(--border-light);
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-
-            .view-product-container .filter-label {
-                font-weight: 600;
-                color: var(--text-medium);
-                margin-bottom: 0;
-                white-space: nowrap;
-            }
-
-            .view-product-container .filter-select {
-                background: var(--white);
-                border: 1px solid var(--border-light);
-                border-radius: 8px;
-                padding: 10px 15px;
-                color: var(--text-dark);
-                font-weight: 500;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-                transition: all 0.2s ease;
-                min-width: 180px;
-            }
-
-            .view-product-container .filter-select:focus {
-                outline: none;
-                border-color: var(--primary-yellow);
-                box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
-            }
-
-            .view-product-container .table-container {
-                background-color: var(--white);
-                border-radius: 16px;
-                box-shadow: var(--shadow-light);
-                overflow: hidden;
-                border: 1px solid var(--border-light);
-                transition: all 0.3s ease;
-            }
-
-            .view-product-container .table-container:hover {
-                box-shadow: var(--shadow-medium);
-            }
-
-            .view-product-container .table {
-                margin-bottom: 0;
-                border-collapse: separate;
-                border-spacing: 0;
-                width: 100%;
-            }
-
-            .view-product-container .table thead {
-                background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--dark-yellow) 100%);
-            }
-
-            .view-product-container .table thead th {
-                border: none;
-                padding: 18px 16px;
-                font-weight: 700;
-                font-size: 15px;
-                color: var(--text-dark);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                border-bottom: 2px solid var(--dark-yellow);
-                vertical-align: middle;
-                white-space: nowrap;
-            }
-
-            .view-product-container .table tbody tr {
-                transition: all 0.2s ease;
-                border-bottom: 1px solid var(--border-light);
-            }
-
-            .view-product-container .table tbody tr:last-child {
-                border-bottom: none;
-            }
-
-            .view-product-container .table tbody tr:hover {
-                background-color: var(--light-yellow);
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            }
-
-            .view-product-container .table tbody td {
-                padding: 16px;
-                vertical-align: middle;
-                border-top: none;
-                border-bottom: 1px solid var(--border-light);
-                font-size: 15px;
-            }
-
-            .view-product-container .product-name {
-                font-weight: 600;
-                color: var(--text-dark);
-            }
-
-            .view-product-container .product-type {
-                font-weight: 500;
-                color: var(--text-medium);
-            }
-
-            .view-product-container .product-price {
-                font-weight: 700;
-                color: var(--text-dark);
-                font-size: 15px;
-            }
-
-            .view-product-container .status-active {
-                background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.25) 100%);
-                color: #27AE60;
-                font-weight: 700;
-                padding: 8px 16px;
-                border-radius: 20px;
-                display: inline-block;
-                font-size: 13px;
-                border: 1px solid rgba(46, 204, 113, 0.3);
-                box-shadow: 0 2px 4px rgba(46, 204, 113, 0.1);
-            }
-
-            .view-product-container .status-inactive {
-                background: linear-gradient(135deg, rgba(231, 76, 60, 0.15) 0%, rgba(231, 76, 60, 0.25) 100%);
-                color: #E74C3C;
-                font-weight: 700;
-                padding: 8px 16px;
-                border-radius: 20px;
-                display: inline-block;
-                font-size: 13px;
-                border: 1px solid rgba(231, 76, 60, 0.3);
-                box-shadow: 0 2px 4px rgba(231, 76, 60, 0.1);
-            }
-
-            /* Các gói bảo hiểm với màu sắc phân cấp rõ ràng */
-            .view-product-container .package-badge {
-                font-weight: 600;
-                padding: 8px 14px;
-                border-radius: 12px;
-                display: inline-block;
-                font-size: 13px;
-                border: 1px solid;
-                text-align: center;
-                min-width: 90px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .view-product-container .package-basic {
-                background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
-                color: #2E7D32;
-                border-color: #81C784;
-            }
-
-            .view-product-container .package-standard {
-                background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
-                color: #1565C0;
-                border-color: #64B5F6;
-            }
-
-            .view-product-container .package-advanced {
-                background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
-                color: #FF8F00;
-                border-color: #FFD54F;
-            }
-
-            .view-product-container .package-comprehensive {
-                background: linear-gradient(135deg, #FBE9E7 0%, #FFCCBC 100%);
-                color: #D84315;
-                border-color: #FF8A65;
-            }
-
-            .view-product-container .package-unknown {
-                background: linear-gradient(135deg, #F5F5F5 0%, #EEEEEE 100%);
-                color: #757575;
-                border-color: #BDBDBD;
-            }
-
-            .view-product-container .btn-edit {
-                background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--dark-yellow) 100%);
-                border: none;
-                color: var(--text-dark);
-                font-weight: 700;
-                padding: 8px 16px;
-                border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                transition: all 0.2s ease;
-                font-size: 14px;
-                min-width: 70px;
-            }
-
-            .view-product-container .btn-edit:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-                color: var(--text-dark);
-            }
-
-            .view-product-container .btn-delete {
-                background: transparent;
-                border: 1px solid #E74C3C;
-                color: #E74C3C;
-                font-weight: 700;
-                padding: 8px 16px;
-                border-radius: 8px;
-                transition: all 0.2s ease;
-                font-size: 14px;
-                min-width: 70px;
-            }
-
-            .view-product-container .btn-delete:hover {
-                background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
-                color: white;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
-            }
-
-            .view-product-container .table-responsive {
-                border-radius: 16px;
-            }
-
-            .view-product-container .empty-field {
-                color: var(--text-light);
-                font-style: italic;
-                font-size: 14px;
-            }
-
-            /* Custom scrollbar */
-            .view-product-container .table-responsive::-webkit-scrollbar {
-                height: 8px;
-            }
-
-            .view-product-container .table-responsive::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 10px;
-            }
-
-            .view-product-container .table-responsive::-webkit-scrollbar-thumb {
-                background: var(--primary-yellow);
-                border-radius: 10px;
-            }
-
-            /* Animation for table rows */
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            .view-product-container .table tbody tr {
-                animation: fadeInUp 0.4s ease forwards;
-            }
-
-            .view-product-container .table tbody tr:nth-child(1) {
-                animation-delay: 0.05s;
-            }
-            .view-product-container .table tbody tr:nth-child(2) {
-                animation-delay: 0.1s;
-            }
-            .view-product-container .table tbody tr:nth-child(3) {
-                animation-delay: 0.15s;
-            }
-            .view-product-container .table tbody tr:nth-child(4) {
-                animation-delay: 0.2s;
-            }
-            .view-product-container .table tbody tr:nth-child(5) {
-                animation-delay: 0.25s;
-            }
-            .view-product-container .table tbody tr:nth-child(6) {
-                animation-delay: 0.3s;
-            }
-            .view-product-container .table tbody tr:nth-child(7) {
-                animation-delay: 0.35s;
-            }
-
-            /* Responsive adjustments */
-            @media (max-width: 1200px) {
-                .view-product-container .table thead th,
-                .view-product-container .table tbody td {
-                    padding: 14px 12px;
-                    font-size: 14px;
-                }
-
-                .view-product-container .btn-edit,
-                .view-product-container .btn-delete {
-                    padding: 7px 14px;
-                    font-size: 13px;
-                    min-width: 65px;
-                }
-
-                .view-product-container .package-badge {
-                    min-width: 80px;
-                    padding: 7px 12px;
-                }
-            }
-
-            @media (max-width: 992px) {
-                .view-product-container .filter-section {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-
-                .view-product-container .filter-select {
-                    width: 100%;
-                    min-width: auto;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .view-product-container .header {
-                    padding: 20px 25px;
-                }
-
-                .view-product-container .header h1 {
-                    font-size: 24px;
-                }
-
-                .view-product-container .header p {
-                    font-size: 14px;
-                }
-
-                .view-product-container .table thead th {
-                    padding: 12px 10px;
-                    font-size: 13px;
-                }
-
-                .view-product-container .table tbody td {
-                    padding: 12px 10px;
-                    font-size: 13px;
-                }
-
-                .view-product-container .btn-edit,
-                .view-product-container .btn-delete {
-                    padding: 6px 12px;
-                    font-size: 12px;
-                    min-width: 60px;
-                }
-
-                .view-product-container .package-badge {
-                    min-width: 70px;
-                    padding: 6px 10px;
-                    font-size: 12px;
-                }
-
-                .view-product-container .d-flex.gap-2 {
-                    gap: 6px !important;
-                }
-            }
-
-            @media (max-width: 576px) {
-                .view-product-container .header {
-                    padding: 15px 20px;
-                }
-
-                .view-product-container .header h1 {
-                    font-size: 20px;
-                }
-
-                .view-product-container .table-responsive {
-                    border-radius: 12px;
-                }
-
-                .view-product-container .table thead th {
-                    padding: 10px 8px;
-                    font-size: 12px;
-                }
-
-                .view-product-container .table tbody td {
-                    padding: 10px 8px;
-                    font-size: 12px;
-                }
-
-                .view-product-container .package-badge {
-                    min-width: 60px;
-                    padding: 5px 8px;
-                    font-size: 11px;
-                }
-            }
-        </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Sản Phẩm Bảo Hiểm Du Lịch - TIS</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/admin.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/productmanagement.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     </head>
     <body>
-        <div class="view-product-container">
-            <div class="header">
-                <h1><i class="fas fa-list"></i> Danh sách sản phẩm bảo hiểm du lịch</h1>
-                <p>Quản lý và theo dõi tất cả sản phẩm bảo hiểm du lịch</p>            
+    <!-- Top Header -->
+    <jsp:include page="component/admin-header.jsp"/>
+
+    <div class="main-container">
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1>Quản Lý Sản Phẩm Bảo Hiểm Du Lịch</h1>
             </div>
 
-            <form class="filter-section" action="${pageContext.request.contextPath}/filter" method="GET">
-                <p class="filter-label">Lọc sản phẩm:</p>
-                <select class="filter-select" name="filter">
-                    <option value="all">Tất cả sản phẩm</option>
-                    <option value="domestic">Trong nước</option>
-                    <option value="international">Quốc tế</option>
-                    <option value="nonactive">Chờ duyệt</option>
-                    <option value="active">Hoạt động</option>
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section">
+                <form method="GET" action="${pageContext.request.contextPath}/filter" class="search-form">
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label for="search">Tìm kiếm:</label>
+                            <input type="text" id="search" name="search" value="${searchTerm}" 
+                                   placeholder="Tìm theo tên sản phẩm, loại, gói...">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="type">Loại:</label>
+                            <select id="type" name="type">
+                                <option value="">Tất cả loại</option>
+                                <option value="domestic" ${typeFilter == 'domestic' ? 'selected' : ''}>Trong nước</option>
+                                <option value="international" ${typeFilter == 'international' ? 'selected' : ''}>Quốc tế</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="package">Gói:</label>
+                            <select id="package" name="package">
+                                <option value="">Tất cả gói</option>
+                                <option value="basic" ${packageFilter == 'basic' ? 'selected' : ''}>Cơ bản</option>
+                                <option value="standard" ${packageFilter == 'standard' ? 'selected' : ''}>Tiêu chuẩn</option>
+                                <option value="advanced" ${packageFilter == 'advanced' ? 'selected' : ''}>Nâng cao</option>
+                                <option value="comprehensive" ${packageFilter == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="status">Trạng thái:</label>
+                            <select id="status" name="status">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="active" ${statusFilter == 'active' ? 'selected' : ''}>Hoạt động</option>
+                                <option value="inactive" ${statusFilter == 'inactive' ? 'selected' : ''}>Chờ duyệt</option>
                 </select>
-                <button class="btn btn-warning px-5" type="submit"><i class="fas fa-filter"></i> Lọc</button>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-search">
+                                <i class="fas fa-search"></i>
+                                Tìm kiếm
+                            </button>
+                            <a href="${pageContext.request.contextPath}/view_product" class="btn btn-clear">
+                                <i class="fas fa-times"></i>
+                                Xóa bộ lọc
+                            </a>
+                        </div>
+                    </div>
             </form>
+            </div>
 
+            <!-- Products Table -->
+            <div class="products-table-section">
+                <div class="table-header">
+                    <div class="table-title-section">
+                        <h3>Danh sách sản phẩm bảo hiểm</h3>
+                        <p>Tổng cộng: ${products.size()} sản phẩm</p>
+                    </div>
+                    <div class="page-size-container">
+                        <label>Hiển thị: 
+                            <select id="pageSizeSelect">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> sản phẩm/trang
+                        </label>
+                    </div>
+                </div>
+                
+                <c:if test="${not empty error}">
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        ${error}
+                    </div>
+                </c:if>
+                
+                <c:if test="${not empty success}">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i>
+                        ${success}
+                    </div>
+                </c:if>
+                
+                <div class="table-container">
             <c:choose>
                 <c:when test="${not empty products}">
-                    <div class="table-container">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
+                            <table class="products-table">
                                 <thead>
                                     <tr>
+                                        <th>ID</th>
                                         <th>Tên sản phẩm</th>
                                         <th>Loại</th>
                                         <th>Giá tiền</th>
@@ -505,12 +129,31 @@
                                     <c:forEach items="${products}" var="product">
                                         <c:if test="${!product.is_delete}">
                                             <tr>
-                                                <td class="product-name">${product.name}</td>
-                                                <td class="product-type">${product.type == "domestic" ? "Trong nước" : "Quốc tế"}</td>
-                                                <td class="product-price">
+                                                <td>#${product.id}</td>
+                                                <td>
+                                                    <div class="product-info">
+                                                        <strong>${product.name}</strong>
+                                                        <small class="product-description">
+                                                            <c:choose>
+                                                                <c:when test="${fn:length(product.description) > 50}">
+                                                                    ${fn:substring(product.description, 0, 50)}...
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    ${product.description}
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </small>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="type-badge type-${product.type}">
+                                                        ${product.type == "domestic" ? "Trong nước" : "Quốc tế"}
+                                                    </span>
+                                                </td>
+                                                <td class="price-amount">
                                                     <c:choose>
                                                         <c:when test="${product.price != null}">
-                                                            <fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" groupingUsed="true"/> VNĐ
+                                                            <fmt:formatNumber value="${product.price}" type="currency" currencyCode="VND"/>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <span class="empty-field">Chưa có giá</span>
@@ -518,47 +161,32 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>
-                                                    <c:choose>
-                                                        <c:when test="${product.is_active}">
-                                                            <span class="status-active">Hoạt động</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="status-inactive">Chờ duyệt</span>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                    <span class="status-badge status-${product.is_active ? 'active' : 'inactive'}">
+                                                        ${product.is_active ? 'Hoạt động' : 'Chờ duyệt'}
+                                                    </span>
                                                 </td>
                                                 <td>
+                                                    <span class="package-badge package-${product.package_type}">
                                                     <c:choose>
-                                                        <c:when test="${product.package_type == 'basic'}">
-                                                            <span class="package-badge package-basic">Cơ bản</span>
-                                                        </c:when>
-                                                        <c:when test="${product.package_type == 'standard'}">
-                                                            <span class="package-badge package-standard">Tiêu chuẩn</span>
-                                                        </c:when>
-                                                        <c:when test="${product.package_type == 'advanced'}">
-                                                            <span class="package-badge package-advanced">Nâng cao</span>
-                                                        </c:when>
-                                                        <c:when test="${product.package_type == 'comprehensive'}">
-                                                            <span class="package-badge package-comprehensive">Toàn diện</span>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <span class="package-badge package-unknown">${product.package_type}</span>
-                                                        </c:otherwise>
+                                                            <c:when test="${product.package_type == 'basic'}">Cơ bản</c:when>
+                                                            <c:when test="${product.package_type == 'standard'}">Tiêu chuẩn</c:when>
+                                                            <c:when test="${product.package_type == 'advanced'}">Nâng cao</c:when>
+                                                            <c:when test="${product.package_type == 'comprehensive'}">Toàn diện</c:when>
+                                                            <c:otherwise>${product.package_type}</c:otherwise>
                                                     </c:choose>
+                                                    </span>
                                                 </td>
-                                                <td>
-                                                    <div class="d-flex gap-2">
-
-                                                        <a href="${pageContext.request.contextPath}/edit_product?id=${product.id}&id_benefit=${product.benefit_id}"> 
-                                                            <button type="button" class="btn btn-edit">
-                                                                <i class="fas fa-edit me-1"></i> Sửa
-                                                            </button>
+                                                <td class="actions-cell">
+                                                    <div class="action-buttons">
+                                                        <a href="${pageContext.request.contextPath}/edit_product?id=${product.id}&id_benefit=${product.benefit_id}" 
+                                                           class="btn-sm btn-info">
+                                                            <i class="fas fa-edit"></i>
+                                                            Sửa
                                                         </a>
-
-                                                        <a href="${pageContext.request.contextPath}/delete_product?id=${product.id}&id_benefit=${product.benefit_id}">                                                           
-                                                            <button class="btn btn-delete">
-                                                                <i class="fas fa-trash me-1"></i> Xóa
-                                                            </button>
+                                                        <a href="${pageContext.request.contextPath}/delete_product?id=${product.id}&id_benefit=${product.benefit_id}" 
+                                                           class="btn-sm btn-danger delete-btn">
+                                                            <i class="fas fa-trash"></i>
+                                                            Xóa
                                                         </a>
                                                     </div>
                                                 </td>
@@ -567,31 +195,159 @@
                                     </c:forEach>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
                 </c:when>
                 <c:otherwise>
-                    <div>
-                        <h3>Không tìm thấy sản phẩm phù hợp!</h3>
+                            <div class="no-data">
+                                <i class="fas fa-cube"></i>
+                                <h3>Không có sản phẩm nào</h3>
+                                <p>Không tìm thấy sản phẩm nào phù hợp với tiêu chí tìm kiếm.</p>
                     </div>
                 </c:otherwise>
             </c:choose>
+                </div>
+            </div>
+        </div>
         </div>
 
         <script>
-            document.querySelectorAll(".btn-delete").forEach(btn => {
+        document.addEventListener("DOMContentLoaded", function () {
+            // User dropdown functionality
+            const userDropdown = document.querySelector('.user-dropdown');
+            if (userDropdown) {
+                userDropdown.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('active');
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!userDropdown.contains(e.target)) {
+                        userDropdown.classList.remove('active');
+                    }
+                });
+            }
+
+            // Delete confirmation
+            document.querySelectorAll(".delete-btn").forEach(btn => {
                 btn.addEventListener("click", (e) => {
                     e.preventDefault();
                     const confirmDelete = confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
                     if (confirmDelete) {
-                        const link = btn.closest("a");
-                        if (link && link.href) {
-                            window.location.href = link.href; // Chuyển hướng nếu nhấn OK
-                        }
+                        window.location.href = btn.href;
                     }
                 });
             });
-        </script>
 
+            // Table pagination and sorting
+            const table = document.querySelector(".products-table");
+            if (!table) return;
+
+            const tbody = table.querySelector("tbody");
+            const rows = Array.from(tbody.querySelectorAll("tr"));
+            const paginationContainer = document.createElement("div");
+            paginationContainer.classList.add("pagination-container");
+            table.parentNode.appendChild(paginationContainer);
+
+            let currentPage = 1;
+            let pageSize = 10;
+
+            function renderTable() {
+                tbody.innerHTML = "";
+                const start = (currentPage - 1) * pageSize;
+                const end = start + pageSize;
+                rows.slice(start, end).forEach(row => tbody.appendChild(row));
+                renderPagination();
+            }
+
+            function renderPagination() {
+                const totalPages = Math.ceil(rows.length / pageSize);
+                paginationContainer.innerHTML = "";
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement("button");
+                    btn.textContent = i;
+                    btn.classList.add("page-btn");
+                    if (i === currentPage) btn.classList.add("active");
+                    btn.addEventListener("click", () => {
+                        currentPage = i;
+                        renderTable();
+                    });
+                    paginationContainer.appendChild(btn);
+                }
+            }
+
+            document.getElementById("pageSizeSelect").addEventListener("change", function () {
+                pageSize = parseInt(this.value);
+                currentPage = 1;
+                renderTable();
+            });
+
+            // Sorting functionality
+            const headers = table.querySelectorAll("th");
+            let sortOrder = 1;
+            let sortedColumn = null;
+
+            headers.forEach((th, index) => {
+                const sortableColumns = [0, 1, 2, 3, 4, 5]; // ID, Name, Type, Price, Status, Package
+                
+                if (sortableColumns.includes(index)) {
+                    th.style.cursor = "pointer";
+                    th.addEventListener("click", () => {
+                        if (sortedColumn === index) sortOrder *= -1;
+                        else {
+                            sortedColumn = index;
+                            sortOrder = 1;
+                        }
+
+                        rows.sort((a, b) => {
+                            const aText = a.children[index].textContent.trim();
+                            const bText = b.children[index].textContent.trim();
+
+                            switch(index) {
+                                case 0: // ID
+                                    const aId = parseInt(aText.replace('#', ''));
+                                    const bId = parseInt(bText.replace('#', ''));
+                                    return (aId - bId) * sortOrder;
+                                
+                                case 1: // Name
+                                case 2: // Type
+                                case 4: // Status
+                                case 5: // Package
+                                    return aText.localeCompare(bText, "vi") * sortOrder;
+                                
+                                case 3: // Price
+                                    const aPrice = parsePrice(aText);
+                                    const bPrice = parsePrice(bText);
+                                    return (aPrice - bPrice) * sortOrder;
+                                
+                                default:
+                                    return 0;
+                            }
+                        });
+
+                        renderTable();
+                        updateSortIcons(th, headers);
+                    });
+                } else {
+                    th.style.cursor = "default";
+                }
+            });
+
+            function parsePrice(priceStr) {
+                let cleanPrice = priceStr.replace(/[₫\s]/g, '');
+                cleanPrice = cleanPrice.replace(/\./g, '').replace(',', '.');
+                return parseFloat(cleanPrice) || 0;
+            }
+
+            function updateSortIcons(activeTh, allThs) {
+                allThs.forEach(th => {
+                    th.classList.remove("sorted-asc", "sorted-desc");
+                });
+                activeTh.classList.add(sortOrder === 1 ? "sorted-asc" : "sorted-desc");
+            }
+
+            renderTable();
+            });
+        </script>
     </body>
 </html>

@@ -21,7 +21,7 @@
 
             <!-- Main Content -->
             <div class="main-content">
-                <div style="height: 100%; overflow-y: auto; padding: 20px; background: linear-gradient(135deg, #FFF9C4 0%, #FFFFFF 100%); border-radius: 15px;">
+                <div>
                     <jsp:include page="${empty page ? 'home.jsp' : page}"/>
                 </div>
             </div>
