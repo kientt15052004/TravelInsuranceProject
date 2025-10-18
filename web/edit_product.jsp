@@ -443,7 +443,7 @@
                                 <label class="form-label">Tử vong, thương tật vĩnh viễn</label>
                                 <fmt:formatNumber value="${product.benefit.death_or_permanent_disability}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated1" />
                                 <input name="deathOrDisability" type="number" class="form-control domestic_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated1}"/>
                             </div>
 
@@ -451,7 +451,7 @@
                                 <label class="form-label">Tử vong do ốm đau, bệnh tật</label>
                                 <fmt:formatNumber value="${product.benefit.death_due_to_illness}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated2" />
                                 <input name="deathByIllness" type="number" class="form-control domestic_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated2}">
                             </div>
                         </div>
@@ -461,7 +461,7 @@
                                 <label class="form-label">Trách nhiệm cá nhân đối với bên thứ ba</label>
                                 <fmt:formatNumber value="${product.benefit.third_party_liability}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated3" />
                                 <input name="thirdPartyLiability" type="number" class="form-control domestic_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated3}">
                             </div>
 
@@ -469,7 +469,7 @@
                                 <label class="form-label">Bảo hiểm thất lạc thẻ ngân hàng</label>
                                 <fmt:formatNumber value="${product.benefit.lost_bank_card}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated4" />
                                 <input name="lostBankCard" type="number" class="form-control domestic_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated4}">
                             </div>
                         </div>
@@ -479,7 +479,7 @@
                                 <label class="form-label">Bắt cóc và con tin</label>
                                 <fmt:formatNumber value="${product.benefit.kidnap_and_hostage}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated5" />
                                 <input name="kidnapHostage" type="number" class="form-control domestic_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated5}">
                             </div>
 
@@ -487,7 +487,7 @@
                                 <label class="form-label">Mất hoặc hư hỏng dụng cụ chơi Golf</label>
                                 <fmt:formatNumber value="${product.benefit.lost_or_damaged_golf_equipment}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated6" />
                                 <input name="golfEquipLoss" type="number" class="form-control domestic_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated6}">
                             </div>
                         </div>
@@ -502,7 +502,7 @@
                                 <label class="form-label">Chi phí y tế</label>
                                 <fmt:formatNumber value="${product.benefit.medical_cost}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated7" />
                                 <input name="medical_cost" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated7}">
                             </div>
 
@@ -510,7 +510,7 @@
                                 <label class="form-label">Chi phí vận chuyển y tế khẩn cấp</label>
                                 <fmt:formatNumber value="${product.benefit.emergency_transport}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated8" />
                                 <input name="emergency_transport" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated8}">
                             </div>
                         </div>
@@ -520,7 +520,7 @@
                                 <label class="form-label">Hồi hương thi hài về Việt Nam</label>
                                 <fmt:formatNumber value="${product.benefit.repatriation_vn}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated9" />
                                 <input name="repatriation_vn" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated9}">
                             </div>
 
@@ -528,7 +528,7 @@
                                 <label class="form-label">Hồi hương thi hài về quê hương (ngoài VN)</label>
                                 <fmt:formatNumber value="${product.benefit.repatriation_abroad}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated10" />
                                 <input name="repatriation_abroad" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated10}">
                             </div>
                         </div>
@@ -538,7 +538,7 @@
                                 <label class="form-label">Thăm Người được bảo hiểm tại bệnh viện</label>
                                 <fmt:formatNumber value="${product.benefit.hospital_visit}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated11" />
                                 <input name="hospital_visit" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated11}">
                             </div>
 
@@ -546,7 +546,7 @@
                                 <label class="form-label">Thăm viếng để thu xếp tang lễ</label>
                                 <fmt:formatNumber value="${product.benefit.funeral_arrangement}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated12" />
                                 <input name="funeral_arrangement" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated12}">
                             </div>
                         </div>
@@ -556,7 +556,7 @@
                                 <label class="form-label">Chăm sóc trẻ em</label>
                                 <fmt:formatNumber value="${product.benefit.child_care}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated13" />
                                 <input name="child_care" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated13}">
                             </div>
 
@@ -564,7 +564,7 @@
                                 <label class="form-label">Trợ cấp nằm viện</label>
                                 <fmt:formatNumber value="${product.benefit.hospital_allowance}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated14" />
                                 <input name="hospital_allowance" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated14}">
                             </div>
                         </div>
@@ -574,7 +574,7 @@
                                 <label class="form-label">Tử vong và thương tật do tai nạn</label>
                                 <fmt:formatNumber value="${product.benefit.accident_death_injury}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated15" />
                                 <input name="accident_death_injury" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated15}">
                             </div>
 
@@ -582,7 +582,7 @@
                                 <label class="form-label">Hủy bỏ chuyến đi</label>
                                 <fmt:formatNumber value="${product.benefit.trip_cancellation}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated16" />
                                 <input name="trip_cancellation" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated16}">
                             </div>
                         </div>
@@ -592,7 +592,7 @@
                                 <label class="form-label">Hỗ trợ người đi cùng</label>
                                 <fmt:formatNumber value="${product.benefit.companion_support}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated17" />
                                 <input name="companion_support" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated17}">
                             </div>
 
@@ -600,7 +600,7 @@
                                 <label class="form-label">Hành lý đến chậm</label>
                                 <fmt:formatNumber value="${product.benefit.delayed_baggage}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated18" />
                                 <input name="delayed_baggage" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated18}">
                             </div>
                         </div>
@@ -610,7 +610,7 @@
                                 <label class="form-label">Giấy tờ đi đường</label>
                                 <fmt:formatNumber value="${product.benefit.travel_documents}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated19" />
                                 <input name="travel_documents" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated19}">
                             </div>
 
@@ -618,7 +618,7 @@
                                 <label class="form-label">Chuyến đi bị trì hoãn</label>
                                 <fmt:formatNumber value="${product.benefit.trip_delay}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated20" />
                                 <input name="trip_delay" type="number" class="form-control international_benefit" 
-                                       min="0" step="100000" placeholder="Nhập số tiền..." 
+                                       min="0" placeholder="Nhập số tiền..." 
                                        value="${formated20}">
                             </div>
                         </div>
@@ -920,9 +920,12 @@
                         
                         // Xử lý hệ số: chấp nhận cả % (1-10) và số thập phân (0.01-0.1)
                         let actualCoefficient = coefficient_value_1;
-                        if (coefficient_value_1 >= 1 && coefficient_value_1 <= 10) {
+                        if (coefficient_value_1 >= 0.01 && coefficient_value_1 <= 10) {
                             // Nếu nhập % (1-10), chuyển thành số thập phân
                             actualCoefficient = coefficient_value_1 / 100;
+                        }
+                        else{
+                            alert("Hệ số nhập vào phải trong khoảng từ 0.01% và tối đa 10%");
                         }
                         
                         
@@ -935,8 +938,7 @@
                             fee = actualCoefficient * max * value20 * value21;
                             base_price = actualCoefficient * max;
                             // Cập nhật cả input hiển thị và hidden field
-                            coefficient_1.value = coefficient_value_1;
-                            domestic_percentage_rate.value = actualCoefficient;
+                            coefficient_1.value = coefficient_value_1;                           
 
                             result.textContent = formatNumber(fee);
                             result1.innerText = `Số tiền bảo hiểm(STBH): ` + formatNumber(max) + ' VNĐ';
