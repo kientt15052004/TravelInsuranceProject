@@ -90,7 +90,11 @@
                             <c:forEach items="${insurances}" var="insurance">
                                 <a href="purchase-insurance?id=${insurance.id}" class="insurance-card">
                                     <div class="insurance-icon">
+<<<<<<< Updated upstream
                                         <img src="${insurance.img.startsWith('http') ? insurance.img : pageContext.request.contextPath.concat('/').concat(insurance.img)}" 
+=======
+                                        <img src="${pageContext.request.contextPath}/${insurance.img}" 
+>>>>>>> Stashed changes
                                              alt="${insurance.name}" class="insurance-img"/>
                                     </div>
                                     <span class="insurance-type">${insurance.type}</span>
