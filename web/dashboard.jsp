@@ -8,13 +8,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="CSS/admin.css">
+        <link rel="stylesheet" href="CSS/productmanagement.css">
+        <link rel="stylesheet" href="CSS/createproduct.css">
     </head>
     <body style="height: 100vh">
-        <!-- Top Header -->
         <jsp:include page="component/admin-header.jsp"/>
 
         <div class="main-container">
-            <!-- Sidebar -->
             <jsp:include page="component/admin-sidebar.jsp">
                 <jsp:param name="activePage" value="${param.activePage}"/>
             </jsp:include>
@@ -28,5 +28,29 @@
         </div>
         
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        
+        <!-- Dropdown Click Handler -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const userDropdown = document.querySelector('.user-dropdown');
+                
+                if (userDropdown) {
+                    userDropdown.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Toggle active class
+                        this.classList.toggle('active');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!userDropdown.contains(e.target)) {
+                            userDropdown.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

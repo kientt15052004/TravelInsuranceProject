@@ -235,6 +235,14 @@ public class UpdateProduct extends HttpServlet {
     }
 
     private InsuranceProduct createInsuranceProduct(HttpServletRequest request, int benefitId, String imgPath) {
+        System.out.println("DEBUG: All request parameters:");
+        java.util.Enumeration<String> paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+            String paramName = paramNames.nextElement();
+            String paramValue = request.getParameter(paramName);
+            System.out.println("  " + paramName + " = " + paramValue);
+        }
+        
         InsuranceProduct product = new InsuranceProduct();
         product.setBenefit_id(benefitId);
         product.setType(request.getParameter("choose"));
@@ -242,13 +250,30 @@ public class UpdateProduct extends HttpServlet {
         product.setImg(imgPath);
         product.setDescription(request.getParameter("description"));
         product.setPackage_type(request.getParameter("package_type"));
+        System.out.println("DEBUG: package_type parameter = " + request.getParameter("package_type"));
         product.setPrice(parseBigDecimal(request.getParameter("price")));
-        product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")));
+        product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")).multiply(new BigDecimal("100")));
         product.setInternational_rate_1_7(parseBigDecimal(request.getParameter("international_rate_1_7")));
         product.setInternational_rate_8_30(parseBigDecimal(request.getParameter("international_rate_8_30")));
         product.setInternational_rate_31_90(parseBigDecimal(request.getParameter("international_rate_31_90")));
         product.setInternational_rate_91_365(parseBigDecimal(request.getParameter("international_rate_91_180")));
-        product.setIs_active(request.getParameter("active").equals("true") ? true : false);
+        String activeParam = request.getParameter("active");
+        product.setIs_active("true".equals(activeParam));
+        product.setIs_delete(false); // Đảm bảo không bị xóa
+        
+        System.out.println("DEBUG: Created product data:");
+        System.out.println("  - ID: " + product.getId());
+        System.out.println("  - Benefit ID: " + product.getBenefit_id());
+        System.out.println("  - Type: " + product.getType());
+        System.out.println("  - Name: " + product.getName());
+        System.out.println("  - Price: " + product.getPrice());
+        System.out.println("  - Domestic rate: " + product.getDomestic_percentage_rate());
+        System.out.println("  - International rate 1-7: " + product.getInternational_rate_1_7());
+        System.out.println("  - International rate 8-30: " + product.getInternational_rate_8_30());
+        System.out.println("  - International rate 31-90: " + product.getInternational_rate_31_90());
+        System.out.println("  - International rate 91-365: " + product.getInternational_rate_91_365());
+        System.out.println("  - Is active: " + product.getIs_active());
+        
         return product;
     }
 
