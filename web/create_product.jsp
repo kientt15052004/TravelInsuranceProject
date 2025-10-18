@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 <button type="button" class="btn-close" onclick="this.parentElement.parentElement.style.display='none'">
-                    <i class="fas fa-times"></i>
+                    <i class="fas fa-times-circle"></i>
                 </button>
                     </div>
                 </div>
@@ -96,29 +96,29 @@
                     <div class="form-row-three">
                         <div class="form-group col-4">
                             <label for="deathOrDisability">Tử vong, thương tật vĩnh viễn <span class="required">*</span></label>
-                            <input name="deathOrDisability" type="number" class="form-control domestic_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="deathOrDisability" type="number" class="form-control domestic_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-4">
                             <label for="deathByIllness">Tử vong do ốm đau, bệnh tật <span class="required">*</span></label>
-                            <input name="deathByIllness" type="number" class="form-control domestic_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="deathByIllness" type="number" class="form-control domestic_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-4">
                             <label for="thirdPartyLiability">Trách nhiệm cá nhân đối với bên thứ ba <span class="required">*</span></label>
-                            <input name="thirdPartyLiability" type="number" class="form-control domestic_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="thirdPartyLiability" type="number" class="form-control domestic_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                     </div>
                     <div class="form-row-three">
                         <div class="form-group col-4">
                             <label for="lostBankCard">Bảo hiểm thất lạc thẻ ngân hàng <span class="required">*</span></label>
-                            <input name="lostBankCard" type="number" class="form-control domestic_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="lostBankCard" type="number" class="form-control domestic_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-4">
                             <label for="kidnapHostage">Bắt cóc và con tin <span class="required">*</span></label>
-                            <input name="kidnapHostage" type="number" class="form-control domestic_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="kidnapHostage" type="number" class="form-control domestic_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-4">
                             <label for="golfEquipLoss">Mất hoặc hư hỏng dụng cụ chơi Golf <span class="required">*</span></label>
-                            <input name="golfEquipLoss" type="number" class="form-control domestic_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="golfEquipLoss" type="number" class="form-control domestic_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                     </div>
                 </div>
@@ -132,19 +132,19 @@
                     <div class="form-row-four">
                         <div class="form-group col-3">
                             <label for="medical_cost">Chi phí y tế <span class="required">*</span></label>
-                            <input name="medical_cost" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="medical_cost" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="emergency_transport">Chi phí vận chuyển y tế khẩn cấp <span class="required">*</span></label>
-                            <input name="emergency_transport" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="emergency_transport" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="repatriation_vn">Hồi hương thi hài về Việt Nam <span class="required">*</span></label>
-                            <input name="repatriation_vn" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="repatriation_vn" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="repatriation_abroad">Hồi hương thi hài về quê hương (ngoài VN) <span class="required">*</span></label>
-                            <input name="repatriation_abroad" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="repatriation_abroad" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                     </div>
                     
@@ -152,19 +152,19 @@
                     <div class="form-row-four">
                         <div class="form-group col-3">
                             <label for="hospital_visit">Thăm Người được bảo hiểm tại bệnh viện <span class="required">*</span></label>
-                            <input name="hospital_visit" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="hospital_visit" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="funeral_arrangement">Thăm viếng để thu xếp tang lễ <span class="required">*</span></label>
-                            <input name="funeral_arrangement" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="funeral_arrangement" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="child_care">Chăm sóc trẻ em <span class="required">*</span></label>
-                            <input name="child_care" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="child_care" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="hospital_allowance">Trợ cấp nằm viện <span class="required">*</span></label>
-                            <input name="hospital_allowance" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="hospital_allowance" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                     </div>
                     
@@ -172,19 +172,19 @@
                     <div class="form-row-four">
                         <div class="form-group col-3">
                             <label for="accident_death_injury">Tử vong và thương tật do tai nạn <span class="required">*</span></label>
-                            <input name="accident_death_injury" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="accident_death_injury" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="trip_cancellation">Hủy bỏ chuyến đi <span class="required">*</span></label>
-                            <input name="trip_cancellation" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="trip_cancellation" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="companion_support">Hỗ trợ người đi cùng <span class="required">*</span></label>
-                            <input name="companion_support" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="companion_support" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-3">
                             <label for="delayed_baggage">Hành lý đến chậm <span class="required">*</span></label>
-                            <input name="delayed_baggage" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="delayed_baggage" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                     </div>
                     
@@ -192,11 +192,11 @@
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="travel_documents">Giấy tờ đi đường <span class="required">*</span></label>
-                            <input name="travel_documents" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="travel_documents" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                         <div class="form-group col-6">
                             <label for="trip_delay">Chuyến đi bị trì hoãn <span class="required">*</span></label>
-                            <input name="trip_delay" type="number" class="form-control international_required" min="0" step="100000" placeholder="Nhập số tiền...">
+                            <input name="trip_delay" type="number" class="form-control international_required" min="0" placeholder="Nhập số tiền...">
                         </div>
                     </div>
                 </div>
@@ -256,31 +256,31 @@
                             <tbody>
                                 <tr>
                                     <td>1-7 ngày</td>
-                                    <td><input class="form-control" name="coefficient_2" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_3" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_4" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_5" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_2" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_3" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_4" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_5" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
                                 </tr>
                                 <tr>
                                     <td>8-30 ngày</td>
-                                    <td><input class="form-control" name="coefficient_6" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_7" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_8" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_9" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_6" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_7" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_8" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_9" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
                                 </tr>
                                 <tr>
                                     <td>31-90 ngày</td>
-                                    <td><input class="form-control" name="coefficient_10" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_11" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_12" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_13" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_10" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_11" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_12" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_13" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
                                 </tr>
                                 <tr>
                                     <td>91-180 ngày</td>
-                                    <td><input class="form-control" name="coefficient_14" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_15" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_16" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
-                                    <td><input class="form-control" name="coefficient_17" placeholder="Nhập vào biểu phí..." step="1000" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_14" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_15" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_16" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
+                                    <td><input class="form-control" name="coefficient_17" placeholder="Nhập vào biểu phí..." min="0" type="number"></td>
                                 </tr>
                             </tbody>
                         </table>
