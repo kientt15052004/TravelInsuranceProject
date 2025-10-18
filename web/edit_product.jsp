@@ -676,7 +676,7 @@
                                         <td class="text-center">
                                             <fmt:formatNumber value="${product.international_rate_1_7}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated21" />
                                             <input class="coefficient_1_7 form-control" name="international_rate_1_7" 
-                                                   placeholder="Nhập vào biểu phí..." step="1000" type="number" 
+                                                   placeholder="Nhập vào biểu phí..." min="0" type="number" 
                                                    value="${formated21}">
                                         </td>
                                     </tr>
@@ -685,7 +685,7 @@
                                         <td class="text-center">
                                             <fmt:formatNumber value="${product.international_rate_8_30}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated22"/>
                                             <input class="coefficient_8_30 form-control" name="international_rate_8_30" 
-                                                   placeholder="Nhập vào biểu phí..." step="1000" type="number" 
+                                                   placeholder="Nhập vào biểu phí..." min="0" type="number" 
                                                    value="${formated22}">
                                         </td>
                                     </tr>
@@ -694,7 +694,7 @@
                                         <td class="text-center">
                                             <fmt:formatNumber value="${product.international_rate_31_90}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated23"/>
                                             <input class="coefficient_31_90 form-control" name="international_rate_31_90" 
-                                                   placeholder="Nhập vào biểu phí..." step="1000" type="number" 
+                                                   placeholder="Nhập vào biểu phí..." min="0" type="number" 
                                                    value="${formated23}">
                                         </td>
                                     </tr>
@@ -703,7 +703,7 @@
                                         <td class="text-center">
                                             <fmt:formatNumber value="${product.international_rate_91_365}" type="number" maxFractionDigits="0" groupingUsed="false" var="formated24"/>
                                             <input class="coefficient_91_180 form-control" name="international_rate_91_180" 
-                                                   placeholder="Nhập vào biểu phí..." step="1000" type="number" 
+                                                   placeholder="Nhập vào biểu phí..." min="0" type="number" 
                                                    value="${formated24}">
                                         </td>
                                     </tr>
