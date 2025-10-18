@@ -30,7 +30,7 @@
                         </div>
                     </div>
                 <button type="button" class="btn-close" onclick="this.parentElement.parentElement.style.display='none'">
-                    <i class="fas fa-times-circle"></i>
+                    <i class="fas fa-times"></i>
                 </button>
                     </div>
                 </div>
