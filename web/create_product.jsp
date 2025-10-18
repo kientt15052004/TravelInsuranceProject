@@ -448,7 +448,7 @@
                 
                 // Xử lý hệ số: chấp nhận cả % (1-10) và số thập phân (0.01-0.1)
                 let actualCoefficient = coefficient_value_1;
-                if (coefficient_value_1 >= 1 && coefficient_value_1 <= 10) {
+                if (coefficient_value_1 >= 0.01 && coefficient_value_1 <= 10) {
                     // Nếu nhập % (1-10), chuyển thành số thập phân
                     actualCoefficient = coefficient_value_1 / 100;
                 }

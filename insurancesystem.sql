@@ -484,3 +484,25 @@ UNION ALL SELECT 'Contract', COUNT(*) FROM `Contract`
 UNION ALL SELECT 'invoices', COUNT(*) FROM invoices
 UNION ALL SELECT 'Claims', COUNT(*) FROM Claims
 UNION ALL SELECT 'ClaimsRes', COUNT(*) FROM ClaimsRes;
+
+ALTER TABLE insurance_benefits
+    MODIFY death_or_permanent_disability DECIMAL(15,2),
+    MODIFY death_due_to_illness DECIMAL(15,2),
+    MODIFY third_party_liability DECIMAL(15,2),
+    MODIFY lost_bank_card DECIMAL(15,2),
+    MODIFY kidnap_and_hostage DECIMAL(15,2),
+    MODIFY lost_or_damaged_golf_equipment DECIMAL(15,2),
+    MODIFY medical_cost DECIMAL(15,2),
+    MODIFY emergency_transport DECIMAL(15,2),
+    MODIFY repatriation_vn DECIMAL(15,2),
+    MODIFY repatriation_abroad DECIMAL(15,2),
+    MODIFY hospital_visit DECIMAL(15,2),
+    MODIFY funeral_arrangement DECIMAL(15,2),
+    MODIFY child_care DECIMAL(15,2),
+    MODIFY hospital_allowance DECIMAL(15,2),
+    MODIFY accident_death_injury DECIMAL(15,2),
+    MODIFY trip_cancellation DECIMAL(15,2),
+    MODIFY companion_support DECIMAL(15,2),
+    MODIFY delayed_baggage DECIMAL(15,2),
+    MODIFY travel_documents DECIMAL(15,2),
+    MODIFY trip_delay DECIMAL(15,2);
