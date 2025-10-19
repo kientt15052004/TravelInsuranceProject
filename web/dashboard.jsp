@@ -16,6 +16,7 @@
         <jsp:include page="component/admin-header.jsp"/>
 
         <div class="main-container">
+<<<<<<< Updated upstream
 =======
     </head>
     <body style="height: 100vh">
@@ -28,6 +29,9 @@
             <jsp:include page="component/admin-sidebar.jsp">
                 <jsp:param name="activePage" value="${param.activePage}"/>
             </jsp:include>
+=======
+            <jsp:include page="component/admin-sidebar.jsp"/>
+>>>>>>> Stashed changes
 
             <!-- Main Content -->
             <div class="main-content">
