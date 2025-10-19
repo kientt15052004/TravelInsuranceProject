@@ -506,3 +506,11 @@ ALTER TABLE insurance_benefits
     MODIFY delayed_baggage DECIMAL(15,2),
     MODIFY travel_documents DECIMAL(15,2),
     MODIFY trip_delay DECIMAL(15,2);
+    
+        ALTER TABLE products
+    modify domestic_percentage_rate decimal(15,2),
+    modify international_rate_1_7 decimal(15,2),
+    modify international_rate_8_30 decimal(15,2),
+    modify international_rate_31_90 decimal(15,2),
+    modify international_rate_91_365 decimal(15,2),
+    modify price decimal(15,2);

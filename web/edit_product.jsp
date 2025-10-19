@@ -936,10 +936,7 @@
 
                             let max = Math.max(value1, value2, value3, value4, value5, value6);
                             fee = actualCoefficient * max * value20 * value21;
-                            base_price = actualCoefficient * max;
-                            // Cập nhật cả input hiển thị và hidden field
-                            coefficient_1.value = coefficient_value_1;                           
-
+                            base_price = actualCoefficient * max;                        
                             result.textContent = formatNumber(fee);
                             result1.innerText = `Số tiền bảo hiểm(STBH): ` + formatNumber(max) + ' VNĐ';
                             result2.textContent = `Số ngày: ` + formatNumber(value20);
