@@ -1,6 +1,6 @@
 package Controller;
 
-import dal.ProductDBController;
+import dal.InsuranceDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,13 +13,13 @@ public class DeleteProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDBController productDB = new ProductDBController();
+        InsuranceDBContext insuranceDAO = new InsuranceDBContext();
         try {
             String id = request.getParameter("id");
             String benefitId = request.getParameter("id_benefit");
             System.out.println("id: " + id);
             System.out.println("benefit_id: " + benefitId);
-            productDB.deleteProduct(Integer.parseInt(id));
+            insuranceDAO.deleteProduct(Integer.parseInt(id));
 
             response.sendRedirect(request.getContextPath() + "/view_product");
 

@@ -2,13 +2,8 @@
 -- RESET + SEED DATABASE insuranceSystem
 -- =====================================
 
--- 1️⃣ Xóa database cũ nếu có
 DROP DATABASE IF EXISTS insuranceSystem;
-
--- 2️⃣ Tạo database mới
 CREATE DATABASE insuranceSystem CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- 3️⃣ Sử dụng database này
 USE insuranceSystem;
 
 -- =====================================
@@ -63,6 +58,7 @@ CREATE TABLE products (
   name VARCHAR(255),
   img VARCHAR(255),
   description TEXT,
+  package_type ENUM('Basic','Standard','Advanced','Comprehensive'),
   price DECIMAL(10,2),
   domestic_percentage_rate DECIMAL(5,2),
   international_rate_1_7 DECIMAL(5,2),
@@ -149,21 +145,12 @@ CREATE TABLE ClaimsRes (
 );
 
 -- =====================================
--- CHÈN DỮ LIỆU THỰC TẾ (seed data)
+-- SEED DATABASE
 -- =====================================
-
--- Dán toàn bộ script seed từ phần trước vào đây:
--- (bắt đầu từ dòng "SET @old_foreign_key_checks = @@FOREIGN_KEY_CHECKS;" 
--- đến hết phần UNION ALL SELECT kiểm tra)
-
--- 👉 Dán toàn bộ phần seed code ở đây 👈
--- insuranceSystem - realistic seed data
--- Requires that your schema/tables are already created (as in your previous message)
 
 SET @old_foreign_key_checks = @@FOREIGN_KEY_CHECKS;
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Optional: clear data if needed
 TRUNCATE TABLE ClaimsRes;
 TRUNCATE TABLE Claims;
 TRUNCATE TABLE invoices;
@@ -176,7 +163,7 @@ TRUNCATE TABLE users;
 
 DELIMITER $$
 
--- 1️⃣ USERS (Admins, Staffs, Customers)
+-- 1️⃣ USERS
 DROP PROCEDURE IF EXISTS seed_users$$
 CREATE PROCEDURE seed_users()
 BEGIN
@@ -192,22 +179,20 @@ BEGIN
       CONCAT((i % 200)+1, ' Example St, District ', (i % 20) + 1),
       CONCAT('09', LPAD(10000000 + i,8,'0')),
       CONCAT('0', 100000000000 + i),
-      CONCAT('avatar_', i, '.png'),
+      CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
       CASE 
         WHEN i <= 3 THEN 'admin'
         WHEN i <= 13 THEN 'staff'
         ELSE 'customer'
       END,
-      CONCAT('cccd_', i, '.jpg'),
+      CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
       CASE WHEN i % 10 = 0 THEN 'inactive' ELSE 'active' END
     );
     SET i = i + 1;
   END WHILE;
 END$$
-
 CALL seed_users()$$
 DROP PROCEDURE IF EXISTS seed_users$$
-
 
 -- 2️⃣ INSURANCE BENEFITS
 DROP PROCEDURE IF EXISTS seed_benefits$$
@@ -248,19 +233,17 @@ BEGIN
     SET i = i + 1;
   END WHILE;
 END$$
-
 CALL seed_benefits()$$
 DROP PROCEDURE IF EXISTS seed_benefits$$
 
-
--- 3️⃣ PRODUCTS (domestic & international)
+-- 3️⃣ PRODUCTS (với package_type enum và ảnh random)
 DROP PROCEDURE IF EXISTS seed_products$$
 CREATE PROCEDURE seed_products()
 BEGIN
   DECLARE i INT DEFAULT 1;
   WHILE i <= 120 DO
     INSERT INTO products (
-      benefit_id, type, name, img, description, price,
+      benefit_id, type, name, img, description, package_type, price,
       domestic_percentage_rate, international_rate_1_7,
       international_rate_8_30, international_rate_31_90,
       international_rate_91_365, is_active, is_delete
@@ -269,8 +252,14 @@ BEGIN
       i,
       CASE WHEN i % 2 = 0 THEN 'international' ELSE 'domestic' END,
       CONCAT(CASE WHEN i % 2 = 0 THEN 'International Travel Plan ' ELSE 'Domestic Travel Plan ' END, LPAD(i,3,'0')),
-      CONCAT('product_img_', i, '.jpg'),
+      CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
       CONCAT('Gói bảo hiểm ', CASE WHEN i % 2 = 0 THEN 'quốc tế' ELSE 'nội địa' END, ' số ', i),
+      CASE (i % 4)
+        WHEN 0 THEN 'Basic'
+        WHEN 1 THEN 'Standard'
+        WHEN 2 THEN 'Advanced'
+        ELSE 'Comprehensive'
+      END,
       ROUND(300000 + RAND()*5000000,2),
       ROUND(5 + RAND()*25,2),
       ROUND(0.5 + RAND()*5,2),
@@ -283,10 +272,8 @@ BEGIN
     SET i = i + 1;
   END WHILE;
 END$$
-
 CALL seed_products()$$
 DROP PROCEDURE IF EXISTS seed_products$$
-
 
 -- 4️⃣ APPLICATIONS
 DROP PROCEDURE IF EXISTS seed_applications$$
@@ -330,12 +317,10 @@ BEGIN
     SET i = i + 1;
   END WHILE;
 END$$
-
 CALL seed_applications()$$
 DROP PROCEDURE IF EXISTS seed_applications$$
 
-
--- 5️⃣ TRAVELERS (1–3 per application)
+-- 5️⃣ APPLICATION TRAVELERS
 DROP PROCEDURE IF EXISTS seed_application_travelers$$
 CREATE PROCEDURE seed_application_travelers()
 BEGIN
@@ -367,10 +352,8 @@ BEGIN
     SET app_id = app_id + 1;
   END WHILE;
 END$$
-
 CALL seed_application_travelers()$$
 DROP PROCEDURE IF EXISTS seed_application_travelers$$
-
 
 -- 6️⃣ CONTRACTS
 DROP PROCEDURE IF EXISTS seed_contracts$$
@@ -394,10 +377,8 @@ BEGIN
     SET a_id = a_id + 1;
   END WHILE;
 END$$
-
 CALL seed_contracts()$$
 DROP PROCEDURE IF EXISTS seed_contracts$$
-
 
 -- 7️⃣ INVOICES
 DROP PROCEDURE IF EXISTS seed_invoices$$
@@ -422,10 +403,8 @@ BEGIN
     SET c_id = c_id + 1;
   END WHILE;
 END$$
-
 CALL seed_invoices()$$
 DROP PROCEDURE IF EXISTS seed_invoices$$
-
 
 -- 8️⃣ CLAIMS
 DROP PROCEDURE IF EXISTS seed_claims$$
@@ -451,17 +430,15 @@ BEGIN
       CONCAT('Yêu cầu bồi thường cho hợp đồng ', c_id),
       CONCAT('Bank ', (c_id % 8) + 1),
       CONCAT('ACC', LPAD(500000 + c_id,8,'0')),
-      CONCAT('claim_img_', c_id, '.jpg'),
-      CONCAT('claim_doc_', c_id, '.pdf'),
+      CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
+      CONCAT('https://example.com/file_', FLOOR(1 + RAND()*1000), '.pdf'),
       CASE WHEN c_id % 3 = 0 THEN 'approved' WHEN c_id % 5 = 0 THEN 'rejected' ELSE 'pending' END
     );
     SET c_id = c_id + 1;
   END WHILE;
 END$$
-
 CALL seed_claims()$$
 DROP PROCEDURE IF EXISTS seed_claims$$
-
 
 -- 9️⃣ CLAIM RESPONSES
 DROP PROCEDURE IF EXISTS seed_claimsres$$
@@ -482,8 +459,8 @@ BEGIN
         cl_id,
         DATE_ADD(DATE_SUB(CURDATE(), INTERVAL (cl_id % 50) DAY), INTERVAL k DAY),
         CONCAT('Phản hồi ', k, ' cho claim ', cl_id),
-        CONCAT('resp_img_', cl_id, '_', k, '.jpg'),
-        CONCAT('resp_file_', cl_id, '_', k, '.pdf'),
+        CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
+        CONCAT('https://example.com/res_file_', FLOOR(1 + RAND()*1000), '.pdf'),
         CASE WHEN k = 1 AND cl_id % 3 = 0 THEN 'resolved' WHEN k = 2 THEN 'follow_up' ELSE 'open' END
       );
       SET k = k + 1;
@@ -491,15 +468,13 @@ BEGIN
     SET cl_id = cl_id + 1;
   END WHILE;
 END$$
-
 CALL seed_claimsres()$$
 DROP PROCEDURE IF EXISTS seed_claimsres$$
 
 DELIMITER ;
-
 SET FOREIGN_KEY_CHECKS = @old_foreign_key_checks;
 
--- ✅ Quick sanity check (optional)
+-- ✅ Quick sanity check
 SELECT 'users' AS tbl, COUNT(*) AS cnt FROM users
 UNION ALL SELECT 'insurance_benefits', COUNT(*) FROM insurance_benefits
 UNION ALL SELECT 'products', COUNT(*) FROM products
@@ -509,3 +484,33 @@ UNION ALL SELECT 'Contract', COUNT(*) FROM `Contract`
 UNION ALL SELECT 'invoices', COUNT(*) FROM invoices
 UNION ALL SELECT 'Claims', COUNT(*) FROM Claims
 UNION ALL SELECT 'ClaimsRes', COUNT(*) FROM ClaimsRes;
+
+ALTER TABLE insurance_benefits
+    MODIFY death_or_permanent_disability DECIMAL(15,2),
+    MODIFY death_due_to_illness DECIMAL(15,2),
+    MODIFY third_party_liability DECIMAL(15,2),
+    MODIFY lost_bank_card DECIMAL(15,2),
+    MODIFY kidnap_and_hostage DECIMAL(15,2),
+    MODIFY lost_or_damaged_golf_equipment DECIMAL(15,2),
+    MODIFY medical_cost DECIMAL(15,2),
+    MODIFY emergency_transport DECIMAL(15,2),
+    MODIFY repatriation_vn DECIMAL(15,2),
+    MODIFY repatriation_abroad DECIMAL(15,2),
+    MODIFY hospital_visit DECIMAL(15,2),
+    MODIFY funeral_arrangement DECIMAL(15,2),
+    MODIFY child_care DECIMAL(15,2),
+    MODIFY hospital_allowance DECIMAL(15,2),
+    MODIFY accident_death_injury DECIMAL(15,2),
+    MODIFY trip_cancellation DECIMAL(15,2),
+    MODIFY companion_support DECIMAL(15,2),
+    MODIFY delayed_baggage DECIMAL(15,2),
+    MODIFY travel_documents DECIMAL(15,2),
+    MODIFY trip_delay DECIMAL(15,2);
+    
+        ALTER TABLE products
+    modify domestic_percentage_rate decimal(15,2),
+    modify international_rate_1_7 decimal(15,2),
+    modify international_rate_8_30 decimal(15,2),
+    modify international_rate_31_90 decimal(15,2),
+    modify international_rate_91_365 decimal(15,2),
+    modify price decimal(15,2);

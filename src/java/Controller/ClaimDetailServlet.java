@@ -1,0 +1,89 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Controller;
+
+import dal.ClaimsDBContext;
+import dal.ContractDBContext;
+import dal.ClaimsResDBContext;
+import Model.Claims;
+import Model.Contract;
+import Model.ClaimsRes;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+/**
+ *
+ * @author FPTSHOP
+ */
+@WebServlet(name = "ClaimDetailServlet", urlPatterns = {"/ClaimDetailServlet"})
+public class ClaimDetailServlet extends HttpServlet {
+
+    private ClaimsDBContext claimsDB = new ClaimsDBContext();
+    private ContractDBContext contractDB = new ContractDBContext();
+    private ClaimsResDBContext claimsResDB = new ClaimsResDBContext();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            // Lấy ID của claim từ parameter
+            String claimIdParam = request.getParameter("id");
+            
+            if (claimIdParam == null || claimIdParam.trim().isEmpty()) {
+                request.setAttribute("error", "ID claim không hợp lệ");
+                request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
+                return;
+            }
+            
+            int claimId;
+            try {
+                claimId = Integer.parseInt(claimIdParam);
+            } catch (NumberFormatException e) {
+                request.setAttribute("error", "ID claim phải là số");
+                request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
+                return;
+            }
+            
+            // Lấy thông tin claim
+            Claims claim = claimsDB.getClaimById(claimId);
+            
+            if (claim == null) {
+                request.setAttribute("error", "Không tìm thấy claim với ID: " + claimId);
+                request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
+                return;
+            }
+            
+            // Lấy thông tin contract liên quan
+            Contract contract = contractDB.getContractById(claim.getContract_id());
+            
+            // Lấy danh sách claim responses
+            List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
+            
+            // Set attributes cho JSP
+            request.setAttribute("claim", claim);
+            request.setAttribute("contract", contract);
+            request.setAttribute("claimResponses", claimResponses);
+            
+            request.getRequestDispatcher("ClaimDetail.jsp").forward(request, response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Có lỗi xảy ra khi tải chi tiết claim: " + e.getMessage());
+            request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
+        }
+    }
+    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Redirect về GET để tránh duplicate submission
+        response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+    }
+}

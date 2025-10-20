@@ -165,7 +165,7 @@
                                                 </span>
                                             </td>
                                             <td class="total-amount">
-                                                <fmt:formatNumber value="${user.totalInsuranceAmount}" type="currency" currencyCode="VND"/>
+                                                <fmt:formatNumber value="${user.totalInsuranceAmount}" type="number" maxFractionDigits="0" groupingUsed="true"/> ₫
                                             </td>
                                             <td class="actions-cell">
                                                 <div class="action-buttons">

@@ -71,6 +71,15 @@
         <servlet-name>ContractManagementServlet</servlet-name>
         <url-pattern>/ContractManagementServlet</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ContractDetailServlet</servlet-name>
+        <servlet-class>Controller.ContractDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContractDetailServlet</servlet-name>
+        <url-pattern>/ContractDetailServlet</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>TestCreateContract</servlet-name>
         <servlet-class>Controller.TestCreateContract</servlet-class>
@@ -221,6 +230,33 @@
     <servlet-mapping>
         <servlet-name>ClaimsManagementServlet</servlet-name>
         <url-pattern>/ClaimsManagementServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ClaimDetailServlet</servlet-name>
+        <servlet-class>Controller.ClaimDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimDetailServlet</servlet-name>
+        <url-pattern>/ClaimDetailServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ClaimApprovalServlet</servlet-name>
+        <servlet-class>Controller.ClaimApprovalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimApprovalServlet</servlet-name>
+        <url-pattern>/ClaimApprovalServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ClaimStatusUpdateServlet</servlet-name>
+        <servlet-class>Controller.ClaimStatusUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimStatusUpdateServlet</servlet-name>
+        <url-pattern>/ClaimStatusUpdateServlet</url-pattern>
     </servlet-mapping>
 
     <servlet>
