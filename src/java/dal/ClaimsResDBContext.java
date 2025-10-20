@@ -18,7 +18,7 @@ public class ClaimsResDBContext extends DBContext {
             return claimResponses;
         }
         
-        String sql = "SELECT * FROM ClaimsRes WHERE claim_id = ? ORDER BY createDate DESC";
+        String sql = "SELECT * FROM ClaimsRes WHERE claim_id = ? ORDER BY id ASC";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimId);

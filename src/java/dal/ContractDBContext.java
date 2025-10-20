@@ -220,7 +220,7 @@ public class ContractDBContext extends DBContext {
             sql.append("WHERE ").append(String.join(" AND ", conditions));
         }
         
-        sql.append(" ORDER BY c.contract_id DESC");
+        sql.append(" ORDER BY c.contract_id ASC");
         
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < parameters.size(); i++) {
@@ -250,7 +250,7 @@ public class ContractDBContext extends DBContext {
         String sql = "SELECT c.* FROM Contract c " +
                     "LEFT JOIN applications a ON c.application_id = a.id " +
                     "WHERE a.startDate >= ? AND a.endDate <= ? " +
-                    "ORDER BY c.contract_id DESC";
+                    "ORDER BY c.contract_id ASC";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDate(1, java.sql.Date.valueOf(dateFrom));
@@ -277,7 +277,7 @@ public class ContractDBContext extends DBContext {
         String sql = "SELECT c.* FROM Contract c " +
                     "LEFT JOIN applications a ON c.application_id = a.id " +
                     "WHERE a.product_id = ? " +
-                    "ORDER BY c.contract_id DESC";
+                    "ORDER BY c.contract_id ASC";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, productId);

@@ -19,7 +19,7 @@ public class ClaimsDBContext extends DBContext {
             return claims; // Trả về danh sách rỗng thay vì throw exception
         }
         
-        String sql = "SELECT * FROM claims WHERE contract_id = ? ORDER BY requestDate DESC";
+        String sql = "SELECT * FROM claims WHERE contract_id = ? ORDER BY id ASC";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, contractId);
@@ -92,7 +92,7 @@ public class ClaimsDBContext extends DBContext {
             parameters.add(typeFilter);
         }
         
-        sql.append("ORDER BY c.requestDate DESC");
+        sql.append("ORDER BY c.id ASC");
         
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < parameters.size(); i++) {
