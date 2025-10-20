@@ -1,47 +1,47 @@
 package Controller;
 
-import Model.Product;
-import dal.ProductDBController;
+import Model.InsuranceProduct;
+import dal.InsuranceDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.ArrayList;
 
 public class FilterProduct extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDBController productDB = new ProductDBController();
+        InsuranceDBContext insuranceDAO = new InsuranceDBContext();
         String filter = request.getParameter("filter");
         if (filter.equals("all")) {
-            List<Product> products = productDB.getAllProducts();
+            ArrayList<InsuranceProduct> products = insuranceDAO.getAll();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
             request.setAttribute("page", "view_product.jsp");
             request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
         } else if (filter.equals("domestic")) {
-            List<Product> products = productDB.getDomesticProducts();
+            ArrayList<InsuranceProduct> products = insuranceDAO.getDomesticProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
             request.setAttribute("page", "view_product.jsp");
             request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
         } else if (filter.equals("international")) {
-            List<Product> products = productDB.getInternationProducts();
+            ArrayList<InsuranceProduct> products = insuranceDAO.getInternationalProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
             request.setAttribute("page", "view_product.jsp");
             request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
         } else if (filter.equals("nonactive")) {
-            List<Product> products = productDB.getNonActiveProducts();
+            ArrayList<InsuranceProduct> products = insuranceDAO.getNonActiveProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
             request.setAttribute("page", "view_product.jsp");
             request.getRequestDispatcher("dashboard.jsp").forward(request, response);
         } else if (filter.equals("active")) {
-            List<Product> products = productDB.getActiveProducts();
+            ArrayList<InsuranceProduct> products = insuranceDAO.getActiveProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
             request.setAttribute("page", "view_product.jsp");
             request.getRequestDispatcher("dashboard.jsp").forward(request, response);

@@ -156,6 +156,108 @@ public class ClaimsDBContext extends DBContext {
         return claimTypes;
     }
     
+    // Method để cập nhật trạng thái claim với lý do
+    public boolean updateClaimStatusWithReason(int claimId, String newStatus, String reason) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return false;
+        }
+        
+        String sql = "UPDATE claims SET claim_status = ? WHERE id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, claimId);
+            
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Updated claim " + claimId + " status to " + newStatus + 
+                             (reason != null && !reason.trim().isEmpty() ? " with reason: " + reason : "") + 
+                             ". Rows affected: " + rowsAffected);
+            
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error updating claim status: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Method để cập nhật trạng thái claim
+    public boolean updateClaimStatus(int claimId, String newStatus, String reason) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return false;
+        }
+        
+        String sql = "UPDATE claims SET claim_status = ? WHERE id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, claimId);
+            
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Updated claim " + claimId + " status to " + newStatus + ". Rows affected: " + rowsAffected);
+            
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error updating claim status: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Method để lấy claim theo ID
+    public Claims getClaimById(int claimId) {
+        Claims claim = null;
+        
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return claim;
+        }
+        
+        String sql = "SELECT * FROM claims WHERE id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, claimId);
+            System.out.println("Executing SQL: " + sql + " with claimId: " + claimId);
+            ResultSet rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                claim = new Claims();
+                claim.setId(rs.getInt("id"));
+                claim.setContract_id(rs.getInt("contract_id"));
+                claim.setRequestDate(rs.getDate("requestDate"));
+                claim.setClaim_type(rs.getString("claim_type"));
+                claim.setDescription(rs.getString("description"));
+                claim.setPayment_bank(rs.getString("payment_bank"));
+                claim.setPayment_number(rs.getString("payment_number"));
+                claim.setRelated_img(rs.getString("related_img"));
+                claim.setRelated_file(rs.getString("related_file"));
+                claim.setClaim_status(rs.getString("claim_status"));
+                
+                // Try to get claim_amount if column exists
+                try {
+                    if (rs.findColumn("claim_amount") > 0) {
+                        claim.setClaim_amount(rs.getBigDecimal("claim_amount"));
+                    } else {
+                        claim.setClaim_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setClaim_amount(null);
+                }
+                
+                System.out.println("Found claim with ID: " + claimId);
+            } else {
+                System.out.println("No claim found with ID: " + claimId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        
+        return claim;
+    }
+    
     // Method để test connection và kiểm tra bảng claims
     public boolean testConnection() {
         try {
