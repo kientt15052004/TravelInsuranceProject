@@ -228,10 +228,10 @@
             if (!table) return;
 
             const tbody = table.querySelector("tbody");
-            const rows = Array.from(tbody.querySelectorAll("tr"));
-            const paginationContainer = document.createElement("div");
+            const rows = Array.from(tbody.querySelectorAll("tr")); //Tạo mảng các thẻ tr
+            const paginationContainer = document.createElement("div"); //Nơi chứa nút phân trang
             paginationContainer.classList.add("pagination-container");
-            table.parentNode.appendChild(paginationContainer);
+            table.parentNode.appendChild(paginationContainer); // Chèn phần tử con vào phần tử cha của table
 
             let currentPage = 1;
             let pageSize = 10;
@@ -243,7 +243,8 @@
                 rows.slice(start, end).forEach(row => tbody.appendChild(row));
                 renderPagination();
             }
-
+             
+            //Tạo nút phân trang
             function renderPagination() {
                 const totalPages = Math.ceil(rows.length / pageSize);
                 paginationContainer.innerHTML = "";

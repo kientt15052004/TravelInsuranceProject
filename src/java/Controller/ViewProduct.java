@@ -17,9 +17,9 @@ public class ViewProduct extends HttpServlet {
         InsuranceDBContext insuranceDAO = new InsuranceDBContext();
         
         // Lấy các parameter từ form search
-        String searchTerm = request.getParameter("search");
-        String typeFilter = request.getParameter("type");
-        String packageFilter = request.getParameter("package_type");
+        String searchTerm = request.getParameter("search"); //Tên product
+        String typeFilter = request.getParameter("type"); // Trong nước or ngoài nước
+        String packageFilter = request.getParameter("package_type"); //trạng thái hoạt động
         String statusFilter = request.getParameter("status");
         
         System.out.println("DEBUG: Search parameters - search: " + searchTerm + 

@@ -321,7 +321,7 @@
                 </div>
 
                 <!-- Hidden inputs for form submission -->
-                <input type="hidden" name="price" class="price">
+                <input type="hidden" name="price" class="price"> <!-- input ẩn chứa giá trị gốc của sản phẩm-->
                 <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate">
                 <input type="hidden" name="international_rate_1_7" class="international_rate_1_7">
                 <input type="hidden" name="international_rate_8_30" class="international_rate_8_30">
@@ -336,9 +336,9 @@
                     const internationalOption = document.querySelector('input[value="international"]');
                     const domesticSection = document.querySelector('.domestic-section');
                     const internationalSection = document.querySelector('.international-section');
-                    const domesticPricingSection = document.querySelector('.domestic-pricing-section');
-                    const internationalPricingSection = document.querySelector('.international-pricing-section');
-                    const calculateBtn = document.querySelector('.btn-calculate');
+                    const domesticPricingSection = document.querySelector('.domestic-pricing-section'); //Phần công thức và tính phí trong nước
+                    const internationalPricingSection = document.querySelector('.international-pricing-section'); //Phần công thức và tính phí ngoài nước
+                    const calculateBtn = document.querySelector('.btn-calculate'); //Nút tính phí
                     const form = document.querySelector('form');
                     const priceField = document.querySelector('.price'); // Hidden input cho giá sản phẩm cuối cùng (Base Price)
 
@@ -377,7 +377,7 @@
                         });
                     }
 
-                    function calculateFee() {
+                    function calculateFee() { // Kiểm tra bên chọn trong nước nước và ngoài ngoài để tính phí phù hợp.
                         if (domesticOption && domesticOption.checked) {
                             calculateDomesticFee();
                         } else if (internationalOption && internationalOption.checked) {
@@ -387,6 +387,7 @@
                         }
                     }
 
+                    // Tính phí trong nước
                     function calculateDomesticFee() {
                         const coefficient = domesticPricingSection.querySelector('.coefficient-input');
                         const days = domesticPricingSection.querySelector('input[placeholder="Nhập vào số ngày...."]');
@@ -410,8 +411,8 @@
 
                             const value20 = Number(days.value) || 1;
                             const value21 = Number(people.value) || 1;
-                            const coefficient_value_1 = Number(coefficient.value) || 0;
-
+                            const coefficient_value_1 = Number(coefficient.value) || 0; 
+                            //Kiểm tra xem đã nhập quyền lợi chưa
                             const hasValidBenefit = value1 > 0 || value2 > 0 || value3 > 0 || value4 > 0 || value5 > 0 || value6 > 0;
 
                             let actualCoefficient = coefficient_value_1;
@@ -424,7 +425,7 @@
                                             (coefficient_value_1 >= 1 && coefficient_value_1 <= 10))) {
 
                                 let max = Math.max(value1, value2, value3, value4, value5, value6);
-                                const base_price = actualCoefficient * max;
+                                const base_price = actualCoefficient * max; //Giá trị gốc
                                 const fee_preview = base_price * value20 * value21;
 
                                 result.textContent = fee_preview.toLocaleString('vi-VN');
@@ -437,7 +438,7 @@
                                 if (domesticRateField)
                                     domesticRateField.value = actualCoefficient;
                             } else {
-                                alert('Vui lòng nhập ít nhất một quyền lợi bảo hiểm và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10% (hoặc 0.0001 - 0.1)!');
+                                alert('Vui lòng nhập ít nhất một quyền lợi bảo hiểm và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10%!');
                                 result.textContent = '0';
                                 if (priceField)
                                     priceField.value = '0'; // Reset giá trị
@@ -447,6 +448,7 @@
                         }
                     }
 
+             // Tính phí ngoài
             function calculateInternationalFee() {
             const rate1_7 = document.querySelector('input[name="international_rate_1_7"]');
             // Lấy các Rate khác
