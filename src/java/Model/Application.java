@@ -27,11 +27,12 @@ public class Application {
     private List<Traveler> travelers;
     private BuyerInfo buyerInfo;
     private InsuranceProduct insurance;
+    private int benefit_id;
 
     public Application() {
     }
 
-    public Application(int id, int purchaser_id, int product_id, String type, String destination, Date startDate, Date endDate, int travelers_quantity, BigDecimal total_price, List<Traveler> travelers, BuyerInfo buyerInfo, InsuranceProduct insurance) {
+    public Application(int id, int purchaser_id, int product_id, String type, String destination, Date startDate, Date endDate, int travelers_quantity, BigDecimal total_price, List<Traveler> travelers, BuyerInfo buyerInfo, InsuranceProduct insurance, int benefit_id) {
         this.id = id;
         this.purchaser_id = purchaser_id;
         this.product_id = product_id;
@@ -44,6 +45,15 @@ public class Application {
         this.travelers = travelers;
         this.buyerInfo = buyerInfo;
         this.insurance = insurance;
+        this.benefit_id = benefit_id;
+    }
+
+    public int getBenefit_id() {
+        return benefit_id;
+    }
+
+    public void setBenefit_id(int benefit_id) {
+        this.benefit_id = benefit_id;
     }
 
     public int getId() {
