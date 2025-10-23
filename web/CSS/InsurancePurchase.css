@@ -9,19 +9,18 @@ body {
     background-color: #f5f5f5;
 }
 
-.frame {
-    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-    min-height: 100vh;
-    padding: 20px;
+header {
+    background-color: #FFD700;
+    padding: 16px 30px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* Container chính */
 .container {
-    max-width: 1200px;
     margin: 0 auto;
     background: white;
     border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 0px 30px;
 }
 
 /* Header */
@@ -860,3 +859,74 @@ body {
         position: static;
     }
 }
+
+/* Payment Card Styles */
+.payment-card {
+    height: fit-content;
+}
+
+.payment-summary-card {
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.security-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+.payment-methods-info {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Payment Summary Section */
+.payment-summary-section {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.payment-summary-section .section-title {
+    color: #333;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e74c3c;
+}
+
+.payment-summary-section .detail-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.payment-summary-section .detail-row:last-child {
+    border-bottom: none;
+}
+
+/* Update Bottom Bar for Step 5 */
+.bottom-bar .continue-btn {
+    transition: all 0.3s;
+}
+
+.bottom-bar .continue-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design Update */
+@media (max-width: 768px) {
+    .payment-summary-card {
+        position: static;
+    }
+}  

@@ -9,7 +9,8 @@ let state = {
     startDate: '',
     endDate: '',
     buyerInfo: {},
-    insuredPersons: []
+    insuredPersons: [],
+    paymentInfo: {}
 };
 let currentStep = 1;
 
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initBottomBar();
     initTabSwitching();
     initBirthDateValidation();
+    initPaymentForm();
 
     // Set default values
     const today = new Date().toISOString().split('T')[0];
@@ -37,24 +39,55 @@ document.addEventListener('DOMContentLoaded', function () {
     updateBenefitsDisplay();
 });
 
+// Initialize payment form
+function initPaymentForm() {
+    const cardInput = document.getElementById('cardNumber');
+    if (cardInput) {
+        cardInput.addEventListener('input', formatCardNumber);
+    }
+
+    const expiryInput = document.getElementById('expiryDate');
+    if (expiryInput) {
+        expiryInput.addEventListener('input', formatExpiryDate);
+    }
+
+    const cvvInput = document.getElementById('cvv');
+    if (cvvInput) {
+        cvvInput.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 3);
+        });
+    }
+}
+
+function formatCardNumber(e) {
+    let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+    let formattedValue = value.replace(/(.{4})/g, '$1 ').trim();
+    e.target.value = formattedValue.slice(0, 19);
+}
+
+function formatExpiryDate(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.length >= 2) {
+        value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    }
+    e.target.value = value.slice(0, 5);
+}
+
 // Initialize birth date validation
 function initBirthDateValidation() {
     const today = new Date().toISOString().split('T')[0];
 
-    // Buyer's birth date
     const buyerBirthDate = document.getElementById('birthDate');
     if (buyerBirthDate) {
         buyerBirthDate.setAttribute('max', today);
     }
 
-    // Insured person's birth date in modal
     const personBirthDate = document.getElementById('personBirthDate');
     if (personBirthDate) {
         personBirthDate.setAttribute('max', today);
     }
 }
 
-// Validate birth date (not in the future)
 function validateBirthDate(birthDate) {
     if (!birthDate)
         return false;
@@ -156,7 +189,6 @@ function validateDates() {
     return true;
 }
 
-// Calculate number of days
 function calculateDays() {
     if (!state.startDate || !state.endDate)
         return 1;
@@ -164,29 +196,19 @@ function calculateDays() {
     const start = new Date(state.startDate);
     const end = new Date(state.endDate);
     const diffTime = end - start;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end date
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
     return diffDays > 0 ? diffDays : 1;
 }
 
-// Update total amount display
 function updateTotalAmount() {
     const totalElement = document.getElementById('totalAmount');
     const days = calculateDays();
-    // Use at least 1 person for calculation (even if no travelers added yet)
     const numberOfPeople = state.insuredPersons.length > 0 ? state.insuredPersons.length : 1;
     const total = state.selectedPackage.price * numberOfPeople * days;
     totalElement.textContent = formatCurrency(total) + ' VNĐ';
 }
 
-//// Update total amount display
-//function updateTotalAmount() {
-//    const totalElement = document.getElementById('totalAmount');
-//    const total = state.selectedPackage.price * state.insuredPersons.length;
-//    totalElement.textContent = formatCurrency(total) + ' VNĐ';
-//}
-
-// Update benefits display
 function updateBenefitsDisplay() {
     const benefitAmounts = document.querySelectorAll('.benefit-amount');
 
@@ -197,9 +219,13 @@ function updateBenefitsDisplay() {
     });
 }
 
-// Format currency
 function formatCurrency(amount) {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+//    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    if (Number.isInteger(amount)) {
+        return amount.toLocaleString('vi-VN', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+    } else {
+        return amount.toLocaleString('vi-VN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
 }
 
 // Tab switching (Individual/Organization)
@@ -242,6 +268,8 @@ function handleBack() {
         moveToStep(2);
     } else if (currentStep === 4) {
         moveToStep(3);
+    } else if (currentStep === 5) {
+        moveToStep(4);
     } else if (currentStep === 1) {
         if (confirm('Are you sure you want to go back? Selected information will be lost.')) {
             window.history.back();
@@ -259,25 +287,26 @@ function handleContinue() {
         renderConfirmation();
         moveToStep(4);
     } else if (currentStep === 4) {
+        renderPaymentSummary();
+        moveToStep(5);
+    } else if (currentStep === 5 && validateStep5()) {
+        savePaymentInfo();
         submitForm();
     }
 }
 
 function moveToStep(step) {
-    // Hide all steps
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         const content = document.getElementById(`step${i}Content`);
         if (content)
             content.style.display = 'none';
     }
 
-    // Show target step
     const targetContent = document.getElementById(`step${step}Content`);
     if (targetContent) {
         targetContent.style.display = step === 1 ? 'grid' : 'block';
     }
 
-    // Update progress indicators
     updateProgressIndicator(step);
 
     currentStep = step;
@@ -285,7 +314,7 @@ function moveToStep(step) {
 }
 
 function updateProgressIndicator(step) {
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 5; i++) {
         const indicator = document.getElementById(`step${i}`);
         if (!indicator)
             continue;
@@ -346,7 +375,6 @@ function validateStep2() {
             return false;
         }
 
-        // Validate birth date
         if (!validateBirthDate(birthDate)) {
             return false;
         }
@@ -412,6 +440,52 @@ function validateStep3() {
     return true;
 }
 
+function validateStep5() {
+    const cardholderName = document.getElementById('cardholderName').value.trim();
+    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+    const expiryDate = document.getElementById('expiryDate').value;
+    const cvv = document.getElementById('cvv').value;
+
+    if (!cardholderName) {
+        alert('Please enter cardholder name');
+        return false;
+    }
+
+    if (cardNumber.length !== 16 || isNaN(cardNumber)) {
+        alert('Please enter a valid 16-digit card number');
+        return false;
+    }
+
+    if (!expiryDate || expiryDate.length !== 5) {
+        alert('Please enter expiry date in MM/YY format');
+        return false;
+    }
+
+    const [month, year] = expiryDate.split('/');
+    const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
+    const today = new Date();
+    if (expiry <= today) {
+        alert('Card has expired');
+        return false;
+    }
+
+    if (cvv.length !== 3 || isNaN(cvv)) {
+        alert('Please enter a valid 3-digit CVV');
+        return false;
+    }
+
+    return true;
+}
+
+function savePaymentInfo() {
+    state.paymentInfo = {
+        cardholderName: document.getElementById('cardholderName').value.trim(),
+        cardNumber: document.getElementById('cardNumber').value.replace(/\s/g, ''),
+        expiryDate: document.getElementById('expiryDate').value,
+        cvv: document.getElementById('cvv').value
+    };
+}
+
 // Step 3: Add Insured Person
 function openAddPersonModal() {
     document.getElementById('addPersonModal').style.display = 'flex';
@@ -435,7 +509,6 @@ function saveInsuredPerson() {
         return;
     }
 
-    // Validate birth date
     if (!validateBirthDate(birthDate)) {
         return;
     }
@@ -554,15 +627,40 @@ function renderConfirmation() {
     `;
 }
 
-function submitForm() {
-    // Check terms agreement checkbox
-    const agreeTerms = document.getElementById('agreeTerms');
-    if (!agreeTerms.checked) {
-        alert('Please agree to the Personal Data Protection Policy');
-        return;
-    }
+// Step 5: Render payment summary
+function renderPaymentSummary() {
+    const container = document.getElementById('paymentSummaryContent');
+    const days = calculateDays();
+    const totalPrice = state.selectedPackage.price * state.insuredPersons.length * days;
 
-    // Get InsuranceId from URL
+    container.innerHTML = `
+        <div class="payment-summary-section">
+            <h3 class="section-title">Order Summary</h3>
+            <div class="detail-row">
+                <span class="detail-label">Package:</span>
+                <span class="detail-value">${state.selectedPackage.name}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Number of Travelers:</span>
+                <span class="detail-value">${state.insuredPersons.length}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Number of Days:</span>
+                <span class="detail-value">${days}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Price per Person:</span>
+                <span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span>
+            </div>
+            <div class="detail-row" style="border-top: 2px solid #e74c3c; padding-top: 12px; margin-top: 12px;">
+                <span class="detail-label" style="font-weight: 600; font-size: 15px;">Total Amount:</span>
+                <span class="detail-value" style="font-weight: 600; font-size: 16px; color: #e74c3c;">${formatCurrency(totalPrice)} VNĐ</span>
+            </div>
+        </div>
+    `;
+}
+
+function submitForm() {
     const urlParams = new URLSearchParams(window.location.search);
     const insuranceId = urlParams.get('insuranceId') || urlParams.get('id');
 
@@ -571,30 +669,20 @@ function submitForm() {
         return;
     }
 
-    // Create form to submit
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = 'purchase-insurance'; // Change to your servlet URL
+    form.action = 'purchase-insurance';
 
-    // Add InsuranceId
     addHiddenField(form, 'insuranceId', insuranceId);
-
-    // Add Type (package name)
-    addHiddenField(form, 'type', state.selectedPackage.name);
-
-    // Add StartDate and EndDate
+    addHiddenField(form, 'type', INSURANCE_TYPE);
+    addHiddenField(form, 'benefit-id', BENEFIT_ID);
     addHiddenField(form, 'startDate', state.startDate);
     addHiddenField(form, 'endDate', state.endDate);
 
-    // Add TotalPrice
-//    const totalPrice = state.selectedPackage.price * state.insuredPersons.length;
-
-// MỚI (đã có số ngày)
     const days = calculateDays();
     const totalPrice = state.selectedPackage.price * state.insuredPersons.length * days;
     addHiddenField(form, 'totalPrice', totalPrice);
 
-    // Add buyer information
     if (state.buyerInfo.type === 'individual') {
         addHiddenField(form, 'buyerType', 'individual');
         addHiddenField(form, 'buyerIdNumber', state.buyerInfo.idNumber);
@@ -614,7 +702,6 @@ function submitForm() {
         addHiddenField(form, 'buyerAddress', state.buyerInfo.address);
     }
 
-    // Add insured persons list
     addHiddenField(form, 'travelersCount', state.insuredPersons.length);
 
     state.insuredPersons.forEach((person, index) => {
@@ -626,7 +713,12 @@ function submitForm() {
         addHiddenField(form, `traveler[${index}].email`, person.email);
     });
 
-    // Add form to body and submit
+    // Add payment information
+    addHiddenField(form, 'paymentMethod', 'bank_card');
+    addHiddenField(form, 'cardholderName', state.paymentInfo.cardholderName);
+    addHiddenField(form, 'cardNumber', state.paymentInfo.cardNumber);
+    addHiddenField(form, 'expiryDate', state.paymentInfo.expiryDate);
+
     document.body.appendChild(form);
     form.submit();
 }
@@ -639,17 +731,13 @@ function addHiddenField(form, name, value) {
     form.appendChild(input);
 }
 
-// Thêm vào cuối file
 window.addEventListener('pageshow', function (event) {
-    // Kiểm tra nếu trang được load từ cache (bấm back)
     if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
-        // Reset về step 1
         resetForm();
     }
 });
 
 function resetForm() {
-    // Reset state
     state = {
         passengers: 1,
         selectedPackage: {
@@ -660,30 +748,24 @@ function resetForm() {
         startDate: '',
         endDate: '',
         buyerInfo: {},
-        insuredPersons: []
+        insuredPersons: [],
+        paymentInfo: {}
     };
 
     currentStep = 1;
 
-    // Reset form inputs
     document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"]').forEach(input => {
         input.value = '';
     });
 
-    // Reset date inputs to today
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('startDate').value = today;
     document.getElementById('endDate').value = today;
     state.startDate = today;
     state.endDate = today;
 
-    // Clear insured persons list
     renderInsuredPersonsList();
-
-    // Move to step 1
     moveToStep(1);
-
-    // Update display
     updateTotalAmount();
     updateBenefitsDisplay();
 }
