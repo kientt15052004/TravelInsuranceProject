@@ -48,7 +48,7 @@ public class ClaimsResDBContext extends DBContext {
                     claimRes.setUser_fullname("Unknown User");
                 }
                 
-                claimRes.setCreateDate(rs.getDate("createDate"));
+                claimRes.setCreateDate(rs.getTimestamp("createDate"));
                 claimRes.setDescription(rs.getString("description"));
                 claimRes.setRelated_img(rs.getString("related_img"));
                 claimRes.setRelated_file(rs.getString("related_file"));
@@ -84,7 +84,7 @@ public class ClaimsResDBContext extends DBContext {
                 ps.setNull(2, java.sql.Types.INTEGER);
             }
             
-            ps.setDate(3, new java.sql.Date(claimRes.getCreateDate().getTime()));
+            ps.setTimestamp(3, new java.sql.Timestamp(claimRes.getCreateDate().getTime()));
             ps.setString(4, claimRes.getDescription());
             ps.setString(5, claimRes.getRelated_img());
             ps.setString(6, claimRes.getRelated_file());
@@ -112,7 +112,7 @@ public class ClaimsResDBContext extends DBContext {
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimId);
-            ps.setDate(2, new java.sql.Date(createDate.getTime()));
+            ps.setTimestamp(2, new java.sql.Timestamp(createDate.getTime()));
             ps.setString(3, description);
             ps.setString(4, related_img);
             ps.setString(5, related_file);
