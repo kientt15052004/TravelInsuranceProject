@@ -35,5 +35,5 @@ public class navigate extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-    
+        
 }

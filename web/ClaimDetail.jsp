@@ -294,7 +294,7 @@
                     </div>
                 </c:if>
 
-                <!-- Claim Responses Section -->
+                <!-- Claim Responses Section - Chat Style -->
                 <div class="claim-responses-card">
                     <div class="card-header">
                         <h2>
@@ -305,100 +305,135 @@
                             <span class="count-badge">${claimResponses.size()} phản hồi</span>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body chat-container">
                         <c:choose>
                             <c:when test="${not empty claimResponses}">
-                                <div class="responses-timeline">
+                                <div class="chat-messages">
                                     <c:forEach var="response" items="${claimResponses}">
-                                        <div class="response-item">
-                                            <div class="response-header">
-                                                <div class="response-info">
-                                                    <div class="response-id">
-                                                        <i class="fas fa-reply"></i>
-                                                        Phản hồi #${response.claimRes_id}
-                                                    </div>
-                                                    <div class="response-date">
-                                                        <i class="fas fa-calendar"></i>
+                                        <div class="message-item">
+                                            <div class="message-avatar">
+                                                <i class="fas fa-user-circle"></i>
+                                            </div>
+                                            <div class="message-content">
+                                                <div class="message-header">
+                                                    <c:choose>
+                                                        <c:when test="${not empty response.user_fullname}">
+                                                            <span class="message-sender">${response.user_fullname}</span>
+                                                        </c:when>
+                                                        <c:when test="${not empty response.user_name}">
+                                                            <span class="message-sender">${response.user_name}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="message-sender">Staff</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <span class="message-date">
                                                         <fmt:formatDate value="${response.createDate}" pattern="dd/MM/yyyy HH:mm"/>
-                                                    </div>
-                                                </div>
-                                                <div class="response-status">
+                                                    </span>
                                                     <span class="status-badge status-${response.status.toLowerCase()}">
                                                         ${response.status}
                                                     </span>
                                                 </div>
-                                            </div>
-                                            
-                                            <div class="response-content">
-                                                <div class="response-description">
-                                                    <h4>
-                                                        <i class="fas fa-align-left"></i>
-                                                        Nội dung phản hồi
-                                                    </h4>
-                                                    <div class="description-text">
-                                                        <c:choose>
-                                                            <c:when test="${not empty response.description}">
-                                                                ${response.description}
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="no-data">Không có nội dung phản hồi</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </div>
+                                                <div class="message-bubble">
+                                                    <c:choose>
+                                                        <c:when test="${not empty response.description}">
+                                                            ${response.description}
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="no-data">Không có nội dung</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                                 
-                                                <!-- Response Attachments -->
+                                                <!-- Message Attachments -->
                                                 <c:if test="${not empty response.related_img || not empty response.related_file}">
-                                                    <div class="response-attachments">
-                                                        <h4>
-                                                            <i class="fas fa-paperclip"></i>
-                                                            Tài liệu đính kèm
-                                                        </h4>
-                                                        <div class="attachments-list">
-                                                            <c:if test="${not empty response.related_img}">
-                                                                <div class="attachment-item">
-                                                                    <div class="attachment-icon">
-                                                                        <i class="fas fa-image"></i>
-                                                                    </div>
-                                                                    <div class="attachment-content">
-                                                                        <img src="${response.related_img}" 
-                                                                             alt="Response Image" 
-                                                                             class="response-image"
-                                                                             onclick="openImageModal(this.src)">
-                                                                    </div>
-                                                                </div>
-                                                            </c:if>
-                                                            
-                                                            <c:if test="${not empty response.related_file}">
-                                                                <div class="attachment-item">
-                                                                    <div class="attachment-icon">
-                                                                        <i class="fas fa-file"></i>
-                                                                    </div>
-                                                                    <div class="attachment-content">
-                                                                        <a href="${pageContext.request.contextPath}/Image/${response.related_file}" 
-                                                                           class="file-download" 
-                                                                           target="_blank">
-                                                                            <i class="fas fa-download"></i>
-                                                                            Tải xuống tài liệu
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </c:if>
-                                                        </div>
+                                                    <div class="message-attachments">
+                                                        <c:if test="${not empty response.related_img}">
+                                                            <div class="attachment-preview">
+                                                                <img src="${response.related_img}" 
+                                                                     alt="Attachment" 
+                                                                     class="attachment-image"
+                                                                     onclick="openImageModal(this.src)">
+                                                            </div>
+                                                        </c:if>
+                                                        
+                                                        <c:if test="${not empty response.related_file}">
+                                                            <div class="attachment-file">
+                                                                <a href="${pageContext.request.contextPath}/Image/${response.related_file}" 
+                                                                   class="file-link" 
+                                                                   target="_blank">
+                                                                    ${response.related_file}
+                                                                </a>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
                                                 </c:if>
                                             </div>
                                         </div>
                                     </c:forEach>
                                 </div>
+                                
+                                <!-- Chat Input Form -->
+                                <div class="chat-input-section">
+                                    <form action="${pageContext.request.contextPath}/AddClaimResponseServlet" method="POST" class="chat-form">
+                                        <input type="hidden" name="claimId" value="${claim.id}">
+                                        <div class="chat-input-wrapper">
+                                            <textarea 
+                                                name="description" 
+                                                id="chatMessageInput" 
+                                                class="chat-input"
+                                                placeholder="Nhập phản hồi của bạn..."
+                                                rows="3"
+                                                required></textarea>
+                                            <div class="chat-actions">
+                                                <select name="status" class="status-select">
+                                                    <option value="open">Open</option>
+                                                    <option value="follow_up">Follow Up</option>
+                                                    <option value="resolved">Resolved</option>
+                                                </select>
+                                                <button type="submit" class="btn-send">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                    Gửi phản hồi
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </c:when>
                             <c:otherwise>
-                                <div class="no-responses">
-                                    <div class="no-responses-icon">
+                                <div class="chat-empty">
+                                    <div class="empty-icon">
                                         <i class="fas fa-comments"></i>
                                     </div>
                                     <h3>Chưa có phản hồi nào</h3>
                                     <p>Claim này chưa có phản hồi hoặc theo dõi nào từ phía nhân viên.</p>
+                                    
+                                    <!-- Chat Input Form for empty state -->
+                                    <div class="chat-input-section-empty">
+                                        <form action="${pageContext.request.contextPath}/AddClaimResponseServlet" method="POST" class="chat-form">
+                                            <input type="hidden" name="claimId" value="${claim.id}">
+                                            <div class="chat-input-wrapper">
+                                                <textarea 
+                                                    name="description" 
+                                                    id="chatMessageInputEmpty" 
+                                                    class="chat-input"
+                                                    placeholder="Nhập phản hồi đầu tiên..."
+                                                    rows="3"
+                                                    required></textarea>
+                                                <div class="chat-actions">
+                                                    <select name="status" class="status-select">
+                                                        <option value="open">Open</option>
+                                                        <option value="follow_up">Follow Up</option>
+                                                        <option value="resolved">Resolved</option>
+                                                    </select>
+                                                    <button type="submit" class="btn-send">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                        Gửi phản hồi
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </c:otherwise>
                         </c:choose>

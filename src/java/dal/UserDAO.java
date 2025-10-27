@@ -309,7 +309,7 @@ public class UserDAO extends DBContext {
         String sql = "SELECT cl.* FROM claims cl " +
                     "JOIN Contract c ON cl.contract_id = c.contract_id " +
                     "JOIN applications a ON c.application_id = a.id " +
-                    "WHERE a.purchaser_id = ? ORDER BY cl.id ASC";
+                    "WHERE a.purchaser_id = ? ORDER BY CASE cl.claim_status WHEN 'pending' THEN 1 WHEN 'approved' THEN 2 WHEN 'rejected' THEN 3 ELSE 4 END, cl.requestDate ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
