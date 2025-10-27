@@ -209,7 +209,6 @@ public class ContractDBContext extends DBContext {
         }
 
         sql.append(" ORDER BY c.contract_id DESC");
-
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < parameters.size(); i++) {
                 ps.setObject(i + 1, parameters.get(i));
@@ -239,7 +238,6 @@ public class ContractDBContext extends DBContext {
                 + "LEFT JOIN applications a ON c.application_id = a.id "
                 + "WHERE a.startDate >= ? AND a.endDate <= ? "
                 + "ORDER BY c.contract_id DESC";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setDate(1, java.sql.Date.valueOf(dateFrom));
             ps.setDate(2, java.sql.Date.valueOf(dateTo));
@@ -266,7 +264,6 @@ public class ContractDBContext extends DBContext {
                 + "LEFT JOIN applications a ON c.application_id = a.id "
                 + "WHERE a.product_id = ? "
                 + "ORDER BY c.contract_id DESC";
-
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, productId);
 

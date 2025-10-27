@@ -13,6 +13,9 @@ import java.util.Date;
 public class ClaimsRes {
     private int claimRes_id;
     private int claim_id;
+    private int user_id;
+    private String user_name;
+    private String user_fullname;
     private Date createDate;
     private String description;
     private String related_img;
@@ -22,9 +25,10 @@ public class ClaimsRes {
     public ClaimsRes() {
     }
 
-    public ClaimsRes(int claimRes_id, int claim_id, Date createDate, String description, String related_img, String related_file, String status) {
+    public ClaimsRes(int claimRes_id, int claim_id, int user_id, Date createDate, String description, String related_img, String related_file, String status) {
         this.claimRes_id = claimRes_id;
         this.claim_id = claim_id;
+        this.user_id = user_id;
         this.createDate = createDate;
         this.description = description;
         this.related_img = related_img;
@@ -86,5 +90,29 @@ public class ClaimsRes {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
+    }
+
+    public String getUser_fullname() {
+        return user_fullname;
+    }
+
+    public void setUser_fullname(String user_fullname) {
+        this.user_fullname = user_fullname;
     }
 }

@@ -253,6 +253,7 @@
                                     <th>Mô tả</th>
                                     <th>Ngân hàng</th>
                                     <th>Trạng thái</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -282,6 +283,14 @@
                                                     <c:otherwise>${claim.claim_status}</c:otherwise>
                                                 </c:choose>
                                             </span>
+                                        </td>
+                                        <td class="actions-cell">
+                                            <div class="action-buttons">
+                                                <a href="${pageContext.request.contextPath}/ClaimDetailServlet?id=${claim.id}" class="btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>
+                                                    Xem chi tiết
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>

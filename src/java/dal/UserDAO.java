@@ -200,7 +200,7 @@ public class UserDAO extends DBContext {
     // Get all users
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM users ORDER BY id DESC";
+        String sql = "SELECT * FROM users ORDER BY id ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
@@ -255,7 +255,7 @@ public class UserDAO extends DBContext {
     // Get applications by user ID
     public List<Application> getApplicationsByUserId(int userId) {
         List<Application> applications = new ArrayList<>();
-        String sql = "SELECT * FROM applications WHERE purchaser_id = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM applications WHERE purchaser_id = ? ORDER BY id ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
@@ -282,9 +282,9 @@ public class UserDAO extends DBContext {
     // Get contracts by user ID
     public List<Contract> getContractsByUserId(int userId) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT c.* FROM contract c " +
+        String sql = "SELECT c.* FROM Contract c " +
                     "JOIN applications a ON c.application_id = a.id " +
-                    "WHERE a.purchaser_id = ? ORDER BY c.contract_id DESC";
+                    "WHERE a.purchaser_id = ? ORDER BY c.contract_id ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
@@ -307,9 +307,9 @@ public class UserDAO extends DBContext {
     public List<Claims> getClaimsByUserId(int userId) {
         List<Claims> claims = new ArrayList<>();
         String sql = "SELECT cl.* FROM claims cl " +
-                    "JOIN contract c ON cl.contract_id = c.contract_id " +
+                    "JOIN Contract c ON cl.contract_id = c.contract_id " +
                     "JOIN applications a ON c.application_id = a.id " +
-                    "WHERE a.purchaser_id = ? ORDER BY cl.id DESC";
+                    "WHERE a.purchaser_id = ? ORDER BY CASE cl.claim_status WHEN 'pending' THEN 1 WHEN 'approved' THEN 2 WHEN 'rejected' THEN 3 ELSE 4 END, cl.requestDate ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
@@ -371,7 +371,7 @@ public class UserDAO extends DBContext {
             parameters.add(status.trim());
         }
         
-        sql.append(" ORDER BY id DESC");
+        sql.append(" ORDER BY id ASC");
         
         try (PreparedStatement st = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < parameters.size(); i++) {

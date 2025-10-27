@@ -348,7 +348,7 @@ public class InsuranceDBContext extends DBContext {
     // ========== ADDITIONAL METHODS FOR COMPLETE CRUD OPERATIONS ==========
     
     public ArrayList<InsuranceProduct> getDomesticProducts() {
-        String sql = "SELECT * FROM products WHERE type = 'domestic' AND is_delete = false ORDER BY id DESC";
+        String sql = "SELECT * FROM products WHERE type = 'domestic' AND is_delete = false ORDER BY id ASC";
         ArrayList<InsuranceProduct> products = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -363,7 +363,7 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public ArrayList<InsuranceProduct> getInternationalProducts() {
-        String sql = "SELECT * FROM products WHERE type = 'international' AND is_delete = false ORDER BY id DESC";
+        String sql = "SELECT * FROM products WHERE type = 'international' AND is_delete = false ORDER BY id ASC";
         ArrayList<InsuranceProduct> products = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -378,7 +378,7 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public ArrayList<InsuranceProduct> getActiveProducts() {
-        String sql = "SELECT * FROM products WHERE is_active = true AND is_delete = false ORDER BY id DESC";
+        String sql = "SELECT * FROM products WHERE is_active = true AND is_delete = false ORDER BY id ASC";
         ArrayList<InsuranceProduct> products = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -393,7 +393,7 @@ public class InsuranceDBContext extends DBContext {
     }
 
     public ArrayList<InsuranceProduct> getNonActiveProducts() {
-        String sql = "SELECT * FROM products WHERE is_active = false AND is_delete = false ORDER BY id DESC";
+        String sql = "SELECT * FROM products WHERE is_active = false AND is_delete = false ORDER BY id ASC";
         ArrayList<InsuranceProduct> products = new ArrayList<>();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -603,7 +603,7 @@ public class InsuranceDBContext extends DBContext {
             }
         }
         
-        sql.append(" ORDER BY id DESC");
+        sql.append(" ORDER BY id ASC");
         
         System.out.println("DEBUG: Filter SQL: " + sql.toString());
         System.out.println("DEBUG: Parameters: " + parameters);

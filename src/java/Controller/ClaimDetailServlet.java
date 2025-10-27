@@ -10,11 +10,13 @@ import dal.ClaimsResDBContext;
 import Model.Claims;
 import Model.Contract;
 import Model.ClaimsRes;
+import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -83,7 +85,27 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Redirect về GET để tránh duplicate submission
-        response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+        try {
+            // Lấy thông báo thành công/lỗi từ AddClaimResponseServlet
+            String success = request.getParameter("success");
+            String error = request.getParameter("error");
+            
+            String claimId = request.getParameter("id");
+            if (claimId == null) {
+                claimId = request.getParameter("claimId");
+            }
+            
+            if (claimId != null) {
+                // Forward về GET để hiển thị lại trang
+                request.setAttribute("success", success);
+                request.setAttribute("error", error);
+                response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+        }
     }
 }

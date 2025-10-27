@@ -164,8 +164,8 @@
                                                 <div class="buyer-info">
                                                     <div class="buyer-name"><strong>${contract.buyerName}</strong></div>
                                                     <div class="buyer-contact">
-                                                        <small>📞 ${contract.buyerPhone}</small><br>
-                                                        <small>📧 ${contract.buyerEmail}</small>
+                                                        <small>SDT: ${contract.buyerPhone}</small><br>
+                                                        <small>Email: ${contract.buyerEmail}</small>
                                                     </div>
                                                 </div>
                                             </td>

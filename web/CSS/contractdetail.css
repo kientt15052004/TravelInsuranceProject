@@ -367,6 +367,24 @@
     background-color: #f5f5f5;
 }
 
+.claims-list .actions-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.claims-list .actions-cell .action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+}
+
+.claims-list .actions-cell .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
 /* Claims Status Badges */
 .status-approved {
     background-color: #d4edda;
