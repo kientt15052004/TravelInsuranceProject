@@ -370,7 +370,7 @@
 
                         <div class="payment-methods-info" style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
                             <h3 class="section-title" style="margin-bottom: 12px;">Payment Method</h3>
-                            <div style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f0f8ff; border-radius: 6px; border: 1px solid #b3d9ff;">
+                            <div style="display: flex; align-items: center; gap: 8px; padding: 12px; background: #f0f8ff; border: 1px solid #b3d9ff;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
                                 <path d="M2 10h20" stroke="currentColor" stroke-width="2"/>

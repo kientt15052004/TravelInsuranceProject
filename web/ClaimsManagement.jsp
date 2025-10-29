@@ -150,9 +150,7 @@
                                                 </a>
                                             </td>
                                             <td><fmt:formatDate value="${claim.requestDate}" pattern="dd/MM/yyyy"/></td>
-                                            <td>
-                                                <span class="claim-type">${claim.claim_type}</span>
-                                            </td>
+                                            <td class="claim-type">${claim.claim_type}</td>
                                              <td>
                                                  <div class="description-cell">
                                                      <c:choose>
@@ -169,10 +167,8 @@
                                                      </c:choose>
                                                  </div>
                                              </td>
-                                             <td>
-                                                 <span class="status-badge status-${claim.claim_status.toLowerCase()}">
-                                                     ${claim.claim_status}
-                                                 </span>
+                                             <td class="status-text status-${claim.claim_status.toLowerCase()}">
+                                                 ${claim.claim_status}
                                              </td>
                                              <td class="actions-cell">
                                                  <div class="action-buttons">

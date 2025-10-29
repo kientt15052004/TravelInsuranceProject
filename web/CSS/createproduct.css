@@ -21,8 +21,6 @@
 /* Form Container */
 .form-container {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
     margin-bottom: 25px;
 }
@@ -31,8 +29,6 @@
 .form-section {
     background-color: #fff;
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 25px;
 }
 
@@ -166,7 +162,6 @@
 .form-control {
     padding: 12px;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
     width: 100%;
@@ -176,13 +171,11 @@
 .form-control:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 .form-select {
     padding: 12px;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
     width: 100%;
@@ -197,7 +190,6 @@
 .form-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 /* Select Wrapper */
@@ -275,7 +267,6 @@
     gap: 8px;
     padding: 12px 20px;
     border: 2px solid #ddd;
-    border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     background: white;
@@ -300,7 +291,6 @@
 .pricing-formula {
     background: #f8f9fa;
     padding: 20px;
-    border-radius: 8px;
     margin-bottom: 20px;
     border-left: 4px solid #FFD700;
 }
@@ -317,7 +307,6 @@
     border: none;
     padding: 12px 30px;
     font-weight: 600;
-    border-radius: 6px;
     transition: all 0.3s ease;
     font-size: 14px;
     cursor: pointer;
@@ -326,7 +315,6 @@
 .btn-create:hover {
     background-color: #ffed4e;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
 }
 
 .btn-secondary {
@@ -335,7 +323,6 @@
     border: none;
     padding: 12px 30px;
     font-weight: 600;
-    border-radius: 6px;
     transition: all 0.3s ease;
     font-size: 14px;
     cursor: pointer;
@@ -357,7 +344,6 @@
 
 /* Alert Styles */
 .alert {
-    border-radius: 6px;
     border: none;
     margin-bottom: 20px;
     padding: 15px 20px;
@@ -486,9 +472,7 @@
     width: 100%;
     border-collapse: collapse;
     background: white;
-    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .pricing-table .table thead {
@@ -523,7 +507,6 @@
 .pricing-result {
     background: #f8f9fa;
     padding: 20px;
-    border-radius: 8px;
     border-left: 4px solid #FFD700;
 }
 
@@ -563,7 +546,6 @@
 .btn {
     padding: 12px 25px;
     border: none;
-    border-radius: 8px;
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
@@ -582,7 +564,6 @@
 .btn-primary:hover {
     background: #FFC107;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
 }
 
 .btn-secondary {

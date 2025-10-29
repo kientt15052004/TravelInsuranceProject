@@ -52,7 +52,6 @@ public class ClaimsResDBContext extends DBContext {
                 claimRes.setDescription(rs.getString("description"));
                 claimRes.setRelated_img(rs.getString("related_img"));
                 claimRes.setRelated_file(rs.getString("related_file"));
-                claimRes.setStatus(rs.getString("status"));
                 
                 claimResponses.add(claimRes);
             }
@@ -72,7 +71,7 @@ public class ClaimsResDBContext extends DBContext {
             return false;
         }
         
-        String sql = "INSERT INTO ClaimsRes (claim_id, user_id, createDate, description, related_img, related_file, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ClaimsRes (claim_id, user_id, createDate, description, related_img, related_file) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimRes.getClaim_id());
@@ -88,7 +87,6 @@ public class ClaimsResDBContext extends DBContext {
             ps.setString(4, claimRes.getDescription());
             ps.setString(5, claimRes.getRelated_img());
             ps.setString(6, claimRes.getRelated_file());
-            ps.setString(7, claimRes.getStatus());
             
             int rowsAffected = ps.executeUpdate();
             System.out.println("Added claim response. Rows affected: " + rowsAffected);
@@ -101,57 +99,6 @@ public class ClaimsResDBContext extends DBContext {
         }
     }
     
-    // Overloaded method without user_id for backward compatibility
-    public boolean addClaimResponse(int claimId, java.util.Date createDate, String description, String related_img, String related_file, String status) {
-        if (connection == null) {
-            System.err.println("Database connection is null!");
-            return false;
-        }
-        
-        String sql = "INSERT INTO ClaimsRes (claim_id, createDate, description, related_img, related_file, status) VALUES (?, ?, ?, ?, ?, ?)";
-        
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, claimId);
-            ps.setTimestamp(2, new java.sql.Timestamp(createDate.getTime()));
-            ps.setString(3, description);
-            ps.setString(4, related_img);
-            ps.setString(5, related_file);
-            ps.setString(6, status);
-            
-            int rowsAffected = ps.executeUpdate();
-            System.out.println("Added claim response (legacy method). Rows affected: " + rowsAffected);
-            
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQL Error adding claim response: " + e.getMessage());
-            return false;
-        }
-    }
-    
-    // Method để cập nhật status của claim response
-    public boolean updateClaimResponseStatus(int claimResId, String newStatus) {
-        if (connection == null) {
-            System.err.println("Database connection is null!");
-            return false;
-        }
-        
-        String sql = "UPDATE ClaimsRes SET status = ? WHERE id = ?";
-        
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, newStatus);
-            ps.setInt(2, claimResId);
-            
-            int rowsAffected = ps.executeUpdate();
-            System.out.println("Updated claim response " + claimResId + " status to " + newStatus + ". Rows affected: " + rowsAffected);
-            
-            return rowsAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.err.println("SQL Error updating claim response status: " + e.getMessage());
-            return false;
-        }
-    }
     
     // Method để test connection và kiểm tra bảng ClaimsRes
     public boolean testConnection() {

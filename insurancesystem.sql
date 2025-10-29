@@ -540,3 +540,18 @@ CREATE INDEX idx_user_id ON claimsres(user_id);
 
 -- Verify the changes
 DESCRIBE claimsres;
+
+-- =====================================
+-- MIGRATION SCRIPT: Fix createDate column to support time
+-- =====================================
+-- This script changes createDate from DATE to DATETIME to store time information
+-- Created: 2025
+
+USE insurancesystem;
+
+-- Change createDate column from DATE to DATETIME
+ALTER TABLE claimsres 
+MODIFY COLUMN createDate DATETIME DEFAULT CURRENT_TIMESTAMP;
+
+-- Verify the changes
+DESCRIBE claimsres;

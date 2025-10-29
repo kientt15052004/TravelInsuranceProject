@@ -6,6 +6,7 @@
 package Controller;
 
 import dal.ClaimsResDBContext;
+import dal.ClaimsDBContext;
 import Model.ClaimsRes;
 import Model.User;
 import jakarta.servlet.ServletException;
@@ -42,25 +43,40 @@ public class AddClaimResponseServlet extends HttpServlet {
         // Get parameters
         String claimIdStr = request.getParameter("claimId");
         String description = request.getParameter("description");
-        String status = request.getParameter("status");
+        String submitType = request.getParameter("submitType"); // reply, approve, reject
+        String action = request.getParameter("action"); // Hidden field for action
         
-        // Validate parameters
+        // Validate claimId
         if (claimIdStr == null || claimIdStr.trim().isEmpty()) {
-            request.setAttribute("error", "Claim ID không hợp lệ");
+            session.setAttribute("error", "Claim ID không hợp lệ");
             response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
             return;
         }
         
+        int claimId;
+        try {
+            claimId = Integer.parseInt(claimIdStr);
+        } catch (NumberFormatException e) {
+            session.setAttribute("error", "Claim ID không hợp lệ");
+            response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+            return;
+        }
+        
+        // Handle approve/reject actions
+        if (submitType != null && (submitType.equals("approve") || submitType.equals("reject"))) {
+            handleApproveReject(request, response, claimId, submitType, description, currentUser, session);
+            return;
+        }
+        
+        // Handle regular reply
         if (description == null || description.trim().isEmpty()) {
-            request.setAttribute("error", "Vui lòng nhập nội dung phản hồi");
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimIdStr);
+            session.setAttribute("error", "Vui lòng nhập nội dung phản hồi");
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
             return;
         }
         
         try {
-            int claimId = Integer.parseInt(claimIdStr);
-            
-            // Create ClaimsRes object
+            // Create ClaimsRes object for regular reply
             ClaimsRes claimRes = new ClaimsRes();
             claimRes.setClaim_id(claimId);
             claimRes.setUser_id(currentUser.getId()); // Set user from session
@@ -68,28 +84,69 @@ public class AddClaimResponseServlet extends HttpServlet {
             claimRes.setDescription(description);
             claimRes.setRelated_img(null); // Can be extended later
             claimRes.setRelated_file(null); // Can be extended later
-            claimRes.setStatus(status != null && !status.trim().isEmpty() ? status : "open");
             
             // Insert to database
             ClaimsResDBContext claimsResDB = new ClaimsResDBContext();
             boolean success = claimsResDB.addClaimResponse(claimRes);
             
             if (success) {
-                request.setAttribute("success", "Phản hồi đã được gửi thành công");
+                session.setAttribute("success", "Phản hồi đã được gửi thành công");
             } else {
-                request.setAttribute("error", "Có lỗi xảy ra khi gửi phản hồi");
+                session.setAttribute("error", "Có lỗi xảy ra khi gửi phản hồi");
             }
             
             // Redirect to claim detail page
             response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
             
-        } catch (NumberFormatException e) {
-            request.setAttribute("error", "Claim ID không hợp lệ");
-            response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimIdStr);
+            session.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+        }
+    }
+    
+    private void handleApproveReject(HttpServletRequest request, HttpServletResponse response, 
+                                      int claimId, String submitType, String description,
+                                      User currentUser, HttpSession session) 
+            throws ServletException, IOException {
+        try {
+            String newStatus = submitType.equals("approve") ? "approved" : "rejected";
+            String reason = description != null && !description.trim().isEmpty() 
+                          ? description 
+                          : (submitType.equals("approve") ? "Claim đã được chấp nhận" : "Claim đã bị từ chối");
+            
+            // Update claim status
+            ClaimsDBContext claimsDB = new ClaimsDBContext();
+            boolean statusUpdated = claimsDB.updateClaimStatusWithReason(claimId, newStatus, reason);
+            
+            // Also add a response record with the reason
+            ClaimsRes claimRes = new ClaimsRes();
+            claimRes.setClaim_id(claimId);
+            claimRes.setUser_id(currentUser.getId());
+            claimRes.setCreateDate(new Date());
+            claimRes.setDescription(reason);
+            claimRes.setRelated_img(null);
+            claimRes.setRelated_file(null);
+            
+            ClaimsResDBContext claimsResDB = new ClaimsResDBContext();
+            boolean responseAdded = claimsResDB.addClaimResponse(claimRes);
+            
+            if (statusUpdated && responseAdded) {
+                String message = submitType.equals("approve") 
+                    ? "Claim đã được chấp nhận thành công!" 
+                    : "Claim đã bị từ chối!";
+                session.setAttribute("success", message);
+            } else {
+                session.setAttribute("error", "Có lỗi xảy ra khi cập nhật trạng thái claim");
+            }
+            
+            // Redirect to claim detail page
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
         }
     }
 

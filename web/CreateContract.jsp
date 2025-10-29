@@ -57,17 +57,35 @@
                 <p>Tạo hợp đồng bảo hiểm du lịch cho khách hàng tại quầy</p>
             </div>
 
+            <% 
+                // Declare successFlag once for the entire page
+                Boolean successFlag = (Boolean) request.getAttribute("success");
+            %>
+
             <!-- Success Message -->
-            <% if (request.getAttribute("success") != null && (Boolean) request.getAttribute("success")) { %>
+            <% 
+                if (successFlag != null && successFlag && request.getAttribute("contractId") != null) { 
+            %>
             <div class="alert alert-success">
                 <i class="fas fa-check-circle"></i>
                 <strong>Thành công!</strong> Hợp đồng bảo hiểm đã được tạo thành công.
                 <div class="success-info">
                     <strong>Mã hợp đồng:</strong> #<%= request.getAttribute("contractId") %><br>
-                    <strong>Khách hàng:</strong> <%= request.getAttribute("customerName") %><br>
+                    <% if (request.getAttribute("travelerSummary") != null) { %>
+                    <strong>Người được bảo hiểm:</strong> <%= request.getAttribute("travelerSummary") %><br>
+                    <% } %>
+                    <% if (request.getAttribute("travelerCount") != null) { %>
+                    <strong>Số người được bảo hiểm:</strong> <%= request.getAttribute("travelerCount") %><br>
+                    <% } %>
+                    <% if (request.getAttribute("insuranceProduct") != null) { %>
                     <strong>Gói bảo hiểm:</strong> <%= ((InsuranceProduct) request.getAttribute("insuranceProduct")).getName() %><br>
+                    <% } %>
+                    <% if (request.getAttribute("startDate") != null && request.getAttribute("endDate") != null) { %>
                     <strong>Thời gian:</strong> <%= request.getAttribute("startDate") %> - <%= request.getAttribute("endDate") %><br>
+                    <% } %>
+                    <% if (request.getAttribute("totalPrice") != null) { %>
                     <strong>Tổng phí:</strong> <%= request.getAttribute("totalPrice") %> VNĐ
+                    <% } %>
                 </div>
             </div>
             <% } %>
@@ -169,88 +187,127 @@
                     </div>
                 </div>
 
+                <% 
+                    // Use the successFlag already declared above
+                    boolean resetTravelers = successFlag != null && successFlag;
+                    String[] travelerNames = resetTravelers ? null : request.getParameterValues("travelerName");
+                    String[] travelerIds = resetTravelers ? null : request.getParameterValues("travelerId");
+                    String[] travelerPhones = resetTravelers ? null : request.getParameterValues("travelerPhone");
+                    String[] travelerEmails = resetTravelers ? null : request.getParameterValues("travelerEmail");
+                    String[] travelerGenders = resetTravelers ? null : request.getParameterValues("travelerGender");
+                    String[] travelerBirthDates = resetTravelers ? null : request.getParameterValues("travelerBirthDate");
+                    int travelerCount = (!resetTravelers && travelerNames != null && travelerNames.length > 0) ? travelerNames.length : 1;
+                %>
+
                 <!-- Customer/Traveler Information Section -->
                 <div class="form-section">
                     <h2 class="form-title">
                         Thông tin khách hàng (người được bảo hiểm)
                     </h2>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="customerName" class="required-field">Họ và tên</label>
-                            <input type="text" 
-                                   id="customerName" 
-                                   name="customerName" 
-                                   class="form-control" 
-                                   placeholder="Nhập họ và tên đầy đủ"
-                                   value="<%= request.getParameter("customerName") != null ? request.getParameter("customerName") : "" %>"
-                                   required
-                                   pattern="[a-zA-ZÀ-ỹ\s]{2,50}"
-                                   title="Tên phải có từ 2-50 ký tự và chỉ chứa chữ cái">
+
+                    <div id="travelersContainer">
+                        <% for (int i = 0; i < travelerCount; i++) { 
+                                String nameValue = (travelerNames != null && travelerNames.length > i && travelerNames[i] != null) ? travelerNames[i] : "";
+                                String idValue = (travelerIds != null && travelerIds.length > i && travelerIds[i] != null) ? travelerIds[i] : "";
+                                String phoneValue = (travelerPhones != null && travelerPhones.length > i && travelerPhones[i] != null) ? travelerPhones[i] : "";
+                                String emailValue = (travelerEmails != null && travelerEmails.length > i && travelerEmails[i] != null) ? travelerEmails[i] : "";
+                                String genderValue = (travelerGenders != null && travelerGenders.length > i && travelerGenders[i] != null) ? travelerGenders[i] : "";
+                                String birthDateValue = (travelerBirthDates != null && travelerBirthDates.length > i && travelerBirthDates[i] != null) ? travelerBirthDates[i] : "";
+                        %>
+                        <div class="traveler-item" data-index="<%= i %>">
+                            <div class="traveler-header">
+                                <h3 class="traveler-title">Người được bảo hiểm <%= (i + 1) %></h3>
+                                <button type="button" class="btn-remove-traveler" onclick="removeTraveler(this)" <%= travelerCount == 1 ? "disabled" : "" %>>
+                                    <i class="fas fa-trash"></i>
+                                    Xóa
+                                </button>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="travelerName_<%= i %>" class="required-field">Họ và tên</label>
+                                    <input type="text"
+                                           id="travelerName_<%= i %>"
+                                           name="travelerName"
+                                           class="form-control"
+                                           placeholder="Nhập họ và tên đầy đủ"
+                                           value="<%= nameValue %>"
+                                           required
+                                           pattern="[a-zA-ZÀ-ỹ\s]{2,50}"
+                                           title="Tên phải có từ 2-50 ký tự và chỉ chứa chữ cái">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="travelerId_<%= i %>" class="required-field">Số CCCD/CMND</label>
+                                    <input type="text"
+                                           id="travelerId_<%= i %>"
+                                           name="travelerId"
+                                           class="form-control"
+                                           placeholder="Nhập số CCCD/CMND"
+                                           value="<%= idValue %>"
+                                           required
+                                           pattern="[0-9]{9,12}"
+                                           title="Số CCCD/CMND phải có 9-12 chữ số">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="travelerPhone_<%= i %>" class="required-field">Số điện thoại</label>
+                                    <input type="tel"
+                                           id="travelerPhone_<%= i %>"
+                                           name="travelerPhone"
+                                           class="form-control"
+                                           placeholder="Nhập số điện thoại"
+                                           value="<%= phoneValue %>"
+                                           required
+                                           pattern="0[0-9]{9,10}"
+                                           title="Số điện thoại phải có 10-11 số và bắt đầu bằng 0">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="travelerEmail_<%= i %>" class="required-field">Email</label>
+                                    <input type="email"
+                                           id="travelerEmail_<%= i %>"
+                                           name="travelerEmail"
+                                           class="form-control"
+                                           placeholder="Nhập địa chỉ email"
+                                           value="<%= emailValue %>"
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="travelerGender_<%= i %>" class="required-field">Giới tính</label>
+                                    <select id="travelerGender_<%= i %>" name="travelerGender" class="form-select" required>
+                                        <option value="">-- Chọn giới tính --</option>
+                                        <option value="Nam" <%= "Nam".equalsIgnoreCase(genderValue) ? "selected" : "" %>>Nam</option>
+                                        <option value="Nữ" <%= "Nữ".equalsIgnoreCase(genderValue) ? "selected" : "" %>>Nữ</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="travelerBirthDate_<%= i %>" class="required-field">Ngày sinh</label>
+                                    <input type="date"
+                                           id="travelerBirthDate_<%= i %>"
+                                           name="travelerBirthDate"
+                                           class="form-control"
+                                           value="<%= birthDateValue %>"
+                                           required
+                                           max="<%= java.time.LocalDate.now().toString() %>"
+                                           title="Ngày sinh không được trong tương lai">
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="form-group">
-                            <label for="customerId" class="required-field">Số CCCD/CMND</label>
-                            <input type="text" 
-                                   id="customerId" 
-                                   name="customerId" 
-                                   class="form-control" 
-                                   placeholder="Nhập số CCCD/CMND"
-                                   value="<%= request.getParameter("customerId") != null ? request.getParameter("customerId") : "" %>"
-                                   required
-                                   pattern="[0-9]{9,12}"
-                                   title="Số CCCD/CMND phải có 9-12 chữ số">
-                        </div>
+                        <% } %>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="customerPhone" class="required-field">Số điện thoại</label>
-                            <input type="tel" 
-                                   id="customerPhone" 
-                                   name="customerPhone" 
-                                   class="form-control" 
-                                   placeholder="Nhập số điện thoại"
-                                   value="<%= request.getParameter("customerPhone") != null ? request.getParameter("customerPhone") : "" %>"
-                                   required
-                                   pattern="0[0-9]{9,10}"
-                                   title="Số điện thoại phải có 10-11 số và bắt đầu bằng 0">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="customerEmail" class="required-field">Email</label>
-                            <input type="email" 
-                                   id="customerEmail" 
-                                   name="customerEmail" 
-                                   class="form-control" 
-                                   placeholder="Nhập địa chỉ email"
-                                   value="<%= request.getParameter("customerEmail") != null ? request.getParameter("customerEmail") : "" %>"
-                                   required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="customerGender" class="required-field">Giới tính</label>
-                            <select id="customerGender" name="customerGender" class="form-select" required>
-                                <option value="">-- Chọn giới tính --</option>
-                                <option value="Nam" <%= "Nam".equals(request.getParameter("customerGender")) ? "selected" : "" %>>Nam</option>
-                                <option value="Nữ" <%= "Nữ".equals(request.getParameter("customerGender")) ? "selected" : "" %>>Nữ</option>
-                                <option value="Khác" <%= "Khác".equals(request.getParameter("customerGender")) ? "selected" : "" %>>Khác</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="customerBirthDate" class="required-field">Ngày sinh</label>
-                            <input type="date" 
-                                   id="customerBirthDate" 
-                                   name="customerBirthDate" 
-                                   class="form-control"
-                                   value="<%= request.getParameter("customerBirthDate") != null ? request.getParameter("customerBirthDate") : "" %>"
-                                   required
-                                   max="<%= java.time.LocalDate.now().toString() %>"
-                                   title="Ngày sinh không được trong tương lai">
-                        </div>
+
+                    <div class="traveler-actions">
+                        <button type="button" class="btn-add-traveler" onclick="addTraveler()">
+                            <i class="fas fa-user-plus"></i>
+                            Thêm người được bảo hiểm
+                        </button>
                     </div>
                 </div>
 
@@ -264,16 +321,28 @@
                         <label for="insuranceProductId" class="required-field">Gói bảo hiểm</label>
                         <select id="insuranceProductId" name="insuranceProductId" class="form-select" required>
                             <option value="">-- Chọn gói bảo hiểm --</option>
-                            <% if (request.getAttribute("insuranceProducts") != null) { %>
-                                <% for (InsuranceProduct product : (List<InsuranceProduct>) request.getAttribute("insuranceProducts")) { %>
-                                <option value="<%= product.getId() %>" 
+                            <% 
+                                List<InsuranceProduct> products = (List<InsuranceProduct>) request.getAttribute("insuranceProducts");
+                                if (products != null && !products.isEmpty()) {
+                                    for (InsuranceProduct product : products) {
+                            %>
+                                <option value="<%= product.getId() %>"
                                         <%= String.valueOf(product.getId()).equals(request.getParameter("insuranceProductId")) ? "selected" : "" %>>
                                     <%= product.getName() %> - <%= product.getType().equals("domestic") ? "Trong nước" : "Quốc tế" %> 
                                     (<%= product.getPrice() %> VNĐ/ngày)
                                 </option>
-                                <% } %>
+                            <% 
+                                    }
+                                } else if (products != null && products.isEmpty()) {
+                            %>
+                                <option value="" disabled>Không có gói bảo hiểm nào khả dụng</option>
                             <% } %>
                         </select>
+                        <% if (request.getAttribute("insuranceProducts") == null) { %>
+                            <small style="color: #dc3545; display: block; margin-top: 5px;">
+                                <i class="fas fa-exclamation-triangle"></i> Không thể tải danh sách gói bảo hiểm. Vui lòng tải lại trang.
+                            </small>
+                        <% } %>
                     </div>
                     
                     <div class="form-group">
@@ -346,6 +415,134 @@
     <!-- Meta refresh removed - was causing infinite reload loop -->
     
     <script>
+        // Traveler dynamic fields
+        let travelerIndexCounter = document.querySelectorAll('#travelersContainer .traveler-item').length;
+
+        function addTraveler() {
+            const container = document.getElementById('travelersContainer');
+            if (!container) return;
+
+            const index = travelerIndexCounter++;
+            const today = new Date().toISOString().split('T')[0];
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'traveler-item';
+            wrapper.setAttribute('data-index', index);
+            wrapper.innerHTML = `
+                <div class="traveler-header">
+                    <h3 class="traveler-title">Người được bảo hiểm ${index + 1}</h3>
+                    <button type="button" class="btn-remove-traveler" onclick="removeTraveler(this)">
+                        <i class="fas fa-trash"></i>
+                        Xóa
+                    </button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="travelerName_${index}" class="required-field">Họ và tên</label>
+                        <input type="text"
+                               id="travelerName_${index}"
+                               name="travelerName"
+                               class="form-control"
+                               placeholder="Nhập họ và tên đầy đủ"
+                               required
+                               pattern="[a-zA-ZÀ-ỹ\\s]{2,50}"
+                               title="Tên phải có từ 2-50 ký tự và chỉ chứa chữ cái">
+                    </div>
+                    <div class="form-group">
+                        <label for="travelerId_${index}" class="required-field">Số CCCD/CMND</label>
+                        <input type="text"
+                               id="travelerId_${index}"
+                               name="travelerId"
+                               class="form-control"
+                               placeholder="Nhập số CCCD/CMND"
+                               required
+                               pattern="[0-9]{9,12}"
+                               title="Số CCCD/CMND phải có 9-12 chữ số">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="travelerPhone_${index}" class="required-field">Số điện thoại</label>
+                        <input type="tel"
+                               id="travelerPhone_${index}"
+                               name="travelerPhone"
+                               class="form-control"
+                               placeholder="Nhập số điện thoại"
+                               required
+                               pattern="0[0-9]{9,10}"
+                               title="Số điện thoại phải có 10-11 số và bắt đầu bằng 0">
+                    </div>
+                    <div class="form-group">
+                        <label for="travelerEmail_${index}" class="required-field">Email</label>
+                        <input type="email"
+                               id="travelerEmail_${index}"
+                               name="travelerEmail"
+                               class="form-control"
+                               placeholder="Nhập địa chỉ email"
+                               required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="travelerGender_${index}" class="required-field">Giới tính</label>
+                        <select id="travelerGender_${index}" name="travelerGender" class="form-select" required>
+                            <option value="">-- Chọn giới tính --</option>
+                            <option value="Nam">Nam</option>
+                            <option value="Nữ">Nữ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="travelerBirthDate_${index}" class="required-field">Ngày sinh</label>
+                        <input type="date"
+                               id="travelerBirthDate_${index}"
+                               name="travelerBirthDate"
+                               class="form-control"
+                               required
+                               max="${today}"
+                               title="Ngày sinh không được trong tương lai">
+                    </div>
+                </div>
+            `;
+
+            container.appendChild(wrapper);
+            updateTravelerState();
+        }
+
+        function removeTraveler(button) {
+            const container = document.getElementById('travelersContainer');
+            if (!container) return;
+
+            const items = container.querySelectorAll('.traveler-item');
+            if (items.length <= 1) {
+                return;
+            }
+
+            const target = button.closest('.traveler-item');
+            if (target) {
+                container.removeChild(target);
+                updateTravelerState();
+            }
+        }
+
+        function updateTravelerState() {
+            const items = document.querySelectorAll('#travelersContainer .traveler-item');
+            items.forEach((item, idx) => {
+                const title = item.querySelector('.traveler-title');
+                if (title) {
+                    title.textContent = 'Người được bảo hiểm ' + (idx + 1);
+                }
+
+                const removeBtn = item.querySelector('.btn-remove-traveler');
+                if (removeBtn) {
+                    removeBtn.disabled = items.length === 1;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTravelerState();
+        });
+
         // Auto-fill functionality for BUYER when CCCD is entered
         document.getElementById('buyerId').addEventListener('blur', function() {
             const cccd = this.value.trim();
@@ -460,6 +657,29 @@
                 }
             }, 100);
         });
+        
+        // Auto-hide success alert after 5 seconds
+        (function() {
+            const successAlert = document.querySelector('.alert.alert-success');
+            if (successAlert) {
+                // Fade out animation
+                setTimeout(() => {
+                    successAlert.style.transition = 'opacity 0.5s ease-out, margin 0.5s ease-out, padding 0.5s ease-out';
+                    successAlert.style.opacity = '0';
+                    successAlert.style.margin = '0';
+                    successAlert.style.padding = '0';
+                    successAlert.style.height = '0';
+                    successAlert.style.overflow = 'hidden';
+                    
+                    // Remove element completely after animation
+                    setTimeout(() => {
+                        if (successAlert.parentNode) {
+                            successAlert.remove();
+                        }
+                    }, 500);
+                }, 5000); // Show for 5 seconds
+            }
+        })();
     </script>
 </body>
 </html>

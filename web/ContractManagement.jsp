@@ -118,17 +118,17 @@
                     </div>
                 </div>
                 
-                <c:if test="${not empty error}">
+                <c:if test="${not empty requestScope.error}">
                     <div class="alert alert-error">
                         <i class="fas fa-exclamation-circle"></i>
-                        ${error}
+                        ${requestScope.error}
                     </div>
                 </c:if>
                 
-                <c:if test="${not empty success}">
+                <c:if test="${not empty requestScope.success}">
                     <div class="alert alert-success">
                         <i class="fas fa-check-circle"></i>
-                        ${success}
+                        ${requestScope.success}
                     </div>
                 </c:if>
                 
@@ -155,7 +155,7 @@
                                             <td>
                                                 <div class="product-info">
                                                     <strong>${contract.productName}</strong>
-                                                    <small class="product-type">${contract.productType}</small>
+                                                    <span class="product-type">${contract.productType}</span>
                                                 </div>
                                             </td>
                                             <td><fmt:formatDate value="${contract.startDate}" pattern="dd/MM/yyyy"/></td>
@@ -174,10 +174,8 @@
                                                     <fmt:formatNumber value="${contract.totalPrice}" type="number" maxFractionDigits="0" groupingUsed="true"/> ₫
                                                 </span>
                                             </td>
-                                            <td>
-                                                <span class="status-text status-${contract.contract_status.toLowerCase()}">
-                                                    ${contract.contract_status}
-                                                </span>
+                                            <td class="status-text status-${contract.contract_status.toLowerCase()}">
+                                                ${contract.contract_status}
                                             </td>
                                             <td class="actions-cell">
                                                 <div class="action-buttons">

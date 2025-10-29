@@ -68,6 +68,20 @@ public class ClaimDetailServlet extends HttpServlet {
             // Lấy danh sách claim responses
             List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
             
+            // Lấy và xóa session messages để tránh hiển thị ở các trang khác
+            HttpSession session = request.getSession();
+            String success = (String) session.getAttribute("success");
+            String error = (String) session.getAttribute("error");
+            
+            if (success != null) {
+                request.setAttribute("success", success);
+                session.removeAttribute("success");
+            }
+            if (error != null) {
+                request.setAttribute("error", error);
+                session.removeAttribute("error");
+            }
+            
             // Set attributes cho JSP
             request.setAttribute("claim", claim);
             request.setAttribute("contract", contract);

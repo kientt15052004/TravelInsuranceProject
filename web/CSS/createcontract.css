@@ -1,8 +1,6 @@
 /* CreateContract CSS - Consistent with Staff Theme */
 .contract-form {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
     margin-bottom: 25px;
 }
@@ -10,8 +8,6 @@
 .form-section {
     background-color: #fff;
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 25px;
 }
 
@@ -42,7 +38,6 @@
     border: none;
     padding: 12px 30px;
     font-weight: 600;
-    border-radius: 6px;
     transition: all 0.3s ease;
     font-size: 14px;
     cursor: pointer;
@@ -51,7 +46,6 @@
 .btn-create:hover {
     background-color: #ffed4e;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
 }
 
 .btn-secondary {
@@ -60,7 +54,6 @@
     border: none;
     padding: 12px 30px;
     font-weight: 600;
-    border-radius: 6px;
     transition: all 0.3s ease;
     font-size: 14px;
     cursor: pointer;
@@ -72,10 +65,15 @@
 }
 
 .alert {
-    border-radius: 6px;
     border: none;
     margin-bottom: 20px;
     padding: 15px 20px;
+}
+
+.alert:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
 }
 
 .alert-success {
@@ -105,7 +103,6 @@
 .form-control {
     padding: 12px;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
     width: 100%;
@@ -115,13 +112,11 @@
 .form-control:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 .form-select {
     padding: 12px;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
     width: 100%;
@@ -132,7 +127,6 @@
 .form-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 .form-row {
@@ -143,6 +137,75 @@
 
 .form-row .form-group {
     margin-bottom: 0;
+}
+
+.traveler-item {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f9fafb;
+}
+
+.traveler-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.traveler-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.traveler-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.btn-add-traveler {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-add-traveler:hover {
+    background-color: #0056b3;
+}
+
+.btn-remove-traveler {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-remove-traveler[disabled] {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.btn-remove-traveler:not([disabled]):hover {
+    background-color: #c82333;
 }
 
 .button-container {
@@ -186,6 +249,20 @@
         display: block;
         width: 100%;
         margin: 8px 0;
+    }
+
+    .traveler-item {
+        padding: 16px;
+    }
+
+    .traveler-actions {
+        justify-content: center;
+    }
+
+    .btn-add-traveler,
+    .btn-remove-traveler {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -234,5 +311,4 @@
 .btn-create:disabled:hover,
 .btn-secondary:disabled:hover {
     transform: none;
-    box-shadow: none;
 }

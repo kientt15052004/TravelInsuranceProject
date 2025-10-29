@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import Model.Contract;
 import Model.InsuranceProduct;
 import Model.Application;
@@ -65,6 +66,16 @@ public class ContractManagementServlet extends HttpServlet {
             request.setAttribute("activeContracts", activeContracts);
             request.setAttribute("pendingContracts", pendingContracts);
             request.setAttribute("expiredContracts", expiredContracts);
+            
+            // Chỉ hiển thị messages từ request scope, xóa session messages không liên quan
+            // Để tránh hiển thị messages từ các trang khác (như Claims)
+            HttpSession session = request.getSession();
+            if (session.getAttribute("success") != null && request.getAttribute("success") == null) {
+                session.removeAttribute("success");
+            }
+            if (session.getAttribute("error") != null && request.getAttribute("error") == null) {
+                session.removeAttribute("error");
+            }
             
             request.getRequestDispatcher("ContractManagement.jsp").forward(request, response);
         } catch (Exception e) {

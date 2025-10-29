@@ -78,7 +78,6 @@
                 <div class="claim-detail-card">
                     <div class="card-header">
                         <h2>
-                            <i class="fas fa-file-medical"></i>
                             Thông tin Bồi thường #${claim.id}
                         </h2>
                         <div class="header-actions">
@@ -86,30 +85,6 @@
                                 <span class="status-badge status-${claim.claim_status.toLowerCase()}" id="currentStatusDisplay">
                                     ${claim.claim_status}
                                 </span>
-                                <div class="status-edit-section" style="display: none;" id="statusEditSection">
-                                    <select id="inlineStatusSelect" class="inline-status-select">
-                                        <option value="pending" ${claim.claim_status.toLowerCase() == 'pending' ? 'selected' : ''}>
-                                            Pending
-                                        </option>
-                                        <option value="approved" ${claim.claim_status.toLowerCase() == 'approved' ? 'selected' : ''}>
-                                            Approved
-                                        </option>
-                                        <option value="rejected" ${claim.claim_status.toLowerCase() == 'rejected' ? 'selected' : ''}>
-                                            Rejected
-                                        </option>
-                                    </select>
-                                    <div class="status-edit-buttons">
-                                        <button type="button" class="btn btn-sm btn-success" onclick="saveInlineStatus()">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick="cancelInlineStatus()">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-sm btn-edit-status" onclick="editInlineStatus()" id="editStatusBtn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -257,7 +232,6 @@
                             </h2>
                             <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}" 
                                class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i>
                                 Xem chi tiết Contract
                             </a>
                         </div>
@@ -308,7 +282,8 @@
                     <div class="card-body chat-container">
                         <c:choose>
                             <c:when test="${not empty claimResponses}">
-                                <div class="chat-messages">
+                                <div class="chat-messages-container">
+                                    <div class="chat-messages">
                                     <c:forEach var="response" items="${claimResponses}">
                                         <div class="message-item">
                                             <div class="message-avatar">
@@ -324,14 +299,11 @@
                                                             <span class="message-sender">${response.user_name}</span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="message-sender">Staff</span>
+                                                            <span class="message-sender">Null</span>
                                                         </c:otherwise>
                                                     </c:choose>
                                                     <span class="message-date">
                                                         <fmt:formatDate value="${response.createDate}" pattern="dd/MM/yyyy HH:mm"/>
-                                                    </span>
-                                                    <span class="status-badge status-${response.status.toLowerCase()}">
-                                                        ${response.status}
                                                     </span>
                                                 </div>
                                                 <div class="message-bubble">
@@ -386,18 +358,23 @@
                                                 rows="3"
                                                 required></textarea>
                                             <div class="chat-actions">
-                                                <select name="status" class="status-select">
-                                                    <option value="open">Open</option>
-                                                    <option value="follow_up">Follow Up</option>
-                                                    <option value="resolved">Resolved</option>
-                                                </select>
-                                                <button type="submit" class="btn-send">
+                                                <input type="hidden" name="action" value="reply" id="actionType">
+                                                <button type="submit" name="submitType" value="reply" class="btn-send">
                                                     <i class="fas fa-paper-plane"></i>
                                                     Gửi phản hồi
+                                                </button>
+                                                <button type="submit" name="submitType" value="approve" class="btn-approve" onclick="setAction('approve')">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Chấp nhận Claim
+                                                </button>
+                                                <button type="submit" name="submitType" value="reject" class="btn-reject" onclick="setAction('reject')">
+                                                    <i class="fas fa-times-circle"></i>
+                                                    Từ chối Claim
                                                 </button>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
                                 </div>
                             </c:when>
                             <c:otherwise>
@@ -421,14 +398,18 @@
                                                     rows="3"
                                                     required></textarea>
                                                 <div class="chat-actions">
-                                                    <select name="status" class="status-select">
-                                                        <option value="open">Open</option>
-                                                        <option value="follow_up">Follow Up</option>
-                                                        <option value="resolved">Resolved</option>
-                                                    </select>
-                                                    <button type="submit" class="btn-send">
+                                                    <input type="hidden" name="action" value="reply" id="actionTypeEmpty">
+                                                    <button type="submit" name="submitType" value="reply" class="btn-send">
                                                         <i class="fas fa-paper-plane"></i>
                                                         Gửi phản hồi
+                                                    </button>
+                                                    <button type="submit" name="submitType" value="approve" class="btn-approve" onclick="setActionEmpty('approve')">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        Chấp nhận Claim
+                                                    </button>
+                                                    <button type="submit" name="submitType" value="reject" class="btn-reject" onclick="setActionEmpty('reject')">
+                                                        <i class="fas fa-times-circle"></i>
+                                                        Từ chối Claim
                                                     </button>
                                                 </div>
                                             </div>
@@ -710,74 +691,13 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Inline Status Edit functionality
-let originalStatus = '${claim.claim_status}';
-
-function editInlineStatus() {
-    const statusDisplay = document.getElementById('currentStatusDisplay');
-    const statusEditSection = document.getElementById('statusEditSection');
-    const editBtn = document.getElementById('editStatusBtn');
-    
-    // Hide display and edit button, show edit section
-    statusDisplay.style.display = 'none';
-    editBtn.style.display = 'none';
-    statusEditSection.style.display = 'flex';
-    
-    // Set original status for cancel
-    originalStatus = statusDisplay.textContent.trim();
+// Function to set action type for approve/reject buttons
+function setAction(action) {
+    document.getElementById('actionType').value = action;
 }
 
-function cancelInlineStatus() {
-    const statusDisplay = document.getElementById('currentStatusDisplay');
-    const statusEditSection = document.getElementById('statusEditSection');
-    const editBtn = document.getElementById('editStatusBtn');
-    const statusSelect = document.getElementById('inlineStatusSelect');
-    
-    // Reset select to original value
-    statusSelect.value = originalStatus.toLowerCase();
-    
-    // Show display and edit button, hide edit section
-    statusDisplay.style.display = 'inline-block';
-    editBtn.style.display = 'inline-flex';
-    statusEditSection.style.display = 'none';
-}
-
-function saveInlineStatus() {
-    const newStatus = document.getElementById('inlineStatusSelect').value;
-    const currentStatus = originalStatus.toLowerCase();
-    
-    // Check if status changed
-    if (newStatus === currentStatus) {
-        cancelInlineStatus();
-        return;
-    }
-    
-    // Create form and submit directly without confirmation
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '${pageContext.request.contextPath}/ClaimStatusUpdateServlet';
-    
-    const claimIdInput = document.createElement('input');
-    claimIdInput.type = 'hidden';
-    claimIdInput.name = 'claimId';
-    claimIdInput.value = '${claim.id}';
-    
-    const newStatusInput = document.createElement('input');
-    newStatusInput.type = 'hidden';
-    newStatusInput.name = 'newStatus';
-    newStatusInput.value = newStatus;
-    
-    const reasonInput = document.createElement('input');
-    reasonInput.type = 'hidden';
-    reasonInput.name = 'reason';
-    reasonInput.value = 'Cập nhật trạng thái từ giao diện chi tiết';
-    
-    form.appendChild(claimIdInput);
-    form.appendChild(newStatusInput);
-    form.appendChild(reasonInput);
-    
-    document.body.appendChild(form);
-    form.submit();
+function setActionEmpty(action) {
+    document.getElementById('actionTypeEmpty').value = action;
 }
 </script>
 

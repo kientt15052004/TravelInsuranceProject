@@ -26,8 +26,6 @@
     top: 100%;
     right: 0;
     background: white;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     z-index: 1000;
     min-width: 150px;
 }
@@ -48,7 +46,6 @@
 .form-select:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 .form-control:invalid {
@@ -63,7 +60,6 @@
 .btn-create:hover {
     background-color: #ffed4e;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
 }
 
 .btn-secondary:hover {
@@ -139,7 +135,6 @@
 .price-display {
     background: linear-gradient(135deg, #FFD700, #ffed4e);
     padding: 15px;
-    border-radius: 8px;
     margin: 15px 0;
     text-align: center;
     font-weight: bold;
@@ -165,7 +160,6 @@
     font-size: 13px;
     background: rgba(40, 167, 69, 0.1);
     padding: 10px;
-    border-radius: 4px;
     border-left: 3px solid #28a745;
 }
 
@@ -194,7 +188,6 @@ select:focus,
 textarea:focus {
     outline: none;
     border-color: #FFD700;
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
 }
 
 /* Hover effects for interactive elements */
@@ -214,7 +207,6 @@ button:disabled {
 
 button:disabled:hover {
     transform: none;
-    box-shadow: none;
 }
 * {
     margin: 0;
@@ -237,7 +229,6 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: fixed;
     top: 0;
     left: 0;
@@ -300,7 +291,6 @@ body {
     gap: 8px;
     cursor: pointer;
     padding: 8px 12px;
-    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 
@@ -338,8 +328,6 @@ body {
     right: 0;
     background-color: #fff;
     border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     min-width: 150px;
     opacity: 0;
     visibility: hidden;
@@ -438,12 +426,6 @@ body {
     border-left: 3px solid transparent;
 }
 
-.nav-link:hover {
-    background-color: #f8f9fa;
-    border-left-color: #FFD700;
-    transform: translateX(5px);
-}
-
 .nav-item.active .nav-link {
     background-color: #f8f9fa;
     border-left-color: #FFD700;
@@ -458,13 +440,6 @@ body {
 
 .nav-link span {
     font-size: 14px;
-}
-
-/* Sidebar Footer */
-.sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid #e0e0e0;
-    background-color: #ffffff;
 }
 
 /* Main Content */
@@ -495,8 +470,6 @@ body {
 .form-section {
     background-color: #fff;
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 25px;
 }
 
@@ -539,7 +512,6 @@ body {
 .form-group select {
     padding: 12px;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
 }
@@ -594,7 +566,6 @@ body {
     padding: 10px 15px;
     background-color: #FFD700;
     color: #000;
-    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;

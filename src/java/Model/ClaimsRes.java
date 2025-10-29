@@ -20,12 +20,11 @@ public class ClaimsRes {
     private String description;
     private String related_img;
     private String related_file;
-    private String status;
 
     public ClaimsRes() {
     }
 
-    public ClaimsRes(int claimRes_id, int claim_id, int user_id, Date createDate, String description, String related_img, String related_file, String status) {
+    public ClaimsRes(int claimRes_id, int claim_id, int user_id, Date createDate, String description, String related_img, String related_file) {
         this.claimRes_id = claimRes_id;
         this.claim_id = claim_id;
         this.user_id = user_id;
@@ -33,7 +32,6 @@ public class ClaimsRes {
         this.description = description;
         this.related_img = related_img;
         this.related_file = related_file;
-        this.status = status;
     }
 
     public int getClaimRes_id() {
@@ -82,14 +80,6 @@ public class ClaimsRes {
 
     public void setRelated_file(String related_file) {
         this.related_file = related_file;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public int getUser_id() {

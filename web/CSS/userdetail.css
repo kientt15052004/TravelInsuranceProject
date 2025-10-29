@@ -31,7 +31,6 @@
     background: #6c757d;
     color: white;
     text-decoration: none;
-    border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
     display: inline-flex;
@@ -50,7 +49,6 @@
 /* Alert Messages */
 .alert {
     padding: 15px 20px;
-    border-radius: 6px;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
@@ -74,8 +72,6 @@
 /* Sections */
 .section {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     margin-bottom: 25px;
     overflow: hidden;
 }
@@ -104,7 +100,6 @@
     background: #28a745;
     color: white;
     border: none;
-    border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
@@ -182,9 +177,8 @@
 .form-group textarea {
     padding: 12px 15px;
     border: 2px solid #e1e5e9;
-    border-radius: 6px;
     font-size: 14px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.3s ease;
     font-family: inherit;
 }
 
@@ -193,7 +187,6 @@
 .form-group textarea:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
 .form-group textarea {
@@ -211,7 +204,6 @@
 .btn-cancel {
     padding: 10px 20px;
     border: none;
-    border-radius: 6px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -241,70 +233,32 @@
     transform: translateY(-1px);
 }
 
-/* Role and Status Badges */
-.role-badge,
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
+/* Role & Status text */
+.role-text,
+.status-text {
     font-size: 12px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-block;
+    margin: 0;
 }
 
-.role-customer {
-    color: #1976d2 !important;
-    background: transparent !important;
+.role-text.role-customer {
+    color: #1976d2;
 }
 
-.role-staff {
-    color: #7b1fa2 !important;
-    background: transparent !important;
+.role-text.role-staff {
+    color: #7b1fa2;
 }
 
-.role-admin {
-    color: #f57c00 !important;
-    background: transparent !important;
+.role-text.role-admin {
+    color: #f57c00;
 }
 
-.status-active {
-    color: #2e7d32 !important;
-    background: transparent !important;
+.status-text.status-active {
+    color: #2e7d32;
 }
 
-.status-inactive {
-    color: #c62828 !important;
-    background: transparent !important;
-}
-
-/* Force color for badges - Higher specificity */
-.info-item .role-badge,
-.info-item .status-badge {
-    color: inherit !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-}
-
-.info-item .role-customer {
-    color: #1976d2 !important;
-}
-
-.info-item .role-staff {
-    color: #7b1fa2 !important;
-}
-
-.info-item .role-admin {
-    color: #f57c00 !important;
-}
-
-.info-item .status-active {
-    color: #2e7d32 !important;
-}
-
-.info-item .status-inactive {
-    color: #c62828 !important;
+.status-text.status-inactive {
+    color: #c62828;
 }
 .total-amount {
     font-size: 16px;
@@ -363,11 +317,6 @@
     background: #f8f9fa;
 }
 
-/* Row styling */
-.application-row {
-    background-color: rgba(25, 118, 210, 0.05);
-}
-
 /* Action Buttons */
 .btn-detail {
     display: inline-flex;
@@ -377,7 +326,6 @@
     background: #007bff;
     color: white;
     text-decoration: none;
-    border-radius: 6px;
     font-size: 12px;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -390,7 +338,6 @@
     color: white;
     text-decoration: none;
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
 }
 
 .btn-detail i {
@@ -431,30 +378,22 @@
     overflow-wrap: break-word;
 }
 
-/* Claims status badges */
-.claims-table .status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
+/* Claims status text */
+.claims-table .status-text {
     font-size: 12px;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-block;
 }
 
-.claims-table .status-approved {
-    color: #2e7d32 !important;
-    background: transparent !important;
+.claims-table .status-text.status-approved {
+    color: #2e7d32;
 }
 
-.claims-table .status-pending {
-    color: #f57c00 !important;
-    background: transparent !important;
+.claims-table .status-text.status-pending {
+    color: #f57c00;
 }
 
-.claims-table .status-rejected {
-    color: #c62828 !important;
-    background: transparent !important;
+.claims-table .status-text.status-rejected {
+    color: #c62828;
 }
 
 /* No Data State */
@@ -609,9 +548,8 @@
         font-size: 9px;
     }
     
-    .role-badge,
-    .status-badge {
-        padding: 3px 8px;
+    .role-text,
+    .status-text {
         font-size: 10px;
     }
 }
