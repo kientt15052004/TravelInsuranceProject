@@ -60,7 +60,6 @@ body {
 .btn-sign-in {
     background-color: #ff9800;
     color: white;
-    border-radius: 5px;
     padding: 8px 20px;
     font-weight: 600;
     border: none;
@@ -95,7 +94,6 @@ body {
         top: 100%; /* nằm ngay dưới navbar */
         left: 0;
         z-index: 1000;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     /* Khi mở trên mobile, menu chuyển thành dạng dọc */
@@ -155,7 +153,6 @@ body {
     background-color: #ff9800;
     color: white;
     padding: 12px 30px;
-    border-radius: 5px;
     font-weight: 600;
     border: none;
 }
@@ -165,7 +162,6 @@ body {
     color: black;
     padding: 12px 30px;
     border: 2px solid black;
-    border-radius: 5px;
     font-weight: 600;
     margin-left: 15px;
 }
@@ -175,9 +171,7 @@ body {
     height: 384px;
     flex-shrink: 0;
     animation: float 3s ease-in-out infinite;
-    border-radius: 16px;
     border: 0 solid #E5E7EB;
-    box-shadow: 0 25px 50px 0 rgba(0, 0, 0, 0.25);
 }
 
 @keyframes float {
@@ -210,10 +204,8 @@ body {
 /* Card sản phẩm - Khung bao quanh */
 .product-card {
     background: white;
-    border-radius: 15px; /* Bo tròn góc */
     overflow: hidden; /* Ẩn phần thừa để ảnh vừa khít */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1); /* Đổ bóng mềm */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng khi hover */
+    transition: transform 0.3s ease; /* Hiệu ứng khi hover */
     border: 2px solid #e0e0e0; /* Viền xám nhạt */
     height: 100%;
 }
@@ -221,7 +213,6 @@ body {
 /* Hiệu ứng hover cho card - nâng lên và tăng bóng */
 .product-card:hover {
     transform: translateY(-10px); /* Nâng card lên */
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15); /* Tăng độ đổ bóng */
 }
 
 /* Ảnh sản phẩm - chiếm toàn bộ chiều rộng */
@@ -276,7 +267,6 @@ body {
     width: 80px;
     height: 80px;
     background-color: var(--primary-yellow);
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -314,7 +304,6 @@ body {
 
 .faq-item {
     background: white;
-    border-radius: 5px;
     padding: 20px;
     margin-bottom: 15px;
     cursor: pointer;
@@ -377,10 +366,9 @@ body {
     background-color: #ff9800;
     color: white;
     padding: 12px 40px;
-    border-radius: 5px;
     font-weight: 600;
     border: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 /* Footer */

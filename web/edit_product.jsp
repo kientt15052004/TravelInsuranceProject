@@ -37,8 +37,6 @@
                     margin-bottom: 30px;
                     padding: 20px;
                     background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--dark-yellow) 100%);
-                    border-radius: 15px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
                 }
 
                 .page-header h1 {
@@ -59,17 +57,14 @@
                 /* Form sections */
                 .section-wrapper {
                     background: var(--white);
-                    border-radius: 15px;
                     padding: 30px;
                     margin-bottom: 25px;
-                    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
                     border-left: 4px solid var(--primary-yellow);
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    transition: transform 0.3s ease;
                 }
 
                 .section-wrapper:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
                 }
 
                 .section-title {
@@ -89,7 +84,6 @@
                 }
 
                 .form-control {
-                    border-radius: 10px;
                     border: 2px solid #E0E0E0;
                     padding: 12px 15px;
                     transition: all 0.3s;
@@ -98,7 +92,6 @@
 
                 .form-control:focus, .form-select:focus {
                     border-color: var(--primary-yellow);
-                    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25);
                     transform: scale(1.02);
                 }
 
@@ -127,7 +120,6 @@
                 .radio-group-custom label {
                     padding: 12px 25px;
                     border: 2px solid #E0E0E0;
-                    border-radius: 10px;
                     cursor: pointer;
                     transition: all 0.3s;
                     font-weight: 500;
@@ -148,44 +140,35 @@
                 .btn-custom {
                     background: linear-gradient(135deg, var(--dark-yellow) 0%, var(--primary-yellow) 100%);
                     border: none;
-                    border-radius: 10px;
                     padding: 14px 30px;
                     font-weight: 600;
                     color: var(--text-dark);
                     transition: all 0.3s;
-                    box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
                     font-size: 16px;
                     min-width: 160px;
                 }
 
                 .btn-custom:hover {
                     transform: translateY(-3px);
-                    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
                 }
 
                 .btn-success {
                     background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
-                    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
                 }
 
                 .btn-success:hover {
-                    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
                 }
 
                 .btn-danger {
                     background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
-                    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
                 }
 
                 .btn-danger:hover {
-                    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
                 }
 
                 /* Table styling */
                 .table-custom {
-                    border-radius: 10px;
                     overflow: hidden;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
                     background: var(--white);
                 }
 
@@ -212,15 +195,12 @@
                     margin: 15px 0;
                     padding: 15px;
                     background: var(--light-yellow);
-                    border-radius: 10px;
                     border: 2px dashed var(--primary-yellow);
                 }
 
                 .current-image {
                     max-width: 200px;
                     max-height: 200px;
-                    border-radius: 10px;
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                 }
 
                 /* Coefficient inputs */
@@ -233,7 +213,6 @@
 
                 .formula-box {
                     background: var(--light-yellow);
-                    border-radius: 10px;
                     padding: 20px;
                     margin-bottom: 20px;
                     border-left: 4px solid var(--primary-yellow);
@@ -254,14 +233,11 @@
                     margin-top: 30px;
                     padding: 20px;
                     background: var(--white);
-                    border-radius: 15px;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
                 }
 
                 /* Preview boxes */
                 .preview-box {
                     background-color: var(--light-yellow);
-                    border-radius: 10px;
                     padding: 20px;
                     margin-top: 15px;
                 }

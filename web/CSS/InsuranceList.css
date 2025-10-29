@@ -13,14 +13,12 @@ body {
 header {
     background-color: #FFD700;
     padding: 16px 30px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 /* Container chính */
 .container {
     margin: 0 auto;
     background: white;
-    border-radius: 12px;
     padding: 0px 30px;
 }
 
@@ -63,7 +61,6 @@ header {
 /* Filter Section */
 .filter-section {
     background: #fafafa;
-    border-radius: 12px;
     padding: 24px;
     margin-bottom: 24px;
     border: 1px solid #e0e0e0;
@@ -123,7 +120,6 @@ header {
 .form-input, .form-select {
     padding: 12px 16px;
     border: 1px solid #ddd;
-    border-radius: 8px;
     font-size: 14px;
     background: white;
     transition: all 0.3s ease;
@@ -134,7 +130,6 @@ header {
 .form-input:focus, .form-select:focus {
     outline: none;
     border-color: #ff9800;
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
 }
 
 /* Nút search cao bằng input */
@@ -142,7 +137,6 @@ header {
     padding: 12px 24px;
     background: #ff9800;
     border: none;
-    border-radius: 8px;
     color: white;
     font-size: 14px;
     font-weight: 600;
@@ -160,7 +154,6 @@ header {
 
 .search-btn:hover {
     background: #f57c00;
-    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
     transform: translateY(-1px);
 }
 
@@ -175,7 +168,6 @@ header {
 .insurance-card {
     background: white;
     border: 2px solid #e0e0e0;
-    border-radius: 12px;
     padding: 20px;
     transition: all 0.3s;
     cursor: pointer;
@@ -188,7 +180,6 @@ header {
 
 .insurance-card:hover {
     border-color: #ff9800;
-    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.2);
     transform: translateY(-4px);
 }
 
@@ -229,7 +220,6 @@ header {
     padding: 4px 12px;
     background: #fff3e0;
     color: #f57c00;
-    border-radius: 12px;
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 12px;
@@ -264,7 +254,6 @@ header {
     padding: 10px;
     background: #ff9800;
     border: none;
-    border-radius: 6px;
     color: white;
     font-size: 14px;
     font-weight: 600;
@@ -291,7 +280,6 @@ header {
     padding: 8px 14px;
     background: white;
     border: 1px solid #ddd;
-    border-radius: 6px;
     color: #666;
     font-size: 14px;
     cursor: pointer;

@@ -38,9 +38,6 @@
                 </li>
             </ul>
         </nav>
-        <div class="sidebar-footer">
-            <!-- Empty footer for now -->
-        </div>
     </div>
 </body>
 </html>

@@ -145,24 +145,20 @@
                                             <td>${user.fullname}</td>
                                             <td>${user.mail}</td>
                                             <td>${user.phone}</td>
-                                            <td>
-                                                <span class="role-badge role-${user.role}">
-                                                    <c:choose>
-                                                        <c:when test="${user.role == 'customer'}">Khách hàng</c:when>
-                                                        <c:when test="${user.role == 'staff'}">Nhân viên</c:when>
-                                                        <c:when test="${user.role == 'admin'}">Quản trị</c:when>
-                                                        <c:otherwise>${user.role}</c:otherwise>
-                                                    </c:choose>
-                                                </span>
+                                            <td class="role-text role-${user.role}">
+                                                <c:choose>
+                                                    <c:when test="${user.role == 'customer'}">Khách hàng</c:when>
+                                                    <c:when test="${user.role == 'staff'}">Nhân viên</c:when>
+                                                    <c:when test="${user.role == 'admin'}">Quản trị</c:when>
+                                                    <c:otherwise>${user.role}</c:otherwise>
+                                                </c:choose>
                                             </td>
-                                            <td>
-                                                <span class="status-badge status-${user.status}">
-                                                    <c:choose>
-                                                        <c:when test="${user.status == 'active'}">Hoạt động</c:when>
-                                                        <c:when test="${user.status == 'inactive'}">Không hoạt động</c:when>
-                                                        <c:otherwise>${user.status}</c:otherwise>
-                                                    </c:choose>
-                                                </span>
+                                            <td class="status-text status-${user.status}">
+                                                <c:choose>
+                                                    <c:when test="${user.status == 'active'}">Hoạt động</c:when>
+                                                    <c:when test="${user.status == 'inactive'}">Không hoạt động</c:when>
+                                                    <c:otherwise>${user.status}</c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td class="total-amount">
                                                 <fmt:formatNumber value="${user.totalInsuranceAmount}" type="number" maxFractionDigits="0" groupingUsed="true"/> ₫
