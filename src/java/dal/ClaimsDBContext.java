@@ -12,11 +12,10 @@ public class ClaimsDBContext extends DBContext {
     public List<Claims> getClaimsByContractId(int contractId) {
         System.out.println("Getting claims for contract ID: " + contractId);
         List<Claims> claims = new ArrayList<>();
-        
-        // Kiểm tra xem connection có null không
+
         if (connection == null) {
             System.err.println("Database connection is null!");
-            return claims; // Trả về danh sách rỗng thay vì throw exception
+            return claims;
         }
         
         String sql = "SELECT * FROM claims WHERE contract_id = ? ORDER BY CASE claim_status WHEN 'pending' THEN 1 WHEN 'approved' THEN 2 WHEN 'rejected' THEN 3 ELSE 4 END, requestDate ASC";
@@ -40,7 +39,6 @@ public class ClaimsDBContext extends DBContext {
                 claim.setRelated_img(rs.getString("related_img"));
                 claim.setRelated_file(rs.getString("related_file"));
                 claim.setClaim_status(rs.getString("claim_status"));
-                // Không có cột claim_amount trong database thực tế
                 
                 claims.add(claim);
             }
@@ -50,14 +48,13 @@ public class ClaimsDBContext extends DBContext {
             System.err.println("SQL Error: " + e.getMessage());
             System.err.println("SQL State: " + e.getSQLState());
             System.err.println("Vendor Error: " + e.getErrorCode());
-            // Thay vì throw exception, chỉ log lỗi và trả về danh sách rỗng
+
             System.err.println("Returning empty claims list due to error");
         }
         
         return claims;
     }
-    
-    // Method để lấy tất cả claims với bộ lọc
+
     public List<Claims> getAllClaimsWithFilters(String searchTerm, String statusFilter, String typeFilter) {
         List<Claims> claims = new ArrayList<>();
         
@@ -71,22 +68,19 @@ public class ClaimsDBContext extends DBContext {
         sql.append("WHERE 1=1 ");
         
         List<Object> parameters = new ArrayList<>();
-        
-        // Tìm kiếm theo contract ID hoặc description
+
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             sql.append("AND (c.contract_id LIKE ? OR c.description LIKE ?) ");
             String searchPattern = "%" + searchTerm.trim() + "%";
             parameters.add(searchPattern);
             parameters.add(searchPattern);
         }
-        
-        // Lọc theo trạng thái
+
         if (statusFilter != null && !statusFilter.trim().isEmpty()) {
             sql.append("AND c.claim_status = ? ");
             parameters.add(statusFilter);
         }
-        
-        // Lọc theo loại claim
+
         if (typeFilter != null && !typeFilter.trim().isEmpty()) {
             sql.append("AND c.claim_type = ? ");
             parameters.add(typeFilter);
@@ -127,8 +121,7 @@ public class ClaimsDBContext extends DBContext {
         
         return claims;
     }
-    
-    // Method để lấy tất cả loại claim unique
+
     public List<String> getAllClaimTypes() {
         List<String> claimTypes = new ArrayList<>();
         
@@ -155,8 +148,7 @@ public class ClaimsDBContext extends DBContext {
         
         return claimTypes;
     }
-    
-    // Method để cập nhật trạng thái claim với lý do
+
     public boolean updateClaimStatusWithReason(int claimId, String newStatus, String reason) {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -181,8 +173,7 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
     }
-    
-    // Method để cập nhật trạng thái claim
+
     public boolean updateClaimStatus(int claimId, String newStatus, String reason) {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -205,8 +196,7 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
     }
-    
-    // Method để lấy claim theo ID
+
     public Claims getClaimById(int claimId) {
         Claims claim = null;
         
@@ -234,8 +224,7 @@ public class ClaimsDBContext extends DBContext {
                 claim.setRelated_img(rs.getString("related_img"));
                 claim.setRelated_file(rs.getString("related_file"));
                 claim.setClaim_status(rs.getString("claim_status"));
-                
-                // Try to get claim_amount if column exists
+
                 try {
                     if (rs.findColumn("claim_amount") > 0) {
                         claim.setClaim_amount(rs.getBigDecimal("claim_amount"));
@@ -257,8 +246,7 @@ public class ClaimsDBContext extends DBContext {
         
         return claim;
     }
-    
-    // Method để test connection và kiểm tra bảng claims
+
     public boolean testConnection() {
         try {
             String sql = "SELECT COUNT(*) FROM claims";

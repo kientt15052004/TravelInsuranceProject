@@ -27,18 +27,14 @@ public class ClaimsManagementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Lấy các tham số tìm kiếm và lọc
             String searchTerm = request.getParameter("search");
             String statusFilter = request.getParameter("status");
             String typeFilter = request.getParameter("type");
-            
-            // Lấy danh sách claims dựa trên các bộ lọc
+                
             List<Claims> claims = claimsDB.getAllClaimsWithFilters(searchTerm, statusFilter, typeFilter);
-            
-            // Lấy danh sách các loại claim để hiển thị trong dropdown
+
             List<String> claimTypes = claimsDB.getAllClaimTypes();
-            
-            // Set attributes cho JSP
+
             request.setAttribute("claims", claims);
             request.setAttribute("claimTypes", claimTypes);
             request.setAttribute("searchTerm", searchTerm);

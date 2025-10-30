@@ -35,7 +35,6 @@ public class ClaimDetailServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Lấy ID của claim từ parameter
             String claimIdParam = request.getParameter("id");
             
             if (claimIdParam == null || claimIdParam.trim().isEmpty()) {
@@ -52,8 +51,7 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
                 return;
             }
-            
-            // Lấy thông tin claim
+
             Claims claim = claimsDB.getClaimById(claimId);
             
             if (claim == null) {
@@ -61,14 +59,11 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
                 return;
             }
-            
-            // Lấy thông tin contract liên quan
+
             Contract contract = contractDB.getContractById(claim.getContract_id());
-            
-            // Lấy danh sách claim responses
+
             List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
             
-            // Lấy và xóa session messages để tránh hiển thị ở các trang khác
             HttpSession session = request.getSession();
             String success = (String) session.getAttribute("success");
             String error = (String) session.getAttribute("error");

@@ -241,23 +241,7 @@
         <url-pattern>/ClaimDetailServlet</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>ClaimApprovalServlet</servlet-name>
-        <servlet-class>Controller.ClaimApprovalServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ClaimApprovalServlet</servlet-name>
-        <url-pattern>/ClaimApprovalServlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ClaimStatusUpdateServlet</servlet-name>
-        <servlet-class>Controller.ClaimStatusUpdateServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ClaimStatusUpdateServlet</servlet-name>
-        <url-pattern>/ClaimStatusUpdateServlet</url-pattern>
-    </servlet-mapping>
+    
 
     <servlet>
         <servlet-name>UpdateUserServlet</servlet-name>
