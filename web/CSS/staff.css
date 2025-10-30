@@ -1,44 +1,62 @@
 /* CSS-only interactions to replace JavaScript */
 
 /* Navigation hover effects */
-.nav-link:hover {
-    background-color: #FFD700;
-    transform: scale(1.05);
-    transition: all 0.3s ease;
+.sidebar .nav-link { transition: none; }
+.sidebar .nav-link:hover { background-color: inherit; transform: none; border-left-color: transparent; }
+.sidebar * { transition: none; box-shadow: none; }
+.sidebar .nav-item:hover,
+.sidebar .nav-item:hover .nav-link,
+.sidebar .nav-link:hover,
+.sidebar .nav-link:focus,
+.sidebar .nav-link:active {
+    background-color: transparent;
+    border-left-color: transparent;
 }
 
-.nav-item.active .nav-link {
-    background-color: #FFD700;
+.sidebar .nav-item.active .nav-link { 
+    background-color: #f8f9fa; 
+    color: inherit; 
+    border-left-color: #FFD700; 
+    font-weight: 600; 
+}
+.sidebar .nav-link:focus,
+.sidebar .nav-link:active { 
+    background-color: transparent; 
+    color: inherit; 
+    border-left-color: transparent; 
+}
+
+/* User section with inline logout button */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #000;
+    font-size: 14px;
+    font-weight: 500;
+}
+.user-info i {
+    font-size: 20px;
     color: #000;
 }
-
-/* User dropdown - CSS-only */
-.user-dropdown {
-    position: relative;
-    cursor: pointer;
+.logout-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    margin-left: 10px;
+    border: 1px solid #000;
+    border-radius: 9999px;
+    background: #000;
+    color: #FFD700;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1;
+    transition: background 0.2s ease, color 0.2s ease;
 }
-
-/* Removed hover effect - only use click/active */
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
-    z-index: 1000;
-    min-width: 150px;
-}
-
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.logout-link:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 /* Form interactions */
@@ -191,9 +209,7 @@ textarea:focus {
 }
 
 /* Hover effects for interactive elements */
-button:hover,
-.nav-link:hover,
-.dropdown-item:hover {
+button:hover {
     transform: translateY(-1px);
     transition: all 0.3s ease;
 }
@@ -281,87 +297,6 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-}
-
-/* User Dropdown */
-.user-dropdown {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    padding: 8px 12px;
-    transition: background-color 0.3s ease;
-}
-
-.user-dropdown:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #000;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.user-info i {
-    font-size: 20px;
-    color: #000;
-}
-
-.dropdown-arrow {
-    font-size: 12px;
-    color: #000;
-    transition: transform 0.3s ease;
-}
-
-.user-dropdown.active .dropdown-arrow {
-    transform: rotate(180deg);
-}
-
-.dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    min-width: 150px;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.user-dropdown.active .dropdown-menu {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: translateY(0) !important;
-    animation: fadeInDown 0.3s ease !important;
-}
-
-.dropdown-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    color: #333;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #f8f9fa;
-}
-
-.dropdown-item i {
-    font-size: 14px;
-    color: #666;
 }
 
 /* Container */

@@ -34,6 +34,16 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
             String claimIdParam = request.getParameter("id");
             
@@ -64,7 +74,6 @@ public class ClaimDetailServlet extends HttpServlet {
 
             List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
             
-            HttpSession session = request.getSession();
             String success = (String) session.getAttribute("success");
             String error = (String) session.getAttribute("error");
             
@@ -94,6 +103,16 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
             // Lấy thông báo thành công/lỗi từ AddClaimResponseServlet
             String success = request.getParameter("success");

@@ -50,7 +50,7 @@ public class UserDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // login thất bại
+        return null;
     }
     public boolean checkUserExists(String username) {
     String sql = "SELECT * FROM users WHERE username = ?";

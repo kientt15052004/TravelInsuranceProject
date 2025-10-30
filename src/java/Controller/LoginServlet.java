@@ -54,16 +54,18 @@ public class LoginServlet extends HttpServlet {
         }
 
         UserDAO dao = new UserDAO();
-        User user = dao.checkLogin(username, password); // login trả về User nếu đúng, null nếu sai
+        User user = dao.checkLogin(username, password);
 
         if (user != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user); // lưu object user vào session
+            session.setAttribute("user", user);
             session.setAttribute("loginMessage", "Chào mừng, " + user.getFullname() + "!");
             
             // Redirect based on user role
             if ("staff".equals(user.getRole())) {
                 response.sendRedirect(request.getContextPath() + "/staff");
+            } else if ("admin".equals(user.getRole())) {
+                response.sendRedirect(request.getContextPath() + "/admin?tab=home");
             } else {
                 response.sendRedirect(request.getContextPath() + "/home");
             }

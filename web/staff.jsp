@@ -129,28 +129,5 @@ Ut ut commodo nibh, non tempor augue. Ut vehicula fringilla purus, non condiment
         </div>
     </div>
     
-    <!-- Dropdown Click Handler -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const userDropdown = document.querySelector('.user-dropdown');
-            
-            if (userDropdown) {
-                userDropdown.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Toggle active class
-                    this.classList.toggle('active');
-                });
-                
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!userDropdown.contains(e.target)) {
-                        userDropdown.classList.remove('active');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>

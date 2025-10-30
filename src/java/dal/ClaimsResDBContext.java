@@ -18,7 +18,6 @@ public class ClaimsResDBContext extends DBContext {
             return claimResponses;
         }
         
-        // Query với JOIN để lấy thông tin user
         String sql = "SELECT cr.*, u.username as user_name, u.fullname as user_fullname " +
                      "FROM claimsres cr " +
                      "LEFT JOIN users u ON cr.user_id = u.id " +
@@ -36,8 +35,7 @@ public class ClaimsResDBContext extends DBContext {
                 ClaimsRes claimRes = new ClaimsRes();
                 claimRes.setClaimRes_id(rs.getInt("id"));
                 claimRes.setClaim_id(rs.getInt("claim_id"));
-                
-                // Handle user_id (may be null for existing records)
+
                 try {
                     claimRes.setUser_id(rs.getInt("user_id"));
                     claimRes.setUser_name(rs.getString("user_name"));
