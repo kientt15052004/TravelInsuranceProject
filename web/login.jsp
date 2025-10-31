@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Login - Travel Insurance Tracker</title>
+        <title>Đăng Nhập - Bảo Hiểm Du Lịch</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Bootstrap 4 CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -18,10 +18,6 @@
                 background: #fff;
                 padding: 38px 28px 18px 28px;
                 transition: all 0.3s ease;
-            }
-            .login-container:hover {
-                transform: translateY(-5px);
-                background: #fffef5;
             }
 
             .login-icon {
@@ -54,10 +50,6 @@
                 color: #000;
                 font-weight: 600;
             }
-            .btn-yellow:hover, .btn-yellow:focus {
-                background: #ffcf00;
-                color: #111;
-            }
             .login-divider {
                 text-align: center;
                 margin: 17px 0 12px 0;
@@ -83,10 +75,6 @@
                 font-weight: 500;
                 font-size: 14px;
             }
-            .forgot-link:hover {
-                text-decoration: underline;
-                color: #ffcf00;
-            }
             .sign-up-link {
                 color: #ffbf00;
                 font-size: 15px;
@@ -100,23 +88,17 @@
                 transition: all 0.3s ease;
             }
 
-            .btn-signin:hover {
-                background-color: #e6b800;
-                color: #fff;
-                transform: translateY(-2px);
-            }
-
         </style>
     </head>
     <body>
         <div class="login-container">
             <div class="login-icon"><span>&#9889;</span></div>
-            <div class="login-title">Welcome Back</div>
-            <div class="login-text">Sign in to your account to continue</div>
+            <div class="login-title">Chào mừng trở lại</div>
+            <div class="login-text">Đăng nhập vào tài khoản của bạn để tiếp tục</div>
             <form action="${pageContext.request.contextPath}/login" method="POST">
                 <div class="form-group">
-                    <label for="username" class="small mb-1">Username</label>
-                    <input type="username" class="form-control" id="username" name="username" placeholder="Enter your username" 
+                    <label for="username" class="small mb-1">Tên đăng nhập</label>
+                    <input type="username" class="form-control" id="username" name="username" placeholder="Nhập tên đăng nhập của bạn" 
                            value="<%= request.getAttribute("username") != null ? request.getAttribute("username") : "" %>"/>
                     <% String usernameError = (String) request.getAttribute("usernameError");
                     if (usernameError != null) { %>
@@ -124,9 +106,9 @@
                     <% } %>
                 </div>
                 <div class="form-group">
-                    <label for="password" class="small mb-1">Password</label>
+                    <label for="password" class="small mb-1">Mật khẩu</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" 
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu của bạn" 
                                value="<%= request.getAttribute("password") != null ? request.getAttribute("password") : "" %>"/>
                         
 
@@ -141,29 +123,21 @@
                     if (loginError != null) { %>
                 <div class="alert alert-danger mt-2"><%= loginError %></div>
                 <% } %>
+                <% String success = (String) request.getAttribute("success");
+                    if (success != null) { %>
+                <div class="alert alert-success mt-2"><%= success %></div>
+                <% } %>
                 <div class="d-flex justify-content-between align-items-center mb-2">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="rememberMe"/>
-                        <label class="form-check-label small" for="rememberMe">Remember me</label>
-                    </div>
-                    <a class="forgot-link" href="#">Forgot password?</a>
+                    <a class="forgot-link" href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
                 </div>
                 <button class="btn btn-yellow btn-block mb-2 btn-signin" type="submit">
-                    <i class="fa fa-sign-in mr-1"></i> Sign in
+                    <i class="fa fa-sign-in mr-1"></i> Đăng nhập
                 </button>
-                <div class="login-divider">Or continue with</div>
-                <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-social"><img src="https://img.icons8.com/color/16/000000/google-logo.png"/> Google</button>
-                    <button type="button" class="btn btn-social"><img src="https://img.icons8.com/ios-glyphs/16/000000/github.png"/> GitHub</button>
-                </div>
                 <div class="text-center mt-2" style="font-size: 14px;">
-                    Don't have an account?
-                    <a class="sign-up-link" href="#">Sign up</a>
+                    Chưa có tài khoản?
+                    <a class="sign-up-link" href="${pageContext.request.contextPath}/register">Đăng ký</a>
                 </div>
             </form>
-        </div>
-        <div class="footer-text">
-            By signing in, you agree to our <a href="#" class="sign-up-link">Terms of Service</a> and <a href="#" class="sign-up-link">Privacy Policy</a>.
         </div>
 
         <!-- Bootstrap 4 JS & dependencies -->

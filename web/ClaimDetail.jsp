@@ -425,6 +425,35 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    
+    // Auto scroll to bottom (newest messages) when page loads
+    const chatMessagesContainer = document.querySelector('.chat-messages-container');
+    if (chatMessagesContainer) {
+        // Check if we should scroll to bottom (after adding new response)
+        const urlParams = new URLSearchParams(window.location.search);
+        const scrollToBottom = urlParams.get('scrollToBottom');
+        
+        // Function to scroll to bottom
+        function scrollToBottomFunc() {
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        }
+        
+        // Always scroll to bottom when page loads
+        setTimeout(scrollToBottomFunc, 100);
+        setTimeout(scrollToBottomFunc, 300);
+        
+        // If coming from add response, scroll multiple times to ensure it works
+        if (scrollToBottom === 'true') {
+            setTimeout(scrollToBottomFunc, 500);
+            setTimeout(scrollToBottomFunc, 800);
+            
+            // Remove the parameter from URL to avoid scroll on next page load
+            if (window.history.replaceState) {
+                const newUrl = window.location.pathname + '?id=' + urlParams.get('id');
+                window.history.replaceState({}, '', newUrl);
+            }
+        }
+    }
 });
 
 // Image modal functionality

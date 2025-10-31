@@ -48,8 +48,7 @@ public class ViewProduct extends HttpServlet {
         request.setAttribute("typeFilter", typeFilter);
         request.setAttribute("packageFilter", packageFilter);
         request.setAttribute("statusFilter", statusFilter);
-        request.setAttribute("page", "view_product.jsp");
-        request.setAttribute("activePage", "view-products");
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);            
+        
+        request.getRequestDispatcher("/view_product.jsp").forward(request, response);            
     }
 }

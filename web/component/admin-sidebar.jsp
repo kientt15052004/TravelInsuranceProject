@@ -11,9 +11,9 @@
                         <span>Home Page</span>
                     </a>
                 </li>
-                <li class="nav-item ${param.activePage == 'user-management' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/admin" class="nav-link">
-                        <span>User Management</span>
+                <li class="nav-item ${param.activePage == 'user-role-management' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user-role-management" class="nav-link">
+                        <span>Role User Management</span>
                     </a>
                 </li>
                 <li class="nav-item ${param.activePage == 'daily-report' ? 'active' : ''}">

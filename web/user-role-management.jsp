@@ -1,0 +1,323 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Vai Trò - Hệ thống quản lý bảo hiểm</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/staff.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/usermanagement.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <jsp:include page="component/admin-header.jsp"/>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <jsp:include page="component/admin-sidebar.jsp">
+            <jsp:param name="activePage" value="user-role-management"/>
+        </jsp:include>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h1>Quản Lý Vai Trò Người Dùng</h1>
+                <p>Cập nhật vai trò cho từng tài khoản trong hệ thống</p>
+            </div>
+
+            <!-- Alert Messages -->
+            <c:if test="${not empty roleUpdateMessage}">
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i>
+                    ${roleUpdateMessage}
+                </div>
+            </c:if>
+            <c:if test="${not empty roleUpdateError}">
+                <div class="alert alert-error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    ${roleUpdateError}
+                </div>
+            </c:if>
+
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section">
+                <form method="GET" action="${pageContext.request.contextPath}/user-role-management" class="search-form">
+                    <div class="search-row">
+                        <div class="search-group">
+                            <label for="keyword">Tìm kiếm:</label>
+                            <input type="text" id="keyword" name="keyword" 
+                                   placeholder="Tên, email hoặc username..." 
+                                   value="${searchKeyword}">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="role">Vai trò:</label>
+                            <select id="role" name="role">
+                                <option value="all" ${searchRole == 'all' ? 'selected' : ''}>Tất cả</option>
+                                <option value="customer" ${searchRole == 'customer' ? 'selected' : ''}>Khách hàng</option>
+                                <option value="staff" ${searchRole == 'staff' ? 'selected' : ''}>Nhân viên</option>
+                                <option value="admin" ${searchRole == 'admin' ? 'selected' : ''}>Quản trị</option>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="status">Trạng thái:</label>
+                            <select id="status" name="status">
+                                <option value="all" ${searchStatus == 'all' ? 'selected' : ''}>Tất cả</option>
+                                <option value="active" ${searchStatus == 'active' ? 'selected' : ''}>Hoạt động</option>
+                                <option value="inactive" ${searchStatus == 'inactive' ? 'selected' : ''}>Không hoạt động</option>
+                            </select>
+                        </div>
+                        
+                        <div class="button-group">
+                            <button type="submit" class="btn btn-search">
+                                <i class="fas fa-search"></i>
+                                Tìm kiếm
+                            </button>
+                            <a href="${pageContext.request.contextPath}/user-role-management" class="btn btn-clear">
+                                <i class="fas fa-times"></i>
+                                Xóa bộ lọc
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Users Table -->
+            <div class="users-table-section">
+                <div class="table-header">
+                    <div class="table-title-section">
+                        <h3>Danh sách User</h3>
+                        <p>Tổng cộng: ${users.size()} người dùng</p>
+                    </div>
+                    <div class="page-size-container">
+                        <label>Hiển thị: 
+                            <select id="pageSizeSelect">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> người dùng/trang
+                        </label>
+                    </div>
+                </div>
+                
+                <c:choose>
+                    <c:when test="${empty users}">
+                        <div class="no-data">
+                            <i class="fas fa-users"></i>
+                            <p>Không tìm thấy user nào</p>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="table-container">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Họ tên</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Trạng thái</th>
+                                        <th>Vai trò hiện tại</th>
+                                        <th class="text-center">Cập nhật vai trò</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="user" items="${users}">
+                                        <tr>
+                                            <td>${user.id}</td>
+                                            <td>${user.username}</td>
+                                            <td>${user.fullname}</td>
+                                            <td>${user.mail}</td>
+                                            <td>${user.phone}</td>
+                                            <td class="status-text status-${user.status}">
+                                                <c:choose>
+                                                    <c:when test="${user.status == 'active'}">Hoạt động</c:when>
+                                                    <c:when test="${user.status == 'inactive'}">Không hoạt động</c:when>
+                                                    <c:otherwise>${user.status}</c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td class="role-text role-${user.role}">
+                                                <c:choose>
+                                                    <c:when test="${user.role == 'customer'}">Khách hàng</c:when>
+                                                    <c:when test="${user.role == 'staff'}">Nhân viên</c:when>
+                                                    <c:when test="${user.role == 'admin'}">Quản trị</c:when>
+                                                    <c:otherwise>${user.role}</c:otherwise>
+                                                </c:choose>
+                                            </td>
+                                            <td class="actions-cell">
+                                                <form method="post" action="${pageContext.request.contextPath}/user-role-management" style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                                                    <input type="hidden" name="userId" value="${user.id}" />
+                                                    <c:if test="${not empty searchKeyword}">
+                                                        <input type="hidden" name="keyword" value="${searchKeyword}" />
+                                                    </c:if>
+                                                    <c:if test="${not empty searchRole and searchRole != 'all'}">
+                                                        <input type="hidden" name="roleFilter" value="${searchRole}" />
+                                                    </c:if>
+                                                    <c:if test="${not empty searchStatus and searchStatus != 'all'}">
+                                                        <input type="hidden" name="statusFilter" value="${searchStatus}" />
+                                                    </c:if>
+                                                    <select name="role" class="form-select form-select-sm" style="padding: 8px 12px; border: 2px solid #e0e0e0; font-size: 14px; min-width: 150px;"
+                                                            ${sessionScope.user.id == user.id ? 'disabled' : ''}>
+                                                        <c:forEach var="role" items="${allowedRoles}">
+                                                            <option value="${role}" ${role == user.role ? 'selected' : ''}>
+                                                                <c:choose>
+                                                                    <c:when test="${role == 'admin'}">Quản trị</c:when>
+                                                                    <c:when test="${role == 'staff'}">Nhân viên</c:when>
+                                                                    <c:when test="${role == 'customer'}">Khách hàng</c:when>
+                                                                    <c:otherwise>${role}</c:otherwise>
+                                                                </c:choose>
+                                                            </option>
+                                                        </c:forEach>
+                                                    </select>
+                                                    <button type="submit" class="btn-sm btn-info"
+                                                            ${sessionScope.user.id == user.id ? 'disabled' : ''}>
+                                                        <i class="fas fa-save"></i> Lưu
+                                                    </button>
+                                                </form>
+                                                <c:if test="${sessionScope.user.id == user.id}">
+                                                    <small class="text-muted d-block text-center mt-1" style="font-size: 11px; color: #999;">
+                                                        Không thể tự thay đổi vai trò của chính bạn.
+                                                    </small>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // User dropdown functionality
+    const userDropdown = document.querySelector('.user-dropdown');
+    if (userDropdown) {
+        userDropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userDropdown.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('active');
+            }
+        });
+    }
+    const table = document.querySelector(".users-table");
+    if (!table) return;
+
+    const tbody = table.querySelector("tbody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+    const paginationContainer = document.createElement("div");
+    paginationContainer.classList.add("pagination-container");
+    table.parentNode.appendChild(paginationContainer);
+
+
+    let currentPage = 1;
+    let pageSize = 10;
+
+    function renderTable() {
+        tbody.innerHTML = "";
+        const start = (currentPage - 1) * pageSize;
+        const end = start + pageSize;
+        rows.slice(start, end).forEach(row => tbody.appendChild(row));
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(rows.length / pageSize);
+        paginationContainer.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+            const btn = document.createElement("button");
+            btn.textContent = i;
+            btn.classList.add("page-btn");
+            if (i === currentPage) btn.classList.add("active");
+            btn.addEventListener("click", () => {
+                currentPage = i;
+                renderTable();
+            });
+            paginationContainer.appendChild(btn);
+        }
+    }
+
+    document.getElementById("pageSizeSelect").addEventListener("change", function () {
+        pageSize = parseInt(this.value);
+        currentPage = 1;
+        renderTable();
+    });
+
+    // ==== SORT ====
+    const headers = table.querySelectorAll("th");
+    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortedColumn = null;
+
+    headers.forEach((th, index) => {
+        // Chỉ cho phép sort các cột: ID (0), Username (1), Họ tên (2), Email (3), Số điện thoại (4), Trạng thái (5), Vai trò (6)
+        const sortableColumns = [0, 1, 2, 3, 4, 5, 6];
+        
+        if (sortableColumns.includes(index)) {
+            th.style.cursor = "pointer";
+            th.addEventListener("click", () => {
+                if (sortedColumn === index) sortOrder *= -1;
+                else {
+                    sortedColumn = index;
+                    sortOrder = 1;
+                }
+
+                rows.sort((a, b) => {
+                    const aText = a.children[index].textContent.trim();
+                    const bText = b.children[index].textContent.trim();
+
+                    // Xử lý sort cho từng loại cột
+                    switch(index) {
+                        case 0: // ID
+                            const aId = parseInt(aText);
+                            const bId = parseInt(bText);
+                            return (aId - bId) * sortOrder;
+                        
+                        case 1: // Username
+                        case 2: // Họ tên
+                        case 3: // Email
+                        case 4: // Số điện thoại
+                        case 5: // Trạng thái
+                        case 6: // Vai trò
+                            return aText.localeCompare(bText, "vi") * sortOrder;
+                        
+                        default:
+                            return 0;
+                    }
+                });
+
+                renderTable();
+                updateSortIcons(th, headers);
+            });
+        } else {
+            // Các cột không sort được
+            th.style.cursor = "default";
+        }
+    });
+
+    function updateSortIcons(activeTh, allThs) {
+        allThs.forEach(th => {
+            th.classList.remove("sorted-asc", "sorted-desc");
+        });
+        activeTh.classList.add(sortOrder === 1 ? "sorted-asc" : "sorted-desc");
+    }
+
+    renderTable();
+});
+</script>
+
+</body>
+</html>

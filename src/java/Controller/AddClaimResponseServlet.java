@@ -100,13 +100,13 @@ public class AddClaimResponseServlet extends HttpServlet {
                 session.setAttribute("error", "Có lỗi xảy ra khi gửi phản hồi");
             }
             
-            // Redirect to claim detail page
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            // Redirect to claim detail page with scroll parameter
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
         }
     }
     
@@ -145,13 +145,13 @@ public class AddClaimResponseServlet extends HttpServlet {
                 session.setAttribute("error", "Có lỗi xảy ra khi cập nhật trạng thái claim");
             }
             
-            // Redirect to claim detail page
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            // Redirect to claim detail page with scroll parameter
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
         }
     }
 

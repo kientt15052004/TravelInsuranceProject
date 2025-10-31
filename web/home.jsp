@@ -8,7 +8,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>InsureTravel - Travel Insurance</title>
+        <title>InsureTravel - Bảo Hiểm Du Lịch</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <link rel="stylesheet" href="./CSS/styleindex.css"/>
@@ -33,10 +33,10 @@
 
                 <div class="navbar-center collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav flex-row justify-content-center">
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Insurance Plans</a></li>
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Claims</a></li>
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">About</a></li>
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Support</a></li>
+                        <li class="nav-item mx-3"><a class="nav-link" href="#">Gói Bảo Hiểm</a></li>
+                        <li class="nav-item mx-3"><a class="nav-link" href="#">Khiếu Nại</a></li>
+                        <li class="nav-item mx-3"><a class="nav-link" href="#">Giới Thiệu</a></li>
+                        <li class="nav-item mx-3"><a class="nav-link" href="#">Hỗ Trợ</a></li>
                     </ul>
                 </div>
 
@@ -45,20 +45,19 @@
                         Model.User user = (Model.User) session.getAttribute("user");
                         if (user == null) {
                     %>
-                    <button class="btn btn-sign-in" onclick="window.location.href = 'login.jsp'">Sign In</button>
+                    <button class="btn btn-sign-in" onclick="window.location.href = 'login.jsp'">Đăng Nhập</button>
                     <%
                         } else {
                     %>
                     <div class="dropdown">
                         <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user me-2"></i>
                             <span><%= user.getFullname() %></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Profile</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Hồ Sơ</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi Mật Khẩu</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout">Logout</a></li>
+                            <li><a class="dropdown-item" href="logout">Đăng Xuất</a></li>
                         </ul>
                     </div>
 
@@ -77,14 +76,14 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6">
-                        <h1>Travel with Confidence,</h1>
-                        <h1 class="subtitle">Insured with Care</h1>
-                        <p>Comprehensive travel insurance coverage for your peace of mind. From medical emergencies to trip cancellations, we've got you covered worldwide.</p>
-                        <button class="btn btn-instant">Get Insurance</button>
-                        <button class="btn btn-learn">Learn More</button>
+                        <h1>Du lịch tự tin,</h1>
+                        <h1 class="subtitle">Được bảo hiểm an toàn</h1>
+                        <p>Bảo hiểm du lịch toàn diện cho sự an tâm của bạn. Từ các trường hợp cấp cứu y tế đến hủy chuyến đi, chúng tôi bảo vệ bạn trên toàn thế giới.</p>
+                        <button class="btn btn-instant">Mua Bảo Hiểm</button>
+                        <button class="btn btn-learn">Tìm Hiểu Thêm</button>
                     </div>
                     <div class="col-lg-6">
-                        <img src="./Image/img_home.png" alt="Travel Insurance" class="img-fluid hero-image">
+                        <img src="./Image/img_home.png" alt="Bảo Hiểm Du Lịch" class="img-fluid hero-image">
                     </div>
                 </div>
             </div>
@@ -93,13 +92,16 @@
         <!-- Products Section -->
         <section class="products-section">
             <div class="container">
-                <h2>Current Travel Insurance Products</h2>
-                <p class="subtitle-text">Choose the perfect insurance plan for your next adventure</p>
+                <h2>Sản phẩm bán chạy</h2>
+                <p class="subtitle-text">Chọn gói bảo hiểm hoàn hảo cho chuyến phiêu lưu tiếp theo của bạn</p>
                 <div class="row g-4 justify-content-center">
                     <%
                         ArrayList<Model.InsuranceProduct> products = (ArrayList<Model.InsuranceProduct>) request.getAttribute("products");
                         if (products != null && !products.isEmpty()) {
+                            int count = 0;
                             for (Model.InsuranceProduct p : products) {
+                                if (count >= 4) break;
+                                count++;
                     %>
                     <div class="col-lg-5 col-md-6">
                         <div class="product-card text-center">
@@ -124,16 +126,16 @@
         <!-- Why Choose Section -->
         <section class="why-choose-section">
             <div class="container">
-                <h2>Why Choose InsureTravel?</h2>
-                <p class="subtitle-text">Trusted by over 2 million travelers worldwide</p>
+                <h2>Tại sao chọn InsureTravel?</h2>
+                <p class="subtitle-text">Được tin tưởng bởi hơn 2 triệu khách du lịch trên toàn thế giới</p>
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
                             <div class="feature-icon">
                                 <i class="fas fa-shield-alt"></i>
                             </div>
-                            <h4>Instant Coverage</h4>
-                            <p>Get instant travel coverage with our streamlined application process</p>
+                            <h4>Bảo hiểm tức thì</h4>
+                            <p>Nhận bảo hiểm du lịch ngay lập tức với quy trình đăng ký đơn giản</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -141,8 +143,8 @@
                             <div class="feature-icon">
                                 <i class="fas fa-globe"></i>
                             </div>
-                            <h4>Global Coverage</h4>
-                            <p>Protected around the world with our comprehensive network</p>
+                            <h4>Bảo vệ toàn cầu</h4>
+                            <p>Được bảo vệ trên toàn thế giới với mạng lưới toàn diện của chúng tôi</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -150,8 +152,8 @@
                             <div class="feature-icon">
                                 <i class="fas fa-headset"></i>
                             </div>
-                            <h4>24/7 Support</h4>
-                            <p>Round-the-clock assistance whenever and wherever you need it</p>
+                            <h4>Hỗ trợ 24/7</h4>
+                            <p>Hỗ trợ liên tục bất cứ khi nào và ở đâu bạn cần</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -159,8 +161,8 @@
                             <div class="feature-icon">
                                 <i class="fas fa-bolt"></i>
                             </div>
-                            <h4>Fast Claims</h4>
-                            <p>Quick and hassle-free claims processing with digital submission</p>
+                            <h4>Giải quyết nhanh chóng</h4>
+                            <p>Xử lý khiếu nại nhanh chóng và dễ dàng với nộp đơn kỹ thuật số</p>
                         </div>
                     </div>
                 </div>
@@ -170,40 +172,40 @@
         <!-- FAQ Section - Phần câu hỏi thường gặp -->
         <section class="faq-section">
             <div class="container">
-                <h2>Frequently Asked Questions</h2>
-                <p class="subtitle-text">Get answers to common travel insurance questions</p>
+                <h2>Câu Hỏi Thường Gặp</h2>
+                <p class="subtitle-text">Nhận câu trả lời cho các câu hỏi phổ biến về bảo hiểm du lịch</p>
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <!-- FAQ Item 1 -->
                         <div class="faq-item" onclick="toggleFAQ(this)">
                             <div class="faq-question">
-                                <span>What does travel insurance cover?</span>
+                                <span>Bảo hiểm du lịch bao gồm những gì?</span>
                                 <i class="fas fa-chevron-down faq-icon"></i>
                             </div>
                             <div class="faq-answer">
-                                Travel insurance typically covers medical emergencies, trip cancellations, lost baggage, flight delays, and emergency evacuations. The specific coverage depends on the plan you choose. Our Basic plan covers essential medical needs, while Premium and Elite plans offer more comprehensive protection including adventure sports and cancel-for-any-reason options.
+                                Bảo hiểm du lịch thường bao gồm các trường hợp cấp cứu y tế, hủy chuyến đi, hành lý bị mất, chậm chuyến bay và sơ tán khẩn cấp. Phạm vi bảo hiểm cụ thể phụ thuộc vào gói bạn chọn. Gói Cơ bản của chúng tôi bao gồm các nhu cầu y tế thiết yếu, trong khi các gói Cao cấp và Cao nhất cung cấp bảo vệ toàn diện hơn bao gồm thể thao mạo hiểm và các tùy chọn hủy vì bất kỳ lý do nào.
                             </div>
                         </div>
 
                         <!-- FAQ Item 2 -->
                         <div class="faq-item" onclick="toggleFAQ(this)">
                             <div class="faq-question">
-                                <span>When should I purchase travel insurance?</span>
+                                <span>Khi nào tôi nên mua bảo hiểm du lịch?</span>
                                 <i class="fas fa-chevron-down faq-icon"></i>
                             </div>
                             <div class="faq-answer">
-                                It's best to purchase travel insurance as soon as you book your trip. This ensures maximum coverage, especially for trip cancellation benefits. Some benefits, like pre-existing condition coverage, are only available if you purchase within a specific time frame after your initial trip deposit.
+                                Tốt nhất là bạn nên mua bảo hiểm du lịch ngay sau khi đặt chuyến đi. Điều này đảm bảo phạm vi bảo hiểm tối đa, đặc biệt là các quyền lợi hủy chuyến đi. Một số quyền lợi, như bảo hiểm cho các tình trạng sẵn có, chỉ có sẵn nếu bạn mua trong một khung thời gian cụ thể sau khi đặt cọc chuyến đi ban đầu.
                             </div>
                         </div>
 
                         <!-- FAQ Item 3 -->
                         <div class="faq-item" onclick="toggleFAQ(this)">
                             <div class="faq-question">
-                                <span>How do I file a claim?</span>
+                                <span>Làm thế nào để nộp đơn khiếu nại?</span>
                                 <i class="fas fa-chevron-down faq-icon"></i>
                             </div>
                             <div class="faq-answer">
-                                Filing a claim is easy! You can submit your claim online through our portal, via email, or by calling our 24/7 support team. You'll need to provide documentation such as receipts, medical reports, or police reports depending on your claim type. Most claims are processed within 10-15 business days.
+                                Nộp đơn khiếu nại rất dễ dàng! Bạn có thể gửi đơn khiếu nại trực tuyến qua cổng thông tin của chúng tôi, qua email hoặc bằng cách gọi cho đội hỗ trợ 24/7 của chúng tôi. Bạn sẽ cần cung cấp tài liệu như hóa đơn, báo cáo y tế hoặc báo cáo cảnh sát tùy thuộc vào loại khiếu nại của bạn. Hầu hết các khiếu nại được xử lý trong vòng 10-15 ngày làm việc.
                             </div>
                         </div>
                     </div>
@@ -214,9 +216,9 @@
         <!-- CTA Section -->
         <section class="cta-section">
             <div class="container">
-                <h2>Ready to Travel with Peace of Mind?</h2>
-                <p>Get your personalized insurance in under 3 minutes</p>
-                <button class="btn btn-cta" onclick="window.location.href = 'InsurancePurchase.jsp'">Get Now</button>
+                <h2>Sẵn sàng du lịch với sự an tâm?</h2>
+                <p>Nhận bảo hiểm cá nhân hóa của bạn trong vòng chưa đầy 3 phút</p>
+                <button class="btn btn-cta" onclick="window.location.href = 'InsurancePurchase.jsp'">Mua Ngay</button>
             </div>
         </section>
 
@@ -225,7 +227,7 @@
             <div class="modal-dialog modal-lg"> 
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="profileModalLabel">Edit Profile</h5>
+                        <h5 class="modal-title" id="profileModalLabel">Chỉnh Sửa Hồ Sơ</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data"> <!-- multipart nếu upload avatar/CCCD -->
@@ -243,7 +245,7 @@
                                     <input type="hidden" name="id" value="<c:out value='${user.id}' />">
 
                                     <div class="mb-2">
-                                        <label class="form-label fw-semibold">Full Name:</label>
+                                        <label class="form-label fw-semibold">Họ và Tên:</label>
                                         <input type="text" class="form-control" name="fullname" value="<c:out value='${user.fullname}' />" required>
                                     </div>
 
@@ -253,30 +255,30 @@
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label fw-semibold">Date of Birth:</label>
+                                        <label class="form-label fw-semibold">Ngày Sinh:</label>
                                         <input type="date" class="form-control" name="dob" value="<c:out value='${user.dob}' />">
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label fw-semibold">Address:</label>
+                                        <label class="form-label fw-semibold">Địa Chỉ:</label>
                                         <input type="text" class="form-control" name="address" value="<c:out value='${user.address}' />">
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label fw-semibold">Phone:</label>
+                                        <label class="form-label fw-semibold">Số Điện Thoại:</label>
                                         <input type="text" class="form-control" name="phone" value="<c:out value='${user.phone}' />">
                                     </div>
 
                                     <div class="mb-2">
-                                        <label class="form-label fw-semibold">CCCD Number:</label>
+                                        <label class="form-label fw-semibold">Số CCCD:</label>
                                         <input type="text" class="form-control" name="cccd" value="<c:out value='${user.cccd}' />">
                                     </div>
 
                                     <!-- CCCD Image -->
                                     <div class="mb-2">
-                                        <label class="form-label fw-semibold">CCCD Image:</label>
+                                        <label class="form-label fw-semibold">Ảnh CCCD:</label>
                                         <c:if test="${not empty user.cccd_img}">
-                                            <img id="cccdPreview" src="<c:out value='${user.cccd_img}' />" alt="CCCD Image" class="img-fluid mt-1 mb-1">
+                                            <img id="cccdPreview" src="<c:out value='${user.cccd_img}' />" alt="Ảnh CCCD" class="img-fluid mt-1 mb-1">
                                         </c:if>
                                         <input type="file" name="cccd_img" class="form-control mt-1" onchange="previewImage(this, 'cccdPreview')">
                                     </div>
@@ -284,8 +286,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Update Profile</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            <button type="submit" class="btn btn-primary">Cập Nhật Hồ Sơ</button>
                         </div>
                     </form>
                 </div>
@@ -297,24 +299,24 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                        <h5 class="modal-title" id="changePasswordModalLabel">Đổi Mật Khẩu</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <form action="ChangePasswordServlet" method="post">
                             <div class="mb-3">
-                                <label class="form-label">Current Password</label>
+                                <label class="form-label">Mật Khẩu Hiện Tại</label>
                                 <input type="password" class="form-control" name="currentPassword" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">New Password</label>
+                                <label class="form-label">Mật Khẩu Mới</label>
                                 <input type="password" class="form-control" name="newPassword" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Confirm New Password</label>
+                                <label class="form-label">Xác Nhận Mật Khẩu Mới</label>
                                 <input type="password" class="form-control" name="confirmPassword" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
                         </form>
                     </div>
                 </div>

@@ -25,11 +25,13 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    padding-right: calc(20px + env(scrollbar-width, 17px));
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 .header-left {
@@ -77,18 +79,21 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 /* User section with inline logout button */
-.user-info {
-    display: flex;
+.top-header .user-info {
+    display: flex !important;
+    flex-direction: row !important;
     align-items: center;
     gap: 10px;
     color: #000;
     font-size: 14px;
     font-weight: 500;
 }
-.user-info i {
+.top-header .user-info i {
     font-size: 20px;
     color: #000;
 }

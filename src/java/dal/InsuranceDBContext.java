@@ -642,4 +642,29 @@ public class InsuranceDBContext extends DBContext {
         return products;
     }
 
+    public ArrayList<InsuranceProduct> getTopSellingProducts(int limit) {
+        String sql = "SELECT p.*, COUNT(a.id) as purchase_count " +
+                    "FROM products p " +
+                    "LEFT JOIN applications a ON p.id = a.product_id " +
+                    "WHERE p.is_delete = false AND p.is_active = true " +
+                    "GROUP BY p.id " +
+                    "ORDER BY purchase_count DESC, p.id ASC " +
+                    "LIMIT ?";
+        
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, limit);
+            ResultSet rs = stm.executeQuery();
+            
+            while (rs.next()) {
+                InsuranceProduct product = mapResultSetToInsuranceProduct(rs);
+                products.add(product);
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting top selling products: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return products;
+    }
+
 }
