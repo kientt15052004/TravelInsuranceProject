@@ -71,7 +71,6 @@
         <servlet-name>ContractManagementServlet</servlet-name>
         <url-pattern>/ContractManagementServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ContractDetailServlet</servlet-name>
         <servlet-class>Controller.ContractDetailServlet</servlet-class>
@@ -79,6 +78,78 @@
     <servlet-mapping>
         <servlet-name>ContractDetailServlet</servlet-name>
         <url-pattern>/ContractDetailServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TestCreateContract</servlet-name>
+        <servlet-class>Controller.TestCreateContract</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestCreateContract</servlet-name>
+        <url-pattern>/TestCreateContract</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DebugForm</servlet-name>
+        <servlet-class>Controller.DebugForm</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugForm</servlet-name>
+        <url-pattern>/DebugForm</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SimpleCreateContract</servlet-name>
+        <servlet-class>Controller.SimpleCreateContract</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimpleCreateContract</servlet-name>
+        <url-pattern>/SimpleCreateContract</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SimpleCreateContractGet</servlet-name>
+        <servlet-class>Controller.SimpleCreateContractGet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimpleCreateContractGet</servlet-name>
+        <url-pattern>/SimpleCreateContractGet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SimpleCreateContractServlet</servlet-name>
+        <servlet-class>Controller.SimpleCreateContractServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SimpleCreateContractServlet</servlet-name>
+        <url-pattern>/SimpleCreateContractServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TestApplicationInsert</servlet-name>
+        <servlet-class>Controller.TestApplicationInsert</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestApplicationInsert</servlet-name>
+        <url-pattern>/TestApplicationInsert</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TestContractInsert</servlet-name>
+        <servlet-class>Controller.TestContractInsert</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestContractInsert</servlet-name>
+        <url-pattern>/TestContractInsert</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DebugRealData</servlet-name>
+        <servlet-class>Controller.DebugRealData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DebugRealData</servlet-name>
+        <url-pattern>/DebugRealData</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TestDBConnection</servlet-name>
+        <servlet-class>Controller.TestDBConnection</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TestDBConnection</servlet-name>
+        <url-pattern>/TestDBConnection</url-pattern>
     </servlet-mapping>
     <!-- Session timeout (120 minutes = 2 hours) -->
     <session-config>
@@ -91,6 +162,15 @@
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>navigate</servlet-name>
+        <servlet-class>Controller.navigate</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>navigate</servlet-name>
+        <url-pattern>/navigate</url-pattern>
     </servlet-mapping>
     
     <servlet>
@@ -142,7 +222,6 @@
         <servlet-name>UpdateProduct</servlet-name>
         <url-pattern>/update_product</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>UserManagementServlet</servlet-name>
         <servlet-class>Controller.UserManagementServlet</servlet-class>
@@ -151,7 +230,6 @@
         <servlet-name>UserManagementServlet</servlet-name>
         <url-pattern>/usermanagement</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ClaimsManagementServlet</servlet-name>
         <servlet-class>Controller.ClaimsManagementServlet</servlet-class>
@@ -160,7 +238,6 @@
         <servlet-name>ClaimsManagementServlet</servlet-name>
         <url-pattern>/ClaimsManagementServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ClaimDetailServlet</servlet-name>
         <servlet-class>Controller.ClaimDetailServlet</servlet-class>
@@ -169,9 +246,6 @@
         <servlet-name>ClaimDetailServlet</servlet-name>
         <url-pattern>/ClaimDetailServlet</url-pattern>
     </servlet-mapping>
-
-    
-
     <servlet>
         <servlet-name>UpdateUserServlet</servlet-name>
         <servlet-class>Controller.UpdateUserServlet</servlet-class>
@@ -181,5 +255,20 @@
         <url-pattern>/updateuser</url-pattern>
     </servlet-mapping>
 
-    
+    <servlet>
+        <servlet-name>ClaimApprovalServlet</servlet-name>
+        <servlet-class>Controller.ClaimApprovalServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimApprovalServlet</servlet-name>
+        <url-pattern>/ClaimApprovalServlet</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ClaimStatusUpdateServlet</servlet-name>
+        <servlet-class>Controller.ClaimStatusUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClaimStatusUpdateServlet</servlet-name>
+        <url-pattern>/ClaimStatusUpdateServlet</url-pattern>
+    </servlet-mapping>
 </web-app>

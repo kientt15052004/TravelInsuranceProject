@@ -426,5 +426,60 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
+    public boolean updateUserProfile(User user) {
+        String sql = "UPDATE users SET fullname = ?, mail = ?, dob = ?, address = ?, phone = ?, cccd = ?, avatar = ?, cccd_img = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, user.getFullname());
+            st.setString(2, user.getMail());
+
+            if (user.getDob() != null) {
+                st.setDate(3, Date.valueOf(user.getDob()));
+            } else {
+                st.setNull(3, java.sql.Types.DATE);
+            }
+
+            st.setString(4, user.getAddress());
+            st.setString(5, user.getPhone());
+            st.setString(6, user.getCccd());
+            st.setString(7, user.getAvatar());
+            st.setString(8, user.getCccd_img());
+            st.setInt(9, user.getId()); // WHERE id = ?
+
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean changePassword(int userId, String oldPassword, String newPassword) {
+        String sqlCheck = "SELECT password FROM users WHERE id = ?";
+        String sqlUpdate = "UPDATE users SET password = ? WHERE id = ?";
+
+        try (PreparedStatement stCheck = connection.prepareStatement(sqlCheck)) {
+            stCheck.setInt(1, userId);
+            try (ResultSet rs = stCheck.executeQuery()) {
+                if (rs.next()) {
+                    String currentPassword = rs.getString("password");
+                    if (!currentPassword.equals(oldPassword)) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
+            try (PreparedStatement stUpdate = connection.prepareStatement(sqlUpdate)) {
+                stUpdate.setString(1, newPassword);
+                stUpdate.setInt(2, userId);
+                int rows = stUpdate.executeUpdate();
+                return rows > 0;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     
 }
