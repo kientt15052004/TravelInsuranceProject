@@ -527,6 +527,28 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
+    
+    public boolean updateUserStatus(int userId, String status) {
+        if (status == null) {
+            return false;
+        }
+
+        String normalizedStatus = status.trim().toLowerCase();
+        if (!"active".equals(normalizedStatus) && !"inactive".equals(normalizedStatus)) {
+            return false;
+        }
+
+        String sql = "UPDATE users SET status = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, normalizedStatus);
+            st.setInt(2, userId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public boolean updateUserProfile(User user) {
         String sql = "UPDATE users SET fullname = ?, mail = ?, dob = ?, address = ?, phone = ?, cccd = ?, avatar = ?, cccd_img = ? WHERE id = ?";

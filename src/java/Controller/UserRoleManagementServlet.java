@@ -82,16 +82,16 @@ public class UserRoleManagementServlet extends HttpServlet {
             return;
         }
 
+        String action = request.getParameter("action");
         String userIdParam = request.getParameter("userId");
-        String roleParam = request.getParameter("role");
         
         // Lấy các tham số search/filter để giữ lại sau khi redirect
         String keyword = request.getParameter("keyword");
         String roleFilter = request.getParameter("roleFilter");
         String statusFilter = request.getParameter("statusFilter");
 
-        if (userIdParam == null || userIdParam.trim().isEmpty() || roleParam == null || roleParam.trim().isEmpty()) {
-            session.setAttribute("roleUpdateError", "Thiếu thông tin người dùng hoặc vai trò.");
+        if (userIdParam == null || userIdParam.trim().isEmpty()) {
+            session.setAttribute("roleUpdateError", "Thiếu thông tin người dùng.");
             String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
             response.sendRedirect(redirectUrl);
             return;
@@ -108,19 +108,90 @@ public class UserRoleManagementServlet extends HttpServlet {
         }
 
         if (currentUser != null && currentUser.getId() == targetUserId) {
-            session.setAttribute("roleUpdateError", "Bạn không thể tự chỉnh sửa vai trò của chính mình tại đây.");
+            session.setAttribute("roleUpdateError", "Bạn không thể tự chỉnh sửa vai trò và trạng thái của chính mình.");
             String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
             response.sendRedirect(redirectUrl);
             return;
         }
 
         UserDAO userDAO = new UserDAO();
-        boolean updated = userDAO.updateUserRole(targetUserId, roleParam);
+        boolean updated = false;
+        boolean roleUpdated = false;
+        boolean statusUpdated = false;
+        String message = "";
+
+        if ("updateRole".equals(action)) {
+            String roleParam = request.getParameter("role");
+            if (roleParam == null || roleParam.trim().isEmpty()) {
+                session.setAttribute("roleUpdateError", "Thiếu thông tin vai trò.");
+                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+                response.sendRedirect(redirectUrl);
+                return;
+            }
+            updated = userDAO.updateUserRole(targetUserId, roleParam);
+            if (updated) {
+                message = "Cập nhật vai trò thành công.";
+            } else {
+                message = "Không thể cập nhật vai trò. Vui lòng thử lại.";
+            }
+        } else if ("updateStatus".equals(action)) {
+            String statusParam = request.getParameter("status");
+            if (statusParam == null || statusParam.trim().isEmpty()) {
+                session.setAttribute("roleUpdateError", "Thiếu thông tin trạng thái.");
+                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+                response.sendRedirect(redirectUrl);
+                return;
+            }
+            updated = userDAO.updateUserStatus(targetUserId, statusParam);
+            if (updated) {
+                message = "Cập nhật trạng thái thành công.";
+            } else {
+                message = "Không thể cập nhật trạng thái. Vui lòng thử lại.";
+            }
+        } else if ("updateBoth".equals(action)) {
+            String roleParam = request.getParameter("role");
+            String statusParam = request.getParameter("status");
+            
+            if (roleParam == null || roleParam.trim().isEmpty()) {
+                session.setAttribute("roleUpdateError", "Thiếu thông tin vai trò.");
+                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+                response.sendRedirect(redirectUrl);
+                return;
+            }
+            if (statusParam == null || statusParam.trim().isEmpty()) {
+                session.setAttribute("roleUpdateError", "Thiếu thông tin trạng thái.");
+                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+                response.sendRedirect(redirectUrl);
+                return;
+            }
+            
+            roleUpdated = userDAO.updateUserRole(targetUserId, roleParam);
+            statusUpdated = userDAO.updateUserStatus(targetUserId, statusParam);
+            
+            if (roleUpdated && statusUpdated) {
+                message = "Cập nhật vai trò và trạng thái thành công.";
+                updated = true;
+            } else if (roleUpdated) {
+                message = "Cập nhật vai trò thành công nhưng không thể cập nhật trạng thái.";
+                updated = true;
+            } else if (statusUpdated) {
+                message = "Cập nhật trạng thái thành công nhưng không thể cập nhật vai trò.";
+                updated = true;
+            } else {
+                message = "Không thể cập nhật vai trò và trạng thái. Vui lòng thử lại.";
+                updated = false;
+            }
+        } else {
+            session.setAttribute("roleUpdateError", "Hành động không hợp lệ.");
+            String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+            response.sendRedirect(redirectUrl);
+            return;
+        }
 
         if (updated) {
-            session.setAttribute("roleUpdateMessage", "Cập nhật vai trò thành công.");
+            session.setAttribute("roleUpdateMessage", message);
         } else {
-            session.setAttribute("roleUpdateError", "Không thể cập nhật vai trò. Vui lòng thử lại.");
+            session.setAttribute("roleUpdateError", message);
         }
 
         String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);

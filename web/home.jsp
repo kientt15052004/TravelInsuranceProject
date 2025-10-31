@@ -14,60 +14,7 @@
         <link rel="stylesheet" href="./CSS/styleindex.css"/>
     </head>
     <body>
-        <%--<jsp:include page="./component/header.jsp"></jsp:include>--%>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg shadow-sm">
-            <div class="container d-flex justify-content-between align-items-center">
-
-                <div class="navbar-left d-flex align-items-center">
-                    <a class="navbar-brand" href="#">
-                        <i class="fas fa-shield-alt"></i>
-                        InsureTravel
-                    </a>
-                </div>
-                <!-- Nút toggle (mobile) --> 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="navbar-center collapse navbar-collapse justify-content-center" id="navbarNav">
-                    <ul class="navbar-nav flex-row justify-content-center">
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Gói Bảo Hiểm</a></li>
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Khiếu Nại</a></li>
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Giới Thiệu</a></li>
-                        <li class="nav-item mx-3"><a class="nav-link" href="#">Hỗ Trợ</a></li>
-                    </ul>
-                </div>
-
-                <div class="navbar-right d-flex justify-content-end">
-                    <%
-                        Model.User user = (Model.User) session.getAttribute("user");
-                        if (user == null) {
-                    %>
-                    <button class="btn btn-sign-in" onclick="window.location.href = 'login.jsp'">Đăng Nhập</button>
-                    <%
-                        } else {
-                    %>
-                    <div class="dropdown">
-                        <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span><%= user.getFullname() %></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Hồ Sơ</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi Mật Khẩu</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="logout">Đăng Xuất</a></li>
-                        </ul>
-                    </div>
-
-                    <%
-                        }
-                    %>
-                </div>
-
-            </div>  
-        </nav>
+        <jsp:include page="./component/header.jsp"></jsp:include>
 
 
 
@@ -79,8 +26,8 @@
                         <h1>Du lịch tự tin,</h1>
                         <h1 class="subtitle">Được bảo hiểm an toàn</h1>
                         <p>Bảo hiểm du lịch toàn diện cho sự an tâm của bạn. Từ các trường hợp cấp cứu y tế đến hủy chuyến đi, chúng tôi bảo vệ bạn trên toàn thế giới.</p>
-                        <button class="btn btn-instant">Mua Bảo Hiểm</button>
-                        <button class="btn btn-learn">Tìm Hiểu Thêm</button>
+                        <button class="btn btn-instant" onclick="window.location.href = 'InsuranceList'">Mua Bảo Hiểm</button>
+                        <button class="btn btn-learn" onclick="window.location.href = 'InsuranceList'">Tìm Hiểu Thêm</button>
                     </div>
                     <div class="col-lg-6">
                         <img src="./Image/img_home.png" alt="Bảo Hiểm Du Lịch" class="img-fluid hero-image">
@@ -106,12 +53,17 @@
                     <div class="col-lg-5 col-md-6">
                         <div class="product-card text-center">
                             <img src="<%= p.getImg().startsWith("http") ? p.getImg() : "./" + p.getImg() %>" alt="<%= p.getName() %>" class="product-image">
-                            <button class="btn-select-plan"><%= p.getName() %></button>
+                            <button class="btn-select-plan" onclick="window.location.href = 'InsuranceList'"><%= p.getName() %></button>
                             <p class="product-desc mt-2"><%= p.getDescription() %></p>
                         </div>
                     </div>
                     <%
                             }
+                    %>
+                    <div class="col-12 text-center mt-4">
+                        <button class="btn btn-primary" onclick="window.location.href = 'InsuranceList'" style="padding: 12px 30px; font-size: 1.1rem;">Xem Tất Cả Sản Phẩm</button>
+                    </div>
+                    <%
                         } else {
                     %>
                     <p class="text-center">Hiện chưa có sản phẩm nào được hiển thị.</p>
@@ -218,7 +170,7 @@
             <div class="container">
                 <h2>Sẵn sàng du lịch với sự an tâm?</h2>
                 <p>Nhận bảo hiểm cá nhân hóa của bạn trong vòng chưa đầy 3 phút</p>
-                <button class="btn btn-cta" onclick="window.location.href = 'InsurancePurchase.jsp'">Mua Ngay</button>
+                <button class="btn btn-cta" onclick="window.location.href = 'InsuranceList'">Xem Sản Phẩm</button>
             </div>
         </section>
 
@@ -227,7 +179,7 @@
             <div class="modal-dialog modal-lg"> 
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="profileModalLabel">Chỉnh Sửa Hồ Sơ</h5>
+                        <h5 class="modal-title" id="profileModalLabel">Hồ Sơ</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data"> <!-- multipart nếu upload avatar/CCCD -->
@@ -235,10 +187,14 @@
                             <div class="row g-3">
                                 <!-- Avatar -->
                                 <div class="col-md-3 text-center">
+                                    <label class="form-label fw-semibold d-block mb-2">Ảnh đại diện</label>
                                     <c:if test="${not empty user.avatar}">
-                                        <img id="avatarPreview" src="<c:out value='${user.avatar}' />" alt="Avatar" class="img-fluid rounded-circle mb-2">
+                                        <img id="avatarPreview" src="<c:out value='${user.avatar}' />" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2">
                                     </c:if>
-                                    <input type="file" name="avatar" class="form-control mt-1" onchange="previewImage(this, 'avatarPreview')">
+                                    <c:if test="${empty user.avatar}">
+                                        <img id="avatarPreview" src="" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2" style="display: none;">
+                                    </c:if>
+                                    <input type="file" name="avatar" class="form-control mt-1" accept="image/*" onchange="previewImage(this, 'avatarPreview')">
                                 </div>
 
                                 <div class="col-md-9">
@@ -362,7 +318,9 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function (e) {
-                        document.getElementById(previewId).src = e.target.result;
+                        const previewImg = document.getElementById(previewId);
+                        previewImg.src = e.target.result;
+                        previewImg.style.display = 'block';
                     }
                     reader.readAsDataURL(file);
                 }

@@ -64,7 +64,16 @@ body {
     padding: 8px 20px;
     font-weight: 600;
     border: none;
-    transition: background-color 0.3s;
+    transition: none;
+}
+
+/* Bỏ hover effect cho nút đăng nhập */
+.btn-sign-in:hover,
+.btn-sign-in:focus,
+.btn-sign-in:active {
+    background-color: #ff9800;
+    color: white;
+    transform: none;
 }
 
 /* Thông tin user */
@@ -153,6 +162,16 @@ body {
 .navbar-right .dropdown-divider {
     margin: 8px 0;
     border-color: #e0e0e0;
+}
+
+/* Avatar Image Styling */
+.avatar-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #f8f9fa;
 }
 
 /* Responsive cho mobile */

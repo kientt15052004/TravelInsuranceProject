@@ -7,27 +7,22 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>InsureTravel - Insurance List</title>
+        <title>InsureTravel - Danh Sách Bảo Hiểm</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="./CSS/styleindex.css"/>
         <link rel="stylesheet" href="./CSS/InsuranceList.css">
     </head>
     <body>
+        <!-- Header -->
+        <jsp:include page="component/header.jsp" />
+        
         <div class="container">
-            <!-- Header -->
-            <jsp:include page="component/header.jsp" />
-
-            <!-- Breadcrumb -->
-            <div class="breadcrumb">
-                <a href="#">Home</a>
-                <span>&gt;</span>
-                <span>Insurance List</span>
-            </div>
 
             <!-- Page Title -->
             <h1 class="page-title">
                 <span class="icon">🛡️</span>
-                Travel Insurance Products
+                Sản Phẩm Bảo Hiểm Du Lịch
             </h1>
 
             <!-- Filter Section -->
@@ -35,15 +30,15 @@
                 <form action="InsuranceList" method="GET" class="filter-form">
                     <!-- Search by name -->
                     <div class="form-group">
-                        <label>Search by Name</label>
-                        <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Enter insurance name...">
+                        <label>Tìm kiếm theo tên</label>
+                        <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Nhập tên bảo hiểm...">
                     </div>
 
                     <!-- Filter by type -->
                     <div class="form-group">
-                        <label>Filter by Type</label>
+                        <label>Lọc theo loại</label>
                         <select class="form-select" name="searchType">
-                            <option value="">All Types</option>
+                            <option value="">Tất cả loại</option>
                             <c:forEach var="t" items="${types}">
                                 <option value="${t}" ${param.searchType == t ? 'selected' : ''}>${t}</option>
                             </c:forEach>
@@ -52,18 +47,18 @@
 
                     <!-- Filter by price -->
                     <div class="form-group price-filter">
-                        <label>Filter by Price (USD)</label>
+                        <label>Lọc theo giá (USD)</label>
                         <div class="price-range">
-                            <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Min" min="0" step="1">
+                            <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Tối thiểu" min="0" step="1">
                             <span>-</span>
-                            <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Max" min="0" step="1">
+                            <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Tối đa" min="0" step="1">
                         </div>
                     </div>
 
                     <!-- Buttons -->
                     <div class="form-buttons">
-                        <button type="submit" class="search-btn">🔍 Search</button>
-                        <a href="InsuranceList" class="search-btn">🧹 Clear</a>
+                        <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
+                        <a href="InsuranceList" class="search-btn">🧹 Xóa bộ lọc</a>
                     </div>
                 </form>
             </div>
@@ -73,7 +68,7 @@
                 <div class="results-count">
                     <c:set var="startIndex" value="${(currentPage - 1) * pageSize + 1}" />
                     <c:set var="endIndex" value="${currentPage * pageSize > totalRecords ? totalRecords : currentPage * pageSize}" />
-                    Showing <strong>${totalRecords > 0 ? startIndex : 0}-${endIndex}</strong> of <strong>${totalRecords}</strong> results
+                    Hiển thị <strong>${totalRecords > 0 ? startIndex : 0}-${endIndex}</strong> trong tổng số <strong>${totalRecords}</strong> kết quả
                 </div>
             </div>
 
@@ -83,8 +78,8 @@
                     <c:when test="${empty insurances}">
                         <div class="empty-state">
                             <div class="icon">🔍</div>
-                            <h3>No results found</h3>
-                            <p>Try adjusting your search or filter criteria</p>
+                            <h3>Không tìm thấy kết quả</h3>
+                            <p>Vui lòng điều chỉnh tiêu chí tìm kiếm hoặc bộ lọc</p>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -100,10 +95,10 @@
 
                                 <!-- Added Price Display -->
                                 <div class="insurance-price">
-                                    💰 Price: <strong>$${insurance.price}</strong>
+                                    💰 Giá: <strong>$${insurance.price}</strong>
                                 </div>
 
-                                <button class="view-details-btn">Purchase Now</button>
+                                <button class="view-details-btn">Mua Ngay</button>
                             </a>
                         </c:forEach>
                     </c:otherwise>
@@ -117,10 +112,10 @@
                     <c:choose>
                         <c:when test="${currentPage > 1}">
                             <a href="InsuranceList?page=${currentPage - 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                               class="page-btn">← Previous</a>
+                               class="page-btn">← Trước</a>
                         </c:when>
                         <c:otherwise>
-                            <span class="page-btn disabled">← Previous</span>
+                            <span class="page-btn disabled">← Trước</span>
                         </c:otherwise>
                     </c:choose>
 
@@ -141,16 +136,19 @@
                     <c:choose>
                         <c:when test="${currentPage < totalPages}">
                             <a href="InsuranceList?page=${currentPage + 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                               class="page-btn">Next →</a>
+                               class="page-btn">Sau →</a>
                         </c:when>
                         <c:otherwise>
-                            <span class="page-btn disabled">Next →</span>
+                            <span class="page-btn disabled">Sau →</span>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </c:if>
         </div>
 
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
         <!-- SweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="./JS/SweetAlert.js"></script>

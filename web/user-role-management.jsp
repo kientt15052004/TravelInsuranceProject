@@ -123,7 +123,7 @@
                                         <th>Số điện thoại</th>
                                         <th>Trạng thái</th>
                                         <th>Vai trò hiện tại</th>
-                                        <th class="text-center">Cập nhật vai trò</th>
+                                        <th class="text-center">Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -151,6 +151,7 @@
                                             </td>
                                             <td class="actions-cell">
                                                 <form method="post" action="${pageContext.request.contextPath}/user-role-management" style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                                                    <input type="hidden" name="action" value="updateBoth" />
                                                     <input type="hidden" name="userId" value="${user.id}" />
                                                     <c:if test="${not empty searchKeyword}">
                                                         <input type="hidden" name="keyword" value="${searchKeyword}" />
@@ -174,14 +175,19 @@
                                                             </option>
                                                         </c:forEach>
                                                     </select>
+                                                    <select name="status" class="form-select form-select-sm" style="padding: 8px 12px; border: 2px solid #e0e0e0; font-size: 14px; min-width: 150px;"
+                                                            ${sessionScope.user.id == user.id ? 'disabled' : ''}>
+                                                        <option value="active" ${user.status == 'active' ? 'selected' : ''}>Hoạt động</option>
+                                                        <option value="inactive" ${user.status == 'inactive' ? 'selected' : ''}>Không hoạt động</option>
+                                                    </select>
                                                     <button type="submit" class="btn-sm btn-info"
                                                             ${sessionScope.user.id == user.id ? 'disabled' : ''}>
-                                                        <i class="fas fa-save"></i> Lưu
+                                                        Lưu
                                                     </button>
                                                 </form>
                                                 <c:if test="${sessionScope.user.id == user.id}">
                                                     <small class="text-muted d-block text-center mt-1" style="font-size: 11px; color: #999;">
-                                                        Không thể tự thay đổi vai trò của chính bạn.
+                                                        Không thể tự thay đổi vai trò và trạng thái của chính bạn.
                                                     </small>
                                                 </c:if>
                                             </td>
