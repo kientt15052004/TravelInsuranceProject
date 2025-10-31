@@ -16,35 +16,21 @@ import java.math.BigDecimal;
 public class UserDAO extends DBContext {
 
     public User checkLogin(String username, String password) {
+        User user = getUserByCredentials(username, password);
+        if (user != null && "active".equalsIgnoreCase(user.getStatus())) {
+            return user;
+        }
+        return null;
+    }
+
+    public User getUserByCredentials(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, username);
             st.setString(2, password);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    User u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setUsername(rs.getString("username"));
-                    u.setPassword(rs.getString("password"));
-                    u.setFullname(rs.getString("fullname"));
-                    u.setMail(rs.getString("mail"));
-
-                    Date dobSql = rs.getDate("dob"); // java.sql.Date
-                    if (dobSql != null) {
-                        LocalDate dobLocal = dobSql.toLocalDate();
-                        u.setDob(dobLocal);
-                    } else {
-                        u.setDob(null);
-                    }
-
-                    u.setAddress(rs.getString("address"));
-                    u.setPhone(rs.getString("phone"));
-                    u.setCccd(rs.getString("cccd"));
-                    u.setAvatar(rs.getString("avatar"));
-                    u.setRole(rs.getString("role"));
-                    u.setCccd_img(rs.getString("cccd_img"));
-                    u.setStatus(rs.getString("status"));
-                    return u;
+                    return mapUser(rs);
                 }
             }
         } catch (SQLException e) {
@@ -482,4 +468,30 @@ public class UserDAO extends DBContext {
         return false;
     }
     
+    private User mapUser(ResultSet rs) throws SQLException {
+        User u = new User();
+        u.setId(rs.getInt("id"));
+        u.setUsername(rs.getString("username"));
+        u.setPassword(rs.getString("password"));
+        u.setFullname(rs.getString("fullname"));
+        u.setMail(rs.getString("mail"));
+
+        Date dobSql = rs.getDate("dob");
+        if (dobSql != null) {
+            LocalDate dobLocal = dobSql.toLocalDate();
+            u.setDob(dobLocal);
+        } else {
+            u.setDob(null);
+        }
+
+        u.setAddress(rs.getString("address"));
+        u.setPhone(rs.getString("phone"));
+        u.setCccd(rs.getString("cccd"));
+        u.setAvatar(rs.getString("avatar"));
+        u.setRole(rs.getString("role"));
+        u.setCccd_img(rs.getString("cccd_img"));
+        u.setStatus(rs.getString("status"));
+        return u;
+    }
+
 }
