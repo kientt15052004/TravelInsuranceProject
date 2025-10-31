@@ -38,6 +38,16 @@ public class ContractManagementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
             // Lấy các tham số tìm kiếm và lọc
             String searchTerm = request.getParameter("search");
@@ -69,7 +79,6 @@ public class ContractManagementServlet extends HttpServlet {
             
             // Chỉ hiển thị messages từ request scope, xóa session messages không liên quan
             // Để tránh hiển thị messages từ các trang khác (như Claims)
-            HttpSession session = request.getSession();
             if (session.getAttribute("success") != null && request.getAttribute("success") == null) {
                 session.removeAttribute("success");
             }
@@ -88,6 +97,16 @@ public class ContractManagementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         // Redirect về GET để tránh duplicate submission
         response.sendRedirect(request.getContextPath() + "/ContractManagementServlet");
     }

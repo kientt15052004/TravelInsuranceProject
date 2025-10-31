@@ -34,8 +34,17 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
-            // Lấy ID của claim từ parameter
             String claimIdParam = request.getParameter("id");
             
             if (claimIdParam == null || claimIdParam.trim().isEmpty()) {
@@ -52,8 +61,7 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
                 return;
             }
-            
-            // Lấy thông tin claim
+
             Claims claim = claimsDB.getClaimById(claimId);
             
             if (claim == null) {
@@ -61,15 +69,11 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
                 return;
             }
-            
-            // Lấy thông tin contract liên quan
+
             Contract contract = contractDB.getContractById(claim.getContract_id());
-            
-            // Lấy danh sách claim responses
+
             List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
             
-            // Lấy và xóa session messages để tránh hiển thị ở các trang khác
-            HttpSession session = request.getSession();
             String success = (String) session.getAttribute("success");
             String error = (String) session.getAttribute("error");
             
@@ -99,6 +103,16 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
             // Lấy thông báo thành công/lỗi từ AddClaimResponseServlet
             String success = request.getParameter("success");

@@ -7,7 +7,8 @@
 }
 
 .card-header {
-    color: white;
+    background: #FFD700;
+    color: black;
     padding: 20px 24px;
     display: flex;
     justify-content: space-between;
@@ -138,6 +139,7 @@
 /* Status Badges */
 .status-badge {
     padding: 4px 12px;
+    border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
     text-transform: uppercase;
@@ -164,6 +166,7 @@
     background: #e0e7ff;
     color: #3730a3;
     padding: 4px 8px;
+    border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 500;
 }
@@ -246,6 +249,7 @@
 
 .attachment-item {
     background: #f9fafb;
+    border-radius: 8px;
     padding: 16px;
     border: 1px solid #e5e7eb;
 }
@@ -273,6 +277,7 @@
 .claim-image {
     max-width: 100%;
     max-height: 200px;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -290,6 +295,7 @@
     background: #3b82f6;
     color: white;
     text-decoration: none;
+    border-radius: 6px;
     font-weight: 500;
     transition: background 0.2s ease;
 }
@@ -339,6 +345,7 @@
 .modal-content img {
     width: 100%;
     height: auto;
+    border-radius: 8px;
 }
 
 .close {
@@ -374,6 +381,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -392,6 +400,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -410,6 +419,7 @@
     max-width: 500px;
     width: 90%;
     background: white;
+    border-radius: 12px;
     overflow: hidden;
 }
 
@@ -450,6 +460,7 @@
     width: 100%;
     padding: 12px;
     border: 1px solid #d1d5db;
+    border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
     resize: vertical;
@@ -472,6 +483,7 @@
 
 .modal-footer .btn {
     padding: 10px 20px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -494,6 +506,7 @@
 /* Alert Styles */
 .alert {
     padding: 16px 20px;
+    border-radius: 8px;
     margin-bottom: 24px;
     display: flex;
     align-items: center;
@@ -524,6 +537,7 @@
 /* Claim Responses Section */
 .claim-responses-card {
     background: white;
+    border-radius: 12px;
     margin-bottom: 24px;
     overflow: hidden;
 }
@@ -537,6 +551,7 @@
     background: #e0e7ff;
     color: #3730a3;
     padding: 6px 12px;
+    border-radius: 20px;
     font-size: 0.875rem;
     font-weight: 500;
 }
@@ -550,6 +565,7 @@
 
 .response-item {
     background: #f9fafb;
+    border-radius: 8px;
     padding: 20px;
     border-left: 4px solid #3b82f6;
     position: relative;
@@ -563,6 +579,7 @@
     width: 12px;
     height: 12px;
     background: #3b82f6;
+    border-radius: 50%;
     border: 3px solid white;
 }
 
@@ -632,6 +649,7 @@
 .description-text {
     background: white;
     padding: 12px;
+    border-radius: 6px;
     border: 1px solid #e5e7eb;
     line-height: 1.6;
     color: #374151;
@@ -646,6 +664,7 @@
 .response-attachments {
     background: white;
     padding: 16px;
+    border-radius: 6px;
     border: 1px solid #e5e7eb;
 }
 
@@ -675,12 +694,14 @@
     gap: 12px;
     padding: 8px;
     background: #f9fafb;
+    border-radius: 6px;
 }
 
 .attachment-icon {
     width: 32px;
     height: 32px;
     background: #e0e7ff;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -695,6 +716,7 @@
 .response-image {
     max-width: 200px;
     max-height: 150px;
+    border-radius: 6px;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -755,6 +777,7 @@
     color: white;
     border: none;
     padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -773,6 +796,7 @@
     max-width: 600px;
     width: 90%;
     background: white;
+    border-radius: 12px;
     overflow: hidden;
 }
 
@@ -795,6 +819,7 @@
     width: 100%;
     padding: 12px;
     border: 1px solid #d1d5db;
+    border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
     background: white;
@@ -815,6 +840,7 @@
     width: 100%;
     padding: 12px;
     border: 1px solid #d1d5db;
+    border-radius: 6px;
     font-family: inherit;
     font-size: 14px;
     resize: vertical;
@@ -833,9 +859,36 @@
     gap: 8px;
 }
 
+.status-edit-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-status-select {
+    padding: 4px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background: white;
+    cursor: pointer;
+    min-width: 100px;
+}
+
+.inline-status-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.status-edit-buttons {
+    display: flex;
+    gap: 4px;
+}
+
 .btn-sm {
     padding: 4px 8px;
     font-size: 0.75rem;
+    border-radius: 4px;
     border: none;
     cursor: pointer;
     display: inline-flex;
@@ -862,6 +915,24 @@
     background: #4b5563;
 }
 
+.btn-edit-status {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+    padding: 4px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-edit-status:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
 /* Chat Style for Responses */
 .chat-container {
     display: flex;
@@ -882,10 +953,12 @@
 
 .chat-messages-container::-webkit-scrollbar-track {
     background: #e5e7eb;
+    border-radius: 4px;
 }
 
 .chat-messages-container::-webkit-scrollbar-thumb {
     background: #9ca3af;
+    border-radius: 4px;
 }
 
 .chat-messages-container::-webkit-scrollbar-thumb:hover {
@@ -898,10 +971,12 @@
 
 .chat-container::-webkit-scrollbar-track {
     background: #e5e7eb;
+    border-radius: 4px;
 }
 
 .chat-container::-webkit-scrollbar-thumb {
     background: #9ca3af;
+    border-radius: 4px;
 }
 
 .chat-container::-webkit-scrollbar-thumb:hover {
@@ -912,8 +987,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding-bottom: 2%;
-    padding-left: 2%;
+    padding: 2%;
 }
 
 .message-item {
@@ -939,6 +1013,7 @@
     width: 40px;
     height: 40px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -977,6 +1052,7 @@
 .message-bubble {
     background: white;
     padding: 12px 16px;
+    border-radius: 12px;
     position: relative;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -1009,6 +1085,7 @@
 .attachment-preview img {
     max-width: 200px;
     max-height: 150px;
+    border-radius: 8px;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -1020,6 +1097,7 @@
 .attachment-file {
     background: #f3f4f6;
     padding: 8px 12px;
+    border-radius: 8px;
     display: inline-block;
 }
 
@@ -1129,6 +1207,7 @@
 .status-select {
     padding: 10px 16px;
     border: 2px solid #e5e7eb;
+    border-radius: 8px;
     font-family: inherit;
     font-size: 0.9rem;
     font-weight: 500;
@@ -1148,6 +1227,7 @@
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1174,6 +1254,7 @@
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     border: none;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1199,6 +1280,7 @@
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
     border: none;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1324,6 +1406,21 @@
         gap: 8px;
     }
     
+    .status-edit-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .inline-status-select {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .status-edit-buttons {
+        align-self: flex-start;
+    }
+    
     .info-row {
         flex-direction: column;
         align-items: flex-start;
@@ -1427,4 +1524,9 @@
     .chat-input-section-empty {
         margin-top: 24px;
     }
+}
+
+/* Force-remove all border radius in claim detail page */
+* {
+	border-radius: 0 !important;
 }

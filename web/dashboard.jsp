@@ -16,7 +16,7 @@
 
         <div class="main-container">
             <jsp:include page="component/admin-sidebar.jsp">
-                <jsp:param name="activePage" value="${param.activePage}"/>
+                <jsp:param name="activePage" value="${empty requestScope.activePage ? param.activePage : requestScope.activePage}"/>
             </jsp:include>
 
             <!-- Main Content -->
