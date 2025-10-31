@@ -359,4 +359,25 @@ public class ContractDBContext extends DBContext {
         }
     }
 
+    public List<Contract> getRecentContracts(int limit) {
+        List<Contract> contracts = new ArrayList<>();
+        String sql = "SELECT * FROM contract ORDER BY contract_id DESC LIMIT ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Contract contract = new Contract();
+                contract.setContract_id(rs.getInt("contract_id"));
+                contract.setCurrent_benefit_id(rs.getInt("current_benefit_id"));
+                contract.setApplication_id(rs.getInt("application_id"));
+                contract.setDescription(rs.getString("description"));
+                contract.setContract_status(rs.getString("contract_status"));
+                contracts.add(contract);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return contracts;
+    }
+
 }

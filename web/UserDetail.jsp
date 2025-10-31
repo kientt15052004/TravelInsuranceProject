@@ -156,11 +156,9 @@
                         
                         <div class="form-actions">
                             <button type="submit" class="btn-save">
-                                <i class="fas fa-save"></i>
                                 Lưu thay đổi
                             </button>
                             <button type="button" class="btn-cancel" onclick="toggleEditForm()">
-                                <i class="fas fa-times"></i>
                                 Hủy
                             </button>
                         </div>

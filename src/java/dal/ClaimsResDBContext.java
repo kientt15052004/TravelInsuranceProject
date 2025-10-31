@@ -22,7 +22,7 @@ public class ClaimsResDBContext extends DBContext {
                      "FROM claimsres cr " +
                      "LEFT JOIN users u ON cr.user_id = u.id " +
                      "WHERE cr.claim_id = ? " +
-                     "ORDER BY cr.id ASC";
+                     "ORDER BY cr.createDate ASC, cr.id ASC";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimId);

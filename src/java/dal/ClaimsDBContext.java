@@ -1,6 +1,7 @@
 package dal;
 
 import Model.Claims;
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -262,5 +263,222 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
         return false;
+    }
+    
+    public int getTotalClaims() {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return 0;
+        }
+        
+        String sql = "SELECT COUNT(*) FROM claims";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public int getClaimsByStatusCount(String status) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return 0;
+        }
+        
+        String sql = "SELECT COUNT(*) FROM claims WHERE claim_status = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public int getRecentClaimsCount(int days) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return 0;
+        }
+        
+        // Lấy số lượng bồi thường mới trong X ngày vừa qua
+        String sql = "SELECT COUNT(*) FROM claims WHERE requestDate >= DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, days);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        return 0;
+    }
+    
+    public List<Claims> getRecentClaims(int limit) {
+        List<Claims> claims = new ArrayList<>();
+        
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return claims;
+        }
+        
+        String sql = "SELECT * FROM claims ORDER BY CASE claim_status WHEN 'pending' THEN 1 WHEN 'approved' THEN 2 WHEN 'rejected' THEN 3 ELSE 4 END, requestDate DESC LIMIT ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Claims claim = new Claims();
+                claim.setId(rs.getInt("id"));
+                claim.setContract_id(rs.getInt("contract_id"));
+                claim.setRequestDate(rs.getDate("requestDate"));
+                claim.setClaim_type(rs.getString("claim_type"));
+                claim.setDescription(rs.getString("description"));
+                claim.setPayment_bank(rs.getString("payment_bank"));
+                claim.setPayment_number(rs.getString("payment_number"));
+                claim.setRelated_img(rs.getString("related_img"));
+                claim.setRelated_file(rs.getString("related_file"));
+                claim.setClaim_status(rs.getString("claim_status"));
+                
+                try {
+                    if (rs.findColumn("claim_amount") > 0) {
+                        claim.setClaim_amount(rs.getBigDecimal("claim_amount"));
+                    } else {
+                        claim.setClaim_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setClaim_amount(null);
+                }
+                
+                claims.add(claim);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        
+        return claims;
+    }
+    
+    public List<Claims> getRecentPendingClaims(int limit) {
+        List<Claims> claims = new ArrayList<>();
+        
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return claims;
+        }
+        
+        String sql = "SELECT * FROM claims WHERE claim_status = 'pending' ORDER BY requestDate DESC LIMIT ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Claims claim = new Claims();
+                claim.setId(rs.getInt("id"));
+                claim.setContract_id(rs.getInt("contract_id"));
+                claim.setRequestDate(rs.getDate("requestDate"));
+                claim.setClaim_type(rs.getString("claim_type"));
+                claim.setDescription(rs.getString("description"));
+                claim.setPayment_bank(rs.getString("payment_bank"));
+                claim.setPayment_number(rs.getString("payment_number"));
+                claim.setRelated_img(rs.getString("related_img"));
+                claim.setRelated_file(rs.getString("related_file"));
+                claim.setClaim_status(rs.getString("claim_status"));
+                
+                try {
+                    if (rs.findColumn("claim_amount") > 0) {
+                        claim.setClaim_amount(rs.getBigDecimal("claim_amount"));
+                    } else {
+                        claim.setClaim_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setClaim_amount(null);
+                }
+                
+                claims.add(claim);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        
+        return claims;
+    }
+    
+    public List<Claims> getOverduePendingClaims(int daysOld, int limit) {
+        List<Claims> claims = new ArrayList<>();
+        
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return claims;
+        }
+        
+        // Lấy các pending claims đã quá X ngày, JOIN với contract và application để lấy total_price
+        // Ưu tiên sắp xếp theo total_price DESC (cao nhất trước), sau đó đến requestDate ASC (cũ nhất trước)
+        String sql = "SELECT c.*, COALESCE(a.total_price, 0) as contract_total_price " +
+                     "FROM claims c " +
+                     "INNER JOIN contract ct ON c.contract_id = ct.contract_id " +
+                     "INNER JOIN applications a ON ct.application_id = a.id " +
+                     "WHERE c.claim_status = 'pending' AND c.requestDate < DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
+                     "ORDER BY COALESCE(a.total_price, 0) DESC, c.requestDate ASC LIMIT ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, daysOld);
+            ps.setInt(2, limit);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Claims claim = new Claims();
+                claim.setId(rs.getInt("id"));
+                claim.setContract_id(rs.getInt("contract_id"));
+                claim.setRequestDate(rs.getDate("requestDate"));
+                claim.setClaim_type(rs.getString("claim_type"));
+                claim.setDescription(rs.getString("description"));
+                claim.setPayment_bank(rs.getString("payment_bank"));
+                claim.setPayment_number(rs.getString("payment_number"));
+                claim.setRelated_img(rs.getString("related_img"));
+                claim.setRelated_file(rs.getString("related_file"));
+                claim.setClaim_status(rs.getString("claim_status"));
+                
+                // Lấy total_price từ application
+                try {
+                    BigDecimal contractTotalPrice = rs.getBigDecimal("contract_total_price");
+                    claim.setContractTotalPrice(contractTotalPrice != null ? contractTotalPrice : BigDecimal.ZERO);
+                } catch (SQLException e) {
+                    claim.setContractTotalPrice(BigDecimal.ZERO);
+                }
+                
+                try {
+                    if (rs.findColumn("claim_amount") > 0) {
+                        claim.setClaim_amount(rs.getBigDecimal("claim_amount"));
+                    } else {
+                        claim.setClaim_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setClaim_amount(null);
+                }
+                
+                claims.add(claim);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error: " + e.getMessage());
+        }
+        
+        return claims;
     }
 }

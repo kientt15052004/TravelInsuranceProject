@@ -1,24 +1,51 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="Model.User" %>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - InsureTravel</title>
-    <link rel="stylesheet" href="./CSS/header.css">
-</head>
+<nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="navbar-left d-flex align-items-center">
+            <a class="navbar-brand" href="home">
+                <i class="fas fa-shield-alt"></i>
+                InsureTravel
+            </a>
+        </div>
+        <!-- Nút toggle (mobile) --> 
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<header class="header">
-    <div class="logo">InsureTravel</div>
-    <nav class="nav">
-        <a href="${pageContext.request.contextPath}/Home" class="nav-link">Home</a>
-        <a href="${pageContext.request.contextPath}/InsuranceList" class="nav-link">Products</a>
-        <a href="${pageContext.request.contextPath}/About" class="nav-link">About</a>
-        <a href="${pageContext.request.contextPath}/Contact" class="nav-link">Contact</a>
-    </nav>
-    <div class="user-icon">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <circle cx="10" cy="6" r="4" stroke="currentColor" stroke-width="2"/>
-        <path d="M4 18c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="2"/>
-        </svg>
-    </div>
-</header>
+        <div class="navbar-center collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav flex-row justify-content-center">
+                <li class="nav-item mx-3"><a class="nav-link" href="InsuranceList">Gói Bảo Hiểm</a></li>
+                <li class="nav-item mx-3"><a class="nav-link" href="#">Khiếu Nại</a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-right d-flex justify-content-end">
+            <%
+                Model.User user = (Model.User) session.getAttribute("user");
+                if (user == null) {
+            %>
+            <button class="btn btn-sign-in" onclick="window.location.href = 'login.jsp'">Đăng Nhập</button>
+            <%
+                } else {
+            %>
+            <div class="dropdown">
+                <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span><%= user.getFullname() %></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Hồ Sơ</a></li>
+                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi Mật Khẩu</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="logout">Đăng Xuất</a></li>
+                </ul>
+            </div>
+            <%
+                }
+            %>
+        </div>
+    </div>  
+</nav>

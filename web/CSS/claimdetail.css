@@ -85,6 +85,19 @@
     transform: translateY(-1px);
 }
 
+/* Contract Info Card Button */
+.contract-info-card .card-header .btn-primary {
+    background: white;
+    color: #333;
+    text-decoration: underline;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
 /* Info Grid */
 .info-grid {
     display: grid;
@@ -147,7 +160,6 @@
 }
 
 .status-pending {
-    background: #fef3c7;
     color: #92400e;
 }
 

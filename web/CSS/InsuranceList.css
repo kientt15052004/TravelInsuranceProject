@@ -14,11 +14,18 @@ header {
     padding: 16px 30px;
 }
 
-/* Container chính */
-.container {
-    margin: 0 auto;
+/* Container chính - Sử dụng Bootstrap container nhưng full width */
+body > .container {
+    max-width: 100% !important;
+    width: 100%;
+    padding: 20px 30px;
     background: white;
-    padding: 0px 30px;
+    padding-top: 30px;
+}
+
+/* Đảm bảo navbar container không bị giới hạn */
+.navbar .container {
+    max-width: 100% !important;
 }
 
 /* Header */

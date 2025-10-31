@@ -11,14 +11,9 @@
                         <span>Home Page</span>
                     </a>
                 </li>
-                <li class="nav-item ${param.activePage == 'user-management' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/admin" class="nav-link">
-                        <span>User Management</span>
-                    </a>
-                </li>
-                <li class="nav-item ${param.activePage == 'daily-report' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/admin" class="nav-link">
-                        <span>Daily Report</span>
+                <li class="nav-item ${param.activePage == 'user-role-management' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user-role-management" class="nav-link">
+                        <span>Quản lý quyền tài khoản</span>
                     </a>
                 </li>
                 <li class="nav-item ${param.activePage == 'product-management' ? 'active' : ''}">

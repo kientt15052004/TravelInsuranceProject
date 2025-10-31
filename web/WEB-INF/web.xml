@@ -165,6 +165,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UserRoleManagementServlet</servlet-name>
+        <servlet-class>Controller.UserRoleManagementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserRoleManagementServlet</servlet-name>
+        <url-pattern>/user-role-management</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>navigate</servlet-name>
         <servlet-class>Controller.navigate</servlet-class>
     </servlet>
