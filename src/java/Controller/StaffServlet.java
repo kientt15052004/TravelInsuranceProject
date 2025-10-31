@@ -31,20 +31,19 @@ public class StaffServlet extends HttpServlet {
             return;
         }
 
-        // Load dashboard statistics - chỉ lấy thống kê về bồi thường
         ClaimsDBContext claimsDB = new ClaimsDBContext();
         
-        // Claims statistics
+
         int totalClaims = claimsDB.getTotalClaims();
         int pendingClaims = claimsDB.getClaimsByStatusCount("pending");
         int approvedClaims = claimsDB.getClaimsByStatusCount("approved");
-        // Lấy số lượng bồi thường mới trong 2 ngày vừa qua
+
         int recentClaimsCount = claimsDB.getRecentClaimsCount(2);
         
-        // Recent data
+
         List<Claims> recentClaims = claimsDB.getRecentClaims(10);
-        // Lấy các bồi thường pending đã quá 7 ngày (cần xử lý)
-        List<Claims> overduePendingClaims = claimsDB.getOverduePendingClaims(7, 10);
+
+        List<Claims> overduePendingClaims = claimsDB.getOverduePendingClaims(10);
         
         // Set attributes for JSP
         request.setAttribute("totalClaims", totalClaims);
