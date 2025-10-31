@@ -71,7 +71,6 @@
         <servlet-name>ContractManagementServlet</servlet-name>
         <url-pattern>/ContractManagementServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ContractDetailServlet</servlet-name>
         <servlet-class>Controller.ContractDetailServlet</servlet-class>
@@ -152,7 +151,6 @@
         <servlet-name>TestDBConnection</servlet-name>
         <url-pattern>/TestDBConnection</url-pattern>
     </servlet-mapping>
-
     <!-- Session timeout (120 minutes = 2 hours) -->
     <session-config>
         <session-timeout>120</session-timeout>
@@ -213,7 +211,6 @@
         <servlet-name>UpdateProduct</servlet-name>
         <url-pattern>/update_product</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>UserManagementServlet</servlet-name>
         <servlet-class>Controller.UserManagementServlet</servlet-class>
@@ -222,7 +219,6 @@
         <servlet-name>UserManagementServlet</servlet-name>
         <url-pattern>/usermanagement</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ClaimsManagementServlet</servlet-name>
         <servlet-class>Controller.ClaimsManagementServlet</servlet-class>
@@ -231,7 +227,6 @@
         <servlet-name>ClaimsManagementServlet</servlet-name>
         <url-pattern>/ClaimsManagementServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ClaimDetailServlet</servlet-name>
         <servlet-class>Controller.ClaimDetailServlet</servlet-class>
@@ -240,7 +235,6 @@
         <servlet-name>ClaimDetailServlet</servlet-name>
         <url-pattern>/ClaimDetailServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ClaimApprovalServlet</servlet-name>
         <servlet-class>Controller.ClaimApprovalServlet</servlet-class>
@@ -249,7 +243,6 @@
         <servlet-name>ClaimApprovalServlet</servlet-name>
         <url-pattern>/ClaimApprovalServlet</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ClaimStatusUpdateServlet</servlet-name>
         <servlet-class>Controller.ClaimStatusUpdateServlet</servlet-class>
@@ -258,15 +251,4 @@
         <servlet-name>ClaimStatusUpdateServlet</servlet-name>
         <url-pattern>/ClaimStatusUpdateServlet</url-pattern>
     </servlet-mapping>
-
-    <servlet>
-        <servlet-name>UpdateUserServlet</servlet-name>
-        <servlet-class>Controller.UpdateUserServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UpdateUserServlet</servlet-name>
-        <url-pattern>/updateuser</url-pattern>
-    </servlet-mapping>
-
-
 </web-app>

@@ -426,6 +426,32 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
+    public boolean updateUserProfile(User user) {
+        String sql = "UPDATE users SET fullname = ?, mail = ?, dob = ?, address = ?, phone = ?, cccd = ?, avatar = ?, cccd_img = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, user.getFullname());
+            st.setString(2, user.getMail());
+
+            if (user.getDob() != null) {
+                st.setDate(3, Date.valueOf(user.getDob()));
+            } else {
+                st.setNull(3, java.sql.Types.DATE);
+            }
+
+            st.setString(4, user.getAddress());
+            st.setString(5, user.getPhone());
+            st.setString(6, user.getCccd());
+            st.setString(7, user.getAvatar());
+            st.setString(8, user.getCccd_img());
+            st.setInt(9, user.getId()); // WHERE id = ?
+
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     public boolean changePassword(int userId, String oldPassword, String newPassword) {
         String sqlCheck = "SELECT password FROM users WHERE id = ?";
         String sqlUpdate = "UPDATE users SET password = ? WHERE id = ?";
