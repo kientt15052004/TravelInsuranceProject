@@ -318,14 +318,13 @@
 .users-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
 }
 
 .users-table th,
 .users-table td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+    border: 1px solid #e0e0e0;
 }
 
 .users-table td {
@@ -384,10 +383,14 @@
 
 .status-text.status-active {
     color: #2e7d32;
+    padding: 0 !important;
+    align-items: center;
 }
 
 .status-text.status-inactive {
     color: #c62828;
+    padding: 0 !important;
+    align-items: center;
 }
 
 /* Action Buttons */
@@ -479,7 +482,7 @@
 .users-table th,
 .users-table td {
     padding: 12px 8px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 /* Responsive design for smaller screens */

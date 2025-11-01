@@ -13,31 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Header -->
-    <div class="top-header">
-        <div class="header-left">
-            <div class="logo">
-                <div class="logo-text">
-                    <span class="logo-main">Logo</span>
-                </div>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="user-dropdown">
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Staff</span>
-                </div>
-                <i class="fas fa-chevron-down dropdown-arrow"></i>
-                <div class="dropdown-menu">
-                    <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Đăng xuất
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
         <!-- Sidebar -->
@@ -180,11 +156,9 @@
                         
                         <div class="form-actions">
                             <button type="submit" class="btn-save">
-                                <i class="fas fa-save"></i>
                                 Lưu thay đổi
                             </button>
                             <button type="button" class="btn-cancel" onclick="toggleEditForm()">
-                                <i class="fas fa-times"></i>
                                 Hủy
                             </button>
                         </div>
@@ -299,6 +273,7 @@
                                             <th>Ngân hàng</th>
                                             <th>Số tài khoản</th>
                                             <th>Trạng thái</th>
+                                            <th>Thao tác</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -317,6 +292,11 @@
                                                     <span class="status-badge status-${claim.claim_status}">
                                                         ${claim.claim_status}
                                                     </span>
+                                                </td>
+                                                <td>
+                                                    <a href="${pageContext.request.contextPath}/ClaimDetailServlet?id=${claim.id}" class="btn-detail">
+                                                        Xem chi tiết
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

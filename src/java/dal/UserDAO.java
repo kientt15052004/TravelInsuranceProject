@@ -10,47 +10,43 @@ import java.sql.SQLException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.math.BigDecimal;
 
 public class UserDAO extends DBContext {
 
+    private static final Set<String> ALLOWED_ROLES = new HashSet<>(Arrays.asList("admin", "staff", "customer"));
+
+    public static Set<String> getAllowedRoles() {
+        return Collections.unmodifiableSet(ALLOWED_ROLES);
+    }
+
     public User checkLogin(String username, String password) {
+        User user = getUserByCredentials(username, password);
+        if (user != null && "active".equalsIgnoreCase(user.getStatus())) {
+            return user;
+        }
+        return null;
+    }
+
+    public User getUserByCredentials(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, username);
             st.setString(2, password);
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    User u = new User();
-                    u.setId(rs.getInt("id"));
-                    u.setUsername(rs.getString("username"));
-                    u.setPassword(rs.getString("password"));
-                    u.setFullname(rs.getString("fullname"));
-                    u.setMail(rs.getString("mail"));
-
-                    Date dobSql = rs.getDate("dob"); // java.sql.Date
-                    if (dobSql != null) {
-                        LocalDate dobLocal = dobSql.toLocalDate();
-                        u.setDob(dobLocal);
-                    } else {
-                        u.setDob(null);
-                    }
-
-                    u.setAddress(rs.getString("address"));
-                    u.setPhone(rs.getString("phone"));
-                    u.setCccd(rs.getString("cccd"));
-                    u.setAvatar(rs.getString("avatar"));
-                    u.setRole(rs.getString("role"));
-                    u.setCccd_img(rs.getString("cccd_img"));
-                    u.setStatus(rs.getString("status"));
-                    return u;
+                    return mapUser(rs);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // login thất bại
+        return null;
     }
     public boolean checkUserExists(String username) {
     String sql = "SELECT * FROM users WHERE username = ?";
@@ -64,6 +60,89 @@ public class UserDAO extends DBContext {
     }
     return false;
 }
+
+    public boolean checkEmailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE mail = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, email);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Get user by username or email
+    public User getUserByUsernameOrEmail(String usernameOrEmail) {
+        String sql = "SELECT * FROM users WHERE username = ? OR mail = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, usernameOrEmail);
+            st.setString(2, usernameOrEmail);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return mapUser(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    // Reset password by username or email
+    public boolean resetPassword(String usernameOrEmail, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE username = ? OR mail = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, newPassword);
+            st.setString(2, usernameOrEmail);
+            st.setString(3, usernameOrEmail);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Verify user information (username, email, phone, cccd)
+    public boolean verifyUserInfo(String username, String email, String phone, String cccd) {
+        String sql = "SELECT COUNT(*) FROM users WHERE username = ? AND mail = ? AND phone = ? AND cccd = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, username);
+            st.setString(2, email);
+            st.setString(3, phone);
+            st.setString(4, cccd);
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Reset password by user information (username, email, phone, cccd)
+    public boolean resetPasswordByInfo(String username, String email, String phone, String cccd, String newPassword) {
+        String sql = "UPDATE users SET password = ? WHERE username = ? AND mail = ? AND phone = ? AND cccd = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, newPassword);
+            st.setString(2, username);
+            st.setString(3, email);
+            st.setString(4, phone);
+            st.setString(5, cccd);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
     
@@ -426,6 +505,51 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
+
+    public boolean updateUserRole(int userId, String role) {
+        if (role == null) {
+            return false;
+        }
+
+        String normalizedRole = role.trim().toLowerCase();
+        if (!ALLOWED_ROLES.contains(normalizedRole)) {
+            return false;
+        }
+
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, normalizedRole);
+            st.setInt(2, userId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean updateUserStatus(int userId, String status) {
+        if (status == null) {
+            return false;
+        }
+
+        String normalizedStatus = status.trim().toLowerCase();
+        if (!"active".equals(normalizedStatus) && !"inactive".equals(normalizedStatus)) {
+            return false;
+        }
+
+        String sql = "UPDATE users SET status = ? WHERE id = ?";
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+            st.setString(1, normalizedStatus);
+            st.setInt(2, userId);
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean updateUserProfile(User user) {
         String sql = "UPDATE users SET fullname = ?, mail = ?, dob = ?, address = ?, phone = ?, cccd = ?, avatar = ?, cccd_img = ? WHERE id = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
@@ -482,4 +606,30 @@ public class UserDAO extends DBContext {
         return false;
     }
     
+    private User mapUser(ResultSet rs) throws SQLException {
+        User u = new User();
+        u.setId(rs.getInt("id"));
+        u.setUsername(rs.getString("username"));
+        u.setPassword(rs.getString("password"));
+        u.setFullname(rs.getString("fullname"));
+        u.setMail(rs.getString("mail"));
+
+        Date dobSql = rs.getDate("dob");
+        if (dobSql != null) {
+            LocalDate dobLocal = dobSql.toLocalDate();
+            u.setDob(dobLocal);
+        } else {
+            u.setDob(null);
+        }
+
+        u.setAddress(rs.getString("address"));
+        u.setPhone(rs.getString("phone"));
+        u.setCccd(rs.getString("cccd"));
+        u.setAvatar(rs.getString("avatar"));
+        u.setRole(rs.getString("role"));
+        u.setCccd_img(rs.getString("cccd_img"));
+        u.setStatus(rs.getString("status"));
+        return u;
+    }
+
 }

@@ -555,3 +555,5 @@ MODIFY COLUMN createDate DATETIME DEFAULT CURRENT_TIMESTAMP;
 
 -- Verify the changes
 DESCRIBE claimsres;
+
+ALTER TABLE claimsres DROP COLUMN status;

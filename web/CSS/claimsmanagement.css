@@ -465,7 +465,7 @@
 .claims-table th,
 .claims-table td {
     padding: 12px 8px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 /* Responsive design for smaller screens */

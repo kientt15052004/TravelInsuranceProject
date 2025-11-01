@@ -7,32 +7,22 @@
         <nav class="sidebar-nav">
             <ul>
                 <li class="nav-item ${param.activePage == 'home' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/navigate?page=home" class="nav-link">
-                        <i class="fas fa-home"></i>
+                    <a href="${pageContext.request.contextPath}/admin" class="nav-link">
                         <span>Home Page</span>
                     </a>
                 </li>
-                <li class="nav-item ${param.activePage == 'user-management' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/navigate?page=user" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        <span>User Management</span>
-                    </a>
-                </li>
-                <li class="nav-item ${param.activePage == 'daily-report' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/navigate?page=report" class="nav-link">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Daily Report</span>
+                <li class="nav-item ${param.activePage == 'user-role-management' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user-role-management" class="nav-link">
+                        <span>Quản lý quyền tài khoản</span>
                     </a>
                 </li>
                 <li class="nav-item ${param.activePage == 'product-management' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/navigate?page=create" class="nav-link">
-                        <i class="fas fa-plus-circle"></i>
+                    <a href="${pageContext.request.contextPath}/create_product" class="nav-link">
                         <span>Tạo sản phẩm</span>
                     </a>
                 </li>
                 <li class="nav-item ${param.activePage == 'view-products' ? 'active' : ''}">
                     <a href="${pageContext.request.contextPath}/view_product" class="nav-link">
-                        <i class="fas fa-eye"></i>
                         <span>Quản lý sản phẩm</span>
                     </a>
                 </li>

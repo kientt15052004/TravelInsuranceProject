@@ -23,7 +23,7 @@ public class HomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         InsuranceDBContext dao = new InsuranceDBContext();
-        ArrayList<InsuranceProduct> list = dao.getAll();
+        ArrayList<InsuranceProduct> list = dao.getTopSellingProducts(4);
 
         HttpSession session = request.getSession(false);
         if (session != null) {

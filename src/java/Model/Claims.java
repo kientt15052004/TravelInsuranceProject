@@ -23,6 +23,7 @@ public class Claims {
     private String related_file;
     private String claim_status;
     private BigDecimal claim_amount;
+    private BigDecimal contractTotalPrice; // Total price từ application của contract
 
     public Claims() {
     }
@@ -127,5 +128,13 @@ public class Claims {
 
     public void setClaim_amount(BigDecimal claim_amount) {
         this.claim_amount = claim_amount;
+    }
+    
+    public BigDecimal getContractTotalPrice() {
+        return contractTotalPrice;
+    }
+    
+    public void setContractTotalPrice(BigDecimal contractTotalPrice) {
+        this.contractTotalPrice = contractTotalPrice;
     }
 }

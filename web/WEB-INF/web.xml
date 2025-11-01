@@ -156,9 +156,32 @@
         <session-timeout>120</session-timeout>
     </session-config>
     <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>Controller.AdminServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserRoleManagementServlet</servlet-name>
+        <servlet-class>Controller.UserRoleManagementServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserRoleManagementServlet</servlet-name>
+        <url-pattern>/user-role-management</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>navigate</servlet-name>
         <servlet-class>Controller.navigate</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>navigate</servlet-name>
+        <url-pattern>/navigate</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>CreateProduct</servlet-name>
         <servlet-class>Controller.CreateProduct</servlet-class>
@@ -183,10 +206,7 @@
         <servlet-name>UpdateProduct</servlet-name>
         <servlet-class>Controller.UpdateProduct</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>navigate</servlet-name>
-        <url-pattern>/navigate</url-pattern>
-    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>CreateProduct</servlet-name>
         <url-pattern>/create_product</url-pattern>
@@ -235,6 +255,15 @@
         <servlet-name>ClaimDetailServlet</servlet-name>
         <url-pattern>/ClaimDetailServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>UpdateUserServlet</servlet-name>
+        <servlet-class>Controller.UpdateUserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateUserServlet</servlet-name>
+        <url-pattern>/updateuser</url-pattern>
+    </servlet-mapping>
+
     <servlet>
         <servlet-name>ClaimApprovalServlet</servlet-name>
         <servlet-class>Controller.ClaimApprovalServlet</servlet-class>

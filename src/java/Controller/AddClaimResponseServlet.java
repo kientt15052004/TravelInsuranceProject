@@ -31,12 +31,17 @@ public class AddClaimResponseServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         // Check if user is logged in
-        HttpSession session = request.getSession();
-        User currentUser = (User) session.getAttribute("user");
-        
-        if (currentUser == null) {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
             request.setAttribute("error", "Bạn cần đăng nhập để gửi phản hồi");
             request.getRequestDispatcher("login.jsp").forward(request, response);
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            session.setAttribute("error", "Bạn không có quyền thực hiện thao tác này");
+            response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
             return;
         }
         
@@ -95,13 +100,13 @@ public class AddClaimResponseServlet extends HttpServlet {
                 session.setAttribute("error", "Có lỗi xảy ra khi gửi phản hồi");
             }
             
-            // Redirect to claim detail page
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            // Redirect to claim detail page with scroll parameter
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
         }
     }
     
@@ -140,19 +145,29 @@ public class AddClaimResponseServlet extends HttpServlet {
                 session.setAttribute("error", "Có lỗi xảy ra khi cập nhật trạng thái claim");
             }
             
-            // Redirect to claim detail page
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            // Redirect to claim detail page with scroll parameter
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         // Redirect to claim management if accessed via GET
         response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
     }

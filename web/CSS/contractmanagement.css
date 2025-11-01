@@ -135,9 +135,6 @@
     flex-shrink: 1;
 }
 
-
-
-
 .btn-clear {
     background: linear-gradient(135deg, #6c757d, #5a6268);
     color: white;
@@ -151,9 +148,6 @@
     font-size: 14px;
     flex-shrink: 1;
 }
-
-
-
 
 .export-section {
     background: white;
@@ -466,7 +460,6 @@
     font-size: 14px;
 }
 
-
 /* Table responsive adjustments */
 .contracts-table {
     min-width: 1200px; /* Ensure table doesn't get too cramped */
@@ -475,7 +468,7 @@
 .contracts-table th,
 .contracts-table td {
     padding: 12px 8px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 /* Responsive design for smaller screens */
