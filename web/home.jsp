@@ -61,7 +61,7 @@
                             }
                     %>
                     <div class="col-12 text-center mt-4">
-                        <button class="btn btn-primary" onclick="window.location.href = 'InsuranceList'" style="padding: 12px 30px; font-size: 1.1rem;">Xem Tất Cả Sản Phẩm</button>
+                        <button class="btn btn-instant" onclick="window.location.href = 'InsuranceList'" style="padding: 12px 30px; font-size: 1.1rem;">Xem Tất Cả Sản Phẩm</button>
                     </div>
                     <%
                         } else {
