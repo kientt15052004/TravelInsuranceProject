@@ -164,8 +164,7 @@
                     </div>
                 </div>
 
-                <% 
-                    // Use the successFlag already declared above
+                <%
                     boolean resetTravelers = successFlag != null && successFlag;
                     String[] travelerNames = resetTravelers ? null : request.getParameterValues("travelerName");
                     String[] travelerIds = resetTravelers ? null : request.getParameterValues("travelerId");
@@ -175,8 +174,7 @@
                     String[] travelerBirthDates = resetTravelers ? null : request.getParameterValues("travelerBirthDate");
                     int travelerCount = (!resetTravelers && travelerNames != null && travelerNames.length > 0) ? travelerNames.length : 1;
                 %>
-
-                <!-- Customer/Traveler Information Section -->
+                
                 <div class="form-section">
                     <h2 class="form-title">
                         Thông tin khách hàng (người được bảo hiểm)
@@ -195,7 +193,6 @@
                             <div class="traveler-header">
                                 <h3 class="traveler-title">Người được bảo hiểm <%= (i + 1) %></h3>
                                 <button type="button" class="btn-remove-traveler" onclick="removeTraveler(this)" <%= travelerCount == 1 ? "disabled" : "" %>>
-                                    <i class="fas fa-trash"></i>
                                     Xóa
                                 </button>
                             </div>

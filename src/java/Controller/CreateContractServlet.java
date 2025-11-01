@@ -48,6 +48,7 @@ public class CreateContractServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -58,8 +59,8 @@ public class CreateContractServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
+        
         try {
-            // Load available insurance products for the form
             List<InsuranceProduct> insuranceProducts = insuranceDB.getAll();
             request.setAttribute("insuranceProducts", insuranceProducts);
             

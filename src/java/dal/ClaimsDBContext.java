@@ -419,7 +419,7 @@ public class ClaimsDBContext extends DBContext {
         return claims;
     }
     
-    public List<Claims> getOverduePendingClaims(int daysOld, int limit) {
+    public List<Claims> getOverduePendingClaims(int limit) {
         List<Claims> claims = new ArrayList<>();
         
         if (connection == null) {
@@ -427,18 +427,22 @@ public class ClaimsDBContext extends DBContext {
             return claims;
         }
         
-        // Lấy các pending claims đã quá X ngày, JOIN với contract và application để lấy total_price
-        // Ưu tiên sắp xếp theo total_price DESC (cao nhất trước), sau đó đến requestDate ASC (cũ nhất trước)
+
         String sql = "SELECT c.*, COALESCE(a.total_price, 0) as contract_total_price " +
                      "FROM claims c " +
                      "INNER JOIN contract ct ON c.contract_id = ct.contract_id " +
                      "INNER JOIN applications a ON ct.application_id = a.id " +
-                     "WHERE c.claim_status = 'pending' AND c.requestDate < DATE_SUB(CURDATE(), INTERVAL ? DAY) " +
-                     "ORDER BY COALESCE(a.total_price, 0) DESC, c.requestDate ASC LIMIT ?";
+                     "WHERE c.claim_status = 'pending' " +
+                     "ORDER BY COALESCE(a.total_price, 0) DESC, c.requestDate ASC";
+        
+        if (limit > 0) {
+            sql += " LIMIT ?";
+        }
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, daysOld);
-            ps.setInt(2, limit);
+            if (limit > 0) {
+                ps.setInt(1, limit);
+            }
             ResultSet rs = ps.executeQuery();
             
             while (rs.next()) {

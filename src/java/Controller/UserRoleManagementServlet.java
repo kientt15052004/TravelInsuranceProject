@@ -32,15 +32,13 @@ public class UserRoleManagementServlet extends HttpServlet {
         }
 
         UserDAO userDAO = new UserDAO();
-        
-        // Lấy các tham số search/filter từ request
+
         String keyword = request.getParameter("keyword");
         String role = request.getParameter("role");
         String status = request.getParameter("status");
         
         List<User> users;
-        
-        // Nếu có search/filter, sử dụng searchUsers, ngược lại lấy tất cả
+
         if ((keyword != null && !keyword.trim().isEmpty()) || 
             (role != null && !role.trim().isEmpty() && !role.equals("all")) ||
             (status != null && !status.trim().isEmpty() && !status.equals("all"))) {
@@ -84,8 +82,7 @@ public class UserRoleManagementServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         String userIdParam = request.getParameter("userId");
-        
-        // Lấy các tham số search/filter để giữ lại sau khi redirect
+
         String keyword = request.getParameter("keyword");
         String roleFilter = request.getParameter("roleFilter");
         String statusFilter = request.getParameter("statusFilter");
@@ -120,72 +117,45 @@ public class UserRoleManagementServlet extends HttpServlet {
         boolean statusUpdated = false;
         String message = "";
 
-        if ("updateRole".equals(action)) {
-            String roleParam = request.getParameter("role");
-            if (roleParam == null || roleParam.trim().isEmpty()) {
-                session.setAttribute("roleUpdateError", "Thiếu thông tin vai trò.");
-                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
-                response.sendRedirect(redirectUrl);
-                return;
-            }
-            updated = userDAO.updateUserRole(targetUserId, roleParam);
-            if (updated) {
-                message = "Cập nhật vai trò thành công.";
-            } else {
-                message = "Không thể cập nhật vai trò. Vui lòng thử lại.";
-            }
-        } else if ("updateStatus".equals(action)) {
-            String statusParam = request.getParameter("status");
-            if (statusParam == null || statusParam.trim().isEmpty()) {
-                session.setAttribute("roleUpdateError", "Thiếu thông tin trạng thái.");
-                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
-                response.sendRedirect(redirectUrl);
-                return;
-            }
-            updated = userDAO.updateUserStatus(targetUserId, statusParam);
-            if (updated) {
-                message = "Cập nhật trạng thái thành công.";
-            } else {
-                message = "Không thể cập nhật trạng thái. Vui lòng thử lại.";
-            }
-        } else if ("updateBoth".equals(action)) {
-            String roleParam = request.getParameter("role");
-            String statusParam = request.getParameter("status");
-            
-            if (roleParam == null || roleParam.trim().isEmpty()) {
-                session.setAttribute("roleUpdateError", "Thiếu thông tin vai trò.");
-                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
-                response.sendRedirect(redirectUrl);
-                return;
-            }
-            if (statusParam == null || statusParam.trim().isEmpty()) {
-                session.setAttribute("roleUpdateError", "Thiếu thông tin trạng thái.");
-                String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
-                response.sendRedirect(redirectUrl);
-                return;
-            }
-            
-            roleUpdated = userDAO.updateUserRole(targetUserId, roleParam);
-            statusUpdated = userDAO.updateUserStatus(targetUserId, statusParam);
-            
-            if (roleUpdated && statusUpdated) {
-                message = "Cập nhật vai trò và trạng thái thành công.";
-                updated = true;
-            } else if (roleUpdated) {
-                message = "Cập nhật vai trò thành công nhưng không thể cập nhật trạng thái.";
-                updated = true;
-            } else if (statusUpdated) {
-                message = "Cập nhật trạng thái thành công nhưng không thể cập nhật vai trò.";
-                updated = true;
-            } else {
-                message = "Không thể cập nhật vai trò và trạng thái. Vui lòng thử lại.";
-                updated = false;
-            }
-        } else {
+        if (!"updateBoth".equals(action)) {
             session.setAttribute("roleUpdateError", "Hành động không hợp lệ.");
             String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
             response.sendRedirect(redirectUrl);
             return;
+        }
+
+        // Xử lý action "updateBoth"
+        String roleParam = request.getParameter("role");
+        String statusParam = request.getParameter("status");
+        
+        if (roleParam == null || roleParam.trim().isEmpty()) {
+            session.setAttribute("roleUpdateError", "Thiếu thông tin vai trò.");
+            String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+            response.sendRedirect(redirectUrl);
+            return;
+        }
+        if (statusParam == null || statusParam.trim().isEmpty()) {
+            session.setAttribute("roleUpdateError", "Thiếu thông tin trạng thái.");
+            String redirectUrl = buildRedirectUrl(request.getContextPath(), keyword, roleFilter, statusFilter);
+            response.sendRedirect(redirectUrl);
+            return;
+        }
+        
+        roleUpdated = userDAO.updateUserRole(targetUserId, roleParam);
+        statusUpdated = userDAO.updateUserStatus(targetUserId, statusParam);
+        
+        if (roleUpdated && statusUpdated) {
+            message = "Cập nhật vai trò và trạng thái thành công.";
+            updated = true;
+        } else if (roleUpdated) {
+            message = "Cập nhật vai trò thành công nhưng không thể cập nhật trạng thái.";
+            updated = true;
+        } else if (statusUpdated) {
+            message = "Cập nhật trạng thái thành công nhưng không thể cập nhật vai trò.";
+            updated = true;
+        } else {
+            message = "Không thể cập nhật vai trò và trạng thái. Vui lòng thử lại.";
+            updated = false;
         }
 
         if (updated) {
