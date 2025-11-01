@@ -10,11 +10,13 @@ import dal.ClaimsResDBContext;
 import Model.Claims;
 import Model.Contract;
 import Model.ClaimsRes;
+import Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -32,8 +34,17 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
-            // Lấy ID của claim từ parameter
             String claimIdParam = request.getParameter("id");
             
             if (claimIdParam == null || claimIdParam.trim().isEmpty()) {
@@ -50,8 +61,7 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
                 return;
             }
-            
-            // Lấy thông tin claim
+
             Claims claim = claimsDB.getClaimById(claimId);
             
             if (claim == null) {
@@ -59,12 +69,22 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.getRequestDispatcher("ClaimsManagement.jsp").forward(request, response);
                 return;
             }
-            
-            // Lấy thông tin contract liên quan
+
             Contract contract = contractDB.getContractById(claim.getContract_id());
-            
-            // Lấy danh sách claim responses
+
             List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
+            
+            String success = (String) session.getAttribute("success");
+            String error = (String) session.getAttribute("error");
+            
+            if (success != null) {
+                request.setAttribute("success", success);
+                session.removeAttribute("success");
+            }
+            if (error != null) {
+                request.setAttribute("error", error);
+                session.removeAttribute("error");
+            }
             
             // Set attributes cho JSP
             request.setAttribute("claim", claim);
@@ -83,7 +103,37 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Redirect về GET để tránh duplicate submission
-        response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
+        try {
+            // Lấy thông báo thành công/lỗi từ AddClaimResponseServlet
+            String success = request.getParameter("success");
+            String error = request.getParameter("error");
+            
+            String claimId = request.getParameter("id");
+            if (claimId == null) {
+                claimId = request.getParameter("claimId");
+            }
+            
+            if (claimId != null) {
+                // Forward về GET để hiển thị lại trang
+                request.setAttribute("success", success);
+                request.setAttribute("error", error);
+                response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+        }
     }
 }

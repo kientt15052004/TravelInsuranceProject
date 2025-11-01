@@ -14,30 +14,7 @@
 </head>
 <body>
     <!-- Top Header -->
-    <div class="top-header">
-        <div class="header-left">
-            <div class="logo">
-                <div class="logo-text">
-                    <span class="logo-main">Logo</span>
-                </div>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="user-dropdown">
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Staff</span>
-                </div>
-                <i class="fas fa-chevron-down dropdown-arrow"></i>
-                <div class="dropdown-menu">
-                    <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Đăng xuất
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
         <!-- Sidebar -->
@@ -253,6 +230,7 @@
                                     <th>Mô tả</th>
                                     <th>Ngân hàng</th>
                                     <th>Trạng thái</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -282,6 +260,13 @@
                                                     <c:otherwise>${claim.claim_status}</c:otherwise>
                                                 </c:choose>
                                             </span>
+                                        </td>
+                                        <td class="actions-cell">
+                                            <div class="action-buttons">
+                                                <a href="${pageContext.request.contextPath}/ClaimDetailServlet?id=${claim.id}" class="btn-sm btn-info">
+                                                    Xem chi tiết
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>

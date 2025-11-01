@@ -12,31 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Header -->
-    <div class="top-header">
-        <div class="header-left">
-            <div class="logo">
-                <div class="logo-text">
-                    <span class="logo-main">Logo</span>
-                </div>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="user-dropdown">
-                <div class="user-info">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Staff</span>
-                </div>
-                <i class="fas fa-chevron-down dropdown-arrow"></i>
-                <div class="dropdown-menu">
-                    <a href="${pageContext.request.contextPath}/logout" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Đăng xuất
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
         <!-- Sidebar -->
@@ -78,7 +54,6 @@
                 <div class="claim-detail-card">
                     <div class="card-header">
                         <h2>
-                            <i class="fas fa-file-medical"></i>
                             Thông tin Bồi thường #${claim.id}
                         </h2>
                         <div class="header-actions">
@@ -86,30 +61,6 @@
                                 <span class="status-badge status-${claim.claim_status.toLowerCase()}" id="currentStatusDisplay">
                                     ${claim.claim_status}
                                 </span>
-                                <div class="status-edit-section" style="display: none;" id="statusEditSection">
-                                    <select id="inlineStatusSelect" class="inline-status-select">
-                                        <option value="pending" ${claim.claim_status.toLowerCase() == 'pending' ? 'selected' : ''}>
-                                            Pending
-                                        </option>
-                                        <option value="approved" ${claim.claim_status.toLowerCase() == 'approved' ? 'selected' : ''}>
-                                            Approved
-                                        </option>
-                                        <option value="rejected" ${claim.claim_status.toLowerCase() == 'rejected' ? 'selected' : ''}>
-                                            Rejected
-                                        </option>
-                                    </select>
-                                    <div class="status-edit-buttons">
-                                        <button type="button" class="btn btn-sm btn-success" onclick="saveInlineStatus()">
-                                            <i class="fas fa-check"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-sm btn-secondary" onclick="cancelInlineStatus()">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-sm btn-edit-status" onclick="editInlineStatus()" id="editStatusBtn">
-                                    <i class="fas fa-edit"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -257,7 +208,6 @@
                             </h2>
                             <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}" 
                                class="btn btn-primary">
-                                <i class="fas fa-external-link-alt"></i>
                                 Xem chi tiết Contract
                             </a>
                         </div>
@@ -294,7 +244,7 @@
                     </div>
                 </c:if>
 
-                <!-- Claim Responses Section -->
+                <!-- Claim Responses Section - Chat Style -->
                 <div class="claim-responses-card">
                     <div class="card-header">
                         <h2>
@@ -305,100 +255,142 @@
                             <span class="count-badge">${claimResponses.size()} phản hồi</span>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body chat-container">
                         <c:choose>
                             <c:when test="${not empty claimResponses}">
-                                <div class="responses-timeline">
+                                <div class="chat-messages-container">
+                                    <div class="chat-messages">
                                     <c:forEach var="response" items="${claimResponses}">
-                                        <div class="response-item">
-                                            <div class="response-header">
-                                                <div class="response-info">
-                                                    <div class="response-id">
-                                                        <i class="fas fa-reply"></i>
-                                                        Phản hồi #${response.claimRes_id}
-                                                    </div>
-                                                    <div class="response-date">
-                                                        <i class="fas fa-calendar"></i>
+                                        <div class="message-item">
+                                            <div class="message-avatar">
+                                                <i class="fas fa-user-circle"></i>
+                                            </div>
+                                            <div class="message-content">
+                                                <div class="message-header">
+                                                    <c:choose>
+                                                        <c:when test="${not empty response.user_fullname}">
+                                                            <span class="message-sender">${response.user_fullname}</span>
+                                                        </c:when>
+                                                        <c:when test="${not empty response.user_name}">
+                                                            <span class="message-sender">${response.user_name}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="message-sender">Null</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <span class="message-date">
                                                         <fmt:formatDate value="${response.createDate}" pattern="dd/MM/yyyy HH:mm"/>
-                                                    </div>
-                                                </div>
-                                                <div class="response-status">
-                                                    <span class="status-badge status-${response.status.toLowerCase()}">
-                                                        ${response.status}
                                                     </span>
                                                 </div>
-                                            </div>
-                                            
-                                            <div class="response-content">
-                                                <div class="response-description">
-                                                    <h4>
-                                                        <i class="fas fa-align-left"></i>
-                                                        Nội dung phản hồi
-                                                    </h4>
-                                                    <div class="description-text">
-                                                        <c:choose>
-                                                            <c:when test="${not empty response.description}">
-                                                                ${response.description}
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <span class="no-data">Không có nội dung phản hồi</span>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </div>
+                                                <div class="message-bubble">
+                                                    <c:choose>
+                                                        <c:when test="${not empty response.description}">
+                                                            ${response.description}
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="no-data">Không có nội dung</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                                 
-                                                <!-- Response Attachments -->
+                                                <!-- Message Attachments -->
                                                 <c:if test="${not empty response.related_img || not empty response.related_file}">
-                                                    <div class="response-attachments">
-                                                        <h4>
-                                                            <i class="fas fa-paperclip"></i>
-                                                            Tài liệu đính kèm
-                                                        </h4>
-                                                        <div class="attachments-list">
-                                                            <c:if test="${not empty response.related_img}">
-                                                                <div class="attachment-item">
-                                                                    <div class="attachment-icon">
-                                                                        <i class="fas fa-image"></i>
-                                                                    </div>
-                                                                    <div class="attachment-content">
-                                                                        <img src="${response.related_img}" 
-                                                                             alt="Response Image" 
-                                                                             class="response-image"
-                                                                             onclick="openImageModal(this.src)">
-                                                                    </div>
-                                                                </div>
-                                                            </c:if>
-                                                            
-                                                            <c:if test="${not empty response.related_file}">
-                                                                <div class="attachment-item">
-                                                                    <div class="attachment-icon">
-                                                                        <i class="fas fa-file"></i>
-                                                                    </div>
-                                                                    <div class="attachment-content">
-                                                                        <a href="${pageContext.request.contextPath}/Image/${response.related_file}" 
-                                                                           class="file-download" 
-                                                                           target="_blank">
-                                                                            <i class="fas fa-download"></i>
-                                                                            Tải xuống tài liệu
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </c:if>
-                                                        </div>
+                                                    <div class="message-attachments">
+                                                        <c:if test="${not empty response.related_img}">
+                                                            <div class="attachment-preview">
+                                                                <img src="${response.related_img}" 
+                                                                     alt="Attachment" 
+                                                                     class="attachment-image"
+                                                                     onclick="openImageModal(this.src)">
+                                                            </div>
+                                                        </c:if>
+                                                        
+                                                        <c:if test="${not empty response.related_file}">
+                                                            <div class="attachment-file">
+                                                                <a href="${pageContext.request.contextPath}/Image/${response.related_file}" 
+                                                                   class="file-link" 
+                                                                   target="_blank">
+                                                                    ${response.related_file}
+                                                                </a>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
                                                 </c:if>
                                             </div>
                                         </div>
                                     </c:forEach>
                                 </div>
+                                
+                                <!-- Chat Input Form -->
+                                <div class="chat-input-section">
+                                    <form action="${pageContext.request.contextPath}/AddClaimResponseServlet" method="POST" class="chat-form">
+                                        <input type="hidden" name="claimId" value="${claim.id}">
+                                        <div class="chat-input-wrapper">
+                                            <textarea 
+                                                name="description" 
+                                                id="chatMessageInput" 
+                                                class="chat-input"
+                                                placeholder="Nhập phản hồi của bạn..."
+                                                rows="3"
+                                                required></textarea>
+                                            <div class="chat-actions">
+                                                <input type="hidden" name="action" value="reply" id="actionType">
+                                                <button type="submit" name="submitType" value="reply" class="btn-send">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                    Gửi phản hồi
+                                                </button>
+                                                <button type="submit" name="submitType" value="approve" class="btn-approve" onclick="setAction('approve')">
+                                                    <i class="fas fa-check-circle"></i>
+                                                    Chấp nhận Claim
+                                                </button>
+                                                <button type="submit" name="submitType" value="reject" class="btn-reject" onclick="setAction('reject')">
+                                                    <i class="fas fa-times-circle"></i>
+                                                    Từ chối Claim
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                </div>
                             </c:when>
                             <c:otherwise>
-                                <div class="no-responses">
-                                    <div class="no-responses-icon">
+                                <div class="chat-empty">
+                                    <div class="empty-icon">
                                         <i class="fas fa-comments"></i>
                                     </div>
                                     <h3>Chưa có phản hồi nào</h3>
                                     <p>Claim này chưa có phản hồi hoặc theo dõi nào từ phía nhân viên.</p>
+                                    
+                                    <!-- Chat Input Form for empty state -->
+                                    <div class="chat-input-section-empty">
+                                        <form action="${pageContext.request.contextPath}/AddClaimResponseServlet" method="POST" class="chat-form">
+                                            <input type="hidden" name="claimId" value="${claim.id}">
+                                            <div class="chat-input-wrapper">
+                                                <textarea 
+                                                    name="description" 
+                                                    id="chatMessageInputEmpty" 
+                                                    class="chat-input"
+                                                    placeholder="Nhập phản hồi đầu tiên..."
+                                                    rows="3"
+                                                    required></textarea>
+                                                <div class="chat-actions">
+                                                    <input type="hidden" name="action" value="reply" id="actionTypeEmpty">
+                                                    <button type="submit" name="submitType" value="reply" class="btn-send">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                        Gửi phản hồi
+                                                    </button>
+                                                    <button type="submit" name="submitType" value="approve" class="btn-approve" onclick="setActionEmpty('approve')">
+                                                        <i class="fas fa-check-circle"></i>
+                                                        Chấp nhận Claim
+                                                    </button>
+                                                    <button type="submit" name="submitType" value="reject" class="btn-reject" onclick="setActionEmpty('reject')">
+                                                        <i class="fas fa-times-circle"></i>
+                                                        Từ chối Claim
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </c:otherwise>
                         </c:choose>
@@ -413,85 +405,6 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <img id="modalImage" src="" alt="Claim Image">
-        </div>
-    </div>
-
-    <!-- Approval Modal -->
-    <div id="approvalModal" class="modal">
-        <div class="modal-content approval-modal">
-            <div class="modal-header">
-                <h3 id="modalTitle">Xác nhận hành động</h3>
-                <span class="close" onclick="closeApprovalModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <p id="modalMessage">Bạn có chắc chắn muốn thực hiện hành động này?</p>
-                <div id="reasonSection" style="display: none;">
-                    <label for="rejectReason">Lý do từ chối:</label>
-                    <textarea id="rejectReason" name="reason" rows="4" placeholder="Nhập lý do từ chối..."></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeApprovalModal()">
-                    <i class="fas fa-times"></i>
-                    Hủy
-                </button>
-                <button type="button" class="btn" id="confirmBtn" onclick="submitApproval()">
-                    <i class="fas fa-check"></i>
-                    Xác nhận
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Status Update Modal -->
-    <div id="statusUpdateModal" class="modal">
-        <div class="modal-content status-update-modal">
-            <div class="modal-header">
-                <h3>Cập nhật trạng thái Claim</h3>
-                <span class="close" onclick="closeStatusUpdateModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="currentStatus">Trạng thái hiện tại:</label>
-                    <div class="current-status-display">
-                        <span class="status-badge status-${claim.claim_status.toLowerCase()}">
-                            ${claim.claim_status}
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="newStatus">Trạng thái mới:</label>
-                    <select id="newStatus" name="newStatus" class="form-select">
-                        <option value="">-- Chọn trạng thái mới --</option>
-                        <option value="pending" ${claim.claim_status.toLowerCase() == 'pending' ? 'disabled' : ''}>
-                            Pending - Chờ xử lý
-                        </option>
-                        <option value="approved" ${claim.claim_status.toLowerCase() == 'approved' ? 'disabled' : ''}>
-                            Approved - Đã duyệt
-                        </option>
-                        <option value="rejected" ${claim.claim_status.toLowerCase() == 'rejected' ? 'disabled' : ''}>
-                            Rejected - Từ chối
-                        </option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="statusReason">Lý do thay đổi:</label>
-                    <textarea id="statusReason" name="reason" rows="4" 
-                              placeholder="Nhập lý do thay đổi trạng thái (tùy chọn)..."></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="closeStatusUpdateModal()">
-                    <i class="fas fa-times"></i>
-                    Hủy
-                </button>
-                <button type="button" class="btn btn-primary" onclick="submitStatusUpdate()">
-                    <i class="fas fa-save"></i>
-                    Cập nhật
-                </button>
-            </div>
         </div>
     </div>
 
@@ -511,6 +424,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 userDropdown.classList.remove('active');
             }
         });
+    }
+    
+    // Auto scroll to bottom (newest messages) when page loads
+    const chatMessagesContainer = document.querySelector('.chat-messages-container');
+    if (chatMessagesContainer) {
+        // Check if we should scroll to bottom (after adding new response)
+        const urlParams = new URLSearchParams(window.location.search);
+        const scrollToBottom = urlParams.get('scrollToBottom');
+        
+        // Function to scroll to bottom
+        function scrollToBottomFunc() {
+            chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+        }
+        
+        // Always scroll to bottom when page loads
+        setTimeout(scrollToBottomFunc, 100);
+        setTimeout(scrollToBottomFunc, 300);
+        
+        // If coming from add response, scroll multiple times to ensure it works
+        if (scrollToBottom === 'true') {
+            setTimeout(scrollToBottomFunc, 500);
+            setTimeout(scrollToBottomFunc, 800);
+            
+            // Remove the parameter from URL to avoid scroll on next page load
+            if (window.history.replaceState) {
+                const newUrl = window.location.pathname + '?id=' + urlParams.get('id');
+                window.history.replaceState({}, '', newUrl);
+            }
+        }
     }
 });
 
@@ -535,214 +477,15 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// Approval Modal functionality
-let currentAction = '';
+// (Removed unused approval/status modal JS)
 
-function showApprovalModal(action) {
-    currentAction = action;
-    const modal = document.getElementById('approvalModal');
-    const title = document.getElementById('modalTitle');
-    const message = document.getElementById('modalMessage');
-    const reasonSection = document.getElementById('reasonSection');
-    const confirmBtn = document.getElementById('confirmBtn');
-    
-    if (action === 'approve') {
-        title.textContent = 'Chấp nhận Claim';
-        message.textContent = 'Bạn có chắc chắn muốn chấp nhận claim này?';
-        reasonSection.style.display = 'none';
-        confirmBtn.className = 'btn btn-approve';
-        confirmBtn.innerHTML = '<i class="fas fa-check"></i> Chấp nhận';
-    } else if (action === 'reject') {
-        title.textContent = 'Từ chối Claim';
-        message.textContent = 'Bạn có chắc chắn muốn từ chối claim này?';
-        reasonSection.style.display = 'block';
-        confirmBtn.className = 'btn btn-reject';
-        confirmBtn.innerHTML = '<i class="fas fa-times"></i> Từ chối';
-    }
-    
-    modal.style.display = 'block';
+// Function to set action type for approve/reject buttons
+function setAction(action) {
+    document.getElementById('actionType').value = action;
 }
 
-function closeApprovalModal() {
-    document.getElementById('approvalModal').style.display = 'none';
-    document.getElementById('rejectReason').value = '';
-}
-
-function submitApproval() {
-    const reason = document.getElementById('rejectReason').value;
-    
-    // Validate reason for rejection
-    if (currentAction === 'reject' && (!reason || reason.trim() === '')) {
-        alert('Vui lòng nhập lý do từ chối');
-        return;
-    }
-    
-    // Create form and submit
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '${pageContext.request.contextPath}/ClaimApprovalServlet';
-    
-    const claimIdInput = document.createElement('input');
-    claimIdInput.type = 'hidden';
-    claimIdInput.name = 'claimId';
-    claimIdInput.value = '${claim.id}';
-    
-    const actionInput = document.createElement('input');
-    actionInput.type = 'hidden';
-    actionInput.name = 'action';
-    actionInput.value = currentAction;
-    
-    const reasonInput = document.createElement('input');
-    reasonInput.type = 'hidden';
-    reasonInput.name = 'reason';
-    reasonInput.value = reason;
-    
-    form.appendChild(claimIdInput);
-    form.appendChild(actionInput);
-    form.appendChild(reasonInput);
-    
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// Close approval modal when clicking outside
-window.addEventListener('click', function(event) {
-    const approvalModal = document.getElementById('approvalModal');
-    if (event.target === approvalModal) {
-        closeApprovalModal();
-    }
-});
-
-// Status Update Modal functionality
-function showStatusUpdateModal() {
-    const modal = document.getElementById('statusUpdateModal');
-    modal.style.display = 'block';
-    
-    // Reset form
-    document.getElementById('newStatus').value = '';
-    document.getElementById('statusReason').value = '';
-}
-
-function closeStatusUpdateModal() {
-    document.getElementById('statusUpdateModal').style.display = 'none';
-    document.getElementById('newStatus').value = '';
-    document.getElementById('statusReason').value = '';
-}
-
-function submitStatusUpdate() {
-    const newStatus = document.getElementById('newStatus').value;
-    const reason = document.getElementById('statusReason').value;
-    
-    // Validate new status
-    if (!newStatus || newStatus.trim() === '') {
-        alert('Vui lòng chọn trạng thái mới');
-        return;
-    }
-    
-    // Create form and submit
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '${pageContext.request.contextPath}/ClaimStatusUpdateServlet';
-    
-    const claimIdInput = document.createElement('input');
-    claimIdInput.type = 'hidden';
-    claimIdInput.name = 'claimId';
-    claimIdInput.value = '${claim.id}';
-    
-    const newStatusInput = document.createElement('input');
-    newStatusInput.type = 'hidden';
-    newStatusInput.name = 'newStatus';
-    newStatusInput.value = newStatus;
-    
-    const reasonInput = document.createElement('input');
-    reasonInput.type = 'hidden';
-    reasonInput.name = 'reason';
-    reasonInput.value = reason;
-    
-    form.appendChild(claimIdInput);
-    form.appendChild(newStatusInput);
-    form.appendChild(reasonInput);
-    
-    document.body.appendChild(form);
-    form.submit();
-}
-
-// Close status update modal when clicking outside
-window.addEventListener('click', function(event) {
-    const statusUpdateModal = document.getElementById('statusUpdateModal');
-    if (event.target === statusUpdateModal) {
-        closeStatusUpdateModal();
-    }
-});
-
-// Inline Status Edit functionality
-let originalStatus = '${claim.claim_status}';
-
-function editInlineStatus() {
-    const statusDisplay = document.getElementById('currentStatusDisplay');
-    const statusEditSection = document.getElementById('statusEditSection');
-    const editBtn = document.getElementById('editStatusBtn');
-    
-    // Hide display and edit button, show edit section
-    statusDisplay.style.display = 'none';
-    editBtn.style.display = 'none';
-    statusEditSection.style.display = 'flex';
-    
-    // Set original status for cancel
-    originalStatus = statusDisplay.textContent.trim();
-}
-
-function cancelInlineStatus() {
-    const statusDisplay = document.getElementById('currentStatusDisplay');
-    const statusEditSection = document.getElementById('statusEditSection');
-    const editBtn = document.getElementById('editStatusBtn');
-    const statusSelect = document.getElementById('inlineStatusSelect');
-    
-    // Reset select to original value
-    statusSelect.value = originalStatus.toLowerCase();
-    
-    // Show display and edit button, hide edit section
-    statusDisplay.style.display = 'inline-block';
-    editBtn.style.display = 'inline-flex';
-    statusEditSection.style.display = 'none';
-}
-
-function saveInlineStatus() {
-    const newStatus = document.getElementById('inlineStatusSelect').value;
-    const currentStatus = originalStatus.toLowerCase();
-    
-    // Check if status changed
-    if (newStatus === currentStatus) {
-        cancelInlineStatus();
-        return;
-    }
-    
-    // Create form and submit directly without confirmation
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '${pageContext.request.contextPath}/ClaimStatusUpdateServlet';
-    
-    const claimIdInput = document.createElement('input');
-    claimIdInput.type = 'hidden';
-    claimIdInput.name = 'claimId';
-    claimIdInput.value = '${claim.id}';
-    
-    const newStatusInput = document.createElement('input');
-    newStatusInput.type = 'hidden';
-    newStatusInput.name = 'newStatus';
-    newStatusInput.value = newStatus;
-    
-    const reasonInput = document.createElement('input');
-    reasonInput.type = 'hidden';
-    reasonInput.name = 'reason';
-    reasonInput.value = 'Cập nhật trạng thái từ giao diện chi tiết';
-    
-    form.appendChild(claimIdInput);
-    form.appendChild(newStatusInput);
-    form.appendChild(reasonInput);
-    
-    document.body.appendChild(form);
-    form.submit();
+function setActionEmpty(action) {
+    document.getElementById('actionTypeEmpty').value = action;
 }
 </script>
 

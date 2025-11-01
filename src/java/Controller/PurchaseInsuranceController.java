@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import dal.ApplicationDBContext;
@@ -27,11 +23,15 @@ import java.util.Set;
 import Model.Application;
 import Model.ApplicationTraveler;
 import Model.BuyerInfo;
+import Model.Contract;
 import Model.InsuranceBenefit;
 import Model.InsuranceProduct;
 import Model.InsurancePurchase;
+import Model.Invoice;
 import Model.Traveler;
 import Model.User;
+import dal.ContractDBContext;
+import dal.InvoiceDBContext;
 import utils.Validation;
 
 /**
@@ -43,11 +43,13 @@ public class PurchaseInsuranceController extends HttpServlet {
 
     private InsuranceDBContext insuranceDB;
     private InsuranceBenefitDBContext insuranceBenefitDB;
+    private ContractDBContext contractDB;
 
     @Override
     public void init() throws ServletException {
         insuranceDB = new InsuranceDBContext();
         insuranceBenefitDB = new InsuranceBenefitDBContext();
+        contractDB = new ContractDBContext();
     }
 
     @Override
@@ -111,13 +113,28 @@ public class PurchaseInsuranceController extends HttpServlet {
             String endDateStr = request.getParameter("endDate");
             String totalPriceStr = request.getParameter("totalPrice");
             String travelerQuantityStr = request.getParameter("travelersCount");
+            String benefitIdStr = request.getParameter("benefit-id");
+
+            // ===== LẤY PARAM THANH TOÁN =====
+            String paymentMethod = request.getParameter("paymentMethod");
+            String cardholderName = request.getParameter("cardholderName");
+            String cardNumber = request.getParameter("cardNumber");
+            String expiryDate = request.getParameter("expiryDate");
 
             HttpSession session = request.getSession();
             User user = (User) session.getAttribute("user");
 
+            if (user == null) {
+                response.sendRedirect("login");
+                return;
+            }
+
             // ===== VALIDATE VÀ PARSE =====
             int insuranceId = (insuranceIdStr != null && !insuranceIdStr.isEmpty())
                     ? Integer.parseInt(insuranceIdStr) : 0;
+
+            int benefitId = (benefitIdStr != null && !benefitIdStr.isEmpty())
+                    ? Integer.parseInt(benefitIdStr) : 0;
 
             int travelerQuantity = (travelerQuantityStr != null && !travelerQuantityStr.isEmpty())
                     ? Integer.parseInt(travelerQuantityStr) : 0;
@@ -131,13 +148,30 @@ public class PurchaseInsuranceController extends HttpServlet {
             Date endDate = (endDateStr != null && !endDateStr.isEmpty())
                     ? java.sql.Date.valueOf(endDateStr) : null;
 
-            // ===== TẠO OBJECT APPLICATION =====
-            Application app = new Application();
-
-            if (user != null) {
-                app.setPurchaser_id(user.getId());
+            // ===== VALIDATE THÔNG TIN THANH TOÁN =====
+            if (paymentMethod == null || paymentMethod.isEmpty()) {
+                response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Payment method is required", "UTF-8"));
+                return;
             }
 
+            if ("bank_card".equalsIgnoreCase(paymentMethod)) {
+                if (cardholderName == null || cardholderName.trim().isEmpty()) {
+                    response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Cardholder name is required", "UTF-8"));
+                    return;
+                }
+                if (cardNumber == null || cardNumber.length() != 16) {
+                    response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Invalid card number", "UTF-8"));
+                    return;
+                }
+                if (expiryDate == null || !expiryDate.matches("\\d{2}/\\d{2}")) {
+                    response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Invalid expiry date format", "UTF-8"));
+                    return;
+                }
+            }
+
+            // ===== TẠO OBJECT APPLICATION =====
+            Application app = new Application();
+            app.setPurchaser_id(user.getId());
             app.setProduct_id(insuranceId);
             app.setType(type);
             app.setDestination(destination);
@@ -145,6 +179,7 @@ public class PurchaseInsuranceController extends HttpServlet {
             app.setEndDate(endDate);
             app.setTravelers_quantity(travelerQuantity);
             app.setTotal_price(totalPrice);
+            app.setBenefit_id(benefitId);
 
             // ===== TẠO OBJECT BUYER =====
             String buyerType = request.getParameter("buyerType");
@@ -170,8 +205,6 @@ public class PurchaseInsuranceController extends HttpServlet {
 
             // ===== LẤY DANH SÁCH TRAVELERS =====
             List<ApplicationTraveler> travelers = new ArrayList<>();
-
-// Tập hợp để check trùng lặp
             Set<Long> cccdSet = new HashSet<>();
             Set<String> emailSet = new HashSet<>();
             Set<String> phoneSet = new HashSet<>();
@@ -179,43 +212,37 @@ public class PurchaseInsuranceController extends HttpServlet {
             for (int i = 0; i < travelerQuantity; i++) {
                 ApplicationTraveler traveler = new ApplicationTraveler();
 
-                // CCCD
                 String cccdParam = request.getParameter("traveler[" + i + "].idNumber");
                 if (cccdParam != null && !cccdParam.isEmpty()) {
                     Long cccd = Long.parseLong(cccdParam);
                     if (!cccdSet.add(cccd)) {
-                        // Nếu add fail -> đã tồn tại
-                        response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate CCCD found: " + cccd, "UTF-8"));
-                        return; // Dừng hẳn
+                        response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Duplicate CCCD: " + cccd, "UTF-8"));
+                        return;
                     }
                     traveler.setCccd_id(cccd);
                 }
 
-                // Name + gender
                 traveler.setName(request.getParameter("traveler[" + i + "].fullName"));
                 traveler.setGender(request.getParameter("traveler[" + i + "].gender"));
 
-                // Birthdate
                 String birthDateParam = request.getParameter("traveler[" + i + "].birthDate");
                 if (birthDateParam != null && !birthDateParam.isEmpty()) {
                     traveler.setDob(java.sql.Date.valueOf(birthDateParam));
                 }
 
-                // Phone
                 String phone = request.getParameter("traveler[" + i + "].phoneNumber");
                 if (phone != null && !phone.isEmpty()) {
                     if (!phoneSet.add(phone)) {
-                        response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate phone number found: " + phone, "UTF-8"));
+                        response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Duplicate phone: " + phone, "UTF-8"));
                         return;
                     }
                     traveler.setPhone(phone);
                 }
 
-                // Email
                 String email = request.getParameter("traveler[" + i + "].email");
                 if (email != null && !email.isEmpty()) {
                     if (!emailSet.add(email)) {
-                        response.sendRedirect("InsuranceList?error=" + URLEncoder.encode("Duplicate email found: " + email, "UTF-8"));
+                        response.sendRedirect("insurance-list?error=" + URLEncoder.encode("Duplicate email: " + email, "UTF-8"));
                         return;
                     }
                     traveler.setEmail(email);
@@ -224,24 +251,64 @@ public class PurchaseInsuranceController extends HttpServlet {
                 travelers.add(traveler);
             }
 
-            // ===== INSERT DB =====
-            ApplicationDBContext adb = new ApplicationDBContext();
-            int appId = adb.insertApplicationWithTravelers(app, travelers); // đã insert cả app và travelers
-            app.setId(appId);
+            // ===== TẠO CONTRACT =====
+            Contract contract = new Contract();
+            contract.setCurrent_benefit_id(benefitId);
+            contract.setDescription("Insurance Contract for purchase");
+            contract.setContract_status("active");
+            contract.setProductName(type);
+            contract.setProductType(type);
+            contract.setStartDate(startDate);
+            contract.setEndDate(endDate);
 
-            String mess = "";
-
-            if(appId > 0){
-                mess += "success=true";
-            }else{
-                mess += "error=Fail to purchase!";
+            if ("individual".equalsIgnoreCase(buyerType)) {
+                contract.setBuyerName(buyerInfo.getFullName());
+            } else {
+                contract.setBuyerName(buyerInfo.getOrgName());
             }
-//             REDIRECT (không dùng forward)
-            response.sendRedirect("InsuranceList?"+ mess);
 
+            contract.setBuyerPhone(buyerInfo.getPhoneNumber());
+            contract.setBuyerEmail(buyerInfo.getEmail());
+            contract.setTotalPrice(totalPrice);
+
+            // ===== TẠO INVOICE =====
+            Invoice invoice = new Invoice();
+            invoice.setBase_amount(totalPrice);
+            invoice.setTax_rate(new BigDecimal("0.1")); // 10% VAT
+            invoice.setPayment_method("bank_transfer");
+            invoice.setPayment_code("PAY_" + System.currentTimeMillis() + "_" + insuranceId);
+
+            String maskedCard = "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
+            String notes = "Cardholder: " + cardholderName + " | Card: " + maskedCard + " | Expiry: " + expiryDate;
+            invoice.setNotes(notes);
+            invoice.setCreated_at(new java.sql.Timestamp(System.currentTimeMillis()));
+
+            // ===== THỰC HIỆN TRANSACTION =====
+            InvoiceDBContext pdb = new InvoiceDBContext();
+            int result = -1;
+            String errorMessage = null;
+
+            try {
+                result = pdb.processInsurancePurchaseTransaction(app, travelers, contract, invoice);
+            } catch (Exception e) {
+                errorMessage = e.getMessage();
+                System.err.println("Transaction failed: " + errorMessage);
+            }
+
+            if (result > 0) {
+                int contractId = contract.getContract_id();
+                response.sendRedirect("insurance-list?success=true&contractId=" + contractId + "&paymentId=" + result);
+            } else {
+                String error = errorMessage != null ? errorMessage : "Payment processing failed";
+                response.sendRedirect("insurance-list?error=" + URLEncoder.encode(error, "UTF-8"));
+            }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendRedirect("error.jsp?message=" + URLEncoder.encode("Invalid input format: " + e.getMessage(), "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("error.jsp?message=" + e.getMessage());
+            response.sendRedirect("error.jsp?message=" + URLEncoder.encode("Error: " + e.getMessage(), "UTF-8"));
         }
     }
 

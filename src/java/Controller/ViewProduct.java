@@ -8,18 +8,30 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import Model.User;
 
 public class ViewProduct extends HttpServlet {   
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"admin".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
         InsuranceDBContext insuranceDAO = new InsuranceDBContext();
         
         // Lấy các parameter từ form search
-        String searchTerm = request.getParameter("search");
-        String typeFilter = request.getParameter("type");
-        String packageFilter = request.getParameter("package_type");
+        String searchTerm = request.getParameter("search"); //Tên product
+        String typeFilter = request.getParameter("type"); // Trong nước or ngoài nước
+        String packageFilter = request.getParameter("package_type"); //trạng thái hoạt động
         String statusFilter = request.getParameter("status");
         
         System.out.println("DEBUG: Search parameters - search: " + searchTerm + 
@@ -36,7 +48,7 @@ public class ViewProduct extends HttpServlet {
         request.setAttribute("typeFilter", typeFilter);
         request.setAttribute("packageFilter", packageFilter);
         request.setAttribute("statusFilter", statusFilter);
-        request.setAttribute("page", "view_product.jsp");
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);            
+        
+        request.getRequestDispatcher("/view_product.jsp").forward(request, response);            
     }
 }

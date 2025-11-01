@@ -13,13 +13,11 @@
 
 .stat-card {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .stat-content h3 {
@@ -38,7 +36,6 @@
 /* Alert Styles */
 .alert {
     padding: 15px 20px;
-    border-radius: 6px;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
@@ -61,10 +58,9 @@
 
 .search-filter-section {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
     margin-bottom: 25px;
+    border: solid 1px black;
 }
 
 .search-form {
@@ -97,7 +93,6 @@
 .filter-group input {
     padding: 12px;
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
     font-size: 14px;
     transition: border-color 0.3s ease;
 }
@@ -127,18 +122,16 @@
 }
 
 .btn-search {
-    background: linear-gradient(135deg, #FFD700, #ffed4e);
-    color: #000;
+    background: linear-gradient(135deg, #FFD700, #FFC107);
+    color: #333;
     border: none;
     padding: 12px 16px;
     font-weight: 600;
-    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
     flex-shrink: 1;
 }
 
@@ -148,20 +141,16 @@
     border: none;
     padding: 12px 16px;
     font-weight: 600;
-    border-radius: 8px;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.2);
     flex-shrink: 1;
 }
 
 .export-section {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 20px;
     margin-bottom: 25px;
     text-align: right;
@@ -173,7 +162,6 @@
     border: none;
     padding: 12px 20px;
     font-weight: 600;
-    border-radius: 6px;
     transition: all 0.3s ease;
     cursor: pointer;
     display: inline-flex;
@@ -183,9 +171,8 @@
 
 .users-table-section {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
+    border: solid 1px black;
 }
 
 .table-header {
@@ -238,7 +225,6 @@
     background: #eee;
     margin: 0 3px;
     padding: 5px 10px;
-    border-radius: 4px;
     cursor: pointer;
     transition: 0.2s;
 }
@@ -273,7 +259,6 @@
 .page-size-container select {
     padding: 6px 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
     font-size: 14px;
     margin: 0 5px;
     background: white;
@@ -283,7 +268,6 @@
 .page-size-container select:focus {
     outline: none;
     border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 
 /* Pagination container */
@@ -298,7 +282,6 @@
     padding: 5px 10px;
     margin: 2px;
     cursor: pointer;
-    border-radius: 4px;
 }
 
 .page-btn.active {
@@ -329,19 +312,19 @@
 
 .table-container {
     overflow-x: auto;
+    border: solid 1px black;
 }
 
 .users-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
 }
 
 .users-table th,
 .users-table td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid #e0e0e0;
+    border: 1px solid #e0e0e0;
 }
 
 .users-table td {
@@ -378,24 +361,36 @@
     margin-bottom: 2px;
 }
 
-/* Role Badge */
-.role-badge {
-    background-color: #e9ecef;
-    color: #495057;
-    padding: 4px 8px;
-    border-radius: 4px;
+/* Role & Status text styling */
+.role-text,
+.status-text {
     font-size: 12px;
-    font-weight: 500;
+    font-weight: 600;
+    text-transform: none;
 }
 
-.role-staff {
-    background-color: #d1ecf1;
+.role-text.role-customer {
+    color: #1976d2;
+}
+
+.role-text.role-staff {
     color: #0c5460;
 }
 
-.role-customer {
-    background-color: #d4edda;
-    color: #155724;
+.role-text.role-admin {
+    color: #f57c00;
+}
+
+.status-text.status-active {
+    color: #2e7d32;
+    padding: 0 !important;
+    align-items: center;
+}
+
+.status-text.status-inactive {
+    color: #c62828;
+    padding: 0 !important;
+    align-items: center;
 }
 
 /* Action Buttons */
@@ -413,7 +408,6 @@
 .btn-sm {
     padding: 6px 12px;
     border: none;
-    border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
@@ -488,7 +482,7 @@
 .users-table th,
 .users-table td {
     padding: 12px 8px;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 /* Responsive design for smaller screens */
@@ -517,8 +511,8 @@
         font-size: 10px;
     }
     
-    .role-badge {
-        padding: 3px 6px;
+    .role-text,
+    .status-text {
         font-size: 10px;
     }
 }

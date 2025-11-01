@@ -13,7 +13,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import jakarta.servlet.http.HttpSession;
 import java.io.File;
+import Model.User;
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024, // 1MB
@@ -23,8 +25,37 @@ import java.io.File;
 public class CreateProduct extends HttpServlet {
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"admin".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
+
+        request.setAttribute("page", "create_product.jsp");
+        request.setAttribute("activePage", "product-management");
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"admin".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
         InsuranceDBContext insuranceDAO = new InsuranceDBContext();
 
         try {
@@ -64,29 +95,38 @@ public class CreateProduct extends HttpServlet {
         }
     }
 
-    private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
-        Part filePart = request.getPart("img");
-        if (filePart == null || filePart.getSize() == 0) {
-            return null;
-        }
-
-        // Tạo tên file an toàn
-        String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-        String safeFileName = System.currentTimeMillis() + "_"
-                + UUID.randomUUID().toString() + "_"
-                + originalFileName.replaceAll("[^a-zA-Z0-9.-]", "_");
-
-        String uploadPath = getServletContext().getRealPath("") + File.separator + "Image" + File.separator + "upload_imgs";
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
-
-        String filePath = uploadPath + File.separator + safeFileName;
-        filePart.write(filePath);
-
-        return "Image/upload_imgs/" + safeFileName;
+private String handleFileUpload(HttpServletRequest request) throws IOException, ServletException {
+    // 1. Thu thập File
+    Part filePart = request.getPart("img");
+    
+    // 2. Kiểm tra File trống
+    if (filePart == null || filePart.getSize() == 0) {
+        return null;
     }
+
+    // Lấy tên file gốc
+    String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+    
+    // Tạo tên file mới: Thêm thời gian hiện tại để tránh xung đột tên đơn giản
+    String safeFileName = System.currentTimeMillis() + "_" + originalFileName;
+
+    // 4. Xác định Đường dẫn Lưu trữ
+    String uploadPath = getServletContext().getRealPath("") + File.separator + "Image" + File.separator + "upload_imgs";
+    File uploadDir = new File(uploadPath);
+    
+    // 5. Tạo thư mục nếu chưa tồn tại
+    if (!uploadDir.exists()) {
+        uploadDir.mkdir();
+    }
+
+    // 6. Ghi File vật lý
+    String filePath = uploadPath + File.separator + safeFileName;
+    filePart.write(filePath);
+
+    // 7. Trả về đường dẫn tương đối (để lưu DB và hiển thị)
+    return "Image/upload_imgs/" + safeFileName;
+}
+
 
     private InsuranceBenefit createInsuranceBenefit(HttpServletRequest request) {
         InsuranceBenefit benefit = new InsuranceBenefit();

@@ -16,7 +16,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -24,6 +24,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import Model.Application;
 import Model.ApplicationTraveler;
 import Model.Contract;
@@ -47,8 +48,19 @@ public class CreateContractServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
+        
         try {
-            // Load available insurance products for the form
             List<InsuranceProduct> insuranceProducts = insuranceDB.getAll();
             request.setAttribute("insuranceProducts", insuranceProducts);
             
@@ -63,6 +75,16 @@ public class CreateContractServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("user") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            return;
+        }
         try {
             // Get form parameters - Buyer Information
             String buyerName = request.getParameter("buyerName");
@@ -71,13 +93,13 @@ public class CreateContractServlet extends HttpServlet {
             String buyerEmail = request.getParameter("buyerEmail");
             String buyerAddress = request.getParameter("buyerAddress");
             
-            // Get form parameters - Customer Information
-            String customerName = request.getParameter("customerName");
-            String customerId = request.getParameter("customerId");
-            String customerPhone = request.getParameter("customerPhone");
-            String customerEmail = request.getParameter("customerEmail");
-            String customerGender = request.getParameter("customerGender");
-            String customerBirthDate = request.getParameter("customerBirthDate");
+            // Get form parameters - Travelers Information
+            String[] travelerNames = request.getParameterValues("travelerName");
+            String[] travelerIds = request.getParameterValues("travelerId");
+            String[] travelerPhones = request.getParameterValues("travelerPhone");
+            String[] travelerEmails = request.getParameterValues("travelerEmail");
+            String[] travelerGenders = request.getParameterValues("travelerGender");
+            String[] travelerBirthDates = request.getParameterValues("travelerBirthDate");
             
             // Get form parameters - Contract Information
             String insuranceProductId = request.getParameter("insuranceProductId");
@@ -88,7 +110,7 @@ public class CreateContractServlet extends HttpServlet {
 
             // Validate required fields
             List<String> errors = validateForm(buyerName, buyerId, buyerPhone, buyerEmail, buyerAddress,
-                    customerName, customerId, customerPhone, customerEmail, customerGender, customerBirthDate,
+                    travelerNames, travelerIds, travelerPhones, travelerEmails, travelerGenders, travelerBirthDates,
                     insuranceProductId, startDate, endDate, destination);
 
             if (!errors.isEmpty()) {
@@ -102,7 +124,6 @@ public class CreateContractServlet extends HttpServlet {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date startDateParsed = new Date(sdf.parse(startDate).getTime());
             Date endDateParsed = new Date(sdf.parse(endDate).getTime());
-            Date customerBirthDateParsed = new Date(sdf.parse(customerBirthDate).getTime());
 
             // Get insurance product details
             InsuranceProduct selectedProduct = insuranceDB.getById(Integer.parseInt(insuranceProductId));
@@ -112,8 +133,17 @@ public class CreateContractServlet extends HttpServlet {
                 return;
             }
 
-            // Calculate total price based on insurance type and duration
-            BigDecimal totalPrice = calculatePrice(selectedProduct, startDateParsed, endDateParsed);
+            if (travelerNames == null || travelerNames.length == 0) {
+                request.setAttribute("error", "Vui lòng nhập ít nhất một người được bảo hiểm");
+                doGet(request, response);
+                return;
+            }
+
+            int travelerCount = travelerNames.length;
+
+            // Calculate total price based on insurance type, duration and traveler quantity
+            BigDecimal pricePerTraveler = calculatePrice(selectedProduct, startDateParsed, endDateParsed);
+            BigDecimal totalPrice = pricePerTraveler.multiply(new BigDecimal(travelerCount));
 
             // Check if BUYER exists by CCCD, if not create new user
             User buyer = userDAO.getUserByCccd(buyerId);
@@ -131,7 +161,7 @@ public class CreateContractServlet extends HttpServlet {
                 buyer.setPhone(buyerPhone);
                 buyer.setCccd(buyerId);
                 buyer.setAvatar(null);
-                buyer.setRole("buyer"); // Set role as buyer
+                buyer.setRole("customer");
                 buyer.setCccd_img(null);
                 buyer.setStatus("active");
                 
@@ -153,20 +183,32 @@ public class CreateContractServlet extends HttpServlet {
             application.setDestination(destination);
             application.setStartDate(startDateParsed);
             application.setEndDate(endDateParsed);
-            application.setTravelers_quantity(1);
+            application.setTravelers_quantity(travelerCount);
             application.setTotal_price(totalPrice);
 
-            // Create ApplicationTraveler (Customer information)
-            ApplicationTraveler traveler = new ApplicationTraveler();
-            traveler.setCccd_id(Long.parseLong(customerId));
-            traveler.setName(customerName);
-            traveler.setGender(customerGender);
-            traveler.setDob(customerBirthDateParsed);
-            traveler.setPhone(customerPhone);
-            traveler.setEmail(customerEmail);
-
             List<ApplicationTraveler> travelers = new ArrayList<>();
-            travelers.add(traveler);
+            for (int i = 0; i < travelerCount; i++) {
+                String idValue = getArrayValue(travelerIds, i);
+                String nameValue = getArrayValue(travelerNames, i);
+                String genderValue = getArrayValue(travelerGenders, i);
+                String phoneValue = getArrayValue(travelerPhones, i);
+                String emailValue = getArrayValue(travelerEmails, i);
+                String birthDateValue = getArrayValue(travelerBirthDates, i);
+
+                if (idValue == null || nameValue == null || genderValue == null || birthDateValue == null) {
+                    throw new IllegalStateException("Thiếu thông tin người được bảo hiểm tại vị trí " + (i + 1));
+                }
+
+                ApplicationTraveler traveler = new ApplicationTraveler();
+                traveler.setCccd_id(Long.parseLong(idValue.trim()));
+                traveler.setName(nameValue != null ? nameValue.trim() : null);
+                traveler.setGender(normalizeGender(genderValue));
+                traveler.setDob(new Date(sdf.parse(birthDateValue).getTime()));
+                traveler.setPhone(phoneValue != null ? phoneValue.trim() : null);
+                traveler.setEmail(emailValue != null ? emailValue.trim() : null);
+
+                travelers.add(traveler);
+            }
 
             // Insert application with travelers
             int applicationId = applicationDB.insertApplicationWithTravelers(application, travelers);
@@ -180,21 +222,41 @@ public class CreateContractServlet extends HttpServlet {
             Contract contract = new Contract();
             contract.setCurrent_benefit_id(selectedProduct.getBenefit_id());
             contract.setApplication_id(applicationId);
-            contract.setDescription(contractDescription != null ? contractDescription : 
-                    "Hợp đồng bảo hiểm du lịch cho " + customerName);
+            String primaryTravelerName = getArrayValue(travelerNames, 0);
+            contract.setDescription((contractDescription != null && !contractDescription.trim().isEmpty())
+                    ? contractDescription
+                    : "Hợp đồng bảo hiểm du lịch cho " + (primaryTravelerName != null ? primaryTravelerName : "khách hàng"));
             contract.setContract_status("ACTIVE");
 
             contractDB.insertContract(contract);
 
             // Set success attributes
+            StringBuilder summaryBuilder = new StringBuilder();
+            for (int i = 0; i < travelerCount; i++) {
+                String nameValue = getArrayValue(travelerNames, i);
+                if (nameValue != null && !nameValue.trim().isEmpty()) {
+                    if (summaryBuilder.length() > 0) {
+                        summaryBuilder.append(", ");
+                    }
+                    summaryBuilder.append(nameValue.trim());
+                }
+            }
+            String travelerSummary = summaryBuilder.length() > 0 ? summaryBuilder.toString() : "N/A";
+
             request.setAttribute("success", true);
             request.setAttribute("contractId", contract.getContract_id());
-            request.setAttribute("customerName", customerName);
+            request.setAttribute("travelerSummary", travelerSummary);
+            request.setAttribute("customerName", travelerSummary);
+            request.setAttribute("travelerCount", travelerCount);
             request.setAttribute("insuranceProduct", selectedProduct);
             request.setAttribute("startDate", startDate);
             request.setAttribute("endDate", endDate);
             request.setAttribute("totalPrice", totalPrice);
             request.setAttribute("destination", destination);
+
+            // Ensure products list is loaded for the form
+            List<InsuranceProduct> insuranceProducts = insuranceDB.getAll();
+            request.setAttribute("insuranceProducts", insuranceProducts);
 
             request.getRequestDispatcher("CreateContract.jsp").forward(request, response);
 
@@ -212,8 +274,8 @@ public class CreateContractServlet extends HttpServlet {
     }
 
     private List<String> validateForm(String buyerName, String buyerId, String buyerPhone, String buyerEmail, String buyerAddress,
-            String customerName, String customerId, String customerPhone, String customerEmail, String customerGender, 
-            String customerBirthDate, String insuranceProductId, String startDate, String endDate, String destination) {
+            String[] travelerNames, String[] travelerIds, String[] travelerPhones, String[] travelerEmails, String[] travelerGenders,
+            String[] travelerBirthDates, String insuranceProductId, String startDate, String endDate, String destination) {
         
         List<String> errors = new ArrayList<>();
 
@@ -244,35 +306,63 @@ public class CreateContractServlet extends HttpServlet {
             errors.add("Địa chỉ người mua không được để trống");
         }
 
-        // Validate Customer Information
-        if (customerName == null || customerName.trim().isEmpty()) {
-            errors.add("Tên khách hàng không được để trống");
-        }
+        // Validate Travelers Information
+        if (travelerNames == null || travelerNames.length == 0) {
+            errors.add("Vui lòng nhập ít nhất một người được bảo hiểm");
+        } else {
+            for (int i = 0; i < travelerNames.length; i++) {
+                String prefix = "Người được bảo hiểm " + (i + 1) + ": ";
 
-        if (customerId == null || customerId.trim().isEmpty()) {
-            errors.add("Số CCCD/CMND khách hàng không được để trống");
-        } else if (!isValidIdNumber(customerId)) {
-            errors.add("Số CCCD/CMND khách hàng không hợp lệ");
-        }
+                String name = getArrayValue(travelerNames, i);
+                if (name == null || name.trim().isEmpty()) {
+                    errors.add(prefix + "Tên không được để trống");
+                }
 
-        if (customerPhone == null || customerPhone.trim().isEmpty()) {
-            errors.add("Số điện thoại khách hàng không được để trống");
-        } else if (!isValidPhoneNumber(customerPhone)) {
-            errors.add("Số điện thoại khách hàng không hợp lệ");
-        }
+                String idNumber = getArrayValue(travelerIds, i);
+                if (idNumber == null || idNumber.trim().isEmpty()) {
+                    errors.add(prefix + "Số CCCD/CMND không được để trống");
+                } else if (!isValidIdNumber(idNumber)) {
+                    errors.add(prefix + "Số CCCD/CMND không hợp lệ");
+                }
 
-        if (customerEmail == null || customerEmail.trim().isEmpty()) {
-            errors.add("Email khách hàng không được để trống");
-        } else if (!isValidEmail(customerEmail)) {
-            errors.add("Email khách hàng không hợp lệ");
-        }
+                String phone = getArrayValue(travelerPhones, i);
+                if (phone == null || phone.trim().isEmpty()) {
+                    errors.add(prefix + "Số điện thoại không được để trống");
+                } else if (!isValidPhoneNumber(phone)) {
+                    errors.add(prefix + "Số điện thoại không hợp lệ");
+                }
 
-        if (customerGender == null || customerGender.trim().isEmpty()) {
-            errors.add("Giới tính khách hàng không được để trống");
-        }
+                String email = getArrayValue(travelerEmails, i);
+                if (email == null || email.trim().isEmpty()) {
+                    errors.add(prefix + "Email không được để trống");
+                } else if (!isValidEmail(email)) {
+                    errors.add(prefix + "Email không hợp lệ");
+                }
 
-        if (customerBirthDate == null || customerBirthDate.trim().isEmpty()) {
-            errors.add("Ngày sinh không được để trống");
+                String gender = getArrayValue(travelerGenders, i);
+                if (gender == null || gender.trim().isEmpty()) {
+                    errors.add(prefix + "Giới tính không được để trống");
+                } else {
+                    String normalizedGender = normalizeGender(gender);
+                    if (normalizedGender == null) {
+                        errors.add(prefix + "Giới tính không hợp lệ (chỉ Nam hoặc Nữ)");
+                    }
+                }
+
+                String birthDate = getArrayValue(travelerBirthDates, i);
+                if (birthDate == null || birthDate.trim().isEmpty()) {
+                    errors.add(prefix + "Ngày sinh không được để trống");
+                } else {
+                    try {
+                        LocalDate parsedBirth = LocalDate.parse(birthDate);
+                        if (parsedBirth.isAfter(LocalDate.now())) {
+                            errors.add(prefix + "Ngày sinh không được trong tương lai");
+                        }
+                    } catch (DateTimeParseException e) {
+                        errors.add(prefix + "Ngày sinh không hợp lệ");
+                    }
+                }
+            }
         }
 
         if (insuranceProductId == null || insuranceProductId.trim().isEmpty()) {
@@ -313,6 +403,27 @@ public class CreateContractServlet extends HttpServlet {
         }
 
         return errors;
+    }
+
+    private String getArrayValue(String[] array, int index) {
+        if (array == null || array.length <= index) {
+            return null;
+        }
+        return array[index];
+    }
+
+    private String normalizeGender(String input) {
+        if (input == null) {
+            return null;
+        }
+        String value = input.trim().toLowerCase();
+        if (value.equals("nam") || value.equals("male")) {
+            return "Male";
+        }
+        if (value.equals("nữ") || value.equals("nu") || value.equals("female")) {
+            return "Female";
+        }
+        return null;
     }
 
     private BigDecimal calculatePrice(InsuranceProduct product, Date startDate, Date endDate) {

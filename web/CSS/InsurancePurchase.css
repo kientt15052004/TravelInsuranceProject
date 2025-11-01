@@ -9,19 +9,22 @@ body {
     background-color: #f5f5f5;
 }
 
-.frame {
-    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-    min-height: 100vh;
-    padding: 20px;
+header {
+    background-color: #FFD700;
+    padding: 16px 30px;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
+/* Container chính - Sử dụng Bootstrap container nhưng full width */
+body > .container {
+    max-width: 100% !important;
+    width: 100%;
+    padding: 20px 30px;
     background: white;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Đảm bảo navbar container không bị giới hạn */
+.navbar .container {
+    max-width: 100% !important;
 }
 
 /* Header */
@@ -64,7 +67,6 @@ body {
 .progress-circle {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
     background: #e0e0e0;
     display: flex;
     align-items: center;
@@ -114,7 +116,6 @@ body {
 /* Card */
 .card {
     background: #fafafa;
-    border-radius: 12px;
     padding: 24px;
 }
 
@@ -168,7 +169,6 @@ body {
 .passenger-input {
     padding: 12px;
     border: 1px solid #ddd;
-    border-radius: 6px;
     font-size: 14px;
     background: white;
     transition: all 0.3s;
@@ -178,14 +178,12 @@ body {
 .passenger-input:focus {
     outline: none;
     border-color: #ff9800;
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
 }
 
 /* Warning Box */
 .warning-box {
     background: #fff9e6;
     border: 1px solid #ffe066;
-    border-radius: 6px;
     padding: 12px;
     display: flex;
     align-items: center;
@@ -217,7 +215,6 @@ body {
 .package-card {
     background: white;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
     padding: 16px;
     cursor: pointer;
     transition: all 0.3s;
@@ -225,14 +222,12 @@ body {
 
 .package-card:hover {
     border-color: #ff9800;
-    box-shadow: 0 2px 8px rgba(255, 152, 0, 0.2);
     transform: translateY(-2px);
 }
 
 .package-card.selected {
     background: #fff8e1;
     border-color: #ff9800;
-    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
 }
 
 .package-icon {
@@ -273,13 +268,11 @@ body {
     gap: 12px;
     padding: 12px;
     background: white;
-    border-radius: 6px;
     border: 1px solid #e0e0e0;
     transition: all 0.3s;
 }
 
 .benefit-item:hover {
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .benefit-number {
@@ -287,7 +280,6 @@ body {
     height: 28px;
     background: #ff9800;
     color: white;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -385,11 +377,9 @@ body {
     padding: 16px;
     background: linear-gradient(135deg, #fff3cd 0%, #fffbeb 100%);
     border: 1px solid #ffc107;
-    border-radius: 8px;
     margin: 20px 0;
     font-size: 14px;
     color: #856404;
-    box-shadow: 0 2px 6px rgba(255, 193, 7, 0.15);
 }
 
 /* Buyer Form */
@@ -411,7 +401,6 @@ body {
 .form-input {
     padding: 12px 16px;
     border: 1px solid #ddd;
-    border-radius: 8px;
     font-size: 14px;
     transition: all 0.3s ease;
     font-family: inherit;
@@ -425,7 +414,6 @@ body {
 .form-input:focus {
     outline: none;
     border-color: #e74c3c;
-    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
 .form-input::placeholder {
@@ -472,7 +460,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
     z-index: 100;
 }
 
@@ -480,7 +467,6 @@ body {
     padding: 12px 24px;
     background: white;
     border: 1px solid #ddd;
-    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     color: #333;
@@ -516,7 +502,6 @@ body {
     padding: 12px 32px;
     background: #ff9800;
     border: none;
-    border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
@@ -527,7 +512,6 @@ body {
 
 .continue-btn:hover {
     background: #f57c00;
-    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
     transform: translateY(-1px);
 }
 
@@ -543,7 +527,6 @@ body {
     padding: 12px 24px;
     background: #27ae60;
     border: none;
-    border-radius: 8px;
     color: white;
     font-size: 14px;
     font-weight: 600;
@@ -554,7 +537,6 @@ body {
 
 .add-person-btn:hover {
     background: #229954;
-    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
     transform: translateY(-1px);
 }
 
@@ -568,13 +550,8 @@ body {
 .insured-person-card {
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
     padding: 20px;
     transition: all 0.3s;
-}
-
-.insured-person-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .person-header {
@@ -595,7 +572,6 @@ body {
 .remove-person-btn {
     background: #e74c3c;
     border: none;
-    border-radius: 6px;
     width: 36px;
     height: 36px;
     display: flex;
@@ -651,13 +627,11 @@ body {
 
 .modal-content {
     background: white;
-    border-radius: 12px;
     padding: 24px;
     max-width: 700px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
@@ -712,7 +686,6 @@ body {
 .btn-secondary {
     padding: 12px 32px;
     border: none;
-    border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -727,7 +700,6 @@ body {
 
 .btn-primary:hover {
     background: #229954;
-    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
 }
 
 .btn-secondary {
@@ -744,7 +716,6 @@ body {
 .confirmation-section {
     background: white;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
 }
@@ -771,7 +742,6 @@ body {
     padding: 16px;
     background: #f9f9f9;
     border: 1px solid #e0e0e0;
-    border-radius: 6px;
     margin-bottom: 12px;
 }
 
@@ -860,3 +830,72 @@ body {
         position: static;
     }
 }
+
+/* Payment Card Styles */
+.payment-card {
+    height: fit-content;
+}
+
+.payment-summary-card {
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.security-notice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    margin-top: 20px;
+}
+
+.payment-methods-info {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Payment Summary Section */
+.payment-summary-section {
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.payment-summary-section .section-title {
+    color: #333;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e74c3c;
+}
+
+.payment-summary-section .detail-row {
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.payment-summary-section .detail-row:last-child {
+    border-bottom: none;
+}
+
+/* Update Bottom Bar for Step 5 */
+.bottom-bar .continue-btn {
+    transition: all 0.3s;
+}
+
+.bottom-bar .continue-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design Update */
+@media (max-width: 768px) {
+    .payment-summary-card {
+        position: static;
+    }
+}  

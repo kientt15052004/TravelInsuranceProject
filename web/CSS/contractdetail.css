@@ -10,7 +10,6 @@
     text-decoration: none;
     display: inline-block;
     padding: 10px 16px;
-    border-radius: 6px;
     font-weight: 600;
     transition: all 0.3s ease;
     border: none;
@@ -30,9 +29,9 @@
 
 .contract-detail-section {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
 }
 
 .detail-grid {
@@ -42,9 +41,9 @@
 }
 
 .detail-card {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    background: white;
     overflow: hidden;
+    border: 1px solid #e0e0e0;
 }
 
 .card-header {
@@ -98,7 +97,6 @@
 .action-buttons .btn {
     display: inline-block;
     padding: 10px 16px;
-    border-radius: 6px;
     font-weight: 600;
     transition: all 0.3s ease;
     border: none;
@@ -132,8 +130,6 @@
     clear: both;
     display: block;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
     margin-left: 0;
     margin-right: 0;
@@ -201,7 +197,6 @@
     background-color: white;
     margin: 5% auto;
     padding: 0;
-    border-radius: 8px;
     width: 80%;
     max-width: 500px;
 }
@@ -243,7 +238,6 @@
     width: 100%;
     padding: 10px;
     border: 1px solid #e0e0e0;
-    border-radius: 4px;
     font-size: 14px;
 }
 
@@ -260,7 +254,6 @@
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -273,7 +266,6 @@
     color: #6c757d;
     border: 1px solid #6c757d;
     padding: 10px 20px;
-    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -284,19 +276,16 @@
 
 .status-badge {
     padding: 4px 8px;
-    border-radius: 4px;
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
 }
 
 .status-active {
-    background-color: #d4edda;
     color: #155724;
 }
 
 .status-pending {
-    background-color: #fff3cd;
     color: #856404;
 }
 
@@ -312,8 +301,6 @@
     clear: both;
     display: block;
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     padding: 25px;
     margin-left: 0;
     margin-right: 0;
@@ -365,6 +352,23 @@
 
 .claims-list tr:hover {
     background-color: #f5f5f5;
+}
+
+.claims-list .actions-cell {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.claims-list .actions-cell .action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+}
+
+.claims-list .actions-cell .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
 }
 
 /* Claims Status Badges */
