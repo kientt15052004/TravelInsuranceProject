@@ -380,4 +380,181 @@ public class ContractDBContext extends DBContext {
         return contracts;
     }
 
+    /**
+     * Lấy danh sách hợp đồng đã mua của customer với thông tin chi tiết
+     *
+     * @param customerId ID của customer
+     * @param searchTerm Từ khóa tìm kiếm (tên sản phẩm, contract ID)
+     * @param statusFilter Lọc theo trạng thái (active, pending, cancelled)
+     * @param typeFilter Lọc theo loại (domestic, international)
+     * @param page Trang hiện tại (bắt đầu từ 1)
+     * @param pageSize Số record mỗi trang
+     * @return Danh sách hợp đồng với thông tin chi tiết
+     */
+    public List<Contract> getCustomerPurchasedInsurance(int customerId, String searchTerm,
+            String statusFilter, String typeFilter, String sortBy, int page, int pageSize) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT c.contract_id, c.current_benefit_id, c.application_id, c.description, c.contract_status, ");
+        sql.append("p.name as product_name, p.type as product_type, p.package_type, ");
+        sql.append("a.destination, a.startDate, a.endDate, a.travelers_quantity, a.total_price, ");
+        sql.append("u.fullname as buyer_name, u.phone as buyer_phone, u.mail as buyer_email ");
+        sql.append("FROM Contract c ");
+        sql.append("JOIN applications a ON c.application_id = a.id ");
+        sql.append("JOIN products p ON a.product_id = p.id ");
+        sql.append("JOIN users u ON a.purchaser_id = u.id ");
+        sql.append("WHERE a.purchaser_id = ? ");
+
+        List<Object> params = new ArrayList<>();
+        params.add(customerId);
+
+        // Thêm điều kiện tìm kiếm
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            sql.append("AND (p.name LIKE ? OR c.contract_id LIKE ? OR a.destination LIKE ?) ");
+            String searchPattern = "%" + searchTerm.trim() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        // Lọc theo trạng thái
+        if (statusFilter != null && !statusFilter.trim().isEmpty() && !"all".equalsIgnoreCase(statusFilter)) {
+            sql.append("AND c.contract_status = ? ");
+            params.add(statusFilter);
+        }
+
+        // Lọc theo loại
+        if (typeFilter != null && !typeFilter.trim().isEmpty() && !"all".equalsIgnoreCase(typeFilter)) {
+            sql.append("AND p.type = ? ");
+            params.add(typeFilter);
+        }
+
+        // Sắp xếp theo yêu cầu
+        if (sortBy != null && !sortBy.trim().isEmpty()) {
+            switch (sortBy.toLowerCase()) {
+                case "newest":
+                    sql.append("ORDER BY c.contract_id DESC ");
+                    break;
+                case "expiring":
+                    sql.append("ORDER BY a.endDate ASC ");
+                    break;
+                case "price_desc":
+                    sql.append("ORDER BY a.total_price DESC ");
+                    break;
+                case "price_asc":
+                    sql.append("ORDER BY a.total_price ASC ");
+                    break;
+                default:
+                    sql.append("ORDER BY c.contract_id DESC ");
+            }
+        } else {
+            sql.append("ORDER BY c.contract_id DESC ");
+        }
+
+        // Phân trang
+        if (page > 0 && pageSize > 0) {
+            int offset = (page - 1) * pageSize;
+            sql.append("LIMIT ? OFFSET ? ");
+            params.add(pageSize);
+            params.add(offset);
+        }
+
+        List<Contract> contracts = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            // Set parameters
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Contract contract = new Contract();
+                contract.setContract_id(rs.getInt("contract_id"));
+                contract.setCurrent_benefit_id(rs.getInt("current_benefit_id"));
+                contract.setApplication_id(rs.getInt("application_id"));
+                contract.setDescription(rs.getString("description"));
+                contract.setContract_status(rs.getString("contract_status"));
+
+                // Thông tin sản phẩm
+                contract.setProductName(rs.getString("product_name"));
+                contract.setProductType(rs.getString("product_type"));
+
+                // Thông tin ngày
+                contract.setStartDate(rs.getDate("startDate"));
+                contract.setEndDate(rs.getDate("endDate"));
+
+                // Thông tin chuyến đi
+                contract.setDestination(rs.getString("destination"));
+                contract.setTravelers_quantity(rs.getInt("travelers_quantity"));
+
+                // Thông tin người mua
+                contract.setBuyerName(rs.getString("buyer_name"));
+                contract.setBuyerPhone(rs.getString("buyer_phone"));
+                contract.setBuyerEmail(rs.getString("buyer_email"));
+
+                // Tổng số tiền
+                contract.setTotalPrice(rs.getBigDecimal("total_price"));
+
+                contracts.add(contract);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to get customer purchased insurance", e);
+        }
+
+        return contracts;
+    }
+
+    /**
+     * Đếm tổng số hợp đồng của customer (cho phân trang)
+     */
+    public int getCustomerContractCount(int customerId, String searchTerm, String statusFilter, String typeFilter) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT COUNT(*) FROM Contract c ");
+        sql.append("JOIN applications a ON c.application_id = a.id ");
+        sql.append("JOIN products p ON a.product_id = p.id ");
+        sql.append("WHERE a.purchaser_id = ? ");
+
+        List<Object> params = new ArrayList<>();
+        params.add(customerId);
+
+        // Thêm điều kiện tìm kiếm
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+            sql.append("AND (p.name LIKE ? OR c.contract_id LIKE ? OR a.destination LIKE ?) ");
+            String searchPattern = "%" + searchTerm.trim() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        // Lọc theo trạng thái
+        if (statusFilter != null && !statusFilter.trim().isEmpty() && !"all".equalsIgnoreCase(statusFilter)) {
+            sql.append("AND c.contract_status = ? ");
+            params.add(statusFilter);
+        }
+
+        // Lọc theo loại
+        if (typeFilter != null && !typeFilter.trim().isEmpty() && !"all".equalsIgnoreCase(typeFilter)) {
+            sql.append("AND p.type = ? ");
+            params.add(typeFilter);
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            // Set parameters
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 }
