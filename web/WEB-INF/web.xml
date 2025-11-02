@@ -280,4 +280,14 @@
         <servlet-name>ClaimStatusUpdateServlet</servlet-name>
         <url-pattern>/ClaimStatusUpdateServlet</url-pattern>
     </servlet-mapping>
+    
+    <!-- Purchased Insurance Servlet -->
+    <servlet>
+        <servlet-name>PurchasedInsuranceServlet</servlet-name>
+        <servlet-class>Controller.PurchasedInsuranceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PurchasedInsuranceServlet</servlet-name>
+        <url-pattern>/purchased-insurance</url-pattern>
+    </servlet-mapping>
 </web-app>

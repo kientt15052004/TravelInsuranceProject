@@ -26,6 +26,10 @@ public class Contract {
     private Date startDate;
     private Date endDate;
     
+    // Thông tin chuyến đi
+    private String destination;
+    private int travelers_quantity;
+    
     // Thông tin người mua
     private String buyerName;
     private String buyerPhone;
@@ -148,5 +152,21 @@ public class Contract {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public int getTravelers_quantity() {
+        return travelers_quantity;
+    }
+
+    public void setTravelers_quantity(int travelers_quantity) {
+        this.travelers_quantity = travelers_quantity;
     }
 }
