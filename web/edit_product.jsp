@@ -4,8 +4,6 @@
     <!DOCTYPE html>
     <html lang="en">
         <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>Chỉnh Sửa Sản Phẩm Bảo Hiểm</title>
             <style>
                 :root {
                     --primary-yellow: #FFD700;
@@ -27,16 +25,15 @@
                 }
 
                 .container {
-                    max-width: 1200px;
-                    margin: 0 auto;
-                    padding: 20px;
+                    max-width: 100%;
                 }
-
+                .main-content{
+                    padding: 0;
+                }
                 .page-header {
                     text-align: center;
                     margin-bottom: 30px;
                     padding: 20px;
-                    background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--dark-yellow) 100%);
                 }
 
                 .page-header h1 {
@@ -310,7 +307,7 @@
         <body>
             <div class="container">
                 <div class="page-header">
-                    <h1><i class="fas fa-edit"></i> Chỉnh Sửa Sản Phẩm</h1>
+                    <h1>Chỉnh Sửa Sản Phẩm</h1>
                     <p class="subtitle">Cập nhật thông tin sản phẩm bảo hiểm du lịch</p>
                 </div>
 
@@ -343,7 +340,7 @@
 
                     <!-- Basic Information Section -->
                     <div class="section-wrapper">
-                        <h2 class="section-title"><i class="fas fa-info-circle"></i> Thông tin cơ bản</h2>
+                        <h2 class="section-title">Thông tin cơ bản</h2>
                         <div class="row">
                             <div class="col-md-9 mb-4">
                                 <label class="form-label" for="name">Tên sản phẩm <span class="required-star">*</span></label>
@@ -371,11 +368,11 @@
                             <div class="radio-group-custom">
                                 <div>
                                     <input type="radio" name="choose" id="option1" value="domestic" ${product.type == 'domestic' ? 'checked' : ''}>
-                                    <label for="option1"><i class="fas fa-home"></i> Trong nước</label>
+                                    <label for="option1">Trong nước</label>
                                 </div>
                                 <div>
                                     <input type="radio" name="choose" id="option2" value="international" ${product.type == 'international' ? 'checked' : ''}>
-                                    <label for="option2"><i class="fas fa-globe"></i> Ngoài nước</label>
+                                    <label for="option2">Ngoài nước</label>
                                 </div>
                             </div>
                         </div>
@@ -412,7 +409,7 @@
 
                     <!-- Domestic Benefits Section -->
                     <div class="section-wrapper domestic-section">
-                        <h2 class="section-title"><i class="fas fa-shield-alt"></i> Quyền lợi bảo hiểm trong nước</h2>
+                        <h2 class="section-title">Quyền lợi bảo hiểm trong nước</h2>
 
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
@@ -471,7 +468,7 @@
 
                     <!-- International Benefits Section -->
                     <div class="section-wrapper international-section">
-                        <h2 class="section-title"><i class="fas fa-globe-americas"></i> Quyền lợi bảo hiểm ngoài nước</h2>
+                        <h2 class="section-title">Quyền lợi bảo hiểm ngoài nước</h2>
 
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
@@ -600,9 +597,8 @@
                         </div>
                     </div>
 
-                    <!-- Tính phí trong nước -->
                     <div class="section-wrapper domestic_preview">
-                        <h2 class="section-title"><i class="fas fa-calculator"></i> Tính phí trong nước</h2>
+                        <h2 class="section-title">Tính phí trong nước</h2>
                         <div class="formula-box text-center">
                             <h4>Công thức tính phí</h4>
                             <p>Phí = <input class="coefficient_1 form-control coefficient-input" name="domestic_percentage_rate" placeholder="Nhập vào hệ số...." value="${product.domestic_percentage_rate}">% × STBH × Số ngày × Số người</p>
@@ -632,7 +628,7 @@
 
                     <!-- Tính phí ngoài nước -->
                     <div class="section-wrapper international_preview">
-                        <h2 class="section-title"><i class="fas fa-calculator"></i> Tính phí ngoài nước</h2>
+                        <h2 class="section-title">Tính phí ngoài nước</h2>
                         <div class="formula-box text-center">
                             <h4>Công thức tính phí</h4>
                             <p>Phí bảo hiểm = Biểu phí theo ngày x số ngày x số người</p>
@@ -712,11 +708,11 @@
                     <!-- Action Buttons -->
                     <div class="action-buttons">
                         <button type="submit" class="btn btn-custom btn-success">
-                            <i class="fas fa-save"></i> Cập Nhật Sản Phẩm
+                            Cập Nhật Sản Phẩm
                         </button>
 
                         <button type="button" class="btn btn-custom btn-danger" onclick="window.history.back()">
-                            <i class="fas fa-times"></i> Huỷ
+                            Huỷ
                         </button>
 
                         <button type="button" class="btn-result btn btn-custom fw-bold">

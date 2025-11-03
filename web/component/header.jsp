@@ -122,7 +122,6 @@
     }
     .form-control:focus, .form-select:focus{
         border-color: var(--brand-yellow);
-        box-shadow: 0 0 0 0.2rem rgba(255, 213, 77, 0.25);
     }
 
     /* ===== COMMON PAGINATION ===== */

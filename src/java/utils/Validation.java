@@ -22,26 +22,6 @@ public class Validation {
         }
     }
 
-    // Trả về Double (null nếu không hợp lệ)
-    public static Double validDouble(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return null;
-        }
-        try {
-            return Double.parseDouble(value.trim());
-        } catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
-    // Trả về String (null nếu rỗng hoặc null)
-    public static String validString(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return null;
-        }
-        return value.trim();
-    }
-    
     // Validate ID number (CCCD/CMND)
     public static boolean isValidIdNumber(String idNumber) {
         if (idNumber == null || idNumber.trim().isEmpty()) {
@@ -69,20 +49,6 @@ public class Validation {
         return email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
     }
     
-    // Validate date format
-    public static boolean isValidDateFormat(String date, String format) {
-        if (date == null || date.trim().isEmpty()) {
-            return false;
-        }
-        try {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(format);
-            sdf.setLenient(false);
-            sdf.parse(date);
-            return true;
-        } catch (java.text.ParseException e) {
-            return false;
-        }
-    }
 }
 
 
