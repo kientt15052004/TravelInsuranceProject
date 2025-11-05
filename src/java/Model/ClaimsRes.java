@@ -20,6 +20,7 @@ public class ClaimsRes {
     private String description;
     private String related_img;
     private String related_file;
+    private String action_type; // 'approve', 'reject', or 'review'
 
     public ClaimsRes() {
     }
@@ -104,5 +105,13 @@ public class ClaimsRes {
 
     public void setUser_fullname(String user_fullname) {
         this.user_fullname = user_fullname;
+    }
+
+    public String getAction_type() {
+        return action_type;
+    }
+
+    public void setAction_type(String action_type) {
+        this.action_type = action_type;
     }
 }

@@ -295,7 +295,7 @@ body {
 
 /* Sidebar - Pure White */
 .sidebar {
-    width: 250px;
+    width: 200px;
     background-color: #ffffff;
     border-right: 1px solid #e0e0e0;
     display: flex;
@@ -340,7 +340,7 @@ body {
 .nav-link {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
+    padding: 12px 15px;
     color: #333;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -366,7 +366,7 @@ body {
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 250px;
+    margin-left: 200px;
     padding: 30px;
     background-color: #f8f9fa;
     min-height: calc(100vh - 60px);
