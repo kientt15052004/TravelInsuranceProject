@@ -30,7 +30,6 @@
                 margin: 0 auto 16px auto;
                 font-size: 25px;
                 color: #fff;
-                border-radius: 50%;
             }
             .forgot-password-title {
                 font-size: 20px;

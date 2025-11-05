@@ -67,7 +67,6 @@
         color: #000;
         font-weight: 600;
         padding: 0.5rem 1.5rem;
-        border-radius: 0.5rem;
         transition: all 0.3s;
     }
     
@@ -92,7 +91,6 @@
         border-color: var(--brand-yellow);
         color:#000;
         font-weight:600;
-        border-radius: 0.5rem;
         transition: all 0.3s;
     }
     .btn-brand:hover{
@@ -118,7 +116,6 @@
 
     /* ===== COMMON FORM CONTROLS ===== */
     .form-control, .form-select{
-        border-radius:10px;
     }
     .form-control:focus, .form-select:focus{
         border-color: var(--brand-yellow);

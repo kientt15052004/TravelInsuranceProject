@@ -382,7 +382,7 @@
                                 
                                 <!-- Update Compensation Amount Section (for approved claims) -->
                                 <c:if test="${claim.claim_status == 'approved'}">
-                                    <div class="compensation-update-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                    <div class="compensation-update-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa;">
                                         <h4 style="margin-bottom: 10px;">
                                             <i class="fas fa-money-bill-wave"></i>
                                             Cập nhật số tiền đền bù
@@ -399,7 +399,7 @@
                                                     min="0"
                                                     value="${claim.compensation_amount != null ? claim.compensation_amount : ''}"
                                                     placeholder="Nhập số tiền đền bù"
-                                                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                                    style="width: 100%; padding: 8px; border: 1px solid #ddd;">
                                             </div>
                                             <button type="submit" class="btn-approve" style="padding: 8px 20px;">
                                                 <i class="fas fa-save"></i>
@@ -433,7 +433,7 @@
                                                         id="related_img"
                                                         name="related_img" 
                                                         accept="image/*"
-                                                        style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em;">
+                                                        style="width: 100%; padding: 6px; border: 1px solid #ddd; font-size: 0.9em;">
                                                 </div>
                                                 <div style="flex: 1; min-width: 200px;">
                                                     <label for="related_file" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9em;">
@@ -443,7 +443,7 @@
                                                         type="file" 
                                                         id="related_file"
                                                         name="related_file" 
-                                                        style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em;">
+                                                        style="width: 100%; padding: 6px; border: 1px solid #ddd; font-size: 0.9em;">
                                                 </div>
                                             </div>
                                             
@@ -460,7 +460,7 @@
                                                         step="0.01" 
                                                         min="0"
                                                         placeholder="Nhập số tiền đền bù (có thể để trống)"
-                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd;">
                                                 </div>
                                             </c:if>
                                             <div class="chat-actions">
@@ -495,7 +495,7 @@
                                     
                                     <!-- Update Compensation Amount Section (for approved claims) -->
                                     <c:if test="${claim.claim_status == 'approved'}">
-                                        <div class="compensation-update-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                                        <div class="compensation-update-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa;">
                                             <h4 style="margin-bottom: 10px;">
                                                 <i class="fas fa-money-bill-wave"></i>
                                                 Cập nhật số tiền đền bù
@@ -512,7 +512,7 @@
                                                         min="0"
                                                         value="${claim.compensation_amount != null ? claim.compensation_amount : ''}"
                                                         placeholder="Nhập số tiền đền bù"
-                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                                        style="width: 100%; padding: 8px; border: 1px solid #ddd;">
                                                 </div>
                                                 <button type="submit" class="btn-approve" style="padding: 8px 20px;">
                                                     <i class="fas fa-save"></i>
@@ -546,7 +546,7 @@
                                                             id="related_img_empty"
                                                             name="related_img" 
                                                             accept="image/*"
-                                                            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em;">
+                                                            style="width: 100%; padding: 6px; border: 1px solid #ddd; font-size: 0.9em;">
                                                     </div>
                                                     <div style="flex: 1; min-width: 200px;">
                                                         <label for="related_file_empty" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9em;">
@@ -556,7 +556,7 @@
                                                             type="file" 
                                                             id="related_file_empty"
                                                             name="related_file" 
-                                                            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em;">
+                                                            style="width: 100%; padding: 6px; border: 1px solid #ddd; font-size: 0.9em;">
                                                     </div>
                                                 </div>
                                                 <c:if test="${claim.claim_status == 'pending'}">
@@ -572,7 +572,7 @@
                                                             step="0.01" 
                                                             min="0"
                                                             placeholder="Nhập số tiền đền bù (có thể để trống)"
-                                                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                                            style="width: 100%; padding: 8px; border: 1px solid #ddd;">
                                                     </div>
                                                 </c:if>
                                                 <div class="chat-actions">

@@ -104,13 +104,11 @@ body {
     padding: 6px 12px;
     margin-left: 10px;
     border: 1px solid #000;
-    border-radius: 9999px;
     background: #000;
     color: #FFD700;
     font-weight: 600;
     text-decoration: none;
     line-height: 1;
-    transition: background 0.2s ease, color 0.2s ease;
 }
 .logout-link:focus {
     outline: none;
@@ -164,7 +162,6 @@ body {
 }
 
 .sidebar .nav-link { transition: none !important; }
-.sidebar .nav-link:hover { background-color: inherit !important; border-left-color: transparent !important; transform: none !important; }
 /* Forcefully disable any hover/focus background/border from external styles */
 .sidebar * { transition: none !important; box-shadow: none !important; }
 .sidebar .nav-item:hover,
@@ -174,6 +171,7 @@ body {
 .sidebar .nav-link:active {
     background-color: transparent !important;
     border-left-color: transparent !important;
+    transform: none !important;
 }
 
 /* Disable active/focus highlight in sidebar */

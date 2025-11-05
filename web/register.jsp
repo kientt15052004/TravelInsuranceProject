@@ -16,7 +16,6 @@
                 max-width: 480px;
                 margin: 50px auto;
                 background: #fff;
-                border-radius: 12px;
                 padding: 35px 28px 22px 28px;
                 transition: all 0.3s ease;
             }
@@ -28,7 +27,6 @@
                 width: 48px;
                 height: 48px;
                 background: #ffd600;
-                border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
