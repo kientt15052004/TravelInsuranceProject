@@ -141,10 +141,19 @@
                                             </td>
                                             <td class="actions-cell">
                                                 <div class="action-buttons">
-                                                    <a href="${pageContext.request.contextPath}/usermanagement?action=detail&userId=${user.id}" 
-                                                       class="btn-sm btn-info">
-                                                        Xem chi tiết
-                                                    </a>
+                                                    <c:choose>
+                                                        <c:when test="${currentUser.role == 'staff' && (user.role == 'admin' || user.role == 'staff')}">
+                                                            <span class="btn-sm btn-info" style="opacity: 0.5; cursor: not-allowed; pointer-events: none;" title="Staff không có quyền xem chi tiết tài khoản admin/staff">
+                                                                Xem chi tiết
+                                                            </span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="${pageContext.request.contextPath}/usermanagement?action=detail&userId=${user.id}" 
+                                                               class="btn-sm btn-info">
+                                                                Xem chi tiết
+                                                            </a>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                             </td>
                                         </tr>

@@ -92,7 +92,7 @@
     </head>
     <body>
         <div class="login-container">
-            <div class="login-icon"><span>&#9889;</span></div>
+            <div class="login-icon"><i class="fa fa-user"></i></div>
             <div class="login-title">Chào mừng trở lại</div>
             <div class="login-text">Đăng nhập vào tài khoản của bạn để tiếp tục</div>
             <form action="${pageContext.request.contextPath}/login" method="POST">

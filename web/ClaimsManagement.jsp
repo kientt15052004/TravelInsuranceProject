@@ -112,6 +112,7 @@
                                          <th>Loại bồi thường</th>
                                          <th>Mô tả</th>
                                          <th>Trạng thái</th>
+                                         <th>Số tiền đền bù</th>
                                          <th>Thao tác</th>
                                      </tr>
                                  </thead>
@@ -145,6 +146,19 @@
                                              </td>
                                              <td class="status-text status-${claim.claim_status.toLowerCase()}">
                                                  ${claim.claim_status}
+                                             </td>
+                                             <td>
+                                                 <c:choose>
+                                                     <c:when test="${claim.claim_status == 'approved' && claim.compensation_amount != null}">
+                                                         <fmt:formatNumber value="${claim.compensation_amount}" type="number" maxFractionDigits="0" groupingUsed="true"/> VNĐ
+                                                     </c:when>
+                                                     <c:when test="${claim.claim_status == 'approved'}">
+                                                         <span style="color: #999;">Chưa cập nhật</span>
+                                                     </c:when>
+                                                     <c:otherwise>
+                                                         <span style="color: #999;">-</span>
+                                                     </c:otherwise>
+                                                 </c:choose>
                                              </td>
                                              <td class="actions-cell">
                                                  <div class="action-buttons">

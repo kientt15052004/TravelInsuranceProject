@@ -34,6 +34,7 @@ public class ClaimDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -44,6 +45,9 @@ public class ClaimDetailServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
+        
+        
+        
         try {
             String claimIdParam = request.getParameter("id");
             
@@ -85,8 +89,7 @@ public class ClaimDetailServlet extends HttpServlet {
                 request.setAttribute("error", error);
                 session.removeAttribute("error");
             }
-            
-            // Set attributes cho JSP
+
             request.setAttribute("claim", claim);
             request.setAttribute("contract", contract);
             request.setAttribute("claimResponses", claimResponses);

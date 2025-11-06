@@ -43,6 +43,15 @@ public class UserManagementServlet extends HttpServlet {
                     int userId = Integer.parseInt(userIdStr);
                     User user = userDAO.getUserById(userId);
                     if (user != null) {
+                        // Check if staff is trying to view admin/staff account
+                        if ("staff".equals(currentUser.getRole()) && 
+                            ("admin".equals(user.getRole()) || "staff".equals(user.getRole()))) {
+                            // Staff cannot view admin/staff details
+                            session.setAttribute("error", "Bạn không có quyền xem chi tiết tài khoản admin/staff");
+                            response.sendRedirect(request.getContextPath() + "/usermanagement");
+                            return;
+                        }
+                        
                         request.setAttribute("user", user);
                         request.setAttribute("applications", userDAO.getApplicationsByUserId(userId));
                         request.setAttribute("contracts", userDAO.getContractsByUserId(userId));
@@ -87,6 +96,7 @@ public class UserManagementServlet extends HttpServlet {
         }
         
         request.setAttribute("users", users);
+        request.setAttribute("currentUser", currentUser);
         request.getRequestDispatcher("/UserManagement.jsp").forward(request, response);
     }
 

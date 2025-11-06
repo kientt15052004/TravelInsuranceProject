@@ -20,6 +20,9 @@ public class UserRoleManagementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
+        
         HttpSession session = request.getSession(false);
         User currentUser = getCurrentUser(session);
         if (currentUser == null) {
@@ -30,6 +33,8 @@ public class UserRoleManagementServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
+        
+        
 
         UserDAO userDAO = new UserDAO();
 

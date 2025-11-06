@@ -97,7 +97,6 @@ body {
     padding: 8px 16px;
     background: #f8f9fa;
     border: 1px solid #e0e0e0;
-    border-radius: 25px;
     color: #333;
     font-weight: 500;
     font-size: 14px;
@@ -114,7 +113,6 @@ body {
     background: white;
     width: 28px;
     height: 28px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,8 +138,6 @@ body {
 /* Dropdown Menu */
 .navbar-right .dropdown-menu {
     min-width: 200px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border: 1px solid #e0e0e0;
     margin-top: 8px;
     padding: 8px 0;
@@ -170,7 +166,6 @@ body {
     height: 150px;
     object-fit: cover;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
     background-color: #f8f9fa;
 }
 
@@ -235,12 +230,28 @@ body {
     }
 }
 
-/* Hero Section */
+/* Hero Section - tận dụng hết chiều rộng */
 .hero-section {
     border: 0 solid #E5E7EB;
     background: linear-gradient(135deg, #FCD34D 0%, #FDE047 35.36%, #FACC15 70.71%);
     padding: 80px 0 100px;
     color: var(--dark-navy);
+}
+
+.hero-section .container {
+    max-width: 95% !important;
+}
+
+@media (min-width: 1200px) {
+    .hero-section .container {
+        max-width: 1400px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .hero-section .container {
+        max-width: 1600px !important;
+    }
 }
 
 .hero-section h1 {
@@ -299,6 +310,22 @@ body {
 .products-section {
     padding: 80px 0;
     background-color: var(--light-gray);
+}
+
+.products-section .container {
+    max-width: 95% !important;
+}
+
+@media (min-width: 1200px) {
+    .products-section .container {
+        max-width: 1400px !important;
+    }
+}
+
+@media (min-width: 1400px) {
+    .products-section .container {
+        max-width: 1600px !important;
+    }
 }
 
 .products-section h2 {
@@ -485,46 +512,3 @@ body {
     transition: transform 0.3s ease;
 }
 
-/* Footer */
-.footer {
-    background-color: var(--dark-navy);
-    color: white;
-    padding: 50px 0 20px;
-}
-
-.footer h5 {
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.footer ul {
-    list-style: none;
-    padding: 0;
-}
-
-.footer ul li {
-    margin-bottom: 10px;
-}
-
-.footer ul li a {
-    color: #adb5bd;
-    text-decoration: none;
-}
-
-.footer ul li a:hover {
-    color: var(--primary-yellow);
-}
-
-.social-icons a {
-    color: white;
-    margin-right: 15px;
-    font-size: 1.2rem;
-}
-
-.footer-bottom {
-    border-top: 1px solid #495057;
-    margin-top: 30px;
-    padding-top: 20px;
-    text-align: center;
-    color: #adb5bd;
-}

@@ -13,13 +13,16 @@
                 min-height: 100vh;
             }
             .register-container {
-                max-width: 450px;
-                margin: 40px auto;
+                max-width: 480px;
+                margin: 50px auto;
                 background: #fff;
-                padding: 38px 28px 18px 28px;
+                padding: 35px 28px 22px 28px;
                 transition: all 0.3s ease;
             }
-
+            .register-container:hover {
+                transform: translateY(-5px);
+                background: #fffef5;
+            }
             .register-icon {
                 width: 48px;
                 height: 48px;
@@ -30,10 +33,9 @@
                 margin: 0 auto 16px auto;
                 font-size: 25px;
                 color: #fff;
-                border-radius: 50%;
             }
             .register-title {
-                font-size: 20px;
+                font-size: 22px;
                 text-align: center;
                 font-weight: bold;
                 margin-bottom: 5px;
@@ -43,18 +45,38 @@
                 text-align: center;
                 color: #888;
                 font-size: 15px;
-                margin-bottom: 17px;
+                margin-bottom: 20px;
             }
             .btn-yellow {
                 background: #ffd600;
                 border: none;
                 color: #000;
                 font-weight: 600;
+                transition: all 0.3s ease;
             }
-            .forgot-link {
-                color: #ffd600;
-                font-weight: 500;
+            .btn-yellow:hover {
+                background: #e6b800;
+                color: #fff;
+                transform: translateY(-2px);
+            }
+            .social-divider {
+                text-align: center;
+                margin: 20px 0 12px 0;
+                color: #bbb;
                 font-size: 14px;
+            }
+            .btn-social {
+                border: 1px solid #eee;
+                background: #f9f9f9;
+                color: #444;
+                width: 49%;
+                margin-bottom: 8px;
+            }
+            .footer-text {
+                text-align: center;
+                font-size: 13px;
+                color: #bbb;
+                margin-top: 18px;
             }
             .sign-in-link {
                 color: #ffbf00;
@@ -72,7 +94,7 @@
     </head>
     <body>
         <div class="register-container">
-            <div class="register-icon"><span>&#10004;</span></div>
+            <div class="register-icon"><i class="fa fa-user"></i></div>
             <div class="register-title">Tạo tài khoản mới</div>
             <div class="register-text">Điền thông tin để đăng ký tài khoản</div>
             <form action="${pageContext.request.contextPath}/register" method="POST">
