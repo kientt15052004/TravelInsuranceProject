@@ -1,4 +1,4 @@
-
+<!--CT= 0,01% * STBH * số ngày * số người-->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>

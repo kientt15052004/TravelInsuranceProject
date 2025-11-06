@@ -16,8 +16,6 @@
     <body>
         <jsp:include page="./component/header.jsp"></jsp:include>
 
-
-
         <!-- Hero Section -->
         <section class="hero-section">
             <div class="container">
