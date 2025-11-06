@@ -74,17 +74,6 @@
     border-color: #28a745;
 }
 
-/* Button hover effects */
-.btn-create:hover {
-    background-color: #ffed4e;
-    transform: translateY(-2px);
-}
-
-.btn-secondary:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-}
-
 /* Auto-hide alerts with CSS animation */
 .alert {
     animation: slideInRight 0.3s ease-out;
@@ -208,12 +197,6 @@ textarea:focus {
     border-color: #FFD700;
 }
 
-/* Hover effects for interactive elements */
-button:hover {
-    transform: translateY(-1px);
-    transition: all 0.3s ease;
-}
-
 /* Loading state for buttons */
 button:disabled {
     opacity: 0.6;
@@ -312,7 +295,7 @@ body {
 
 /* Sidebar - Pure White */
 .sidebar {
-    width: 250px;
+    width: 200px;
     background-color: #ffffff;
     border-right: 1px solid #e0e0e0;
     display: flex;
@@ -357,7 +340,7 @@ body {
 .nav-link {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
+    padding: 12px 15px;
     color: #333;
     text-decoration: none;
     transition: all 0.3s ease;
@@ -383,7 +366,7 @@ body {
 /* Main Content */
 .main-content {
     flex: 1;
-    margin-left: 250px;
+    margin-left: 200px;
     padding: 30px;
     background-color: #f8f9fa;
     min-height: calc(100vh - 60px);
@@ -518,10 +501,6 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.file-label:hover {
-    background-color: #ffed4e;
-}
-
 .file-label i {
     font-size: 16px;
 }
@@ -598,7 +577,6 @@ body {
     background: #fff !important;
     border: 1px solid #e0e0e0 !important;
     padding: 25px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     transition: all 0.3s ease !important;
     position: relative !important;
     overflow: hidden !important;
@@ -611,15 +589,8 @@ body {
     left: 0;
     width: 4px;
     height: 100%;
-    background-color: #FFD700;
     opacity: 0;
     transition: opacity 0.3s ease;
-}
-
-.metric-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
-    transform: translateY(-2px) !important;
-    border-color: #FFD700 !important;
 }
 
 .metric-card:hover::before {
@@ -664,12 +635,7 @@ body {
     background: #fff !important;
     border: 1px solid #e0e0e0 !important;
     padding: 25px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
     transition: box-shadow 0.3s ease !important;
-}
-
-.activity-section:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .section-header {
@@ -695,12 +661,6 @@ body {
     font-weight: 600 !important;
     padding: 6px 12px !important;
     transition: all 0.3s ease !important;
-}
-
-.view-all-link:hover {
-    background-color: #FFD700 !important;
-    color: #000 !important;
-    text-decoration: none !important;
 }
 
 .stats-table-container {
@@ -739,10 +699,6 @@ body {
 
 .stats-table tbody tr {
     transition: background-color 0.2s ease !important;
-}
-
-.stats-table tbody tr:hover {
-    background-color: #fff9e6 !important;
 }
 
 .status-badge {
@@ -796,12 +752,6 @@ body {
     font-size: 12px !important;
     font-weight: 600 !important;
     transition: all 0.3s ease !important;
-}
-
-.view-detail-link:hover {
-    background-color: #138496 !important;
-    color: #fff !important;
-    text-decoration: none !important;
 }
 
 @media (max-width: 768px) {

@@ -15,7 +15,6 @@
               <div class="alert alert-success">
                   <div class="alert-content">
                       <div class="alert-icon">
-                          <i class="fas fa-check-circle"></i>
                       </div>
                       <div class="alert-text">
                           <h4>${notification}</h4>
@@ -32,7 +31,6 @@
                           </div>
                       </div>
                       <button type="button" onclick="this.parentElement.parentElement.style.display = 'none'">
-                          <i class="fas fa-times"></i>
                       </button>
                   </div>
               </div>
@@ -44,7 +42,7 @@
                 <!-- Basic Information Section -->
                 <div class="form-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-info-circle"></i> Thông tin cơ bản</h2>
+                        <h2>Thông tin cơ bản</h2>
                     </div>
                     <div class="form-row-custom">
                         <div class="form-group col-name">
@@ -56,11 +54,11 @@
                             <div class="radio-group-horizontal">
                                 <div class="radio-item">
                                     <input type="radio" name="choose" id="option1" value="domestic" checked>
-                                    <label for="option1"><i class="fas fa-home"></i> Trong nước</label>
+                                    <label for="option1">Trong nước</label>
                                 </div>
                                 <div class="radio-item">
                                     <input type="radio" name="choose" id="option2" value="international">
-                                    <label for="option2"><i class="fas fa-globe"></i> Ngoài nước</label>
+                                    <label for="option2">Ngoài nước</label>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +91,7 @@
                 <!-- Domestic Benefits Section -->
                 <div class="form-section domestic-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-shield-alt"></i> Cấu hình quyền lợi bảo hiểm trong nước</h2>
+                        <h2>Cấu hình quyền lợi bảo hiểm trong nước</h2>
                     </div>
                     <div class="form-row-three">
                         <div class="form-group col-4">
@@ -128,7 +126,7 @@
                 <!-- International Benefits Section -->
                 <div class="form-section international-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-globe-americas"></i> Cấu hình quyền lợi bảo hiểm ngoài nước</h2>
+                        <h2>Cấu hình quyền lợi bảo hiểm ngoài nước</h2>
                     </div>
                     <!-- Row 1: 4 columns -->
                     <div class="form-row-four">
@@ -206,7 +204,7 @@
                 <!-- Domestic Pricing Section -->
                 <div class="form-section domestic-pricing-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-calculator"></i> Tính phí</h2>
+                        <h2>Tính phí</h2>
                     </div>
                     <div class="pricing-formula">
                         <h4>Công thức tính phí</h4>
@@ -311,11 +309,9 @@
                 <!-- Action Buttons -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i>
                         Tạo sản phẩm
                     </button>
                     <button type="button" class="btn btn-secondary btn-calculate">
-                        <i class="fas fa-calculator"></i>
                         Tính phí
                     </button>
                 </div>
@@ -336,7 +332,7 @@
                     const internationalOption = document.querySelector('input[value="international"]');
                     const domesticSection = document.querySelector('.domestic-section');
                     const internationalSection = document.querySelector('.international-section');
-                    const domesticPricingSection = document.querySelector('.domestic-pricing-section'); //Phần công thức và tính phí trong nước
+                    const domesticPricingSection = document.querySelector('.domestic-pricing-section');
                     const internationalPricingSection = document.querySelector('.international-pricing-section'); //Phần công thức và tính phí ngoài nước
                     const calculateBtn = document.querySelector('.btn-calculate'); //Nút tính phí
                     const form = document.querySelector('form');

@@ -51,6 +51,12 @@ public class ClaimsResDBContext extends DBContext {
                 claimRes.setRelated_img(rs.getString("related_img"));
                 claimRes.setRelated_file(rs.getString("related_file"));
                 
+                try {
+                    claimRes.setAction_type(rs.getString("action_type"));
+                } catch (SQLException e) {
+                    claimRes.setAction_type("review"); // Default to review if column doesn't exist
+                }
+                
                 claimResponses.add(claimRes);
             }
             System.out.println("Found " + count + " claim responses for claim ID: " + claimId);
@@ -69,7 +75,7 @@ public class ClaimsResDBContext extends DBContext {
             return false;
         }
         
-        String sql = "INSERT INTO ClaimsRes (claim_id, user_id, createDate, description, related_img, related_file) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO ClaimsRes (claim_id, user_id, createDate, description, related_img, related_file, action_type) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimRes.getClaim_id());
@@ -85,6 +91,13 @@ public class ClaimsResDBContext extends DBContext {
             ps.setString(4, claimRes.getDescription());
             ps.setString(5, claimRes.getRelated_img());
             ps.setString(6, claimRes.getRelated_file());
+            
+            // Set action_type, default to 'review' if not set
+            String actionType = claimRes.getAction_type();
+            if (actionType == null || actionType.trim().isEmpty()) {
+                actionType = "review";
+            }
+            ps.setString(7, actionType);
             
             int rowsAffected = ps.executeUpdate();
             System.out.println("Added claim response. Rows affected: " + rowsAffected);

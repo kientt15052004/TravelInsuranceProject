@@ -24,9 +24,8 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute("page", "home.jsp");
-        request.setAttribute("activePage", "home");
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        // Redirect to admin dashboard
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
     }
 
     @Override

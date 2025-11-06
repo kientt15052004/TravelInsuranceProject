@@ -79,7 +79,7 @@ CREATE TABLE applications (
   startDate DATE,
   endDate DATE,
   travelers_quantity INT,
-  total_price DECIMAL(10,2),
+  total_price DECIMAL(15,2),
   FOREIGN KEY (purchaser_id) REFERENCES users(id),
   FOREIGN KEY (product_id) REFERENCES products(id)
 );
@@ -110,7 +110,7 @@ CREATE TABLE `Contract` (
 CREATE TABLE invoices (
   id INT PRIMARY KEY AUTO_INCREMENT,
   contract_id INT,
-  base_amount DECIMAL(10,2),
+  base_amount DECIMAL(15,2),
   tax_rate DECIMAL(5,2),
   payment_method ENUM('credit_card','bank_transfer','cash'),
   payment_code VARCHAR(255),
@@ -130,18 +130,23 @@ CREATE TABLE Claims (
   related_img VARCHAR(255),
   related_file VARCHAR(255),
   claim_status ENUM('pending','approved','rejected'),
+  compensation_amount DECIMAL(15,2) DEFAULT NULL,
   FOREIGN KEY (contract_id) REFERENCES `Contract`(contract_id)
 );
 
 CREATE TABLE ClaimsRes (
   id INT PRIMARY KEY AUTO_INCREMENT,
   claim_id INT,
-  createDate DATE,
+  user_id INT DEFAULT NULL,
+  createDate DATETIME DEFAULT CURRENT_TIMESTAMP,
   description TEXT,
   related_img VARCHAR(255),
   related_file VARCHAR(255),
-  status ENUM('open','follow_up','resolved'),
-  FOREIGN KEY (claim_id) REFERENCES Claims(id)
+  action_type ENUM('approve','reject','review') DEFAULT 'review',
+  FOREIGN KEY (claim_id) REFERENCES Claims(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  INDEX idx_user_id (user_id),
+  INDEX idx_action_type (action_type)
 );
 
 -- =====================================
@@ -276,6 +281,10 @@ CALL seed_products()$$
 DROP PROCEDURE IF EXISTS seed_products$$
 
 -- 4️⃣ APPLICATIONS
+-- TEST SCENARIOS:
+-- - Large contract values for getUnusualLargeContractClaims test
+-- - Products with different claim rates (some high, some low)
+-- - Revenue scenarios for getRevenueByProduct test
 DROP PROCEDURE IF EXISTS seed_applications$$
 CREATE PROCEDURE seed_applications()
 BEGIN
@@ -285,7 +294,9 @@ BEGIN
   DECLARE startD DATE;
   DECLARE endD DATE;
   DECLARE trav_qty INT;
-  DECLARE base_price DECIMAL(10,2);
+  DECLARE base_price DECIMAL(15,2);
+  DECLARE total_price_calc DECIMAL(15,2);
+  DECLARE price_multiplier DECIMAL(5,2);
 
   WHILE i <= 150 DO
     SET purchaser = ((i - 1) % 120) + 1;
@@ -296,6 +307,20 @@ BEGIN
 
     SELECT price INTO base_price FROM products WHERE id = prod LIMIT 1;
     IF base_price IS NULL THEN SET base_price = 500000; END IF;
+    
+    -- Create some large contract values (for testing getUnusualLargeContractClaims)
+    -- Applications 1-10: Very high value contracts
+    -- Applications 11-30: High value contracts
+    -- Rest: Normal values
+    IF i <= 10 THEN
+      SET price_multiplier = 8.0 + (RAND() * 4.0);  -- 8x to 12x multiplier
+    ELSEIF i <= 30 THEN
+      SET price_multiplier = 3.0 + (RAND() * 3.0);  -- 3x to 6x multiplier
+    ELSE
+      SET price_multiplier = 1.0 + (RAND() * 0.5);  -- 1x to 1.5x multiplier
+    END IF;
+    
+    SET total_price_calc = ROUND(base_price * trav_qty * price_multiplier, 2);
 
     INSERT INTO applications (purchaser_id, product_id, type, destination, startDate, endDate, travelers_quantity, total_price)
     VALUES (
@@ -312,7 +337,7 @@ BEGIN
       startD,
       endD,
       trav_qty,
-      ROUND(base_price * trav_qty * (1 + (RAND()*0.3)),2)
+      total_price_calc
     );
     SET i = i + 1;
   END WHILE;
@@ -356,21 +381,33 @@ CALL seed_application_travelers()$$
 DROP PROCEDURE IF EXISTS seed_application_travelers$$
 
 -- 6️⃣ CONTRACTS
+-- TEST SCENARIOS:
+-- - ~50% active contracts (for getActiveContractsCount test)
+-- - ~30% pending
+-- - ~20% cancelled
+-- - Some contracts with high total_price (for getUnusualLargeContractClaims test)
 DROP PROCEDURE IF EXISTS seed_contracts$$
 CREATE PROCEDURE seed_contracts()
 BEGIN
   DECLARE a_id INT DEFAULT 1;
   DECLARE max_app INT;
+  DECLARE contract_status VARCHAR(20);
+  
   SELECT MAX(id) INTO max_app FROM applications;
 
   WHILE a_id <= IFNULL(max_app,0) DO
+    -- Distribution: 50% active, 30% pending, 20% cancelled
+    IF (a_id % 10) <= 4 THEN
+      SET contract_status = 'active';
+    ELSEIF (a_id % 10) <= 7 THEN
+      SET contract_status = 'pending';
+    ELSE
+      SET contract_status = 'cancelled';
+    END IF;
+    
     INSERT INTO `Contract` (current_benefit_id, application_id, description, contract_status)
     SELECT p.benefit_id, appl.id, CONCAT('Hợp đồng cho đơn ', appl.id),
-           CASE 
-             WHEN appl.id % 4 = 0 THEN 'active'
-             WHEN appl.id % 5 = 0 THEN 'cancelled'
-             ELSE 'pending'
-           END
+           contract_status
     FROM applications appl
     JOIN products p ON p.id = appl.product_id
     WHERE appl.id = a_id;
@@ -381,19 +418,39 @@ CALL seed_contracts()$$
 DROP PROCEDURE IF EXISTS seed_contracts$$
 
 -- 7️⃣ INVOICES
+-- TEST SCENARIOS:
+-- - Revenue calculations with proper base_amount and tax_rate
+-- - High revenue products for getRevenueByProduct test
+-- - Total revenue for getTotalRevenue test
 DROP PROCEDURE IF EXISTS seed_invoices$$
 CREATE PROCEDURE seed_invoices()
 BEGIN
   DECLARE c_id INT DEFAULT 1;
   DECLARE max_c INT;
+  DECLARE base_amt DECIMAL(15,2);
+  DECLARE tax_rt DECIMAL(5,2);
+  
   SELECT MAX(contract_id) INTO max_c FROM `Contract`;
 
   WHILE c_id <= IFNULL(max_c,0) DO
+    -- Get total_price from application
+    SELECT COALESCE(a.total_price, 1000000) INTO base_amt
+    FROM `Contract` c
+    LEFT JOIN applications a ON a.id = c.application_id
+    WHERE c.contract_id = c_id;
+    
+    -- Tax rate: vary between 8% and 12%
+    SET tax_rt = 0.08 + (RAND() * 0.04);
+    
     INSERT INTO invoices (contract_id, base_amount, tax_rate, payment_method, payment_code, notes, created_at)
     SELECT c.contract_id,
-           COALESCE(a.total_price, 1000000),
-           0.10,
-           CASE WHEN c.contract_id % 2 = 0 THEN 'credit_card' ELSE 'bank_transfer' END,
+           base_amt,
+           tax_rt,
+           CASE 
+             WHEN c.contract_id % 3 = 0 THEN 'credit_card'
+             WHEN c.contract_id % 3 = 1 THEN 'bank_transfer'
+             ELSE 'cash'
+           END,
            CONCAT('PAY', LPAD(c.contract_id,6,'0')),
            CONCAT('Invoice for contract ', c.contract_id),
            NOW()
@@ -407,64 +464,322 @@ CALL seed_invoices()$$
 DROP PROCEDURE IF EXISTS seed_invoices$$
 
 -- 8️⃣ CLAIMS
+-- TEST SCENARIOS:
+-- - ~40% approved (half with compensation_amount, half without)
+-- - ~35% pending
+-- - ~25% rejected
+-- - At least 20-30 claims in last 30 days (for getClaimsLast30Days test)
+-- - Claims with dates from 1-365 days ago
+-- - High compensation amounts for getHighCompensationClaims test
+-- - Multiple claims per customer for risk customer testing
 DROP PROCEDURE IF EXISTS seed_claims$$
 CREATE PROCEDURE seed_claims()
 BEGIN
   DECLARE c_id INT DEFAULT 1;
   DECLARE max_c INT;
+  DECLARE claim_status VARCHAR(20);
+  DECLARE compensation_amt DECIMAL(15,2);
+  DECLARE days_ago INT;
+  DECLARE claim_num INT DEFAULT 1;
+  DECLARE total_claims INT DEFAULT 250;
+  DECLARE contract_counter INT DEFAULT 1;
+  DECLARE risk_customer_id INT DEFAULT 14;
+  DECLARE risk_contract_id INT;
+  DECLARE risk_claim_count INT;
+  DECLARE risk_claim_num INT;
+  DECLARE high_claim_product_id INT DEFAULT 1;
+  DECLARE high_claim_contract_id INT;
+  DECLARE high_claim_count INT;
+  DECLARE high_claim_num INT;
+  
   SELECT MAX(contract_id) INTO max_c FROM `Contract`;
-
-  WHILE c_id <= IFNULL(max_c,0) AND c_id <= 120 DO
-    INSERT INTO Claims (contract_id, requestDate, claim_type, description, payment_bank, payment_number, related_img, related_file, claim_status)
+  
+  -- Create claims: 250 total, distributed across contracts
+  WHILE claim_num <= total_claims DO
+    -- Cycle through contracts
+    SET contract_counter = ((claim_num - 1) % max_c) + 1;
+    
+    -- Determine status: 40% approved, 35% pending, 25% rejected
+    IF (claim_num % 10) <= 3 THEN
+      SET claim_status = 'approved';
+    ELSEIF (claim_num % 10) <= 6 THEN
+      SET claim_status = 'pending';
+    ELSE
+      SET claim_status = 'rejected';
+    END IF;
+    
+    -- For approved claims: 50% with compensation, 50% without
+    IF claim_status = 'approved' THEN
+      IF (claim_num % 2) = 0 THEN
+        -- High compensation amounts for testing getHighCompensationClaims
+        SET compensation_amt = ROUND(500000 + RAND() * 4500000, 2);
+      ELSE
+        SET compensation_amt = NULL;
+      END IF;
+    ELSE
+      SET compensation_amt = NULL;
+    END IF;
+    
+    -- Date distribution: 
+    -- - First 30 claims: last 30 days (for getClaimsLast30Days test)
+    -- - Next 50 claims: 31-90 days ago
+    -- - Rest: 91-365 days ago
+    IF claim_num <= 30 THEN
+      SET days_ago = (claim_num - 1) % 30;  -- 0-29 days ago
+    ELSEIF claim_num <= 80 THEN
+      SET days_ago = 31 + ((claim_num - 31) % 60);  -- 31-90 days ago
+    ELSE
+      SET days_ago = 91 + ((claim_num - 81) % 275);  -- 91-365 days ago
+    END IF;
+    
+    INSERT INTO Claims (contract_id, requestDate, claim_type, description, payment_bank, payment_number, related_img, related_file, claim_status, compensation_amount)
     VALUES (
-      c_id,
-      DATE_SUB(CURDATE(), INTERVAL (c_id % 50) DAY),
-      CASE (c_id % 6)
+      contract_counter,
+      DATE_SUB(CURDATE(), INTERVAL days_ago DAY),
+      CASE (claim_num % 8)
         WHEN 0 THEN 'medical'
         WHEN 1 THEN 'lost_baggage'
         WHEN 2 THEN 'flight_delay'
         WHEN 3 THEN 'third_party'
         WHEN 4 THEN 'trip_cancellation'
+        WHEN 5 THEN 'accident'
+        WHEN 6 THEN 'theft'
         ELSE 'other'
       END,
-      CONCAT('Yêu cầu bồi thường cho hợp đồng ', c_id),
-      CONCAT('Bank ', (c_id % 8) + 1),
-      CONCAT('ACC', LPAD(500000 + c_id,8,'0')),
+      CONCAT('Yêu cầu bồi thường cho hợp đồng ', contract_counter, ' - Claim số ', claim_num),
+      CONCAT('Bank ', (claim_num % 10) + 1),
+      CONCAT('ACC', LPAD(500000 + claim_num,8,'0')),
       CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
       CONCAT('https://example.com/file_', FLOOR(1 + RAND()*1000), '.pdf'),
-      CASE WHEN c_id % 3 = 0 THEN 'approved' WHEN c_id % 5 = 0 THEN 'rejected' ELSE 'pending' END
+      claim_status,
+      compensation_amt
     );
-    SET c_id = c_id + 1;
+    
+    SET claim_num = claim_num + 1;
+  END WHILE;
+  
+  -- Create multiple claims for some customers (risk customers test scenario)
+  -- Customer 14-20: High risk customers with many claims
+  SET risk_customer_id = 14;
+  
+  WHILE risk_customer_id <= 20 DO
+    -- Find contracts for this customer
+    SELECT c.contract_id INTO risk_contract_id 
+    FROM `Contract` c
+    JOIN applications a ON c.application_id = a.id
+    WHERE a.purchaser_id = risk_customer_id
+    LIMIT 1;
+    
+    IF risk_contract_id IS NOT NULL THEN
+      -- Create 5-10 claims per risk customer
+      SET risk_claim_count = 5 + (risk_customer_id % 6);
+      SET risk_claim_num = 1;
+      
+      WHILE risk_claim_num <= risk_claim_count DO
+        -- Mix of approved and rejected for risk customers
+        IF (risk_claim_num % 3) = 0 THEN
+          SET claim_status = 'approved';
+          SET compensation_amt = ROUND(100000 + RAND() * 500000, 2);
+        ELSEIF (risk_claim_num % 3) = 1 THEN
+          SET claim_status = 'rejected';
+          SET compensation_amt = NULL;
+        ELSE
+          SET claim_status = 'pending';
+          SET compensation_amt = NULL;
+        END IF;
+        
+        INSERT INTO Claims (contract_id, requestDate, claim_type, description, payment_bank, payment_number, related_img, related_file, claim_status, compensation_amount)
+        VALUES (
+          risk_contract_id,
+          DATE_SUB(CURDATE(), INTERVAL (30 + risk_claim_num * 10) DAY),
+          CASE (risk_claim_num % 5)
+            WHEN 0 THEN 'medical'
+            WHEN 1 THEN 'lost_baggage'
+            WHEN 2 THEN 'accident'
+            WHEN 3 THEN 'theft'
+            ELSE 'other'
+          END,
+          CONCAT('Risk customer claim - Customer ', risk_customer_id, ' - Claim ', risk_claim_num),
+          CONCAT('Bank ', (risk_customer_id % 5) + 1),
+          CONCAT('ACC', LPAD(900000 + risk_customer_id * 100 + risk_claim_num,8,'0')),
+          CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
+          CONCAT('https://example.com/risk_file_', risk_customer_id, '_', risk_claim_num, '.pdf'),
+          claim_status,
+          compensation_amt
+        );
+        
+        SET risk_claim_num = risk_claim_num + 1;
+      END WHILE;
+    END IF;
+    
+    SET risk_customer_id = risk_customer_id + 1;
+  END WHILE;
+  
+  -- Create additional claims for high-claim-rate products (test scenario)
+  -- Products 1-10: High claim rate products (>50% claim rate)
+  -- Products 11-20: Medium claim rate products
+  -- Products 21+: Low claim rate products (already have normal distribution)
+  SET high_claim_product_id = 1;
+  
+  WHILE high_claim_product_id <= 10 DO
+    -- Find contracts for this high-claim-rate product
+    SELECT c.contract_id INTO high_claim_contract_id
+    FROM `Contract` c
+    JOIN applications a ON c.application_id = a.id
+    WHERE a.product_id = high_claim_product_id
+    LIMIT 1;
+    
+    IF high_claim_contract_id IS NOT NULL THEN
+      -- Create 3-5 additional claims per high-claim-rate product
+      SET high_claim_count = 3 + (high_claim_product_id % 3);
+      SET high_claim_num = 1;
+      
+      WHILE high_claim_num <= high_claim_count DO
+        -- Mix of statuses for high-claim-rate products
+        IF (high_claim_num % 3) = 0 THEN
+          SET claim_status = 'approved';
+          SET compensation_amt = ROUND(200000 + RAND() * 800000, 2);
+        ELSEIF (high_claim_num % 3) = 1 THEN
+          SET claim_status = 'pending';
+          SET compensation_amt = NULL;
+        ELSE
+          SET claim_status = 'rejected';
+          SET compensation_amt = NULL;
+        END IF;
+        
+        INSERT INTO Claims (contract_id, requestDate, claim_type, description, payment_bank, payment_number, related_img, related_file, claim_status, compensation_amount)
+        VALUES (
+          high_claim_contract_id,
+          DATE_SUB(CURDATE(), INTERVAL (20 + high_claim_num * 5) DAY),
+          CASE (high_claim_num % 6)
+            WHEN 0 THEN 'medical'
+            WHEN 1 THEN 'lost_baggage'
+            WHEN 2 THEN 'flight_delay'
+            WHEN 3 THEN 'accident'
+            WHEN 4 THEN 'theft'
+            ELSE 'other'
+          END,
+          CONCAT('High claim rate product claim - Product ', high_claim_product_id, ' - Claim ', high_claim_num),
+          CONCAT('Bank ', (high_claim_product_id % 5) + 1),
+          CONCAT('ACC', LPAD(800000 + high_claim_product_id * 100 + high_claim_num,8,'0')),
+          CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
+          CONCAT('https://example.com/highclaim_file_', high_claim_product_id, '_', high_claim_num, '.pdf'),
+          claim_status,
+          compensation_amt
+        );
+        
+        SET high_claim_num = high_claim_num + 1;
+      END WHILE;
+    END IF;
+    
+    SET high_claim_product_id = high_claim_product_id + 1;
   END WHILE;
 END$$
 CALL seed_claims()$$
 DROP PROCEDURE IF EXISTS seed_claims$$
 
 -- 9️⃣ CLAIM RESPONSES
+-- TEST SCENARIOS:
+-- - Link ClaimsRes with staff user_id (IDs 4-13 are staff)
+-- - createDate as DATETIME distributed across date ranges
+-- - Mỗi approved/rejected claim chỉ có 1 ClaimsRes từ staff quyết định
+-- - Staff approval patterns:
+--   * Staff 4-7: Approve nhiều claims (optimistic) - 70% approved, 30% rejected
+--   * Staff 8-10: Reject nhiều claims (strict) - 30% approved, 70% rejected  
+--   * Staff 11-13: Cân bằng (balanced) - 50% approved, 50% rejected
+-- - Pending claims có thể có 1 response review ban đầu
 DROP PROCEDURE IF EXISTS seed_claimsres$$
 CREATE PROCEDURE seed_claimsres()
 BEGIN
   DECLARE cl_id INT DEFAULT 1;
   DECLARE max_claim INT;
-  DECLARE k INT;
-  DECLARE rcount INT;
+  DECLARE staff_user_id INT;
+  DECLARE claim_status_check VARCHAR(20);
+  DECLARE days_offset INT;
+  DECLARE hours_offset INT;
+  DECLARE response_date DATETIME;
+  DECLARE staff_pattern INT;
 
   SELECT MAX(id) INTO max_claim FROM Claims;
+  
   WHILE cl_id <= IFNULL(max_claim,0) DO
-    SET rcount = 1 + (cl_id % 2);
-    SET k = 1;
-    WHILE k <= rcount DO
-      INSERT INTO ClaimsRes (claim_id, createDate, description, related_img, related_file, status)
+    -- Get claim status to determine which staff processed it
+    SELECT claim_status INTO claim_status_check FROM Claims WHERE id = cl_id;
+    
+    -- Only create responses for approved or rejected claims (staff processed them)
+    IF claim_status_check IN ('approved', 'rejected') THEN
+      -- Mỗi claim chỉ có 1 ClaimsRes từ staff quyết định
+      -- Phân bố staff theo pattern:
+      -- Staff 4-7: Approve nhiều (70% approved claims được gán cho họ)
+      -- Staff 8-10: Reject nhiều (70% rejected claims được gán cho họ)
+      -- Staff 11-13: Cân bằng
+      
+      IF claim_status_check = 'approved' THEN
+        -- For approved claims: 70% staff 4-7, 20% staff 11-13, 10% staff 8-10
+        SET staff_pattern = cl_id % 10;
+        IF staff_pattern <= 6 THEN
+          SET staff_user_id = 4 + (cl_id % 4);  -- Staff 4-7 (70%)
+        ELSEIF staff_pattern <= 8 THEN
+          SET staff_user_id = 11 + (cl_id % 3);  -- Staff 11-13 (20%)
+        ELSE
+          SET staff_user_id = 8 + (cl_id % 3);  -- Staff 8-10 (10%)
+        END IF;
+      ELSE
+        -- For rejected claims: 70% staff 8-10, 20% staff 11-13, 10% staff 4-7
+        SET staff_pattern = cl_id % 10;
+        IF staff_pattern <= 6 THEN
+          SET staff_user_id = 8 + (cl_id % 3);  -- Staff 8-10 (70%)
+        ELSEIF staff_pattern <= 8 THEN
+          SET staff_user_id = 11 + (cl_id % 3);  -- Staff 11-13 (20%)
+        ELSE
+          SET staff_user_id = 4 + (cl_id % 4);  -- Staff 4-7 (10%)
+        END IF;
+      END IF;
+      
+      -- Create date/time: distribute across date ranges
+      -- Use DATETIME with hours offset for variety
+      SET days_offset = (cl_id % 90);  -- 0-89 days ago
+      SET hours_offset = (cl_id % 24);  -- 0-23 hours
+      SET response_date = DATE_SUB(NOW(), INTERVAL days_offset DAY);
+      SET response_date = DATE_SUB(response_date, INTERVAL hours_offset HOUR);
+      
+      INSERT INTO ClaimsRes (claim_id, user_id, createDate, description, related_img, related_file, action_type)
       VALUES (
         cl_id,
-        DATE_ADD(DATE_SUB(CURDATE(), INTERVAL (cl_id % 50) DAY), INTERVAL k DAY),
-        CONCAT('Phản hồi ', k, ' cho claim ', cl_id),
+        staff_user_id,
+        response_date,
+        CONCAT('Quyết định ', claim_status_check, ' cho claim ', cl_id, ' bởi staff ', staff_user_id),
         CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
-        CONCAT('https://example.com/res_file_', FLOOR(1 + RAND()*1000), '.pdf'),
-        CASE WHEN k = 1 AND cl_id % 3 = 0 THEN 'resolved' WHEN k = 2 THEN 'follow_up' ELSE 'open' END
+        CONCAT('https://example.com/res_file_', cl_id, '.pdf'),
+        CASE 
+          WHEN claim_status_check = 'approved' THEN 'approve'
+          WHEN claim_status_check = 'rejected' THEN 'reject'
+          ELSE 'review'
+        END
       );
-      SET k = k + 1;
-    END WHILE;
+    ELSE
+      -- For pending claims, create initial review response (1/4 of pending claims)
+      IF (cl_id % 4) = 0 THEN
+        -- Some pending claims have initial response from random staff
+        SET staff_user_id = 4 + (cl_id % 10);  -- Any staff 4-13
+        SET days_offset = (cl_id % 30);  -- Recent dates
+        SET hours_offset = (cl_id % 24);
+        SET response_date = DATE_SUB(NOW(), INTERVAL days_offset DAY);
+        SET response_date = DATE_SUB(response_date, INTERVAL hours_offset HOUR);
+        
+        INSERT INTO ClaimsRes (claim_id, user_id, createDate, description, related_img, related_file, action_type)
+        VALUES (
+          cl_id,
+          staff_user_id,
+          response_date,
+          CONCAT('Initial review cho claim ', cl_id, ' - Đang xử lý'),
+          CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
+          CONCAT('https://example.com/review_file_', cl_id, '.pdf'),
+          'review'
+        );
+      END IF;
+    END IF;
+    
     SET cl_id = cl_id + 1;
   END WHILE;
 END$$
@@ -557,3 +872,49 @@ MODIFY COLUMN createDate DATETIME DEFAULT CURRENT_TIMESTAMP;
 DESCRIBE claimsres;
 
 ALTER TABLE claimsres DROP COLUMN status;
+
+-- =====================================
+-- MIGRATION SCRIPT: Add compensation_amount column to Claims table
+-- =====================================
+-- This script adds a compensation_amount column to track the actual compensation amount paid to customers
+-- Created: 2025
+
+USE insurancesystem;
+
+-- Add compensation_amount column to Claims table
+ALTER TABLE claims 
+ADD COLUMN compensation_amount DECIMAL(15,2) DEFAULT NULL AFTER claim_status;
+
+-- Verify the changes
+DESCRIBE claims;
+
+-- =====================================
+-- MIGRATION SCRIPT: Add action_type column to ClaimsRes table
+-- =====================================
+-- This script adds an action_type column to track what action staff took (approve/reject/review)
+-- Created: 2025
+
+USE insurancesystem;
+
+-- Add action_type column to ClaimsRes table
+ALTER TABLE claimsres 
+ADD COLUMN action_type ENUM('approve','reject','review') DEFAULT 'review' AFTER related_file;
+
+-- Add index for better query performance
+CREATE INDEX idx_action_type ON claimsres(action_type);
+
+-- Update existing records based on claim status
+-- If claim is approved and has ClaimsRes, set action_type = 'approve'
+UPDATE claimsres cr
+JOIN claims cl ON cr.claim_id = cl.id
+SET cr.action_type = 'approve'
+WHERE cl.claim_status = 'approved' AND cr.action_type = 'review';
+
+-- If claim is rejected and has ClaimsRes, set action_type = 'reject'
+UPDATE claimsres cr
+JOIN claims cl ON cr.claim_id = cl.id
+SET cr.action_type = 'reject'
+WHERE cl.claim_status = 'rejected' AND cr.action_type = 'review';
+
+-- Verify the changes
+DESCRIBE claimsres;

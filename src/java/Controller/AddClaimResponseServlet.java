@@ -16,13 +16,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.File;
+import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.util.Date;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
 
 /**
  *
  * @author FPTSHOP
  */
 @WebServlet(name = "AddClaimResponseServlet", urlPatterns = {"/AddClaimResponseServlet"})
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB per file
+        maxRequestSize = 1024 * 1024 * 50)    // 50MB total
 public class AddClaimResponseServlet extends HttpServlet {
 
     @Override
@@ -50,6 +58,7 @@ public class AddClaimResponseServlet extends HttpServlet {
         String description = request.getParameter("description");
         String submitType = request.getParameter("submitType"); // reply, approve, reject
         String action = request.getParameter("action"); // Hidden field for action
+        String compensationAmountStr = request.getParameter("compensationAmount");
         
         // Validate claimId
         if (claimIdStr == null || claimIdStr.trim().isEmpty()) {
@@ -69,8 +78,51 @@ public class AddClaimResponseServlet extends HttpServlet {
         
         // Handle approve/reject actions
         if (submitType != null && (submitType.equals("approve") || submitType.equals("reject"))) {
-            handleApproveReject(request, response, claimId, submitType, description, currentUser, session);
+            BigDecimal compensationAmount = null;
+            if (submitType.equals("approve") && compensationAmountStr != null && !compensationAmountStr.trim().isEmpty()) {
+                try {
+                    compensationAmount = new BigDecimal(compensationAmountStr.trim());
+                    if (compensationAmount.compareTo(BigDecimal.ZERO) < 0) {
+                        session.setAttribute("error", "Số tiền đền bù phải lớn hơn hoặc bằng 0");
+                        response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    session.setAttribute("error", "Số tiền đền bù không hợp lệ");
+                    response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+                    return;
+                }
+            }
+            handleApproveReject(request, response, claimId, submitType, description, compensationAmount, currentUser, session);
             return;
+        }
+        
+        // Handle update compensation amount separately (for approved claims)
+        if (compensationAmountStr != null && !compensationAmountStr.trim().isEmpty()) {
+            try {
+                BigDecimal compensationAmount = new BigDecimal(compensationAmountStr.trim());
+                if (compensationAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    session.setAttribute("error", "Số tiền đền bù phải lớn hơn hoặc bằng 0");
+                    response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+                    return;
+                }
+                
+                ClaimsDBContext claimsDB = new ClaimsDBContext();
+                boolean updated = claimsDB.updateCompensationAmount(claimId, compensationAmount);
+                
+                if (updated) {
+                    session.setAttribute("success", "Cập nhật số tiền đền bù thành công!");
+                } else {
+                    session.setAttribute("error", "Có lỗi xảy ra khi cập nhật số tiền đền bù");
+                }
+                
+                response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
+                return;
+            } catch (NumberFormatException e) {
+                session.setAttribute("error", "Số tiền đền bù không hợp lệ");
+                response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
+                return;
+            }
         }
         
         // Handle regular reply
@@ -81,14 +133,19 @@ public class AddClaimResponseServlet extends HttpServlet {
         }
         
         try {
+            // Handle file uploads
+            String relatedImgPath = handleFileUpload(request, "related_img", true); // image only
+            String relatedFilePath = handleFileUpload(request, "related_file", false); // any file
+            
             // Create ClaimsRes object for regular reply
             ClaimsRes claimRes = new ClaimsRes();
             claimRes.setClaim_id(claimId);
             claimRes.setUser_id(currentUser.getId()); // Set user from session
             claimRes.setCreateDate(new Date());
             claimRes.setDescription(description);
-            claimRes.setRelated_img(null); // Can be extended later
-            claimRes.setRelated_file(null); // Can be extended later
+            claimRes.setRelated_img(relatedImgPath);
+            claimRes.setRelated_file(relatedFilePath);
+            claimRes.setAction_type("review"); // Regular reply is just a review
             
             // Insert to database
             ClaimsResDBContext claimsResDB = new ClaimsResDBContext();
@@ -112,7 +169,7 @@ public class AddClaimResponseServlet extends HttpServlet {
     
     private void handleApproveReject(HttpServletRequest request, HttpServletResponse response, 
                                       int claimId, String submitType, String description,
-                                      User currentUser, HttpSession session) 
+                                      BigDecimal compensationAmount, User currentUser, HttpSession session) 
             throws ServletException, IOException {
         try {
             String newStatus = submitType.equals("approve") ? "approved" : "rejected";
@@ -120,9 +177,20 @@ public class AddClaimResponseServlet extends HttpServlet {
                           ? description 
                           : (submitType.equals("approve") ? "Claim đã được chấp nhận" : "Claim đã bị từ chối");
             
-            // Update claim status
+            // Update claim status and compensation amount if approving
             ClaimsDBContext claimsDB = new ClaimsDBContext();
-            boolean statusUpdated = claimsDB.updateClaimStatusWithReason(claimId, newStatus, reason);
+            boolean statusUpdated;
+            if (submitType.equals("approve") && compensationAmount != null) {
+                // Update both status and compensation amount
+                statusUpdated = claimsDB.updateClaimStatusWithCompensation(claimId, newStatus, compensationAmount);
+            } else {
+                // Update only status
+                statusUpdated = claimsDB.updateClaimStatusWithReason(claimId, newStatus, reason);
+            }
+            
+            // Handle file uploads
+            String relatedImgPath = handleFileUpload(request, "related_img", true); // image only
+            String relatedFilePath = handleFileUpload(request, "related_file", false); // any file
             
             // Also add a response record with the reason
             ClaimsRes claimRes = new ClaimsRes();
@@ -130,8 +198,10 @@ public class AddClaimResponseServlet extends HttpServlet {
             claimRes.setUser_id(currentUser.getId());
             claimRes.setCreateDate(new Date());
             claimRes.setDescription(reason);
-            claimRes.setRelated_img(null);
-            claimRes.setRelated_file(null);
+            claimRes.setRelated_img(relatedImgPath);
+            claimRes.setRelated_file(relatedFilePath);
+            // Set action_type based on approve or reject
+            claimRes.setAction_type(submitType.equals("approve") ? "approve" : "reject");
             
             ClaimsResDBContext claimsResDB = new ClaimsResDBContext();
             boolean responseAdded = claimsResDB.addClaimResponse(claimRes);
@@ -170,6 +240,52 @@ public class AddClaimResponseServlet extends HttpServlet {
         }
         // Redirect to claim management if accessed via GET
         response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
+    }
+    
+    /**
+     * Handle file upload for ClaimsRes
+     * @param request HttpServletRequest
+     * @param partName Name of the part (e.g., "related_img", "related_file")
+     * @param imageOnly If true, only accept image files
+     * @return Relative path to the uploaded file, or null if no file uploaded
+     */
+    private String handleFileUpload(HttpServletRequest request, String partName, boolean imageOnly) 
+            throws IOException, ServletException {
+        Part filePart = request.getPart(partName);
+        
+        if (filePart == null || filePart.getSize() == 0) {
+            return null;
+        }
+        
+        String contentType = filePart.getContentType();
+        
+        // Validate file type
+        if (imageOnly && !contentType.startsWith("image/")) {
+            return null; // Silently ignore invalid image files
+        }
+        
+        // Get original filename
+        String originalFileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+        
+        // Create safe filename with timestamp to avoid conflicts
+        String safeFileName = System.currentTimeMillis() + "_" + originalFileName.replaceAll("[^a-zA-Z0-9._-]", "_");
+        
+        // Determine upload path (similar to CreateProduct)
+        String uploadPath = getServletContext().getRealPath("") + File.separator + "Image" + File.separator + "upload_imgs";
+        File uploadDir = new File(uploadPath);
+        
+        // Create directory if it doesn't exist
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
+        
+        // Write file
+        String filePath = uploadPath + File.separator + safeFileName;
+        filePart.write(filePath);
+        
+        // Return relative path for database (only folder name, not full path)
+        // JSP will add /Image/ prefix when displaying
+        return "upload_imgs/" + safeFileName;
     }
 
 }

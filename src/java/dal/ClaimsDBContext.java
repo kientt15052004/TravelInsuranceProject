@@ -41,6 +41,16 @@ public class ClaimsDBContext extends DBContext {
                 claim.setRelated_file(rs.getString("related_file"));
                 claim.setClaim_status(rs.getString("claim_status"));
                 
+                try {
+                    if (rs.findColumn("compensation_amount") > 0) {
+                        claim.setCompensation_amount(rs.getBigDecimal("compensation_amount"));
+                    } else {
+                        claim.setCompensation_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setCompensation_amount(null);
+                }
+                
                 claims.add(claim);
             }
             System.out.println("Found " + count + " claims for contract ID: " + contractId);
@@ -111,6 +121,16 @@ public class ClaimsDBContext extends DBContext {
                 claim.setRelated_img(rs.getString("related_img"));
                 claim.setRelated_file(rs.getString("related_file"));
                 claim.setClaim_status(rs.getString("claim_status"));
+                
+                try {
+                    if (rs.findColumn("compensation_amount") > 0) {
+                        claim.setCompensation_amount(rs.getBigDecimal("compensation_amount"));
+                    } else {
+                        claim.setCompensation_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setCompensation_amount(null);
+                }
                 
                 claims.add(claim);
             }
@@ -234,6 +254,16 @@ public class ClaimsDBContext extends DBContext {
                     }
                 } catch (SQLException e) {
                     claim.setClaim_amount(null);
+                }
+                
+                try {
+                    if (rs.findColumn("compensation_amount") > 0) {
+                        claim.setCompensation_amount(rs.getBigDecimal("compensation_amount"));
+                    } else {
+                        claim.setCompensation_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setCompensation_amount(null);
                 }
                 
                 System.out.println("Found claim with ID: " + claimId);
@@ -362,6 +392,16 @@ public class ClaimsDBContext extends DBContext {
                     claim.setClaim_amount(null);
                 }
                 
+                try {
+                    if (rs.findColumn("compensation_amount") > 0) {
+                        claim.setCompensation_amount(rs.getBigDecimal("compensation_amount"));
+                    } else {
+                        claim.setCompensation_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setCompensation_amount(null);
+                }
+                
                 claims.add(claim);
             }
         } catch (SQLException e) {
@@ -407,6 +447,16 @@ public class ClaimsDBContext extends DBContext {
                     }
                 } catch (SQLException e) {
                     claim.setClaim_amount(null);
+                }
+                
+                try {
+                    if (rs.findColumn("compensation_amount") > 0) {
+                        claim.setCompensation_amount(rs.getBigDecimal("compensation_amount"));
+                    } else {
+                        claim.setCompensation_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setCompensation_amount(null);
                 }
                 
                 claims.add(claim);
@@ -476,6 +526,16 @@ public class ClaimsDBContext extends DBContext {
                     claim.setClaim_amount(null);
                 }
                 
+                try {
+                    if (rs.findColumn("compensation_amount") > 0) {
+                        claim.setCompensation_amount(rs.getBigDecimal("compensation_amount"));
+                    } else {
+                        claim.setCompensation_amount(null);
+                    }
+                } catch (SQLException e) {
+                    claim.setCompensation_amount(null);
+                }
+                
                 claims.add(claim);
             }
         } catch (SQLException e) {
@@ -484,5 +544,63 @@ public class ClaimsDBContext extends DBContext {
         }
         
         return claims;
+    }
+    
+    public boolean updateCompensationAmount(int claimId, BigDecimal compensationAmount) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return false;
+        }
+        
+        String sql = "UPDATE claims SET compensation_amount = ? WHERE id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            if (compensationAmount != null) {
+                ps.setBigDecimal(1, compensationAmount);
+            } else {
+                ps.setNull(1, java.sql.Types.DECIMAL);
+            }
+            ps.setInt(2, claimId);
+            
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Updated claim " + claimId + " compensation_amount to " + compensationAmount + 
+                             ". Rows affected: " + rowsAffected);
+            
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error updating compensation amount: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public boolean updateClaimStatusWithCompensation(int claimId, String newStatus, BigDecimal compensationAmount) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return false;
+        }
+        
+        String sql = "UPDATE claims SET claim_status = ?, compensation_amount = ? WHERE id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, newStatus);
+            if (compensationAmount != null) {
+                ps.setBigDecimal(2, compensationAmount);
+            } else {
+                ps.setNull(2, java.sql.Types.DECIMAL);
+            }
+            ps.setInt(3, claimId);
+            
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Updated claim " + claimId + " status to " + newStatus + 
+                             " with compensation_amount: " + compensationAmount + 
+                             ". Rows affected: " + rowsAffected);
+            
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("SQL Error updating claim status with compensation: " + e.getMessage());
+            return false;
+        }
     }
 }
