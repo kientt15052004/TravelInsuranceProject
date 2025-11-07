@@ -51,7 +51,6 @@
                     opacity: 0.9;
                 }
 
-                /* Form sections */
                 .section-wrapper {
                     background: var(--white);
                     padding: 30px;
@@ -103,7 +102,6 @@
                     color: var(--danger-red);
                 }
 
-                /* Radio button styling */
                 .radio-group-custom {
                     display: flex;
                     gap: 20px;
@@ -133,7 +131,6 @@
                     transform: scale(1.05);
                 }
 
-                /* Button styling */
                 .btn-custom {
                     background: linear-gradient(135deg, var(--dark-yellow) 0%, var(--primary-yellow) 100%);
                     border: none;
@@ -163,7 +160,6 @@
                 .btn-danger:hover {
                 }
 
-                /* Table styling */
                 .table-custom {
                     overflow: hidden;
                     background: var(--white);
@@ -186,7 +182,6 @@
                     background: var(--white);
                 }
 
-                /* Current image preview */
                 .current-image-container {
                     text-align: center;
                     margin: 15px 0;
@@ -200,7 +195,6 @@
                     max-height: 200px;
                 }
 
-                /* Coefficient inputs */
                 .coefficient-input {
                     width: 150px;
                     display: inline-block;
@@ -222,7 +216,6 @@
                     font-weight: 600;
                 }
 
-                /* Action buttons container */
                 .action-buttons {
                     display: flex;
                     justify-content: space-around;
@@ -232,14 +225,12 @@
                     background: var(--white);
                 }
 
-                /* Preview boxes */
                 .preview-box {
                     background-color: var(--light-yellow);
                     padding: 20px;
                     margin-top: 15px;
                 }
 
-                /* Responsive design */
                 @media (max-width: 768px) {
                     .container {
                         padding: 10px;
@@ -269,7 +260,6 @@
                     }
                 }
 
-                /* Animation for form sections */
                 @keyframes fadeInUp {
                     from {
                         opacity: 0;
@@ -312,11 +302,8 @@
                 </div>
 
                 <form class="form" action="${pageContext.request.contextPath}/update_product" enctype="multipart/form-data" method="POST" style="background: transparent;">
-                    <!-- Hidden fields for IDs -->
                     <input type="hidden" name="product_id" value="${product.id}">
                     <input type="hidden" name="benefit_id" value="${product.benefit_id}">
-
-                    <!-- Thêm các hidden fields để lưu giá trị benefit hiện tại -->
                     <input type="hidden" name="original_deathOrDisability" value="${product.benefit.death_or_permanent_disability}">
                     <input type="hidden" name="original_deathByIllness" value="${product.benefit.death_due_to_illness}">
                     <input type="hidden" name="original_thirdPartyLiability" value="${product.benefit.third_party_liability}">
@@ -338,7 +325,6 @@
                     <input type="hidden" name="original_travel_documents" value="${product.benefit.travel_documents}">
                     <input type="hidden" name="original_trip_delay" value="${product.benefit.trip_delay}">
 
-                    <!-- Basic Information Section -->
                     <div class="section-wrapper">
                         <h2 class="section-title">Thông tin cơ bản</h2>
                         <div class="row">
@@ -356,10 +342,6 @@
                                     <option value="advanced" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'advanced' ? 'selected' : ''}>Nâng cao</option>
                                     <option value="comprehensive" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
                                 </select>
-                                <!-- Debug: Current package_type = '${product.package_type}' (length: ${product.package_type != null ? product.package_type.length() : 'null'}) -->
-                                <!-- Debug: package_type == 'standard': ${product.package_type == 'standard'} -->
-                                <!-- Debug: package_type == 'Standard': ${product.package_type == 'Standard'} -->
-                                <!-- Debug: package_type.trim() == 'standard': ${product.package_type != null && product.package_type.trim() == 'standard'} -->
                             </div>
                         </div>
 
@@ -386,7 +368,6 @@
                         <div>
                             <label class="form-label" for="formFile">Hình ảnh sản phẩm</label>
 
-                            <!-- Current image preview -->
                             <c:if test="${not empty product.img}">
                                 <div class="current-image-container">
                                     <p class="form-label">Ảnh hiện tại:</p>
@@ -407,7 +388,6 @@
                         </div>
                     </div>
 
-                    <!-- Domestic Benefits Section -->
                     <div class="section-wrapper domestic-section">
                         <h2 class="section-title">Quyền lợi bảo hiểm trong nước</h2>
 
@@ -466,7 +446,6 @@
                         </div>
                     </div>
 
-                    <!-- International Benefits Section -->
                     <div class="section-wrapper international-section">
                         <h2 class="section-title">Quyền lợi bảo hiểm ngoài nước</h2>
 
@@ -626,7 +605,6 @@
                         </div>
                     </div>
 
-                    <!-- Tính phí ngoài nước -->
                     <div class="section-wrapper international_preview">
                         <h2 class="section-title">Tính phí ngoài nước</h2>
                         <div class="formula-box text-center">
@@ -705,7 +683,6 @@
                         </div>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="action-buttons">
                         <button type="submit" class="btn btn-custom btn-success">
                             Cập Nhật Sản Phẩm
@@ -720,14 +697,12 @@
                         </button>
                     </div>
 
-                    <!-- Các input ẩn để lấy giá trị -->
                     <input type="hidden" name="price" class="price" value="${product.price}">
                     <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate" value="${product.domestic_percentage_rate}">
                     <input type="hidden" name="international_rate_1_7" class="international_rate_1_7" value="${product.international_rate_1_7}">
                     <input type="hidden" name="international_rate_8_30" class="international_rate_8_30" value="${product.international_rate_8_30}">
                     <input type="hidden" name="international_rate_31_90" class="international_rate_31_90" value="${product.international_rate_31_90}">
                     <input type="hidden" name="international_rate_91_180" class="international_rate_91_180" value="${product.international_rate_91_365}">
-                    <!-- Thêm các hidden fields để lưu giá trị benefit hiện tại -->
                     <input type="hidden" name="original_deathOrDisability" value="${product.benefit.death_or_permanent_disability}">
                     <input type="hidden" name="original_deathByIllness" value="${product.benefit.death_due_to_illness}">
                     <input type="hidden" name="original_thirdPartyLiability" value="${product.benefit.third_party_liability}">
@@ -748,7 +723,6 @@
                     <input type="hidden" name="original_delayed_baggage" value="${product.benefit.delayed_baggage}">
                     <input type="hidden" name="original_travel_documents" value="${product.benefit.travel_documents}">
                     <input type="hidden" name="original_trip_delay" value="${product.benefit.trip_delay}">
-                    <!-- Hidden fields for IDs -->
                     <input type="hidden" name="product_id" value="${product.id}">
                     <input type="hidden" name="benefit_id" value="${product.benefit_id}">
                         
@@ -757,7 +731,6 @@
             </div>
 
             <script>
-                // DOM Elements - Giữ nguyên các biến cũ
                 const domestic_option = document.querySelector('input[value="domestic"]');
                 const international_option = document.querySelector('input[value="international"]');
                 const domestic_div = document.querySelector('.domestic-section');
@@ -788,7 +761,6 @@
                 const international_rate_31_90 = document.querySelector('.international_rate_31_90');
                 const international_rate_91_180 = document.querySelector('.international_rate_91_180');
 
-                // Thêm các biến mới cho bảng đơn giản
                 const coefficient_1_7 = document.querySelector('.coefficient_1_7');
                 const coefficient_8_30 = document.querySelector('.coefficient_8_30');
                 const coefficient_31_90 = document.querySelector('.coefficient_31_90');
@@ -797,7 +769,6 @@
                 let fee = 0;
                 let base_price = 0;
 
-                // Hàm thiết lập khi load trang - GIỮ NGUYÊN
                 window.onload = function () {
                     const packageSelect = document.querySelector('select[name="package_type"]');
                     console.log('Page loaded - package_type value:', packageSelect.value);
@@ -810,7 +781,6 @@
                     return Math.round(num).toLocaleString('vi-VN');
                 }
 
-                // Hàm hiển thị form nhập quyền lợi trong nước và ngoài nước - GIỮ NGUYÊN
                 function toggleSections() {
                     if (domestic_option.checked) {
                         domestic_div.style.display = "block";
@@ -818,14 +788,12 @@
                         domestic_preview.style.display = "block";
                         international_preview.style.display = "none";
                         
-                        // Disable international inputs để tránh validation warning
                         const internationalInputs = document.querySelectorAll('.international_benefit');
                         internationalInputs.forEach(input => {
                             input.disabled = true;
                             input.removeAttribute('required');
                         });
                         
-                        // Enable domestic inputs
                         const domesticInputs = document.querySelectorAll('.domestic_benefit');
                         domesticInputs.forEach(input => {
                             input.disabled = false;
@@ -836,14 +804,12 @@
                         domestic_preview.style.display = "none";
                         international_preview.style.display = "block";
                         
-                        // Disable domestic inputs để tránh validation warning
                         const domesticInputs = document.querySelectorAll('.domestic_benefit');
                         domesticInputs.forEach(input => {
                             input.disabled = true;
                             input.removeAttribute('required');
                         });
                         
-                        // Enable international inputs
                         const internationalInputs = document.querySelectorAll('.international_benefit');
                         internationalInputs.forEach(input => {
                             input.disabled = false;
@@ -867,7 +833,6 @@
                 domestic_option.addEventListener('change', toggleSections);
                 international_option.addEventListener('change', toggleSections);
 
-                // Hàm tính toán - GIỮ NGUYÊN LOGIC CŨ
                 function calculate() {
                     if (domestic_option.checked) {
                         const deathOrDisability = document.querySelector('input[name="deathOrDisability"]').value;
@@ -887,13 +852,10 @@
                         const value21 = Number(op21.value) || 1;
                         const coefficient_value_1 = Number(coefficient_1.value) || 0;
 
-                        // Kiểm tra có ít nhất một benefit có giá trị
                         const hasValidBenefit = value1 > 0 || value2 > 0 || value3 > 0 || value4 > 0 || value5 > 0 || value6 > 0;
                         
-                        // Xử lý hệ số: chấp nhận cả % (1-10) và số thập phân (0.01-0.1)
                         let actualCoefficient = coefficient_value_1;
                         if (coefficient_value_1 >= 0.01 && coefficient_value_1 <= 10) {
-                            // Nếu nhập % (1-10), chuyển thành số thập phân
                             actualCoefficient = coefficient_value_1 / 100;
                         }
                         else{
@@ -925,7 +887,6 @@
 
                         let per_day_premium = 0;
 
-                        // SỬA PHẦN NÀY: Sử dụng các input mới thay vì dựa vào package type
                         if (value22 >= 1 && value22 <= 7) {
                             per_day_premium = Number(coefficient_1_7.value) || 0;
                         } else if (value22 >= 8 && value22 <= 30) {
@@ -939,7 +900,6 @@
                         fee = per_day_premium * value22 * value23;
                         base_price = per_day_premium;
 
-                        // Cập nhật các hidden fields - GIỮ NGUYÊN
                         international_rate_1_7.value = coefficient_1_7.value;
                         international_rate_8_30.value = coefficient_8_30.value;
                         international_rate_31_90.value = coefficient_31_90.value;
@@ -959,13 +919,11 @@
                     }
                 }
 
-                // Hàm tính phí (preview) - GIỮ NGUYÊN
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     calculate();
                 });
 
-                // Kiểm tra trước khi submit - GIỮ NGUYÊN
                 form.addEventListener("submit", (e) => {
                     console.log('Form submit event triggered');
                     calculate();

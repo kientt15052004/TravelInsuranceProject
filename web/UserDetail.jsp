@@ -16,12 +16,10 @@
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="user-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <div class="header-actions">
@@ -32,7 +30,6 @@
                 <h1>Thông tin User</h1>
             </div>
 
-            <!-- Success/Error Messages -->
             <c:if test="${param.success == 'true'}">
                 <div class="alert alert-success">
                     <i class="fas fa-check-circle"></i>
@@ -47,7 +44,6 @@
             </c:if>
 
             <c:if test="${not empty user}">
-                <!-- User Information Section -->
                 <div class="section">
                     <div class="section-header">
                         <h2><i class="fas fa-user"></i> Thông tin cá nhân</h2>
@@ -131,7 +127,6 @@
                         </div>
                     </div>
 
-                    <!-- Edit Form (Hidden by default) -->
                     <form id="edit-form" class="edit-form" method="POST" action="${pageContext.request.contextPath}/updateuser" style="display: none;">
                         <input type="hidden" name="userId" value="${user.id}">
                         
@@ -165,7 +160,6 @@
                     </form>
                 </div>
 
-                <!-- Contracts & Applications Section -->
                 <div class="section">
                     <div class="section-header">
                         <h2><i class="fas fa-file-contract"></i> Lịch sử Mua Bảo Hiểm</h2>
@@ -196,7 +190,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Applications with Contract ID -->
                                         <c:forEach var="app" items="${applications}">
                                             <tr class="application-row">
                                                 <td>${app.id}</td>
@@ -247,7 +240,6 @@
                     </c:choose>
                 </div>
 
-                <!-- Claims Section -->
                 <div class="section">
                     <div class="section-header">
                         <h2><i class="fas fa-exclamation-triangle"></i> Lịch sử Bồi thường</h2>

@@ -15,19 +15,16 @@
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="user-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1>Quản Lý User</h1>
                 <p>Xem và quản lý thông tin người dùng</p>
             </div>
 
-            <!-- Search and Filter Section -->
             <div class="search-filter-section">
                 <form method="GET" action="${pageContext.request.contextPath}/usermanagement" class="search-form">
                     <div class="search-row">
@@ -71,7 +68,6 @@
                 </form>
             </div>
 
-            <!-- Users Table -->
             <div class="users-table-section">
                 <div class="table-header">
                     <div class="table-title-section">
@@ -169,7 +165,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // User dropdown functionality
     const userDropdown = document.querySelector('.user-dropdown');
     if (userDropdown) {
         userDropdown.addEventListener('click', function(e) {
@@ -177,7 +172,6 @@ document.addEventListener("DOMContentLoaded", function () {
             userDropdown.classList.toggle('active');
         });
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!userDropdown.contains(e.target)) {
                 userDropdown.classList.remove('active');
@@ -228,13 +222,11 @@ document.addEventListener("DOMContentLoaded", function () {
         renderTable();
     });
 
-    // ==== SORT ====
     const headers = table.querySelectorAll("th");
-    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortOrder = 1;
     let sortedColumn = null;
 
     headers.forEach((th, index) => {
-        // Chỉ cho phép sort các cột: ID (0), Họ tên (2), Vai trò (5), Trạng thái (6), Tổng số tiền (7)
         const sortableColumns = [0, 2, 5, 6, 7];
         
         if (sortableColumns.includes(index)) {
@@ -250,19 +242,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     const aText = a.children[index].textContent.trim();
                     const bText = b.children[index].textContent.trim();
 
-                    // Xử lý sort cho từng loại cột
                     switch(index) {
-                        case 0: // ID
+                        case 0:
                             const aId = parseInt(aText);
                             const bId = parseInt(bText);
                             return (aId - bId) * sortOrder;
                         
-                        case 2: // Họ tên
-                        case 5: // Vai trò
-                        case 6: // Trạng thái
+                        case 2:
+                        case 5:
+                        case 6:
                             return aText.localeCompare(bText, "vi") * sortOrder;
                         
-                        case 7: // Tổng số tiền
+                        case 7:
                             const aPrice = parsePrice(aText);
                             const bPrice = parsePrice(bText);
                             return (aPrice - bPrice) * sortOrder;
@@ -276,19 +267,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateSortIcons(th, headers);
             });
         } else {
-            // Các cột không sort được
             th.style.cursor = "default";
         }
     });
 
-    // Helper functions for parsing different data types
     function parsePrice(priceStr) {
-        // Remove currency symbols (₫) and spaces
         let cleanPrice = priceStr.replace(/[₫\s]/g, '');
         
-        // Handle Vietnamese number format: 1.234.567,89
-        // Replace dots (thousands separator) with empty string
-        // Replace comma (decimal separator) with dot
         cleanPrice = cleanPrice.replace(/\./g, '').replace(',', '.');
         
         return parseFloat(cleanPrice) || 0;
