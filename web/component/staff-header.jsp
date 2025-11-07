@@ -4,7 +4,6 @@
     User user = (User) session.getAttribute("user");
     String displayName = (user != null && user.getFullname() != null) ? user.getFullname() : "Staff";
 %>
-<!-- Staff Header Fragment (no dropdown) -->
 <div class="top-header">
     <div class="header-left">
         <div class="logo">

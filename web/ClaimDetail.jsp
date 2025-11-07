@@ -15,12 +15,10 @@
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="claims-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <div class="header-left">
@@ -50,7 +48,6 @@
             </c:if>
 
             <c:if test="${not empty claim}">
-                <!-- Claim Information Card -->
                 <div class="claim-detail-card">
                     <div class="card-header">
                         <h2>
@@ -67,7 +64,6 @@
                     
                     <div class="card-body">
                         <div class="info-grid">
-                            <!-- Basic Information -->
                             <div class="info-section">
                                 <h3>
                                     <i class="fas fa-info-circle"></i>
@@ -102,7 +98,6 @@
                                 </div>
                             </div>
 
-                            <!-- Payment Information -->
                             <div class="info-section">
                                 <h3>
                                     <i class="fas fa-credit-card"></i>
@@ -142,7 +137,6 @@
                             </div>
                         </div>
 
-                        <!-- Description Section -->
                         <div class="description-section">
                             <h3>
                                 <i class="fas fa-align-left"></i>
@@ -160,14 +154,12 @@
                             </div>
                         </div>
 
-                        <!-- Attachments Section -->
                         <div class="attachments-section">
                             <h3>
                                 <i class="fas fa-paperclip"></i>
                                 Tài liệu đính kèm
                             </h3>
                             <div class="attachments-grid">
-                                <!-- Images -->
                                 <c:if test="${not empty claim.related_img}">
                                     <div class="attachment-item">
                                         <div class="attachment-header">
@@ -193,7 +185,6 @@
                                     </div>
                                 </c:if>
 
-                                <!-- Files -->
                                 <c:if test="${not empty claim.related_file}">
                                     <div class="attachment-item">
                                         <div class="attachment-header">
@@ -211,7 +202,6 @@
                                     </div>
                                 </c:if>
 
-                                <!-- No attachments -->
                                 <c:if test="${empty claim.related_img && empty claim.related_file}">
                                     <div class="no-attachments">
                                         <i class="fas fa-paperclip"></i>
@@ -223,7 +213,6 @@
                     </div>
                 </div>
 
-                <!-- Contract Information Card -->
                 <c:if test="${not empty contract}">
                     <div class="contract-info-card">
                         <div class="card-header">
@@ -269,7 +258,6 @@
                     </div>
                 </c:if>
 
-                <!-- Claim Responses Section - Chat Style -->
                 <div class="claim-responses-card">
                     <div class="card-header">
                         <h2>
@@ -318,7 +306,6 @@
                                                     </c:choose>
                                                 </div>
                                                 
-                                                <!-- Message Attachments -->
                                                 <c:if test="${not empty response.related_img || not empty response.related_file}">
                                                     <div class="message-attachments">
                                                         <c:if test="${not empty response.related_img}">
@@ -380,7 +367,6 @@
                                     </c:forEach>
                                 </div>
                                 
-                                <!-- Update Compensation Amount Section (for approved claims) -->
                                 <c:if test="${claim.claim_status == 'approved'}">
                                     <div class="compensation-update-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa;">
                                         <h4 style="margin-bottom: 10px;">
@@ -409,7 +395,6 @@
                                     </div>
                                 </c:if>
                                 
-                                <!-- Chat Input Form -->
                                 <div class="chat-input-section">
                                     <form action="${pageContext.request.contextPath}/AddClaimResponseServlet" method="POST" enctype="multipart/form-data" class="chat-form">
                                         <input type="hidden" name="claimId" value="${claim.id}">
@@ -422,7 +407,6 @@
                                                 rows="3"
                                                 required></textarea>
                                             
-                                            <!-- File Upload Section -->
                                             <div style="margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
                                                 <div style="flex: 1; min-width: 200px;">
                                                     <label for="related_img" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9em;">
@@ -493,7 +477,6 @@
                                     <h3>Chưa có phản hồi nào</h3>
                                     <p>Claim này chưa có phản hồi hoặc theo dõi nào từ phía nhân viên.</p>
                                     
-                                    <!-- Update Compensation Amount Section (for approved claims) -->
                                     <c:if test="${claim.claim_status == 'approved'}">
                                         <div class="compensation-update-section" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa;">
                                             <h4 style="margin-bottom: 10px;">
@@ -522,7 +505,6 @@
                                         </div>
                                     </c:if>
                                     
-                                    <!-- Chat Input Form for empty state -->
                                     <div class="chat-input-section-empty">
                                         <form action="${pageContext.request.contextPath}/AddClaimResponseServlet" method="POST" enctype="multipart/form-data" class="chat-form">
                                             <input type="hidden" name="claimId" value="${claim.id}">
@@ -535,7 +517,6 @@
                                                     rows="3"
                                                     required></textarea>
                                                 
-                                                <!-- File Upload Section -->
                                                 <div style="margin-bottom: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
                                                     <div style="flex: 1; min-width: 200px;">
                                                         <label for="related_img_empty" style="display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9em;">
@@ -604,7 +585,6 @@
         </div>
     </div>
 
-    <!-- Image Modal -->
     <div id="imageModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -614,7 +594,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // User dropdown functionality
     const userDropdown = document.querySelector('.user-dropdown');
     if (userDropdown) {
         userDropdown.addEventListener('click', function(e) {
@@ -622,7 +601,6 @@ document.addEventListener("DOMContentLoaded", function () {
             userDropdown.classList.toggle('active');
         });
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!userDropdown.contains(e.target)) {
                 userDropdown.classList.remove('active');
@@ -630,28 +608,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     
-    // Auto scroll to bottom (newest messages) when page loads
     const chatMessagesContainer = document.querySelector('.chat-messages-container');
     if (chatMessagesContainer) {
-        // Check if we should scroll to bottom (after adding new response)
         const urlParams = new URLSearchParams(window.location.search);
         const scrollToBottom = urlParams.get('scrollToBottom');
         
-        // Function to scroll to bottom
         function scrollToBottomFunc() {
             chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
         }
         
-        // Always scroll to bottom when page loads
         setTimeout(scrollToBottomFunc, 100);
         setTimeout(scrollToBottomFunc, 300);
         
-        // If coming from add response, scroll multiple times to ensure it works
         if (scrollToBottom === 'true') {
             setTimeout(scrollToBottomFunc, 500);
             setTimeout(scrollToBottomFunc, 800);
             
-            // Remove the parameter from URL to avoid scroll on next page load
             if (window.history.replaceState) {
                 const newUrl = window.location.pathname + '?id=' + urlParams.get('id');
                 window.history.replaceState({}, '', newUrl);
@@ -660,7 +632,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// Image modal functionality
 function openImageModal(imageSrc) {
     const modal = document.getElementById('imageModal');
     const modalImg = document.getElementById('modalImage');
@@ -668,12 +639,10 @@ function openImageModal(imageSrc) {
     modalImg.src = imageSrc;
 }
 
-// Close modal when clicking X
 document.querySelector('.close').addEventListener('click', function() {
     document.getElementById('imageModal').style.display = 'none';
 });
 
-// Close modal when clicking outside
 window.addEventListener('click', function(event) {
     const modal = document.getElementById('imageModal');
     if (event.target === modal) {
@@ -681,9 +650,7 @@ window.addEventListener('click', function(event) {
     }
 });
 
-// (Removed unused approval/status modal JS)
 
-// Function to set action type for approve/reject buttons
 function setAction(action) {
     document.getElementById('actionType').value = action;
 }

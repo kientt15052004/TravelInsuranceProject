@@ -1,9 +1,3 @@
-<%-- 
-    Document   : staff
-    Created on : Dec 8, 2024
-    Author     : Staff Page
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -31,7 +25,6 @@
                     <p>Tổng quan hệ thống và hoạt động</p>
                 </div>
 
-                <!-- Metrics Cards Section -->
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-header">
@@ -62,7 +55,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Activity Section -->
                 <div class="recent-activity">
                     <div class="activity-section">
                         <div class="section-header">

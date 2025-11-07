@@ -16,19 +16,16 @@
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="claims-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1>Quản Lý Bồi Thường</h1>
                 <p>Xem và quản lý tất cả yêu cầu bồi thường</p>
             </div>
 
-            <!-- Search and Filter Section -->
             <div class="search-filter-section">
                 <form method="GET" action="${pageContext.request.contextPath}/ClaimsManagementServlet" class="search-form">
                     <div class="search-row">
@@ -74,7 +71,6 @@
                 </form>
             </div>
 
-            <!-- Claims Table -->
             <div class="claims-table-section">
                 <div class="table-header">
                     <div class="table-title-section">
@@ -187,7 +183,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // User dropdown functionality
     const userDropdown = document.querySelector('.user-dropdown');
     if (userDropdown) {
         userDropdown.addEventListener('click', function(e) {
@@ -195,7 +190,6 @@ document.addEventListener("DOMContentLoaded", function () {
             userDropdown.classList.toggle('active');
         });
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!userDropdown.contains(e.target)) {
                 userDropdown.classList.remove('active');
@@ -245,13 +239,11 @@ document.addEventListener("DOMContentLoaded", function () {
         renderTable();
     });
 
-    // ==== SORT ====
     const headers = table.querySelectorAll("th");
-    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortOrder = 1;
     let sortedColumn = null;
 
      headers.forEach((th, index) => {
-         // Chỉ cho phép sort các cột: ID (0), Contract ID (1), Ngày yêu cầu (2), Trạng thái (5)
          const sortableColumns = [0, 1, 2, 5];
         
         if (sortableColumns.includes(index)) {
@@ -267,15 +259,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     const aText = a.children[index].textContent.trim();
                     const bText = b.children[index].textContent.trim();
 
-                    // Xử lý sort cho từng loại cột
                     switch(index) {
-                        case 0: // ID Claim
-                        case 1: // Contract ID
+                        case 0:
+                        case 1:
                             const aId = parseInt(aText.replace('#', ''));
                             const bId = parseInt(bText.replace('#', ''));
                             return (aId - bId) * sortOrder;
                         
-                        case 2: // Ngày yêu cầu
+                        case 2:
                             const aDate = parseDate(aText);
                             const bDate = parseDate(bText);
                             if (aDate && bDate) {
@@ -283,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             return aText.localeCompare(bText, "vi") * sortOrder;
                         
-                         case 5: // Trạng thái
+                         case 5:
                              return aText.localeCompare(bText, "vi") * sortOrder;
                         
                         default:
@@ -295,18 +286,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateSortIcons(th, headers);
             });
         } else {
-            // Các cột không sort được
             th.style.cursor = "default";
         }
     });
 
-    // Helper functions for parsing different data types
     function parseDate(dateStr) {
-        // Format: dd/MM/yyyy
         const parts = dateStr.split('/');
         if (parts.length === 3) {
             const day = parseInt(parts[0]);
-            const month = parseInt(parts[1]) - 1; // Month is 0-indexed
+            const month = parseInt(parts[1]) - 1;
             const year = parseInt(parts[2]);
             return new Date(year, month, day);
         }
@@ -323,7 +311,6 @@ document.addEventListener("DOMContentLoaded", function () {
     renderTable();
 });
 
-// Function to toggle description visibility
 function toggleDescription(button) {
     const row = button.closest('tr');
     const preview = row.querySelector('.description-preview');

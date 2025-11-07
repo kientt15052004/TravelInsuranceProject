@@ -15,19 +15,16 @@
     <jsp:include page="component/admin-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/admin-sidebar.jsp">
             <jsp:param name="activePage" value="user-role-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1>Quản Lý Vai Trò Người Dùng</h1>
                 <p>Cập nhật vai trò cho từng tài khoản trong hệ thống</p>
             </div>
 
-            <!-- Alert Messages -->
             <c:if test="${not empty roleUpdateMessage}">
                 <div class="alert alert-success">
                     <i class="fas fa-check-circle"></i>
@@ -41,7 +38,6 @@
                 </div>
             </c:if>
 
-            <!-- Search and Filter Section -->
             <div class="search-filter-section">
                 <form method="GET" action="${pageContext.request.contextPath}/user-role-management" class="search-form">
                     <div class="search-row">
@@ -85,7 +81,6 @@
                 </form>
             </div>
 
-            <!-- Users Table -->
             <div class="users-table-section">
                 <div class="table-header">
                     <div class="table-title-section">
@@ -204,7 +199,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    // User dropdown functionality
     const userDropdown = document.querySelector('.user-dropdown');
     if (userDropdown) {
         userDropdown.addEventListener('click', function(e) {
@@ -212,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
             userDropdown.classList.toggle('active');
         });
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!userDropdown.contains(e.target)) {
                 userDropdown.classList.remove('active');
@@ -263,13 +256,11 @@ document.addEventListener("DOMContentLoaded", function () {
         renderTable();
     });
 
-    // ==== SORT ====
     const headers = table.querySelectorAll("th");
-    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortOrder = 1;
     let sortedColumn = null;
 
     headers.forEach((th, index) => {
-        // Chỉ cho phép sort các cột: ID (0), Username (1), Họ tên (2), Email (3), Số điện thoại (4), Trạng thái (5), Vai trò (6)
         const sortableColumns = [0, 1, 2, 3, 4, 5, 6];
         
         if (sortableColumns.includes(index)) {
@@ -285,19 +276,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     const aText = a.children[index].textContent.trim();
                     const bText = b.children[index].textContent.trim();
 
-                    // Xử lý sort cho từng loại cột
                     switch(index) {
-                        case 0: // ID
+                        case 0:
                             const aId = parseInt(aText);
                             const bId = parseInt(bText);
                             return (aId - bId) * sortOrder;
                         
-                        case 1: // Username
-                        case 2: // Họ tên
-                        case 3: // Email
-                        case 4: // Số điện thoại
-                        case 5: // Trạng thái
-                        case 6: // Vai trò
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
                             return aText.localeCompare(bText, "vi") * sortOrder;
                         
                         default:
@@ -309,7 +299,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateSortIcons(th, headers);
             });
         } else {
-            // Các cột không sort được
             th.style.cursor = "default";
         }
     });

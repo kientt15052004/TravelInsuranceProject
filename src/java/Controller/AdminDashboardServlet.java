@@ -38,14 +38,12 @@ public class AdminDashboardServlet extends HttpServlet {
 
         DashboardDBContext dashboardDB = new DashboardDBContext();
 
-        // Get basic metrics
         int activeContractsCount = dashboardDB.getActiveContractsCount();
         int claimsLast30Days = dashboardDB.getClaimsLast30Days();
         Map<String, Object> approvedRejectedRatio = dashboardDB.getApprovedRejectedRatio();
         BigDecimal totalRevenue = dashboardDB.getTotalRevenue();
         BigDecimal totalCompensationAmount = dashboardDB.getTotalCompensationAmount();
 
-        // Get default limit from request or use 5
         int defaultLimit = 5;
         String limitStr = request.getParameter("limit");
         if (limitStr != null && !limitStr.trim().isEmpty()) {
@@ -56,42 +54,30 @@ public class AdminDashboardServlet extends HttpServlet {
             }
         }
 
-        // Get revenue by product
         List<Map<String, Object>> revenueByProduct = dashboardDB.getRevenueByProduct(defaultLimit);
 
-        // Get claim rate by product
         List<Map<String, Object>> claimRateByProduct = dashboardDB.getClaimRateByProduct(defaultLimit);
 
-        // Get fraud alert claims
         List<Claims> fraudAlertClaims = dashboardDB.getFraudAlertClaims(5);
 
-        // Get unusual large contract claims
         List<Claims> unusualLargeContractClaims = dashboardDB.getUnusualLargeContractClaims(5);
 
-        // Get top risk customers
         List<Map<String, Object>> topRiskCustomers = dashboardDB.getTopRiskCustomers(2, 1, defaultLimit);
 
-        // Get top selling products
         List<Map<String, Object>> topSellingProducts = dashboardDB.getTopSellingProducts(5);
 
-        // Get products with most claims
         List<Map<String, Object>> productsWithMostClaims = dashboardDB.getProductsWithMostClaims(5);
 
-        // Get top revenue products
         List<Map<String, Object>> topRevenueProducts = dashboardDB.getTopRevenueProducts(5);
 
-        // Get new customer risk claims
         List<Claims> newCustomerRiskClaims = dashboardDB.getNewCustomerRiskClaims(5);
 
-        // Set default date range for staff approval (last 30 days)
         Date defaultFromDate = new Date(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000);
         Date defaultToDate = new Date(System.currentTimeMillis());
         List<Map<String, Object>> staffApprovalStats = dashboardDB.getStaffApprovalStats(defaultFromDate, defaultToDate);
 
-        // Get customers with many contracts (default: 3 contracts in 7 days)
         List<Map<String, Object>> customersWithManyContracts = dashboardDB.getCustomersWithManyContracts(3, 7);
 
-        // Set attributes
         request.setAttribute("activeContractsCount", activeContractsCount);
         request.setAttribute("claimsLast30Days", claimsLast30Days);
         request.setAttribute("approvedRejectedRatio", approvedRejectedRatio);

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : admin-dashboard
-    Created on : Admin Dashboard Page
-    Author     : Admin Dashboard
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -32,7 +26,6 @@
                     <p>Tổng quan hệ thống và chỉ số quan trọng</p>
                 </div>
 
-                <!-- A. Metrics Cards Section -->
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-header">
@@ -79,14 +72,12 @@
                     </div>
                 </div>
 
-                <!-- B. Chỉ số toàn hệ thống -->
                 <div class="section">
                     <div class="section-header">
                         <h2>Chỉ số toàn hệ thống</h2>
                     </div>
 
                     <div class="tables-grid">
-                        <!-- Doanh thu theo sản phẩm -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Doanh thu theo sản phẩm</h3>
@@ -127,7 +118,6 @@
                             <div class="table-pagination" data-table="revenueByProduct"></div>
                         </div>
 
-                        <!-- Tỷ lệ claim/hợp đồng theo sản phẩm -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Tỷ lệ claim/hợp đồng theo sản phẩm</h3>
@@ -174,14 +164,12 @@
                     </div>
                 </div>
 
-                <!-- C. Cảnh báo rủi ro -->
                 <div class="section">
                     <div class="section-header">
                         <h2>Cảnh báo rủi ro</h2>
                     </div>
 
                     <div class="tables-grid">
-                        <!-- Claim được đền bù số tiền lớn -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Claim được đền bù số tiền lớn</h3>
@@ -234,7 +222,6 @@
                             <div class="table-pagination" data-table="fraudAlertClaims"></div>
                         </div>
 
-                        <!-- Claim hợp đồng lớn bất thường -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Claim của hợp đồng lớn bất thường</h3>
@@ -281,7 +268,6 @@
                             <div class="table-pagination" data-table="unusualLargeContractClaims"></div>
                         </div>
 
-                        <!-- Top khách hàng rủi ro -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Top khách hàng rủi ro</h3>
@@ -328,14 +314,12 @@
                     </div>
                 </div>
 
-                <!-- D. Quản lý sản phẩm -->
                 <div class="section">
                     <div class="section-header">
                         <h2>Quản lý sản phẩm</h2>
                     </div>
 
                     <div class="tables-grid">
-                        <!-- Sản phẩm bán chạy -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm bán chạy</h3>
@@ -376,7 +360,6 @@
                             <div class="table-pagination" data-table="topSellingProducts"></div>
                         </div>
 
-                        <!-- Sản phẩm bị claim nhiều nhất -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm bị claim nhiều nhất</h3>
@@ -417,7 +400,6 @@
                             <div class="table-pagination" data-table="productsWithMostClaims"></div>
                         </div>
 
-                        <!-- Sản phẩm có doanh thu cao nhất -->
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm có doanh thu cao nhất</h3>
@@ -460,13 +442,11 @@
                     </div>
                 </div>
 
-                <!-- E. Staff Analysis -->
                 <div class="section">
                     <div class="section-header">
                         <h2>Phân tích Staff</h2>
                     </div>
 
-                    <!-- Form filter staff approval -->
                     <div class="filter-form">
                         <form method="POST" action="${pageContext.request.contextPath}/admin/dashboard">
                             <input type="hidden" name="action" value="staffApproval">
@@ -486,7 +466,6 @@
                         </form>
                     </div>
 
-                    <!-- Staff approval stats -->
                     <div class="table-section">
                         <h3>Staff chấp nhận nhiều claim</h3>
                         <div class="stats-table-container">
@@ -530,7 +509,6 @@
                         </div>
                     </div>
 
-                    <!-- Claims by selected staff -->
                     <c:if test="${not empty claimsByStaff}">
                         <div class="table-section">
                             <h3>Danh sách claim theo staff đã chọn</h3>
@@ -578,13 +556,11 @@
                     </c:if>
                 </div>
 
-                <!-- F. Customer Risk Analysis -->
                 <div class="section">
                     <div class="section-header">
                         <h2>Phân tích rủi ro khách hàng</h2>
                     </div>
 
-                    <!-- Form search customers with many contracts -->
                     <div class="filter-form">
                         <form method="POST" action="${pageContext.request.contextPath}/admin/dashboard">
                             <input type="hidden" name="action" value="customerRisk">
@@ -604,7 +580,6 @@
                         </form>
                     </div>
 
-                    <!-- Customers with many contracts -->
                     <div class="table-section">
                         <h3>Khách hàng mua nhiều hợp đồng trong thời gian ngắn</h3>
                         <div class="stats-table-container">
