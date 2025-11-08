@@ -1,9 +1,3 @@
-<%-- 
-    Document   : CreateContractSimple
-    Created on : Dec 8, 2024
-    Author     : Staff Contract Creation - No JavaScript Version
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
 <%@page import="Model.InsuranceProduct"%>
@@ -18,16 +12,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Header -->
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="create-contract"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1></i> Tạo Hợp Đồng Bảo Hiểm Mới</h1>
@@ -35,11 +26,9 @@
             </div>
 
             <% 
-                // Declare successFlag once for the entire page
                 Boolean successFlag = (Boolean) request.getAttribute("success");
             %>
 
-            <!-- Success Message -->
             <% 
                 if (successFlag != null && successFlag && request.getAttribute("contractId") != null) { 
             %>
@@ -67,7 +56,6 @@
             </div>
             <% } %>
 
-            <!-- Error Messages -->
             <% if (request.getAttribute("error") != null) { %>
             <div class="alert alert-danger">
                 <i class="fas fa-exclamation-triangle"></i>
@@ -87,10 +75,8 @@
             </div>
             <% } %>
 
-            <!-- Contract Creation Form -->
             <form action="${pageContext.request.contextPath}/CreateContractServlet" method="POST" class="contract-form">
                 
-                <!-- Buyer Information Section -->
                 <div class="form-section">
                     <h2 class="form-title">
                         Thông tin người mua
@@ -285,7 +271,6 @@
                     </div>
                 </div>
 
-                <!-- Insurance Package Selection -->
                 <div class="form-section">
                     <h2 class="form-title">
                         Chọn gói bảo hiểm
@@ -331,7 +316,6 @@
                     </div>
                 </div>
 
-                <!-- Contract Period -->
                 <div class="form-section">
                     <h2 class="form-title">
                         Thời gian bảo hiểm
@@ -373,7 +357,6 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="button-container">
                     <button type="submit" class="btn-create">
                         Tạo hợp đồng
@@ -386,10 +369,8 @@
         </div>
     </div>
 
-    <!-- Meta refresh removed - was causing infinite reload loop -->
     
     <script>
-        // Traveler dynamic fields
         let travelerIndexCounter = document.querySelectorAll('#travelersContainer .traveler-item').length;
 
         function addTraveler() {
@@ -517,10 +498,9 @@
             updateTravelerState();
         });
 
-        // Auto-fill functionality for BUYER when CCCD is entered
         document.getElementById('buyerId').addEventListener('blur', function() {
             const cccd = this.value.trim();
-            if (cccd.length >= 9) { // Minimum CCCD length
+            if (cccd.length >= 9) {
                 checkBuyerByCccd(cccd);
             }
         });
@@ -530,25 +510,20 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.exists) {
-                        // Tim thay user thi gan data vao cac truong
                         document.getElementById('buyerName').value = data.fullname || '';
                         document.getElementById('buyerPhone').value = data.phone || '';
                         document.getElementById('buyerEmail').value = data.email || '';
                         document.getElementById('buyerAddress').value = data.address || '';
                         
-                        // Chuyen sang trang thai read only
                         document.getElementById('buyerName').readOnly = true;
                         document.getElementById('buyerPhone').readOnly = true;
                         document.getElementById('buyerEmail').readOnly = true;
                         document.getElementById('buyerAddress').readOnly = true;
                         
-                        // Add visual indicator
                         showBuyerFoundIndicator();
                         
-                        // Show message
                         showMessage('Tìm thấy dữ liệu người mua.', 'success');
                     } else {
-                        // Buyer not found - enable buyer fields for manual input
                         enableBuyerFields();
                         hideBuyerFoundIndicator();
                     }
@@ -572,7 +547,6 @@
             buyerIdField.style.borderColor = '#28a745';
             buyerIdField.style.backgroundColor = '#f8fff9';
             
-            // Add checkmark icon
             if (!document.getElementById('buyerFoundIcon')) {
                 const icon = document.createElement('i');
                 icon.id = 'buyerFoundIcon';
@@ -595,24 +569,20 @@
         }
         
         function showMessage(message, type) {
-            // Remove existing message
             const existingMessage = document.getElementById('autoFillMessage');
             if (existingMessage) {
                 existingMessage.remove();
             }
             
-            // Create new message
             const messageDiv = document.createElement('div');
             messageDiv.id = 'autoFillMessage';
             messageDiv.className = 'alert alert-' + (type === 'success' ? 'success' : 'info');
             messageDiv.style.marginTop = '10px';
             messageDiv.innerHTML = '<i class="fas fa-info-circle"></i> ' + message;
             
-            // Insert after buyer information section
             const buyerSection = document.querySelector('.form-section');
             buyerSection.appendChild(messageDiv);
             
-            // Auto-hide after 5 seconds
             setTimeout(() => {
                 if (messageDiv.parentNode) {
                     messageDiv.remove();
@@ -620,7 +590,6 @@
             }, 5000);
         }
         
-        // Reset form functionality
         document.querySelector('button[type="reset"]').addEventListener('click', function() {
             setTimeout(() => {
                 enableBuyerFields();
@@ -632,11 +601,9 @@
             }, 100);
         });
         
-        // Auto-hide success alert after 5 seconds
         (function() {
             const successAlert = document.querySelector('.alert.alert-success');
             if (successAlert) {
-                // Fade out animation
                 setTimeout(() => {
                     successAlert.style.transition = 'opacity 0.5s ease-out, margin 0.5s ease-out, padding 0.5s ease-out';
                     successAlert.style.opacity = '0';
@@ -645,13 +612,12 @@
                     successAlert.style.height = '0';
                     successAlert.style.overflow = 'hidden';
                     
-                    // Remove element completely after animation
                     setTimeout(() => {
                         if (successAlert.parentNode) {
                             successAlert.remove();
                         }
                     }, 500);
-                }, 5000); // Show for 5 seconds
+                }, 5000);
             }
         })();
     </script>

@@ -8,7 +8,6 @@
     <title>Staff Sidebar Component</title>
 </head>
 <body>
-    <!-- Staff Sidebar Component -->
     <div class="sidebar">
         <nav class="sidebar-nav">
             <ul>
