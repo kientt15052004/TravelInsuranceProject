@@ -303,7 +303,7 @@
                     <div class="form-group">
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                             <input type="checkbox" id="agreeTerms" style="width: 20px; height: 20px; cursor: pointer; accent-color: #e74c3c;">
-                            <span>Tôi đồng ý với <a href="#" style="color: #e74c3c; text-decoration: none;">Chính Sách Bảo Vệ Dữ Liệu Cá Nhân của MIC</a></span>
+                            <span>Tôi đồng ý với <a href="#" style="color: #e74c3c; text-decoration: none;">Chính Sách Bảo Vệ Dữ Liệu Cá Nhân của Trang</a></span>
                         </label>
                     </div>
                     <p style="font-size: 13px; color: #666; margin-top: 15px; line-height: 1.6;">
