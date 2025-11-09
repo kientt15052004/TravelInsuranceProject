@@ -212,8 +212,6 @@
     }
 
     /* ===== COMMON FORM CONTROLS ===== */
-    .form-control, .form-select{
-    }
     .form-control:focus, .form-select:focus{
         border-color: var(--brand-yellow);
     }
@@ -323,6 +321,128 @@
     </div>  
 </nav>
 
+<!-- Profile Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> 
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileModalLabel">Hồ Sơ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <!-- Avatar -->
+                        <div class="col-md-3 text-center">
+                            <label class="form-label fw-semibold d-block mb-2">Ảnh đại diện</label>
+                            <c:if test="${not empty sessionScope.user.avatar}">
+                                <img id="avatarPreview" src="<c:out value='${sessionScope.user.avatar}' />" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2">
+                            </c:if>
+                            <c:if test="${empty sessionScope.user.avatar}">
+                                <img id="avatarPreview" src="" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2" style="display: none;">
+                            </c:if>
+                            <input type="file" name="avatar" class="form-control mt-1" accept="image/*" onchange="previewImage(this, 'avatarPreview')">
+                        </div>
+
+                        <div class="col-md-9">
+                            <input type="hidden" name="id" value="<c:out value='${sessionScope.user.id}' />">
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Họ và Tên:</label>
+                                <input type="text" class="form-control" name="fullname" value="<c:out value='${sessionScope.user.fullname}' />" required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Email:</label>
+                                <input type="email" class="form-control" name="mail" value="<c:out value='${sessionScope.user.mail}' />" required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Ngày Sinh:</label>
+                                <input type="date" class="form-control" name="dob" value="<c:out value='${sessionScope.user.dob}' />">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Địa Chỉ:</label>
+                                <input type="text" class="form-control" name="address" value="<c:out value='${sessionScope.user.address}' />">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Số Điện Thoại:</label>
+                                <input type="text" class="form-control" name="phone" value="<c:out value='${sessionScope.user.phone}' />">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Số CCCD:</label>
+                                <input type="text" class="form-control" name="cccd" value="<c:out value='${sessionScope.user.cccd}' />">
+                            </div>
+
+                            <!-- CCCD Image -->
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Ảnh CCCD:</label>
+                                <c:if test="${not empty sessionScope.user.cccd_img}">
+                                    <img id="cccdPreview" src="<c:out value='${sessionScope.user.cccd_img}' />" alt="Ảnh CCCD" class="img-fluid mt-1 mb-1">
+                                </c:if>
+                                <input type="file" name="cccd_img" class="form-control mt-1" onchange="previewImage(this, 'cccdPreview')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Cập Nhật Hồ Sơ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Đổi Mật Khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="ChangePasswordServlet" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Mật Khẩu Hiện Tại</label>
+                        <input type="password" class="form-control" name="currentPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mật Khẩu Mới</label>
+                        <input type="password" class="form-control" name="newPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Xác Nhận Mật Khẩu Mới</label>
+                        <input type="password" class="form-control" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script để preview ảnh và xử lý modal -->
+<script>
+    function previewImage(input, previewId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                if (preview) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
 <!-- Đóng dropdown khi click bên ngoài (CSS thuần) -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -334,6 +454,14 @@
                 if (dropdown && !dropdown.contains(e.target)) {
                     dropdownCheckbox.checked = false;
                 }
+            });
+            
+            // Đóng dropdown khi mở modal
+            const modalLinks = document.querySelectorAll('[data-bs-toggle="modal"]');
+            modalLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    dropdownCheckbox.checked = false;
+                });
             });
         }
     });
