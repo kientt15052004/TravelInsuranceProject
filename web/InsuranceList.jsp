@@ -21,7 +21,6 @@
 
             <!-- Page Title -->
             <h1 class="page-title">
-                <span class="icon">🛡️</span>
                 Sản Phẩm Bảo Hiểm Du Lịch
             </h1>
 
@@ -57,8 +56,8 @@
 
                     <!-- Buttons -->
                     <div class="form-buttons">
-                        <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
-                        <a href="InsuranceList" class="search-btn">🧹 Xóa bộ lọc</a>
+                        <button type="submit" class="search-btn">Tìm kiếm</button>
+                        <a href="InsuranceList" class="search-btn">Xóa bộ lọc</a>
                     </div>
                 </form>
             </div>
@@ -77,7 +76,6 @@
                 <c:choose>
                     <c:when test="${empty insurances}">
                         <div class="empty-state">
-                            <div class="icon">🔍</div>
                             <h3>Không tìm thấy kết quả</h3>
                             <p>Vui lòng điều chỉnh tiêu chí tìm kiếm hoặc bộ lọc</p>
                         </div>
@@ -95,7 +93,7 @@
 
                                 <!-- Added Price Display -->
                                 <div class="insurance-price">
-                                    💰 Giá: <strong>$${insurance.price}</strong>
+                                    Giá: <strong>$${insurance.price}</strong>
                                 </div>
 
                                 <button class="view-details-btn">Mua Ngay</button>

@@ -83,9 +83,6 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
-                            <div class="feature-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
                             <h4>Bảo hiểm tức thì</h4>
                             <p>Nhận bảo hiểm du lịch ngay lập tức với quy trình đăng ký đơn giản</p>
                         </div>

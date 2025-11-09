@@ -51,7 +51,6 @@
                 <!-- Left Panel - Purchase Form -->
                 <div class="card purchase-card">
                     <h2 class="card-title">
-                        <span class="icon">🛡️</span>
                         ${requestScope.insurance.name}
                         <span data-insurance-price="${requestScope.insurance.price}" style="display: none;"></span>
                     </h2>

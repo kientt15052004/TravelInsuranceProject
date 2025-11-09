@@ -147,7 +147,7 @@
                     <c:if test="${not empty product}">
                     <div class="detail-card">
                         <div class="card-header">
-                            <h3><i class="fas fa-shield-alt"></i> Thông tin sản phẩm</h3>
+                            <h3>Thông tin sản phẩm</h3>
                         </div>
                         <div class="card-content">
                             <div class="info-row">

@@ -84,6 +84,103 @@
     .dropdown-toggle:hover {
         color: #ff9800 !important;
     }
+    
+    /* Dropdown CSS thuần - không cần JavaScript */
+    .navbar-right .dropdown-css {
+        position: relative;
+    }
+    
+    .navbar-right .dropdown-checkbox {
+        display: none;
+    }
+    
+    .navbar-right .dropdown-toggle-css {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    
+    .navbar-right .dropdown-toggle-css:hover {
+        background: #e9ecef;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-toggle-css i {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked + .dropdown-toggle-css {
+        background: #e9ecef;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked + .dropdown-toggle-css i {
+        transform: rotate(180deg);
+    }
+    
+    .navbar-right .dropdown-menu-css {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+        min-width: 200px;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        margin: 0;
+        list-style: none;
+        z-index: 1050;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked ~ .dropdown-menu-css {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-item {
+        display: block;
+        padding: 10px 16px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-divider {
+        height: 1px;
+        margin: 8px 0;
+        background: #e0e0e0;
+        border: none;
+    }
+    
 
     /* ===== COMMON BUTTON STYLES ===== */
     .btn-brand{
@@ -176,13 +273,10 @@
     }
 </style>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="navbar-left d-flex align-items-center">
             <a class="navbar-brand" href="home">
-                <i class="fas fa-shield-alt"></i>
                 InsureTravel
             </a>
         </div>
@@ -209,11 +303,13 @@
             <%
                 } else {
             %>
-            <div class="dropdown">
-                <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown-css">
+                <input type="checkbox" id="userDropdownToggle" class="dropdown-checkbox">
+                <label for="userDropdownToggle" class="dropdown-toggle-css">
                     <span><%= user.getFullname() %></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <i class="fas fa-chevron-down"></i>
+                </label>
+                <ul class="dropdown-menu-css">
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Hồ Sơ</a></li>
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi Mật Khẩu</a></li>
                     <li><hr class="dropdown-divider"></li>
@@ -226,3 +322,19 @@
         </div>
     </div>  
 </nav>
+
+<!-- Đóng dropdown khi click bên ngoài (CSS thuần) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownCheckbox = document.querySelector('#userDropdownToggle');
+        if (dropdownCheckbox) {
+            // Đóng dropdown khi click bên ngoài
+            document.addEventListener('click', function(e) {
+                const dropdown = document.querySelector('.dropdown-css');
+                if (dropdown && !dropdown.contains(e.target)) {
+                    dropdownCheckbox.checked = false;
+                }
+            });
+        }
+    });
+</script>
