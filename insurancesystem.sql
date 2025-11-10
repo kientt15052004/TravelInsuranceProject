@@ -838,16 +838,58 @@ ALTER TABLE insurance_benefits
 
 USE insurancesystem;
 
--- Add user_id column to ClaimsRes table
-ALTER TABLE claimsres 
-ADD COLUMN user_id INT DEFAULT NULL AFTER claim_id;
+-- Add user_id column to ClaimsRes table (only if it doesn't exist)
+SET @dbname = DATABASE();
+SET @tablename = 'claimsres';
+SET @columnname = 'user_id';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (COLUMN_NAME = @columnname)
+  ) > 0,
+  'SELECT 1',
+  CONCAT('ALTER TABLE ', @tablename, ' ADD COLUMN ', @columnname, ' INT DEFAULT NULL AFTER claim_id')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
--- Add foreign key constraint to link to users table
-ALTER TABLE claimsres 
-ADD CONSTRAINT claimsres_ibfk_2 FOREIGN KEY (user_id) REFERENCES users(id);
+-- Add foreign key constraint to link to users table (only if it doesn't exist)
+SET @constraint_name = 'claimsres_ibfk_2';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+    WHERE
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (CONSTRAINT_NAME = @constraint_name)
+  ) > 0,
+  'SELECT 1',
+  CONCAT('ALTER TABLE ', @tablename, ' ADD CONSTRAINT ', @constraint_name, ' FOREIGN KEY (user_id) REFERENCES users(id)')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
--- Add index for better query performance
-CREATE INDEX idx_user_id ON claimsres(user_id);
+-- Add index for better query performance (only if it doesn't exist)
+SET @index_name = 'idx_user_id';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+    WHERE
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (INDEX_NAME = @index_name)
+  ) > 0,
+  'SELECT 1',
+  CONCAT('CREATE INDEX ', @index_name, ' ON ', @tablename, '(user_id)')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
 -- If you want to update existing records with a default user (optional)
 -- Uncomment the following line and replace 1 with the appropriate user ID
@@ -881,9 +923,24 @@ ALTER TABLE claimsres DROP COLUMN status;
 
 USE insurancesystem;
 
--- Add compensation_amount column to Claims table
-ALTER TABLE claims 
-ADD COLUMN compensation_amount DECIMAL(15,2) DEFAULT NULL AFTER claim_status;
+-- Add compensation_amount column to Claims table (only if it doesn't exist)
+SET @dbname = DATABASE();
+SET @tablename = 'claims';
+SET @columnname = 'compensation_amount';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (COLUMN_NAME = @columnname)
+  ) > 0,
+  'SELECT 1',
+  CONCAT('ALTER TABLE ', @tablename, ' ADD COLUMN ', @columnname, ' DECIMAL(15,2) DEFAULT NULL AFTER claim_status')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
 -- Verify the changes
 DESCRIBE claims;
@@ -896,12 +953,41 @@ DESCRIBE claims;
 
 USE insurancesystem;
 
--- Add action_type column to ClaimsRes table
-ALTER TABLE claimsres 
-ADD COLUMN action_type ENUM('approve','reject','review') DEFAULT 'review' AFTER related_file;
+-- Add action_type column to ClaimsRes table (only if it doesn't exist)
+SET @dbname = DATABASE();
+SET @tablename = 'claimsres';
+SET @columnname = 'action_type';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (COLUMN_NAME = @columnname)
+  ) > 0,
+  'SELECT 1',
+  CONCAT('ALTER TABLE ', @tablename, ' ADD COLUMN ', @columnname, ' ENUM(''approve'',''reject'',''review'') DEFAULT ''review'' AFTER related_file')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
--- Add index for better query performance
-CREATE INDEX idx_action_type ON claimsres(action_type);
+-- Add index for better query performance (only if it doesn't exist)
+SET @index_name = 'idx_action_type';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.STATISTICS
+    WHERE
+      (TABLE_SCHEMA = @dbname)
+      AND (TABLE_NAME = @tablename)
+      AND (INDEX_NAME = @index_name)
+  ) > 0,
+  'SELECT 1',
+  CONCAT('CREATE INDEX ', @index_name, ' ON ', @tablename, '(', @columnname, ')')
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
 
 -- Update existing records based on claim status
 -- If claim is approved and has ClaimsRes, set action_type = 'approve'
