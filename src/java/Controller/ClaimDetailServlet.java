@@ -41,7 +41,9 @@ public class ClaimDetailServlet extends HttpServlet {
             return;
         }
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+        // Allow both admin and staff to view claim details
+        if (currentUser.getRole() == null || 
+            (!"staff".equalsIgnoreCase(currentUser.getRole()) && !"admin".equalsIgnoreCase(currentUser.getRole()))) {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
@@ -112,7 +114,9 @@ public class ClaimDetailServlet extends HttpServlet {
             return;
         }
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+        // Allow both admin and staff to view claim details
+        if (currentUser.getRole() == null || 
+            (!"staff".equalsIgnoreCase(currentUser.getRole()) && !"admin".equalsIgnoreCase(currentUser.getRole()))) {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }

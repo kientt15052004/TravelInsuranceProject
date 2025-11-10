@@ -1,13 +1,14 @@
 package dal;
 
-import Model.User;
 import Model.Application;
-import Model.Contract;
 import Model.Claims;
+import Model.Contract;
+import Model.User;
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +16,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.math.BigDecimal;
 
 public class UserDAO extends DBContext {
 
@@ -48,18 +48,19 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+
     public boolean checkUserExists(String username) {
-    String sql = "SELECT * FROM users WHERE username = ?";
-    try {
-        PreparedStatement st = connection.prepareStatement(sql);
-        st.setString(1, username);
-        ResultSet rs = st.executeQuery();
-        return rs.next();
-    } catch (SQLException e) {
-        e.printStackTrace();
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, username);
+            ResultSet rs = st.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
 
     public boolean checkEmailExists(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE mail = ?";
@@ -75,7 +76,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
     // Get user by username or email
     public User getUserByUsernameOrEmail(String usernameOrEmail) {
         String sql = "SELECT * FROM users WHERE username = ? OR mail = ?";
@@ -92,7 +93,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     // Reset password by username or email
     public boolean resetPassword(String usernameOrEmail, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE username = ? OR mail = ?";
@@ -107,7 +108,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
     // Verify user information (username, email, phone, cccd)
     public boolean verifyUserInfo(String username, String email, String phone, String cccd) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ? AND mail = ? AND phone = ? AND cccd = ?";
@@ -126,7 +127,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
     // Reset password by user information (username, email, phone, cccd)
     public boolean resetPasswordByInfo(String username, String email, String phone, String cccd, String newPassword) {
         String sql = "UPDATE users SET password = ? WHERE username = ? AND mail = ? AND phone = ? AND cccd = ?";
@@ -144,8 +145,6 @@ public class UserDAO extends DBContext {
         return false;
     }
 
-
-    
     // Get user by CCCD number
     public User getUserByCccd(String cccd) {
         String sql = "SELECT * FROM users WHERE cccd = ?";
@@ -183,7 +182,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     // Check if user exists by CCCD
     public boolean userExistsByCccd(String cccd) {
         String sql = "SELECT COUNT(*) FROM users WHERE cccd = ?";
@@ -199,8 +198,8 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
-     //Insert new user into database
+
+    //Insert new user into database
     public int insertUser(User user) {
         String sql = "INSERT INTO users (username, password, fullname, mail, dob, address, phone, cccd, avatar, role, cccd_img, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement st = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -208,13 +207,13 @@ public class UserDAO extends DBContext {
             st.setString(2, user.getPassword());
             st.setString(3, user.getFullname());
             st.setString(4, user.getMail());
-            
+
             if (user.getDob() != null) {
                 st.setDate(5, Date.valueOf(user.getDob()));
             } else {
                 st.setNull(5, java.sql.Types.DATE);
             }
-            
+
             st.setString(6, user.getAddress());
             st.setString(7, user.getPhone());
             st.setString(8, user.getCccd());
@@ -222,9 +221,9 @@ public class UserDAO extends DBContext {
             st.setString(10, user.getRole());
             st.setString(11, user.getCccd_img());
             st.setString(12, user.getStatus());
-            
+
             int rowsAffected = st.executeUpdate();
-            
+
             if (rowsAffected > 0) {
                 try (ResultSet generatedKeys = st.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
@@ -237,7 +236,7 @@ public class UserDAO extends DBContext {
         }
         return -1; // Failed to insert
     }
-    
+
     // Get user by ID
     public User getUserById(int userId) {
         String sql = "SELECT * FROM users WHERE id = ?";
@@ -275,7 +274,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     // Get all users
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
@@ -313,7 +312,7 @@ public class UserDAO extends DBContext {
         }
         return users;
     }
-    
+
     // Get total insurance amount by user ID
     public BigDecimal getTotalInsuranceAmountByUserId(int userId) {
         String sql = "SELECT SUM(total_price) FROM applications WHERE purchaser_id = ?";
@@ -330,7 +329,7 @@ public class UserDAO extends DBContext {
         }
         return BigDecimal.ZERO;
     }
-    
+
     // Get applications by user ID
     public List<Application> getApplicationsByUserId(int userId) {
         List<Application> applications = new ArrayList<>();
@@ -357,13 +356,13 @@ public class UserDAO extends DBContext {
         }
         return applications;
     }
-    
+
     // Get contracts by user ID
     public List<Contract> getContractsByUserId(int userId) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT c.* FROM Contract c " +
-                    "JOIN applications a ON c.application_id = a.id " +
-                    "WHERE a.purchaser_id = ? ORDER BY c.contract_id ASC";
+        String sql = "SELECT c.* FROM Contract c "
+                + "JOIN applications a ON c.application_id = a.id "
+                + "WHERE a.purchaser_id = ? ORDER BY c.contract_id ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
@@ -381,14 +380,16 @@ public class UserDAO extends DBContext {
         }
         return contracts;
     }
-    
+
     // Get claims by user ID
     public List<Claims> getClaimsByUserId(int userId) {
         List<Claims> claims = new ArrayList<>();
-        String sql = "SELECT cl.* FROM claims cl " +
-                    "JOIN Contract c ON cl.contract_id = c.contract_id " +
-                    "JOIN applications a ON c.application_id = a.id " +
-                    "WHERE a.purchaser_id = ? ORDER BY CASE cl.claim_status WHEN 'pending' THEN 1 WHEN 'approved' THEN 2 WHEN 'rejected' THEN 3 ELSE 4 END, cl.requestDate ASC";
+        String sql = "SELECT cl.* FROM claims cl "
+                + "JOIN Contract c ON cl.contract_id = c.contract_id "
+                + "JOIN applications a ON c.application_id = a.id "
+                + "WHERE a.purchaser_id = ? ORDER BY CASE cl.claim_status "
+                + "WHEN 'pending' THEN 1 WHEN 'in_progress' THEN 2 WHEN 'need_info' THEN 3 "
+                + "WHEN 'approved' THEN 4 WHEN 'paid' THEN 5 WHEN 'rejected' THEN 6 ELSE 7 END, cl.requestDate ASC";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, userId);
             try (ResultSet rs = st.executeQuery()) {
@@ -404,7 +405,7 @@ public class UserDAO extends DBContext {
                     claim.setRelated_img(rs.getString("related_img"));
                     claim.setRelated_file(rs.getString("related_file"));
                     claim.setClaim_status(rs.getString("claim_status"));
-                    
+
                     // Try to get claim_amount if column exists
                     try {
                         if (rs.findColumn("claim_amount") > 0) {
@@ -415,7 +416,7 @@ public class UserDAO extends DBContext {
                     } catch (SQLException e) {
                         claim.setClaim_amount(null);
                     }
-                    
+
                     claims.add(claim);
                 }
             }
@@ -424,13 +425,13 @@ public class UserDAO extends DBContext {
         }
         return claims;
     }
-    
+
     // Search users with filters
     public List<User> searchUsers(String keyword, String role, String status) {
         List<User> users = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM users WHERE 1=1");
         List<Object> parameters = new ArrayList<>();
-        
+
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql.append(" AND (username LIKE ? OR fullname LIKE ? OR mail LIKE ? OR phone LIKE ?)");
             String searchPattern = "%" + keyword.trim() + "%";
@@ -439,19 +440,19 @@ public class UserDAO extends DBContext {
             parameters.add(searchPattern);
             parameters.add(searchPattern);
         }
-        
+
         if (role != null && !role.trim().isEmpty() && !role.equals("all")) {
             sql.append(" AND role = ?");
             parameters.add(role.trim());
         }
-        
+
         if (status != null && !status.trim().isEmpty() && !status.equals("all")) {
             sql.append(" AND status = ?");
             parameters.add(status.trim());
         }
-        
+
         sql.append(" ORDER BY id ASC");
-        
+
         try (PreparedStatement st = connection.prepareStatement(sql.toString())) {
             for (int i = 0; i < parameters.size(); i++) {
                 st.setObject(i + 1, parameters.get(i));
@@ -488,7 +489,7 @@ public class UserDAO extends DBContext {
         }
         return users;
     }
-    
+
     // Update user information (phone, address, status)
     public boolean updateUserInfo(User user) {
         String sql = "UPDATE users SET phone = ?, address = ?, status = ? WHERE id = ?";
@@ -497,7 +498,7 @@ public class UserDAO extends DBContext {
             st.setString(2, user.getAddress());
             st.setString(3, user.getStatus());
             st.setInt(4, user.getId());
-            
+
             int rowsAffected = st.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -527,7 +528,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
     public boolean updateUserStatus(int userId, String status) {
         if (status == null) {
             return false;
@@ -576,6 +577,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
+
     public boolean changePassword(int userId, String oldPassword, String newPassword) {
         String sqlCheck = "SELECT password FROM users WHERE id = ?";
         String sqlUpdate = "UPDATE users SET password = ? WHERE id = ?";
@@ -605,7 +607,7 @@ public class UserDAO extends DBContext {
         }
         return false;
     }
-    
+
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();
         u.setId(rs.getInt("id"));

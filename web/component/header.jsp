@@ -14,6 +14,7 @@
 <!-- CSS Files -->
 <link rel="stylesheet" href="./CSS/header.css"/>
 <link rel="stylesheet" href="./CSS/footer.css"/>
+<link rel="stylesheet" href="./CSS/statuses.css"/>
 
 
 <style>
@@ -85,6 +86,238 @@
     .dropdown-toggle:hover {
         color: #ff9800 !important;
     }
+    
+    /* Dropdown CSS thuần - không cần JavaScript */
+    .navbar-right .dropdown-css {
+        position: relative;
+    }
+    
+    .navbar-right .dropdown-checkbox {
+        display: none;
+    }
+    
+    .navbar-right .dropdown-toggle-css {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    
+    .navbar-right .dropdown-toggle-css:hover {
+        background: #e9ecef;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-toggle-css i {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked + .dropdown-toggle-css {
+        background: #e9ecef;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked + .dropdown-toggle-css i {
+        transform: rotate(180deg);
+    }
+    
+    .navbar-right .dropdown-menu-css {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+        min-width: 200px;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        margin: 0;
+        list-style: none;
+        z-index: 1050;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked ~ .dropdown-menu-css {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-item {
+        display: block;
+        padding: 10px 16px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-divider {
+        height: 1px;
+        margin: 8px 0;
+        background: #e0e0e0;
+        border: none;
+    }
+    
+    /* Modal CSS thuần - không cần JavaScript */
+    .modal-css {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1055;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-css:target {
+        display: flex;
+    }
+    
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .modal-container {
+        position: relative;
+        z-index: 2;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: modalFadeIn 0.3s ease;
+    }
+    
+    .modal-container.modal-lg {
+        width: 800px;
+    }
+    
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .modal-content-css {
+        padding: 0;
+    }
+    
+    .modal-header-css {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .modal-title-css {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    
+    .modal-close-css {
+        font-size: 1.5rem;
+        line-height: 1;
+        color: #666;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s;
+    }
+    
+    .modal-close-css:hover {
+        color: #000;
+    }
+    
+    .modal-body-css {
+        padding: 1.25rem;
+    }
+    
+    .modal-footer-css {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .modal-footer-css .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .modal-footer-css .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border-color: #6c757d;
+    }
+    
+    .modal-footer-css .btn-secondary:hover {
+        background: #5a6268;
+    }
+    
+    .modal-footer-css .btn-primary {
+        background: #ff9800;
+        color: white;
+        border-color: #ff9800;
+    }
+    
+    .modal-footer-css .btn-primary:hover {
+        background: #e68900;
+    }
 
     /* ===== COMMON BUTTON STYLES ===== */
     .btn-brand{
@@ -116,8 +349,6 @@
     }
 
     /* ===== COMMON FORM CONTROLS ===== */
-    .form-control, .form-select{
-    }
     .form-control:focus, .form-select:focus{
         border-color: var(--brand-yellow);
     }
@@ -198,13 +429,10 @@
     }
 </style>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="navbar-left d-flex align-items-center">
             <a class="navbar-brand" href="home">
-                <i class="fas fa-shield-alt"></i>
                 InsureTravel
             </a>
         </div>
@@ -218,7 +446,7 @@
             <ul class="navbar-nav flex-row justify-content-center">
                 <li class="nav-item mx-3"><a class="nav-link" href="InsuranceList">Gói Bảo Hiểm</a></li>
                 <li class="nav-item mx-3"><a class="nav-link" href="purchased-insurance">Bảo Hiểm Đã Mua</a></li>
-                <li class="nav-item mx-3"><a class="nav-link" href="#">Khiếu Nại</a></li>
+                    <li class="nav-item mx-3"><a class="nav-link" href="my-claims">Khiếu Nại</a></li>
             </ul>
         </div>
 

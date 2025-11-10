@@ -6,27 +6,22 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>InsureTravel - Danh Sách Bảo Hiểm</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet" href="./CSS/styleindex.css"/>
-        <link rel="stylesheet" href="./CSS/InsuranceList.css">
     </head>
     <body>
-        <!-- Header -->
         <jsp:include page="component/header.jsp" />
+        <link rel="stylesheet" href="./CSS/styleindex.css"/>
+        <link rel="stylesheet" href="./CSS/InsuranceList.css">
         
         <div class="container">
 
-            <!-- Page Title -->
             <h1 class="page-title">
-                <span class="icon">🛡️</span>
                 Sản Phẩm Bảo Hiểm Du Lịch
             </h1>
 
-            <!-- Filter Section -->
             <div class="filter-section">
                 <form action="InsuranceList" method="GET" class="filter-form">
          <!--1-->   <!-- Search by name -->
+
                     <div class="form-group">
                         <label>Tìm kiếm theo tên</label>
                         <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Nhập tên bảo hiểm...">
@@ -44,7 +39,6 @@
                         </select>
                     </div>
 
-                    <!-- Filter by price -->
                     <div class="form-group price-filter">
                         <label>Lọc theo giá (USD)</label>
                         <div class="price-range">
@@ -55,14 +49,14 @@
                     </div>
          <!-- => Truy vấn đến db -> Trả kết quả mới -->              
                     <!-- Buttons -->
+
                     <div class="form-buttons">
-                        <button type="submit" class="search-btn">🔍 Tìm kiếm</button>
-                        <a href="InsuranceList" class="search-btn">🧹 Xóa bộ lọc</a>
+                        <button type="submit" class="search-btn">Tìm kiếm</button>
+                        <a href="InsuranceList" class="search-btn">Xóa bộ lọc</a>
                     </div>
                 </form>
             </div>
 
-            <!-- Results Info -->
             <div class="results-info">
                 <div class="results-count">
                     <c:set var="startIndex" value="${(currentPage - 1) * pageSize + 1}" />
@@ -78,7 +72,6 @@
                 <c:choose>
                     <c:when test="${empty insurances}">
                         <div class="empty-state">
-                            <div class="icon">🔍</div>
                             <h3>Không tìm thấy kết quả</h3>
                             <p>Vui lòng điều chỉnh tiêu chí tìm kiếm hoặc bộ lọc</p>
                         </div>
@@ -96,7 +89,7 @@
 
                                 <!-- Added Price Display -->
                                 <div class="insurance-price">
-                                    💰 Giá: <strong>$${insurance.price}</strong>
+                                    Giá: <strong>$${insurance.price}</strong>
                                 </div>
 
                                 <button class="view-details-btn">Mua Ngay</button>

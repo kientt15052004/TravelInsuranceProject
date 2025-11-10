@@ -1,23 +1,52 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@page import="Model.User"%>
+<%
+    User currentUser = (User) session.getAttribute("user");
+    boolean isAdmin = currentUser != null && "admin".equalsIgnoreCase(currentUser.getRole());
+    boolean isStaff = currentUser != null && "staff".equalsIgnoreCase(currentUser.getRole());
+%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết Bồi thường - Hệ thống quản lý bảo hiểm</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/staff.css">
+    <c:choose>
+        <c:when test="<%= isAdmin %>">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/admin-dashboard.css">
+        </c:when>
+        <c:otherwise>
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/staff.css">
+        </c:otherwise>
+    </c:choose>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/claimdetail.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <jsp:include page="component/staff-header.jsp"/>
+    <c:choose>
+        <c:when test="<%= isAdmin %>">
+            <jsp:include page="component/admin-header.jsp"/>
+        </c:when>
+        <c:otherwise>
+            <jsp:include page="component/staff-header.jsp"/>
+        </c:otherwise>
+    </c:choose>
 
     <div class="container">
-        <jsp:include page="component/staff-sidebar.jsp">
-            <jsp:param name="activePage" value="claims-management"/>
-        </jsp:include>
+        <c:choose>
+            <c:when test="<%= isAdmin %>">
+                <jsp:include page="component/admin-sidebar.jsp">
+                    <jsp:param name="activePage" value="dashboard"/>
+                </jsp:include>
+            </c:when>
+            <c:otherwise>
+                <jsp:include page="component/staff-sidebar.jsp">
+                    <jsp:param name="activePage" value="claims-management"/>
+                </jsp:include>
+            </c:otherwise>
+        </c:choose>
 
         <div class="main-content">
             <div class="content-header">
@@ -26,10 +55,20 @@
                     <p>Thông tin chi tiết về yêu cầu bồi thường</p>
                 </div>
                 <div class="header-right">
-                    <a href="${pageContext.request.contextPath}/ClaimsManagementServlet" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i>
-                        Quay lại danh sách
-                    </a>
+                    <c:choose>
+                        <c:when test="<%= isAdmin %>">
+                            <a href="${pageContext.request.contextPath}/admin/dashboard" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i>
+                                Quay lại Dashboard
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/ClaimsManagementServlet" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i>
+                                Quay lại danh sách
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
 
@@ -56,7 +95,15 @@
                         <div class="header-actions">
                             <div class="status-container">
                                 <span class="status-badge status-${claim.claim_status.toLowerCase()}" id="currentStatusDisplay">
-                                    ${claim.claim_status}
+                                    <c:choose>
+                                        <c:when test="${claim.claim_status == 'pending'}">Chờ xử lý</c:when>
+                                        <c:when test="${claim.claim_status == 'in_progress'}">Đang xử lý</c:when>
+                                        <c:when test="${claim.claim_status == 'need_info'}">Yêu cầu bổ sung</c:when>
+                                        <c:when test="${claim.claim_status == 'approved'}">Đã duyệt</c:when>
+                                        <c:when test="${claim.claim_status == 'paid'}">Đã thanh toán</c:when>
+                                        <c:when test="${claim.claim_status == 'rejected'}">Bị từ chối</c:when>
+                                        <c:otherwise>${claim.claim_status}</c:otherwise>
+                                    </c:choose>
                                 </span>
                             </div>
                         </div>
@@ -93,7 +140,15 @@
                                 <div class="info-row">
                                     <label>Trạng thái:</label>
                                     <span class="status-badge status-${claim.claim_status.toLowerCase()}">
-                                        ${claim.claim_status}
+                                        <c:choose>
+                                            <c:when test="${claim.claim_status == 'pending'}">Chờ xử lý</c:when>
+                                            <c:when test="${claim.claim_status == 'in_progress'}">Đang xử lý</c:when>
+                                            <c:when test="${claim.claim_status == 'need_info'}">Yêu cầu bổ sung</c:when>
+                                            <c:when test="${claim.claim_status == 'approved'}">Đã duyệt</c:when>
+                                            <c:when test="${claim.claim_status == 'paid'}">Đã thanh toán</c:when>
+                                            <c:when test="${claim.claim_status == 'rejected'}">Bị từ chối</c:when>
+                                            <c:otherwise>${claim.claim_status}</c:otherwise>
+                                        </c:choose>
                                     </span>
                                 </div>
                             </div>

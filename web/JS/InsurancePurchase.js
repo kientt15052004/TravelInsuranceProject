@@ -98,7 +98,7 @@ function validateBirthDate(birthDate) {
     selectedDate.setHours(0, 0, 0, 0);
 
     if (selectedDate > today) {
-        alert('Ngày Sinh Không Thể Ở Tương Lai');
+        alert('Ngày sinh không thể là ngày tương lai');
         return false;
     }
 
@@ -179,10 +179,10 @@ function validateDates() {
         const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
         if (diffDays > 180) {
-            alert('Thời Hạn Bảo Hiểm Không Được Vượt Quá 180 Ngày');
+            alert('Thời hạn bảo hiểm không được vượt quá 180 ngày');
             return false;
         } else if (diffDays < 0) {
-            alert('Ngày Kết Thúc Phải Sau Ngày Bắt Đầu');
+            alert('Ngày kết thúc phải sau ngày bắt đầu');
             return false;
         }
     }
@@ -553,7 +553,7 @@ function renderInsuredPersonsList() {
     const container = document.getElementById('insuredPersonsList');
 
     if (state.insuredPersons.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No insured persons yet. Click "Nút "Thêm người được bảo hiểm" để thêm.</p>';
+        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Chưa có người được bảo hiểm. Nhấn nút "Thêm Người Được Bảo Hiểm" để thêm.</p>';
         return;
     }
 
