@@ -245,8 +245,11 @@
                                         <td>
                                             <span class="status-badge status-${claim.claim_status.toLowerCase()}">
                                                 <c:choose>
-                                                    <c:when test="${claim.claim_status == 'pending'}">Đang xử lý</c:when>
+                                                    <c:when test="${claim.claim_status == 'pending'}">Chờ xử lý</c:when>
+                                                    <c:when test="${claim.claim_status == 'in_progress'}">Đang xử lý</c:when>
+                                                    <c:when test="${claim.claim_status == 'need_info'}">Yêu cầu bổ sung</c:when>
                                                     <c:when test="${claim.claim_status == 'approved'}">Đã duyệt</c:when>
+                                                    <c:when test="${claim.claim_status == 'paid'}">Đã thanh toán</c:when>
                                                     <c:when test="${claim.claim_status == 'rejected'}">Từ chối</c:when>
                                                     <c:otherwise>${claim.claim_status}</c:otherwise>
                                                 </c:choose>

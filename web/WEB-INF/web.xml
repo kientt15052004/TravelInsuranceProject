@@ -299,4 +299,14 @@
         <servlet-name>PurchasedInsuranceServlet</servlet-name>
         <url-pattern>/purchased-insurance</url-pattern>
     </servlet-mapping>
+    
+    <!-- Create Claim Servlet (customer) -->
+    <servlet>
+        <servlet-name>CreateClaimServlet</servlet-name>
+        <servlet-class>Controller.CreateClaimServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateClaimServlet</servlet-name>
+        <url-pattern>/create-claim</url-pattern>
+    </servlet-mapping>
 </web-app>

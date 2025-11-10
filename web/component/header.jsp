@@ -14,6 +14,7 @@
 <!-- CSS Files -->
 <link rel="stylesheet" href="./CSS/header.css"/>
 <link rel="stylesheet" href="./CSS/footer.css"/>
+<link rel="stylesheet" href="./CSS/statuses.css"/>
 
 <style>
     /* ===== GLOBAL CSS VARIABLES ===== */
@@ -423,7 +424,7 @@
             <ul class="navbar-nav flex-row justify-content-center">
                 <li class="nav-item mx-3"><a class="nav-link" href="InsuranceList">Gói Bảo Hiểm</a></li>
                 <li class="nav-item mx-3"><a class="nav-link" href="purchased-insurance">Bảo Hiểm Đã Mua</a></li>
-                <li class="nav-item mx-3"><a class="nav-link" href="#">Khiếu Nại</a></li>
+                    <li class="nav-item mx-3"><a class="nav-link" href="my-claims">Khiếu Nại</a></li>
             </ul>
         </div>
 

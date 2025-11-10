@@ -557,4 +557,32 @@ public class ContractDBContext extends DBContext {
         return 0;
     }
 
+    /**
+     * Kiểm tra xem contract có thuộc về customer không
+     */
+    public boolean isContractOwnedByCustomer(int contractId, int customerId) {
+        if (connection == null) {
+            System.err.println("Database connection is null!");
+            return false;
+        }
+        
+        String sql = "SELECT COUNT(*) FROM Contract c " +
+                    "JOIN applications a ON c.application_id = a.id " +
+                    "WHERE c.contract_id = ? AND a.purchaser_id = ?";
+        
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, contractId);
+            ps.setInt(2, customerId);
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return false;
+    }
+
 }
