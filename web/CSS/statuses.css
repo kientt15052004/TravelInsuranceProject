@@ -1,0 +1,35 @@
+/* Global status badge styles used across pages */
+.status-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.status-pending {
+  background: #fff6ec;
+  color: #b46b00;
+}
+.status-in_progress {
+  background: #e8f4ff;
+  color: #0b63a3;
+}
+.status-need_info {
+  background: #fff4f0;
+  color: #b35a00;
+}
+.status-approved {
+  background: #e8fff3;
+  color: #0b7a53;
+}
+.status-paid {
+  background: #e6ffef;
+  color: #006b3a;
+}
+.status-rejected {
+  background: #fff0f5;
+  color: #b30000;
+}
+.status-text {
+  font-weight: 600;
+}
