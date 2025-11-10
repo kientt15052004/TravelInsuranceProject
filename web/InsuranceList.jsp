@@ -1,5 +1,3 @@
-
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -22,18 +20,21 @@
 
             <div class="filter-section">
                 <form action="InsuranceList" method="GET" class="filter-form">
+         <!--1-->   <!-- Search by name -->
 
                     <div class="form-group">
                         <label>Tìm kiếm theo tên</label>
                         <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Nhập tên bảo hiểm...">
                     </div>
 
+         <!--2-->   <!-- Filter by type -->
                     <div class="form-group">
                         <label>Lọc theo loại</label>
                         <select class="form-select" name="searchType">
                             <option value="">Tất cả loại</option>
                             <c:forEach var="t" items="${types}">
                                 <option value="${t}" ${param.searchType == t ? 'selected' : ''}>${t}</option>
+                                <!--Lặp qua tất cả loại bảo hiểm và đánh dấu loại mà người dùng đã chọn-->
                             </c:forEach>
                         </select>
                     </div>
@@ -41,11 +42,13 @@
                     <div class="form-group price-filter">
                         <label>Lọc theo giá (USD)</label>
                         <div class="price-range">
-                            <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Tối thiểu" min="0" step="1">
+         <!--3-->           <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Tối thiểu" min="0" step="1">
                             <span>-</span>
-                            <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Tối đa" min="0" step="1">
+         <!--4-->       <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Tối đa" min="0" step="1">
                         </div>
                     </div>
+         <!-- => Truy vấn đến db -> Trả kết quả mới -->              
+                    <!-- Buttons -->
 
                     <div class="form-buttons">
                         <button type="submit" class="search-btn">Tìm kiếm</button>
@@ -62,6 +65,9 @@
                 </div>
             </div>
 
+            <!-- Insurance Grid -->
+            
+            <!-- Thông báo “không có kết quả” khi nhập vào dữ liệu không có trong infor gói -->
             <div class="insurance-grid">
                 <c:choose>
                     <c:when test="${empty insurances}">
@@ -71,7 +77,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <c:forEach items="${insurances}" var="insurance">
+                        <c:forEach items="${insurances}" var="insurance"> <!-- lặp từng sản phẩm bảo hiểm và hiển thị thông tin:  -->
                             <a href="purchase-insurance?id=${insurance.id}" class="insurance-card">
                                 <div class="insurance-icon">
                                     <img src="${insurance.img.startsWith('http') ? insurance.img : pageContext.request.contextPath.concat('/').concat(insurance.img)}" 
@@ -94,7 +100,7 @@
             </div>
 
             <!-- Pagination -->
-            <c:if test="${totalPages > 1}">
+            <c:if test="${totalPages > 1}"> <!-- Chỉ hiển thị phân trang nếu có hơn 1 trang dữ liệu -->
                 <div class="pagination">
                     <!-- Previous Button -->
                     <c:choose>
@@ -112,7 +118,7 @@
                         <c:choose>
                             <c:when test="${i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1)}">
                                 <a href="InsuranceList?page=${i}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                                   class="page-btn ${i == currentPage ? 'active' : ''}">${i}</a>
+                                   class="page-btn ${i == currentPage ? 'active' : ''}">${i}</a> <!--Tất cả link trang đều gắn lại các tham số-->
                             </c:when>
                             <c:when test="${i == currentPage - 2 || i == currentPage + 2}">
                                 <span class="pagination-ellipsis">...</span>
@@ -124,7 +130,7 @@
                     <c:choose>
                         <c:when test="${currentPage < totalPages}">
                             <a href="InsuranceList?page=${currentPage + 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                               class="page-btn">Sau →</a>
+                               class="page-btn">Sau →</a>  <!--Tất cả link trang đều gắn lại các tham số-->
                         </c:when>
                         <c:otherwise>
                             <span class="page-btn disabled">Sau →</span>

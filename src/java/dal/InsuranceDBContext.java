@@ -152,7 +152,7 @@ public class InsuranceDBContext extends DBContext {
         if (priceMax != null) {
             sql.append(" AND price <= ?");
         }
-
+                //Gán tham số vào PreparedStatement
         try (PreparedStatement stm = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
 
@@ -173,7 +173,8 @@ public class InsuranceDBContext extends DBContext {
             if (priceMax != null) {
                 stm.setDouble(paramIndex++, priceMax);
             }
-
+            
+            //Thực thi truy vấn và đọc kết quả
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 return rs.getInt("total");
