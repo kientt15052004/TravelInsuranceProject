@@ -11,11 +11,6 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="nav-item ${param.activePage == 'home' ? 'active' : ''}">
-                    <a href="${pageContext.request.contextPath}/admin" class="nav-link">
-                        <span>Home Page</span>
-                    </a>
-                </li>
                 <li class="nav-item ${param.activePage == 'user-role-management' ? 'active' : ''}">
                     <a href="${pageContext.request.contextPath}/user-role-management" class="nav-link">
                         <span>Quản lý quyền tài khoản</span>

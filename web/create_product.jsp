@@ -3,6 +3,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="vi">
+    
     <body>
         <div class="content-header">
             <h1>Tạo Sản Phẩm Bảo Hiểm Du Lịch</h1>
