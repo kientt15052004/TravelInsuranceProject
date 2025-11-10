@@ -42,12 +42,9 @@
                             <label for="status">Trạng thái:</label>
                             <select id="status" name="status">
                                 <option value="">Tất cả trạng thái</option>
-                                <option value="pending" ${statusFilter == 'pending' ? 'selected' : ''}>Chờ xử lý</option>
-                                <option value="in_progress" ${statusFilter == 'in_progress' ? 'selected' : ''}>Đang xử lý</option>
-                                <option value="need_info" ${statusFilter == 'need_info' ? 'selected' : ''}>Yêu cầu bổ sung</option>
-                                <option value="approved" ${statusFilter == 'approved' ? 'selected' : ''}>Đã duyệt</option>
-                                <option value="paid" ${statusFilter == 'paid' ? 'selected' : ''}>Đã thanh toán</option>
-                                <option value="rejected" ${statusFilter == 'rejected' ? 'selected' : ''}>Từ chối</option>
+                                <option value="Pending" ${statusFilter == 'Pending' ? 'selected' : ''}>Chờ xử lý</option>
+                                <option value="Approved" ${statusFilter == 'Approved' ? 'selected' : ''}>Đã duyệt</option>
+                                <option value="Rejected" ${statusFilter == 'Rejected' ? 'selected' : ''}>Từ chối</option>
                             </select>
                         </div>
                         
@@ -147,15 +144,7 @@
                                                  </div>
                                              </td>
                                              <td class="status-text status-${claim.claim_status.toLowerCase()}">
-                                                 <c:choose>
-                                                     <c:when test="${claim.claim_status == 'pending'}">Chờ xử lý</c:when>
-                                                     <c:when test="${claim.claim_status == 'in_progress'}">Đang xử lý</c:when>
-                                                     <c:when test="${claim.claim_status == 'need_info'}">Yêu cầu bổ sung</c:when>
-                                                     <c:when test="${claim.claim_status == 'approved'}">Đã duyệt</c:when>
-                                                     <c:when test="${claim.claim_status == 'paid'}">Đã thanh toán</c:when>
-                                                     <c:when test="${claim.claim_status == 'rejected'}">Từ chối</c:when>
-                                                     <c:otherwise>${claim.claim_status}</c:otherwise>
-                                                 </c:choose>
+                                                 ${claim.claim_status}
                                              </td>
                                              <td class="actions-cell">
                                                  <div class="action-buttons">

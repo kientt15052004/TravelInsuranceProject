@@ -21,7 +21,7 @@ import java.util.Date;
 
 @WebServlet(name = "CreateClaimServlet", urlPatterns = {"/create-claim"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 1, // 1MB
-        maxFileSize = 1024 * 1024 * 10,      // 10MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)   // 50MB    
 public class CreateClaimServlet extends HttpServlet {
 
@@ -58,7 +58,7 @@ public class CreateClaimServlet extends HttpServlet {
             String paymentNumber = request.getParameter("paymentNumber");
 
             int contractId = Integer.parseInt(contractIdStr);
-            
+
             // Kiểm tra xem contract có thuộc về customer không
             if (!contractDB.isContractOwnedByCustomer(contractId, user.getId())) {
                 request.setAttribute("error", "Bạn không có quyền tạo khiếu nại cho hợp đồng này");
@@ -77,14 +77,18 @@ public class CreateClaimServlet extends HttpServlet {
             // Handle file uploads: save to webapp/uploads/claims/<userId>/
             String uploadBase = getServletContext().getRealPath("/uploads/claims/");
             File userDir = new File(uploadBase + File.separator + user.getId());
-            if (!userDir.exists()) userDir.mkdirs();
+            if (!userDir.exists()) {
+                userDir.mkdirs();
+            }
 
             StringBuilder imgList = new StringBuilder();
             StringBuilder fileList = new StringBuilder();
 
             for (Part part : request.getParts()) {
                 String name = part.getName();
-                if (part.getSubmittedFileName() == null || part.getSubmittedFileName().isEmpty()) continue;
+                if (part.getSubmittedFileName() == null || part.getSubmittedFileName().isEmpty()) {
+                    continue;
+                }
                 String filename = System.currentTimeMillis() + "_" + part.getSubmittedFileName();
                 File out = new File(userDir, filename);
                 try (InputStream in = part.getInputStream()) {
@@ -92,10 +96,14 @@ public class CreateClaimServlet extends HttpServlet {
                 }
                 String relPath = "uploads/claims/" + user.getId() + "/" + filename;
                 if (name.equals("imageFiles")) {
-                    if (imgList.length() > 0) imgList.append(",");
+                    if (imgList.length() > 0) {
+                        imgList.append(",");
+                    }
                     imgList.append(relPath);
                 } else if (name.equals("documentFiles")) {
-                    if (fileList.length() > 0) fileList.append(",");
+                    if (fileList.length() > 0) {
+                        fileList.append(",");
+                    }
                     fileList.append(relPath);
                 }
             }
