@@ -10,7 +10,7 @@ import java.util.List;
 public class ContractDBContext extends DBContext {
 
     public void insertContract(Contract contract) {
-        String sql = "INSERT INTO contract (current_benefit_id, application_id, description, contract_status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Contract (current_benefit_id, application_id, description, contract_status) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             ps.setInt(1, contract.getCurrent_benefit_id());
@@ -31,7 +31,7 @@ public class ContractDBContext extends DBContext {
     }
 
     public Contract getContractById(int contractId) {
-        String sql = "SELECT * FROM contract WHERE contract_id = ?";
+        String sql = "SELECT * FROM Contract WHERE contract_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setInt(1, contractId);
@@ -54,7 +54,7 @@ public class ContractDBContext extends DBContext {
 
     public List<Contract> getAllContracts() {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT * FROM contract";
+        String sql = "SELECT * FROM Contract";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ResultSet rs = ps.executeQuery();
@@ -75,7 +75,7 @@ public class ContractDBContext extends DBContext {
 
     public List<Contract> searchContracts(String searchTerm) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT * FROM contract WHERE description LIKE ? OR CAST(contract_id AS CHAR) LIKE ? OR CAST(application_id AS CHAR) LIKE ?";
+        String sql = "SELECT * FROM Contract WHERE description LIKE ? OR CAST(contract_id AS CHAR) LIKE ? OR CAST(application_id AS CHAR) LIKE ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             String searchPattern = "%" + searchTerm + "%";
@@ -101,7 +101,7 @@ public class ContractDBContext extends DBContext {
 
     public List<Contract> getContractsByStatus(String status) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT * FROM contract WHERE contract_status = ?";
+        String sql = "SELECT * FROM Contract WHERE contract_status = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
@@ -123,7 +123,7 @@ public class ContractDBContext extends DBContext {
     }
 
     public int getTotalContracts() {
-        String sql = "SELECT COUNT(*) FROM contract";
+        String sql = "SELECT COUNT(*) FROM Contract";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -147,7 +147,7 @@ public class ContractDBContext extends DBContext {
             return getAllContracts();
         }
 
-        StringBuilder sql = new StringBuilder("SELECT c.* FROM contract c ");
+        StringBuilder sql = new StringBuilder("SELECT c.* FROM Contract c ");
         List<String> conditions = new ArrayList<>();
         List<Object> parameters = new ArrayList<>();
 
@@ -234,7 +234,7 @@ public class ContractDBContext extends DBContext {
 
     public List<Contract> getContractsByDateRange(String dateFrom, String dateTo) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT c.* FROM contract c "
+        String sql = "SELECT c.* FROM Contract c "
                 + "LEFT JOIN applications a ON c.application_id = a.id "
                 + "WHERE a.startDate >= ? AND a.endDate <= ? "
                 + "ORDER BY c.contract_id DESC";
@@ -260,7 +260,7 @@ public class ContractDBContext extends DBContext {
 
     public List<Contract> getContractsByProduct(int productId) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT c.* FROM contract c "
+        String sql = "SELECT c.* FROM Contract c "
                 + "LEFT JOIN applications a ON c.application_id = a.id "
                 + "WHERE a.product_id = ? "
                 + "ORDER BY c.contract_id DESC";
@@ -284,7 +284,7 @@ public class ContractDBContext extends DBContext {
     }
 
     public int getContractsByProductCount(int productId) {
-        String sql = "SELECT COUNT(*) FROM contract c "
+        String sql = "SELECT COUNT(*) FROM Contract c "
                 + "LEFT JOIN applications a ON c.application_id = a.id "
                 + "WHERE a.product_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -300,7 +300,7 @@ public class ContractDBContext extends DBContext {
     }
 
     public int getContractsByDateRangeCount(String dateFrom, String dateTo) {
-        String sql = "SELECT COUNT(*) FROM contract c "
+        String sql = "SELECT COUNT(*) FROM Contract c "
                 + "LEFT JOIN applications a ON c.application_id = a.id "
                 + "WHERE a.startDate >= ? AND a.endDate <= ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -317,7 +317,7 @@ public class ContractDBContext extends DBContext {
     }
 
     public int getContractsByStatusCount(String status) {
-        String sql = "SELECT COUNT(*) FROM contract WHERE contract_status = ?";
+        String sql = "SELECT COUNT(*) FROM Contract WHERE contract_status = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
             ResultSet rs = ps.executeQuery();
@@ -331,7 +331,7 @@ public class ContractDBContext extends DBContext {
     }
 
     public int createContract(Contract contract) {
-        String sql = "INSERT INTO contract (current_benefit_id, application_id, description, contract_status) "
+        String sql = "INSERT INTO Contract (current_benefit_id, application_id, description, contract_status) "
                 + "VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -361,7 +361,7 @@ public class ContractDBContext extends DBContext {
 
     public List<Contract> getRecentContracts(int limit) {
         List<Contract> contracts = new ArrayList<>();
-        String sql = "SELECT * FROM contract ORDER BY contract_id DESC LIMIT ?";
+        String sql = "SELECT * FROM Contract ORDER BY contract_id DESC LIMIT ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, limit);
             ResultSet rs = ps.executeQuery();

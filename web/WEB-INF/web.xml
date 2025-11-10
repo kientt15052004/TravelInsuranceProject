@@ -319,4 +319,14 @@
         <servlet-name>MyClaimDetailServlet</servlet-name>
         <url-pattern>/my-claim-detail</url-pattern>
     </servlet-mapping>
+    
+    <!-- Customer Reply Servlet (customer) -->
+    <servlet>
+        <servlet-name>CustomerReplyServlet</servlet-name>
+        <servlet-class>Controller.CustomerReplyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CustomerReplyServlet</servlet-name>
+        <url-pattern>/customer-reply</url-pattern>
+    </servlet-mapping>
 </web-app>

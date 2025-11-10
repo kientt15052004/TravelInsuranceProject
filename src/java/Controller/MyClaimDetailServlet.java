@@ -55,8 +55,11 @@ public class MyClaimDetailServlet extends HttpServlet {
         
         try {
             String claimIdParam = request.getParameter("id");
+            System.out.println("MyClaimDetailServlet - claimIdParam: " + claimIdParam);
+            System.out.println("MyClaimDetailServlet - currentUser: " + currentUser.getId() + ", role: " + currentUser.getRole());
             
             if (claimIdParam == null || claimIdParam.trim().isEmpty()) {
+                System.out.println("MyClaimDetailServlet - Error: ID claim không hợp lệ");
                 request.setAttribute("error", "ID claim không hợp lệ");
                 request.getRequestDispatcher("MyClaims.jsp").forward(request, response);
                 return;
@@ -65,7 +68,9 @@ public class MyClaimDetailServlet extends HttpServlet {
             int claimId;
             try {
                 claimId = Integer.parseInt(claimIdParam);
+                System.out.println("MyClaimDetailServlet - Parsed claimId: " + claimId);
             } catch (NumberFormatException e) {
+                System.out.println("MyClaimDetailServlet - Error: ID claim phải là số");
                 request.setAttribute("error", "ID claim phải là số");
                 request.getRequestDispatcher("MyClaims.jsp").forward(request, response);
                 return;
@@ -73,25 +78,40 @@ public class MyClaimDetailServlet extends HttpServlet {
 
             // Lấy claim
             Claims claim = claimsDB.getClaimById(claimId);
+            System.out.println("MyClaimDetailServlet - Claim retrieved: " + (claim != null ? "Found" : "Not found"));
             
             if (claim == null) {
+                System.out.println("MyClaimDetailServlet - Error: Không tìm thấy claim với ID: " + claimId);
                 request.setAttribute("error", "Không tìm thấy claim với ID: " + claimId);
                 request.getRequestDispatcher("MyClaims.jsp").forward(request, response);
                 return;
             }
             
             // Kiểm tra xem claim có thuộc về customer không
-            if (!claimsDB.isClaimOwnedByCustomer(claimId, currentUser.getId())) {
+            boolean isOwned = claimsDB.isClaimOwnedByCustomer(claimId, currentUser.getId());
+            System.out.println("MyClaimDetailServlet - Ownership check: " + isOwned);
+            
+            if (!isOwned) {
+                System.out.println("MyClaimDetailServlet - Error: Bạn không có quyền xem claim này");
                 request.setAttribute("error", "Bạn không có quyền xem claim này");
                 request.getRequestDispatcher("MyClaims.jsp").forward(request, response);
                 return;
             }
 
             // Lấy thông tin contract
+            System.out.println("MyClaimDetailServlet - Getting contract for contract_id: " + claim.getContract_id());
             Contract contract = contractDB.getContractById(claim.getContract_id());
+            System.out.println("MyClaimDetailServlet - Contract retrieved: " + (contract != null ? "Found" : "Not found"));
 
             // Lấy danh sách phản hồi của staff
+            System.out.println("MyClaimDetailServlet - Getting claim responses for claimId: " + claimId);
             List<ClaimsRes> claimResponses = claimsResDB.getClaimResponsesByClaimId(claimId);
+            System.out.println("MyClaimDetailServlet - Claim responses retrieved: " + (claimResponses != null ? claimResponses.size() : 0) + " responses");
+            
+            // Đảm bảo claimResponses không null
+            if (claimResponses == null) {
+                claimResponses = new java.util.ArrayList<>();
+            }
             
             // Lấy thông báo từ session
             String success = (String) session.getAttribute("success");
@@ -111,10 +131,26 @@ public class MyClaimDetailServlet extends HttpServlet {
             request.setAttribute("contract", contract);
             request.setAttribute("claimResponses", claimResponses);
             
+            System.out.println("MyClaimDetailServlet - All data retrieved successfully. Forwarding to MyClaimDetail.jsp");
+            System.out.println("MyClaimDetailServlet - claim: " + (claim != null ? "not null" : "null"));
+            System.out.println("MyClaimDetailServlet - contract: " + (contract != null ? "not null" : "null"));
+            System.out.println("MyClaimDetailServlet - claimResponses size: " + (claimResponses != null ? claimResponses.size() : 0));
+            
             // Forward đến JSP
-            request.getRequestDispatcher("MyClaimDetail.jsp").forward(request, response);
+            try {
+                System.out.println("MyClaimDetailServlet - Attempting to forward to MyClaimDetail.jsp");
+                request.getRequestDispatcher("MyClaimDetail.jsp").forward(request, response);
+                System.out.println("MyClaimDetailServlet - Forward successful");
+            } catch (Exception forwardException) {
+                System.err.println("MyClaimDetailServlet - Forward exception: " + forwardException.getClass().getName());
+                System.err.println("MyClaimDetailServlet - Forward exception message: " + forwardException.getMessage());
+                forwardException.printStackTrace();
+                throw forwardException; // Re-throw để catch block bên ngoài xử lý
+            }
             
         } catch (Exception e) {
+            System.err.println("MyClaimDetailServlet - EXCEPTION OCCURRED: " + e.getClass().getName());
+            System.err.println("MyClaimDetailServlet - Exception message: " + e.getMessage());
             e.printStackTrace();
             request.setAttribute("error", "Có lỗi xảy ra khi tải chi tiết claim: " + e.getMessage());
             request.getRequestDispatcher("MyClaims.jsp").forward(request, response);

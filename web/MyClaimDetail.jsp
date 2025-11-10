@@ -48,10 +48,22 @@
             </div>
         </c:if>
 
+        <c:if test="${empty claim}">
+            <div class="alert alert-warning" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                <strong>Không tìm thấy khiếu nại!</strong>
+                <p class="mb-0 mt-2">Khiếu nại bạn đang tìm kiếm không tồn tại hoặc bạn không có quyền xem.</p>
+                <a href="my-claims" class="btn btn-outline-primary mt-3">
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Quay lại danh sách khiếu nại
+                </a>
+            </div>
+        </c:if>
+
         <c:if test="${not empty claim}">
             <!-- Claim Information Card -->
             <div class="claim-detail-card border rounded-3 mb-4">
-                <div class="card-header bg-light p-4 border-bottom">
+                <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="mb-0">
                             <i class="bi bi-file-earmark-text me-2"></i>
@@ -227,7 +239,7 @@
             <!-- Contract Information Card -->
             <c:if test="${not empty contract}">
                 <div class="contract-info-card border rounded-3 mb-4">
-                    <div class="card-header bg-light p-4 border-bottom">
+                    <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="mb-0">
                                 <i class="bi bi-file-earmark-contract me-2"></i>
@@ -269,86 +281,116 @@
                 </div>
             </c:if>
 
-            <!-- Claim Responses Section - Chat Style (Read-only) -->
+            <!-- Claim Responses Section - Chat Style -->
             <div class="claim-responses-card border rounded-3">
-                <div class="card-header bg-light p-4 border-bottom">
+                <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="mb-0">
                             <i class="bi bi-chat-dots me-2"></i>
-                            Phản hồi từ nhân viên
+                            Phản hồi và Theo dõi
                         </h2>
                         <div class="responses-count">
-                            <span class="badge bg-primary">${claimResponses.size()} phản hồi</span>
+                            <span class="count-badge">${claimResponses.size()} phản hồi</span>
                         </div>
                     </div>
                 </div>
-                <div class="card-body p-4">
+                <div class="card-body chat-container">
                     <c:choose>
                         <c:when test="${not empty claimResponses}">
-                            <div class="chat-messages-container" style="max-height: 500px; overflow-y: auto;">
+                            <div class="chat-messages-container">
                                 <div class="chat-messages">
                                     <c:forEach var="response" items="${claimResponses}">
-                                        <div class="message-item mb-3">
-                                            <div class="d-flex align-items-start">
-                                                <div class="message-avatar me-3">
-                                                    <i class="bi bi-person-circle fs-3 text-primary"></i>
-                                                </div>
-                                                <div class="message-content flex-grow-1">
-                                                    <div class="message-header mb-2">
-                                                        <span class="message-sender fw-bold me-2">
-                                                            <c:choose>
-                                                                <c:when test="${not empty response.user_fullname}">
-                                                                    ${response.user_fullname}
-                                                                </c:when>
-                                                                <c:when test="${not empty response.user_name}">
-                                                                    ${response.user_name}
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    Nhân viên
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </span>
-                                                        <span class="message-date text-muted small">
-                                                            <fmt:formatDate value="${response.createDate}" pattern="dd/MM/yyyy HH:mm"/>
-                                                        </span>
-                                                    </div>
-                                                    <div class="message-bubble p-3 bg-light rounded">
+                                        <div class="message-item">
+                                            <div class="message-avatar">
+                                                <i class="bi bi-person-circle"></i>
+                                            </div>
+                                            <div class="message-content">
+                                                <div class="message-header">
+                                                    <span class="message-sender">
                                                         <c:choose>
-                                                            <c:when test="${not empty response.description}">
-                                                                ${response.description}
+                                                            <c:when test="${not empty response.user_fullname}">
+                                                                ${response.user_fullname}
+                                                            </c:when>
+                                                            <c:when test="${not empty response.user_name}">
+                                                                ${response.user_name}
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <span class="text-muted">Không có nội dung</span>
+                                                                Nhân viên
                                                             </c:otherwise>
                                                         </c:choose>
-                                                    </div>
-                                                    
-                                                    <!-- Message Attachments -->
-                                                    <c:if test="${not empty response.related_img || not empty response.related_file}">
-                                                        <div class="message-attachments mt-2">
-                                                            <c:if test="${not empty response.related_img}">
-                                                                <div class="attachment-preview mb-2">
-                                                                    <img src="${pageContext.request.contextPath}/${response.related_img}" 
-                                                                         alt="Attachment" 
-                                                                         class="attachment-image img-thumbnail"
-                                                                         style="max-width: 200px; cursor: pointer;"
-                                                                         onclick="openImageModal('${pageContext.request.contextPath}/${response.related_img}')">
-                                                                </div>
-                                                            </c:if>
-                                                            
-                                                            <c:if test="${not empty response.related_file}">
-                                                                <div class="attachment-file">
-                                                                    <a href="${pageContext.request.contextPath}/${response.related_file}" 
-                                                                       class="file-link btn btn-sm btn-outline-secondary" 
-                                                                       target="_blank">
-                                                                        <i class="bi bi-download me-1"></i>
-                                                                        ${response.related_file}
-                                                                    </a>
-                                                                </div>
-                                                            </c:if>
-                                                        </div>
-                                                    </c:if>
+                                                    </span>
+                                                    <span class="message-date">
+                                                        <fmt:formatDate value="${response.createDate}" pattern="dd/MM/yyyy HH:mm"/>
+                                                    </span>
                                                 </div>
+                                                <div class="message-bubble">
+                                                    <c:choose>
+                                                        <c:when test="${not empty response.description}">
+                                                            ${response.description}
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="no-data">Không có nội dung</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                                
+                                                <!-- Message Attachments -->
+                                                <c:if test="${not empty response.related_img || not empty response.related_file}">
+                                                    <div class="message-attachments">
+                                                        <c:if test="${not empty response.related_img}">
+                                                            <div class="attachment-preview">
+                                                                <c:choose>
+                                                                    <c:when test="${fn:startsWith(response.related_img, 'http://') || fn:startsWith(response.related_img, 'https://')}">
+                                                                        <img src="${response.related_img}" 
+                                                                             alt="Attachment" 
+                                                                             class="attachment-image"
+                                                                             onclick="openImageModal('${response.related_img}')">
+                                                                    </c:when>
+                                                                    <c:when test="${fn:startsWith(response.related_img, 'Image/')}">
+                                                                        <img src="${pageContext.request.contextPath}/${response.related_img}" 
+                                                                             alt="Attachment" 
+                                                                             class="attachment-image"
+                                                                             onclick="openImageModal('${pageContext.request.contextPath}/${response.related_img}')">
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <img src="${pageContext.request.contextPath}/Image/${response.related_img}" 
+                                                                             alt="Attachment" 
+                                                                             class="attachment-image"
+                                                                             onclick="openImageModal('${pageContext.request.contextPath}/Image/${response.related_img}')">
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </div>
+                                                        </c:if>
+                                                        
+                                                        <c:if test="${not empty response.related_file}">
+                                                            <div class="attachment-file">
+                                                                <c:choose>
+                                                                    <c:when test="${fn:startsWith(response.related_file, 'http://') || fn:startsWith(response.related_file, 'https://')}">
+                                                                        <a href="${response.related_file}" 
+                                                                           class="file-link" 
+                                                                           target="_blank">
+                                                                            ${response.related_file}
+                                                                        </a>
+                                                                    </c:when>
+                                                                    <c:when test="${fn:startsWith(response.related_file, 'Image/')}">
+                                                                        <a href="${pageContext.request.contextPath}/${response.related_file}" 
+                                                                           class="file-link" 
+                                                                           target="_blank">
+                                                                            ${response.related_file}
+                                                                        </a>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a href="${pageContext.request.contextPath}/Image/${response.related_file}" 
+                                                                           class="file-link" 
+                                                                           target="_blank">
+                                                                            ${response.related_file}
+                                                                        </a>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </div>
+                                                        </c:if>
+                                                    </div>
+                                                </c:if>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -356,13 +398,49 @@
                             </div>
                         </c:when>
                         <c:otherwise>
-                            <div class="chat-empty text-center py-5">
-                                <i class="bi bi-chat-dots fs-1 text-muted d-block mb-3"></i>
-                                <h5 class="text-muted">Chưa có phản hồi nào</h5>
-                                <p class="text-muted">Nhân viên chưa phản hồi về khiếu nại này.</p>
+                            <div class="chat-empty">
+                                <div class="empty-icon">
+                                    <i class="bi bi-chat-dots"></i>
+                                </div>
+                                <h3>Chưa có phản hồi nào</h3>
+                                <p>Claim này chưa có phản hồi hoặc theo dõi nào từ phía nhân viên.</p>
                             </div>
                         </c:otherwise>
                     </c:choose>
+                </div>
+                
+                <!-- Customer Reply Form -->
+                <div class="reply-form-container">
+                    <h3 class="reply-form-title">
+                        <i class="bi bi-reply-fill me-2"></i>
+                        Gửi phản hồi cho nhân viên
+                    </h3>
+                    <p class="reply-form-subtitle text-muted">Bạn có thể cập nhật thông tin hoặc bổ sung tài liệu để hỗ trợ quá trình xử lý khiếu nại.</p>
+                    <form action="customer-reply" method="post" enctype="multipart/form-data" class="reply-form">
+                        <input type="hidden" name="claimId" value="${claim.id}" />
+                        <div class="mb-3">
+                            <label for="replyDescription" class="form-label">Nội dung phản hồi <span class="text-danger">*</span></label>
+                            <textarea id="replyDescription" name="description" class="form-control" rows="4" placeholder="Nhập nội dung bạn muốn gửi đến nhân viên..." required></textarea>
+                        </div>
+                        <div class="row g-3 file-upload-row">
+                            <div class="col-md-6 file-upload-item">
+                                <label for="replyImage" class="form-label">Hình ảnh (tùy chọn)</label>
+                                <input id="replyImage" type="file" name="related_img" class="form-control" accept="image/*" />
+                                <small class="text-muted">Hỗ trợ các định dạng JPG, PNG (tối đa 10MB).</small>
+                            </div>
+                            <div class="col-md-6 file-upload-item">
+                                <label for="replyFile" class="form-label">Tài liệu khác (tùy chọn)</label>
+                                <input id="replyFile" type="file" name="related_file" class="form-control" />
+                                <small class="text-muted">Có thể tải lên PDF, DOCX, XLSX hoặc các định dạng phù hợp (tối đa 10MB).</small>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-4">
+                            <button type="submit" class="btn-send">
+                                <i class="bi bi-send-fill"></i>
+                                Gửi phản hồi
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </c:if>
@@ -392,7 +470,20 @@
         document.addEventListener("DOMContentLoaded", function() {
             const chatMessagesContainer = document.querySelector('.chat-messages-container');
             if (chatMessagesContainer) {
-                chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                // Function to scroll to bottom
+                function scrollToBottomFunc() {
+                    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
+                }
+                
+                const urlParams = new URLSearchParams(window.location.search);
+                const shouldScroll = urlParams.get('scrollToBottom') === 'true';
+
+                if (shouldScroll) {
+                    setTimeout(scrollToBottomFunc, 100);
+                    setTimeout(scrollToBottomFunc, 300);
+                } else {
+                    setTimeout(scrollToBottomFunc, 200);
+                }
             }
         });
 
