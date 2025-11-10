@@ -20,10 +20,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 
-/**
- *
- * @author FPTSHOP
- */
+
 @WebServlet(name = "UserProfileServlet", urlPatterns = {"/UpdateProfileServlet"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
