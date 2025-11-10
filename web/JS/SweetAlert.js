@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (urlParams.get('success') === 'true') {
         Swal.fire({
             icon: 'success',
-            title: 'Purchase successfully!',
-            text: 'Your insurance has been purchased successfully.',
+            title: 'Mua hàng thành công!',
+            text: 'Bảo hiểm của bạn đã được mua thành công.',
             confirmButtonText: 'OK'
         }).then(() => {
             clearParam('success');
