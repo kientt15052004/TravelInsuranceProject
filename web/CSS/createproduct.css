@@ -30,6 +30,7 @@
     background-color: #fff;
     padding: 25px;
     margin-bottom: 25px;
+    border: solid 1px black;
 }
 
 .form-title {
@@ -289,10 +290,8 @@
 
 /* Pricing Formula */
 .pricing-formula {
-    background: #f8f9fa;
     padding: 20px;
     margin-bottom: 20px;
-    border-left: 4px solid #FFD700;
 }
 
 .pricing-formula h4 {
@@ -505,9 +504,7 @@
 
 /* Pricing Result */
 .pricing-result {
-    background: #f8f9fa;
     padding: 20px;
-    border-left: 4px solid #FFD700;
 }
 
 .result-item {
@@ -534,10 +531,8 @@
     color: #666;
 }
 
-/* Form Actions */
 .form-actions {
     padding: 30px;
-    background: #f8f9fa;
     display: flex;
     justify-content: center;
     gap: 20px;

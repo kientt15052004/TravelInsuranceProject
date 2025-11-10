@@ -16,19 +16,16 @@
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="contract-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1>Quản Lý Hợp Đồng Bảo Hiểm</h1>
                 <p>Xem và quản lý tất cả hợp đồng bảo hiểm</p>
             </div>
 
-            <!-- Search and Filter Section -->
             <div class="search-filter-section">
                 <form method="GET" action="${pageContext.request.contextPath}/ContractManagementServlet" class="search-form">
                     <div class="search-row">
@@ -75,7 +72,6 @@
                 </form>
             </div>
 
-            <!-- Contracts Table -->
             <div class="contracts-table-section">
                 <div class="table-header">
                     <div class="table-title-section">
@@ -226,13 +222,11 @@ document.addEventListener("DOMContentLoaded", function () {
         renderTable();
     });
 
-    // ==== SORT ====
     const headers = table.querySelectorAll("th");
-    let sortOrder = 1; // 1 = asc, -1 = desc
+    let sortOrder = 1;
     let sortedColumn = null;
 
     headers.forEach((th, index) => {
-        // Chỉ cho phép sort các cột: ID (0), Ngày bắt đầu (2), Ngày kết thúc (3), Tổng số tiền (5), Trạng thái (6)
         const sortableColumns = [0, 2, 3, 5, 6];
         
         if (sortableColumns.includes(index)) {
@@ -248,15 +242,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     const aText = a.children[index].textContent.trim();
                     const bText = b.children[index].textContent.trim();
 
-                    // Xử lý sort cho từng loại cột
                     switch(index) {
-                        case 0: // ID Hợp đồng
+                        case 0:
                             const aId = parseInt(aText.replace('#', ''));
                             const bId = parseInt(bText.replace('#', ''));
                             return (aId - bId) * sortOrder;
                         
-                        case 2: // Ngày bắt đầu
-                        case 3: // Ngày kết thúc
+                        case 2:
+                        case 3:
                             const aDate = parseDate(aText);
                             const bDate = parseDate(bText);
                             if (aDate && bDate) {
@@ -264,12 +257,12 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                             return aText.localeCompare(bText, "vi") * sortOrder;
                         
-                        case 5: // Tổng số tiền
+                        case 5:
                             const aPrice = parsePrice(aText);
                             const bPrice = parsePrice(bText);
                             return (aPrice - bPrice) * sortOrder;
                         
-                        case 6: // Trạng thái
+                        case 6:
                             return aText.localeCompare(bText, "vi") * sortOrder;
                         
                         default:
@@ -281,18 +274,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 updateSortIcons(th, headers);
             });
         } else {
-            // Các cột không sort được
             th.style.cursor = "default";
         }
     });
 
-    // Helper functions for parsing different data types
     function parseDate(dateStr) {
-        // Format: dd/MM/yyyy
         const parts = dateStr.split('/');
         if (parts.length === 3) {
             const day = parseInt(parts[0]);
-            const month = parseInt(parts[1]) - 1; // Month is 0-indexed
+            const month = parseInt(parts[1]) - 1;
             const year = parseInt(parts[2]);
             return new Date(year, month, day);
         }
@@ -300,12 +290,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function parsePrice(priceStr) {
-        // Remove currency symbols (₫) and spaces
         let cleanPrice = priceStr.replace(/[₫\s]/g, '');
         
-        // Handle Vietnamese number format: 1.234.567,89
-        // Replace dots (thousands separator) with empty string
-        // Replace comma (decimal separator) with dot
         cleanPrice = cleanPrice.replace(/\./g, '').replace(',', '.');
         
         return parseFloat(cleanPrice) || 0;

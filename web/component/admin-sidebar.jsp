@@ -6,6 +6,11 @@
     <div class="sidebar">
         <nav class="sidebar-nav">
             <ul>
+                <li class="nav-item ${param.activePage == 'dashboard' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/admin/dashboard" class="nav-link">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
                 <li class="nav-item ${param.activePage == 'home' ? 'active' : ''}">
                     <a href="${pageContext.request.contextPath}/admin" class="nav-link">
                         <span>Home Page</span>
