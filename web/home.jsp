@@ -9,12 +9,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>InsureTravel - Bảo Hiểm Du Lịch</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <link rel="stylesheet" href="./CSS/styleindex.css"/>
+        <!-- CSS được load trong header.jsp -->
     </head>
     <body>
         <jsp:include page="./component/header.jsp"></jsp:include>
+        <!-- CSS riêng cho trang này -->
+        <link rel="stylesheet" href="./CSS/styleindex.css"/>
 
 
 
@@ -83,6 +83,9 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
                             <h4>Bảo hiểm tức thì</h4>
                             <p>Nhận bảo hiểm du lịch ngay lập tức với quy trình đăng ký đơn giản</p>
                         </div>

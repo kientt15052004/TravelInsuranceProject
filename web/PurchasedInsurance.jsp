@@ -7,11 +7,13 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Bảo Hiểm Đã Mua</title>
+        <!-- CSS được load trong header.jsp -->
     </head>
     <body>               
         <jsp:include page="./component/header.jsp"></jsp:include>
         
         <!-- CSS riêng cho trang này - load sau header để override -->
+        <link rel="stylesheet" href="./CSS/styleindex.css"/>
         <link rel="stylesheet" href="./CSS/PurchasedInsurance.css"/>
 
             <main class="container my-4 my-lg-5">
@@ -350,6 +352,8 @@
                             });
                         }
         </script>
+        
+        
 <!-- Footer -->
 <jsp:include page="./component/footer.jsp"></jsp:include>
     </body>

@@ -181,6 +181,141 @@
         border: none;
     }
     
+    /* Modal CSS thuần - không cần JavaScript */
+    .modal-css {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1055;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-css:target {
+        display: flex;
+    }
+    
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .modal-container {
+        position: relative;
+        z-index: 2;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: modalFadeIn 0.3s ease;
+    }
+    
+    .modal-container.modal-lg {
+        width: 800px;
+    }
+    
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .modal-content-css {
+        padding: 0;
+    }
+    
+    .modal-header-css {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .modal-title-css {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    
+    .modal-close-css {
+        font-size: 1.5rem;
+        line-height: 1;
+        color: #666;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s;
+    }
+    
+    .modal-close-css:hover {
+        color: #000;
+    }
+    
+    .modal-body-css {
+        padding: 1.25rem;
+    }
+    
+    .modal-footer-css {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .modal-footer-css .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .modal-footer-css .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border-color: #6c757d;
+    }
+    
+    .modal-footer-css .btn-secondary:hover {
+        background: #5a6268;
+    }
+    
+    .modal-footer-css .btn-primary {
+        background: #ff9800;
+        color: white;
+        border-color: #ff9800;
+    }
+    
+    .modal-footer-css .btn-primary:hover {
+        background: #e68900;
+    }
 
     /* ===== COMMON BUTTON STYLES ===== */
     .btn-brand{
@@ -308,8 +443,8 @@
                     <i class="fas fa-chevron-down"></i>
                 </label>
                 <ul class="dropdown-menu-css">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Hồ Sơ</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi Mật Khẩu</a></li>
+                    <li><a class="dropdown-item" href="#profileModal">Hồ Sơ</a></li>
+                    <li><a class="dropdown-item" href="#changePasswordModal">Đổi Mật Khẩu</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="logout">Đăng Xuất</a></li>
                 </ul>
@@ -321,16 +456,17 @@
     </div>  
 </nav>
 
-<!-- Profile Modal -->
-<div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> 
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="profileModalLabel">Hồ Sơ</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Profile Modal - CSS thuần không cần JS -->
+<div class="modal-css" id="profileModal">
+    <a href="#" class="modal-overlay"></a>
+    <div class="modal-container modal-lg">
+        <div class="modal-content-css">
+            <div class="modal-header-css">
+                <h5 class="modal-title-css">Hồ Sơ</h5>
+                <a href="#" class="modal-close-css">&times;</a>
             </div>
             <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data">
-                <div class="modal-body">
+                <div class="modal-body-css">
                     <div class="row g-3">
                         <!-- Avatar -->
                         <div class="col-md-3 text-center">
@@ -388,8 +524,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <div class="modal-footer-css">
+                    <a href="#" class="btn btn-secondary">Đóng</a>
                     <button type="submit" class="btn btn-primary">Cập Nhật Hồ Sơ</button>
                 </div>
             </form>
@@ -397,15 +533,16 @@
     </div>
 </div>
 
-<!-- Change Password Modal -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalLabel">Đổi Mật Khẩu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Change Password Modal - CSS thuần không cần JS -->
+<div class="modal-css" id="changePasswordModal">
+    <a href="#" class="modal-overlay"></a>
+    <div class="modal-container">
+        <div class="modal-content-css">
+            <div class="modal-header-css">
+                <h5 class="modal-title-css">Đổi Mật Khẩu</h5>
+                <a href="#" class="modal-close-css">&times;</a>
             </div>
-            <div class="modal-body">
+            <div class="modal-body-css">
                 <form action="ChangePasswordServlet" method="post">
                     <div class="mb-3">
                         <label class="form-label">Mật Khẩu Hiện Tại</label>
@@ -426,7 +563,7 @@
     </div>
 </div>
 
-<!-- Script để preview ảnh và xử lý modal -->
+<!-- Script để preview ảnh (chỉ cần cho upload ảnh) -->
 <script>
     function previewImage(input, previewId) {
         if (input.files && input.files[0]) {
