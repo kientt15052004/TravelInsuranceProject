@@ -11,7 +11,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 mb-4">
-                    <h5><i class="fas fa-shield-alt"></i> InsureTravel</h5>
+                    <h5>InsureTravel</h5>
                     <p>Nhà cung cấp bảo hiểm du lịch đáng tin cậy của bạn từ năm 2010</p>
                     <div class="social-icons">
                         <a href="#"><i class="fab fa-facebook"></i></a>

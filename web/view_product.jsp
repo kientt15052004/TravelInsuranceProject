@@ -17,19 +17,16 @@
     <jsp:include page="component/admin-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/admin-sidebar.jsp">
             <jsp:param name="activePage" value="view-products"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <h1>Quản Lý Sản Phẩm</h1>
                 <p>Xem và quản lý các sản phẩm bảo hiểm</p>
             </div>
 
-            <!-- Search and Filter Section -->
             <div class="search-filter-section">
                 <form method="GET" action="${pageContext.request.contextPath}/view_product" class="search-form">
                     <div class="search-row">
@@ -82,7 +79,6 @@
                 </form>
             </div>
 
-            <!-- Products Table -->
             <div class="products-table-section">
                 <div class="table-header">
                     <div class="table-title-section">
@@ -216,7 +212,6 @@
 
     <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // User dropdown functionality
         const userDropdown = document.querySelector('.user-dropdown');
         if (userDropdown) {
             userDropdown.addEventListener('click', function(e) {
@@ -224,7 +219,6 @@
                 userDropdown.classList.toggle('active');
             });
             
-            // Close dropdown when clicking outside
             document.addEventListener('click', function(e) {
                 if (!userDropdown.contains(e.target)) {
                     userDropdown.classList.remove('active');
@@ -232,7 +226,6 @@
             });
         }
 
-        // Delete confirmation
         document.querySelectorAll(".delete-btn").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
@@ -243,7 +236,6 @@
             });
         });
 
-        // Table pagination and sorting
         const table = document.querySelector(".products-table");
         if (!table) return;
 
@@ -263,8 +255,6 @@
             rows.slice(start, end).forEach(row => tbody.appendChild(row));
             renderPagination();
         }
-         
-        //Tạo nút phân trang
         function renderPagination() {
             const totalPages = Math.ceil(rows.length / pageSize);
             paginationContainer.innerHTML = "";
@@ -288,13 +278,12 @@
             renderTable();
         });
 
-        // Sorting functionality
         const headers = table.querySelectorAll("th");
         let sortOrder = 1;
         let sortedColumn = null;
 
         headers.forEach((th, index) => {
-            const sortableColumns = [0, 1, 2, 3, 4, 5]; // ID, Name, Type, Price, Status, Package
+            const sortableColumns = [0, 1, 2, 3, 4, 5];
             
             if (sortableColumns.includes(index)) {
                 th.style.cursor = "pointer";
@@ -310,18 +299,18 @@
                         const bText = b.children[index].textContent.trim();
 
                         switch(index) {
-                            case 0: // ID
+                            case 0:
                                 const aId = parseInt(aText.replace('#', ''));
                                 const bId = parseInt(bText.replace('#', ''));
                                 return (aId - bId) * sortOrder;
                             
-                            case 1: // Name
-                            case 2: // Type
-                            case 4: // Status
-                            case 5: // Package
+                            case 1:
+                            case 2:
+                            case 4:
+                            case 5:
                                 return aText.localeCompare(bText, "vi") * sortOrder;
                             
-                            case 3: // Price
+                            case 3:
                                 const aPrice = parsePrice(aText);
                                 const bPrice = parsePrice(bText);
                                 return (aPrice - bPrice) * sortOrder;

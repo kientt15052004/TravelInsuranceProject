@@ -97,7 +97,6 @@ body {
     padding: 8px 16px;
     background: #f8f9fa;
     border: 1px solid #e0e0e0;
-    border-radius: 25px;
     color: #333;
     font-weight: 500;
     font-size: 14px;
@@ -114,7 +113,6 @@ body {
     background: white;
     width: 28px;
     height: 28px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,8 +138,6 @@ body {
 /* Dropdown Menu */
 .navbar-right .dropdown-menu {
     min-width: 200px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border: 1px solid #e0e0e0;
     margin-top: 8px;
     padding: 8px 0;
@@ -170,7 +166,6 @@ body {
     height: 150px;
     object-fit: cover;
     border: 2px solid #e0e0e0;
-    border-radius: 8px;
     background-color: #f8f9fa;
 }
 

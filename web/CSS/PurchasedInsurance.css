@@ -35,7 +35,6 @@ main {
 }
 
 .toolbar .form-control, .toolbar .form-select{
-    border-radius:10px;
 }
 
 /* Container đã được định nghĩa trong header.jsp */
@@ -98,7 +97,6 @@ main {
 .badge-status {
     font-weight:600;
     padding:6px 10px;
-    border-radius:999px;
 }
 
 .badge-pending {
@@ -126,7 +124,6 @@ main {
     justify-content:center;
     width:36px;
     height:36px;
-    border-radius:10px;
     color:#111;
     border:1px solid #e5e7eb;
     background:#fff;
@@ -150,7 +147,6 @@ main {
         display:block;
         margin-bottom:12px;
         border:1px solid #e5e7eb;
-        border-radius:14px;
         padding:12px;
     }
     table tbody td{

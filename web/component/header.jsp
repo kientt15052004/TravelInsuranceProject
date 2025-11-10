@@ -68,7 +68,6 @@
         color: #000;
         font-weight: 600;
         padding: 0.5rem 1.5rem;
-        border-radius: 0.5rem;
         transition: all 0.3s;
     }
     
@@ -86,6 +85,238 @@
     .dropdown-toggle:hover {
         color: #ff9800 !important;
     }
+    
+    /* Dropdown CSS thuần - không cần JavaScript */
+    .navbar-right .dropdown-css {
+        position: relative;
+    }
+    
+    .navbar-right .dropdown-checkbox {
+        display: none;
+    }
+    
+    .navbar-right .dropdown-toggle-css {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        color: #333;
+        font-weight: 500;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    
+    .navbar-right .dropdown-toggle-css:hover {
+        background: #e9ecef;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-toggle-css i {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked + .dropdown-toggle-css {
+        background: #e9ecef;
+        border-color: #ff9800;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked + .dropdown-toggle-css i {
+        transform: rotate(180deg);
+    }
+    
+    .navbar-right .dropdown-menu-css {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        left: auto;
+        min-width: 200px;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        margin: 0;
+        list-style: none;
+        z-index: 1050;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .navbar-right .dropdown-checkbox:checked ~ .dropdown-menu-css {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-item {
+        display: block;
+        padding: 10px 16px;
+        color: #333;
+        text-decoration: none;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-item:hover {
+        background-color: #f8f9fa;
+        color: #ff9800;
+    }
+    
+    .navbar-right .dropdown-menu-css .dropdown-divider {
+        height: 1px;
+        margin: 8px 0;
+        background: #e0e0e0;
+        border: none;
+    }
+    
+    /* Modal CSS thuần - không cần JavaScript */
+    .modal-css {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1055;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-css:target {
+        display: flex;
+    }
+    
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .modal-container {
+        position: relative;
+        z-index: 2;
+        max-width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        animation: modalFadeIn 0.3s ease;
+    }
+    
+    .modal-container.modal-lg {
+        width: 800px;
+    }
+    
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    .modal-content-css {
+        padding: 0;
+    }
+    
+    .modal-header-css {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .modal-title-css {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+    
+    .modal-close-css {
+        font-size: 1.5rem;
+        line-height: 1;
+        color: #666;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
+        background: none;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s;
+    }
+    
+    .modal-close-css:hover {
+        color: #000;
+    }
+    
+    .modal-body-css {
+        padding: 1.25rem;
+    }
+    
+    .modal-footer-css {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 1rem 1.25rem;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .modal-footer-css .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .modal-footer-css .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border-color: #6c757d;
+    }
+    
+    .modal-footer-css .btn-secondary:hover {
+        background: #5a6268;
+    }
+    
+    .modal-footer-css .btn-primary {
+        background: #ff9800;
+        color: white;
+        border-color: #ff9800;
+    }
+    
+    .modal-footer-css .btn-primary:hover {
+        background: #e68900;
+    }
 
     /* ===== COMMON BUTTON STYLES ===== */
     .btn-brand{
@@ -93,7 +324,6 @@
         border-color: var(--brand-yellow);
         color:#000;
         font-weight:600;
-        border-radius: 0.5rem;
         transition: all 0.3s;
     }
     .btn-brand:hover{
@@ -118,12 +348,8 @@
     }
 
     /* ===== COMMON FORM CONTROLS ===== */
-    .form-control, .form-select{
-        border-radius:10px;
-    }
     .form-control:focus, .form-select:focus{
         border-color: var(--brand-yellow);
-        box-shadow: 0 0 0 0.2rem rgba(255, 213, 77, 0.25);
     }
 
     /* ===== COMMON PAGINATION ===== */
@@ -181,13 +407,10 @@
     }
 </style>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <nav class="navbar navbar-expand-lg shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="navbar-left d-flex align-items-center">
             <a class="navbar-brand" href="home">
-                <i class="fas fa-shield-alt"></i>
                 InsureTravel
             </a>
         </div>
@@ -214,13 +437,15 @@
             <%
                 } else {
             %>
-            <div class="dropdown">
-                <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="dropdown-css">
+                <input type="checkbox" id="userDropdownToggle" class="dropdown-checkbox">
+                <label for="userDropdownToggle" class="dropdown-toggle-css">
                     <span><%= user.getFullname() %></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">Hồ Sơ</a></li>
-                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Đổi Mật Khẩu</a></li>
+                    <i class="fas fa-chevron-down"></i>
+                </label>
+                <ul class="dropdown-menu-css">
+                    <li><a class="dropdown-item" href="#profileModal">Hồ Sơ</a></li>
+                    <li><a class="dropdown-item" href="#changePasswordModal">Đổi Mật Khẩu</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="logout">Đăng Xuất</a></li>
                 </ul>
@@ -231,3 +456,151 @@
         </div>
     </div>  
 </nav>
+
+<!-- Profile Modal - CSS thuần không cần JS -->
+<div class="modal-css" id="profileModal">
+    <a href="#" class="modal-overlay"></a>
+    <div class="modal-container modal-lg">
+        <div class="modal-content-css">
+            <div class="modal-header-css">
+                <h5 class="modal-title-css">Hồ Sơ</h5>
+                <a href="#" class="modal-close-css">&times;</a>
+            </div>
+            <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data">
+                <div class="modal-body-css">
+                    <div class="row g-3">
+                        <!-- Avatar -->
+                        <div class="col-md-3 text-center">
+                            <label class="form-label fw-semibold d-block mb-2">Ảnh đại diện</label>
+                            <c:if test="${not empty sessionScope.user.avatar}">
+                                <img id="avatarPreview" src="<c:out value='${sessionScope.user.avatar}' />" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2">
+                            </c:if>
+                            <c:if test="${empty sessionScope.user.avatar}">
+                                <img id="avatarPreview" src="" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2" style="display: none;">
+                            </c:if>
+                            <input type="file" name="avatar" class="form-control mt-1" accept="image/*" onchange="previewImage(this, 'avatarPreview')">
+                        </div>
+
+                        <div class="col-md-9">
+                            <input type="hidden" name="id" value="<c:out value='${sessionScope.user.id}' />">
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Họ và Tên:</label>
+                                <input type="text" class="form-control" name="fullname" value="<c:out value='${sessionScope.user.fullname}' />" required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Email:</label>
+                                <input type="email" class="form-control" name="mail" value="<c:out value='${sessionScope.user.mail}' />" required>
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Ngày Sinh:</label>
+                                <input type="date" class="form-control" name="dob" value="<c:out value='${sessionScope.user.dob}' />">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Địa Chỉ:</label>
+                                <input type="text" class="form-control" name="address" value="<c:out value='${sessionScope.user.address}' />">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Số Điện Thoại:</label>
+                                <input type="text" class="form-control" name="phone" value="<c:out value='${sessionScope.user.phone}' />">
+                            </div>
+
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Số CCCD:</label>
+                                <input type="text" class="form-control" name="cccd" value="<c:out value='${sessionScope.user.cccd}' />">
+                            </div>
+
+                            <!-- CCCD Image -->
+                            <div class="mb-2">
+                                <label class="form-label fw-semibold">Ảnh CCCD:</label>
+                                <c:if test="${not empty sessionScope.user.cccd_img}">
+                                    <img id="cccdPreview" src="<c:out value='${sessionScope.user.cccd_img}' />" alt="Ảnh CCCD" class="img-fluid mt-1 mb-1">
+                                </c:if>
+                                <input type="file" name="cccd_img" class="form-control mt-1" onchange="previewImage(this, 'cccdPreview')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer-css">
+                    <a href="#" class="btn btn-secondary">Đóng</a>
+                    <button type="submit" class="btn btn-primary">Cập Nhật Hồ Sơ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal - CSS thuần không cần JS -->
+<div class="modal-css" id="changePasswordModal">
+    <a href="#" class="modal-overlay"></a>
+    <div class="modal-container">
+        <div class="modal-content-css">
+            <div class="modal-header-css">
+                <h5 class="modal-title-css">Đổi Mật Khẩu</h5>
+                <a href="#" class="modal-close-css">&times;</a>
+            </div>
+            <div class="modal-body-css">
+                <form action="ChangePasswordServlet" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Mật Khẩu Hiện Tại</label>
+                        <input type="password" class="form-control" name="currentPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mật Khẩu Mới</label>
+                        <input type="password" class="form-control" name="newPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Xác Nhận Mật Khẩu Mới</label>
+                        <input type="password" class="form-control" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script để preview ảnh (chỉ cần cho upload ảnh) -->
+<script>
+    function previewImage(input, previewId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                if (preview) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+
+<!-- Đóng dropdown khi click bên ngoài (CSS thuần) -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownCheckbox = document.querySelector('#userDropdownToggle');
+        if (dropdownCheckbox) {
+            // Đóng dropdown khi click bên ngoài
+            document.addEventListener('click', function(e) {
+                const dropdown = document.querySelector('.dropdown-css');
+                if (dropdown && !dropdown.contains(e.target)) {
+                    dropdownCheckbox.checked = false;
+                }
+            });
+            
+            // Đóng dropdown khi mở modal
+            const modalLinks = document.querySelectorAll('[data-bs-toggle="modal"]');
+            modalLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    dropdownCheckbox.checked = false;
+                });
+            });
+        }
+    });
+</script>

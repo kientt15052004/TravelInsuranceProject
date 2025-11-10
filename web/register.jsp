@@ -16,28 +16,23 @@
                 max-width: 480px;
                 margin: 50px auto;
                 background: #fff;
-                border-radius: 12px;
-                box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12);
                 padding: 35px 28px 22px 28px;
                 transition: all 0.3s ease;
             }
             .register-container:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 12px 36px rgba(0,0,0,0.2);
                 background: #fffef5;
             }
             .register-icon {
                 width: 48px;
                 height: 48px;
                 background: #ffd600;
-                border-radius: 50%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 margin: 0 auto 16px auto;
                 font-size: 25px;
                 color: #fff;
-                box-shadow: 0 2px 8px rgba(31, 38, 135, 0.08);
             }
             .register-title {
                 font-size: 22px;
@@ -63,7 +58,6 @@
                 background: #e6b800;
                 color: #fff;
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
             .social-divider {
                 text-align: center;

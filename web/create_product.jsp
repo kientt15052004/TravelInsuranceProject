@@ -15,7 +15,6 @@
               <div class="alert alert-success">
                   <div class="alert-content">
                       <div class="alert-icon">
-                          <i class="fas fa-check-circle"></i>
                       </div>
                       <div class="alert-text">
                           <h4>${notification}</h4>
@@ -32,7 +31,6 @@
                           </div>
                       </div>
                       <button type="button" onclick="this.parentElement.parentElement.style.display = 'none'">
-                          <i class="fas fa-times"></i>
                       </button>
                   </div>
               </div>
@@ -41,10 +39,9 @@
         <div class="form-container">
             <form action="${pageContext.request.contextPath}/create_product" enctype="multipart/form-data" method="POST">
 
-                <!-- Basic Information Section -->
                 <div class="form-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-info-circle"></i> Thông tin cơ bản</h2>
+                        <h2>Thông tin cơ bản</h2>
                     </div>
                     <div class="form-row-custom">
                         <div class="form-group col-name">
@@ -56,11 +53,11 @@
                             <div class="radio-group-horizontal">
                                 <div class="radio-item">
                                     <input type="radio" name="choose" id="option1" value="domestic" checked>
-                                    <label for="option1"><i class="fas fa-home"></i> Trong nước</label>
+                                    <label for="option1">Trong nước</label>
                                 </div>
                                 <div class="radio-item">
                                     <input type="radio" name="choose" id="option2" value="international">
-                                    <label for="option2"><i class="fas fa-globe"></i> Ngoài nước</label>
+                                    <label for="option2">Ngoài nước</label>
                                 </div>
                             </div>
                         </div>
@@ -90,10 +87,9 @@
                     </div>
                 </div>
 
-                <!-- Domestic Benefits Section -->
                 <div class="form-section domestic-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-shield-alt"></i> Cấu hình quyền lợi bảo hiểm trong nước</h2>
+                        <h2>Cấu hình quyền lợi bảo hiểm trong nước</h2>
                     </div>
                     <div class="form-row-three">
                         <div class="form-group col-4">
@@ -125,12 +121,10 @@
                     </div>
                 </div>
 
-                <!-- International Benefits Section -->
                 <div class="form-section international-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-globe-americas"></i> Cấu hình quyền lợi bảo hiểm ngoài nước</h2>
+                        <h2>Cấu hình quyền lợi bảo hiểm ngoài nước</h2>
                     </div>
-                    <!-- Row 1: 4 columns -->
                     <div class="form-row-four">
                         <div class="form-group col-3">
                             <label for="medical_cost">Chi phí y tế <span class="required">*</span></label>
@@ -150,7 +144,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: 4 columns -->
                     <div class="form-row-four">
                         <div class="form-group col-3">
                             <label for="hospital_visit">Thăm Người được bảo hiểm tại bệnh viện <span class="required">*</span></label>
@@ -170,7 +163,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 3: 4 columns -->
                     <div class="form-row-four">
                         <div class="form-group col-3">
                             <label for="accident_death_injury">Tử vong và thương tật do tai nạn <span class="required">*</span></label>
@@ -190,7 +182,6 @@
                         </div>
                     </div>
 
-                    <!-- Row 4: 2 columns (last 2 items) -->
                     <div class="form-row">
                         <div class="form-group col-6">
                             <label for="travel_documents">Giấy tờ đi đường <span class="required">*</span></label>
@@ -203,10 +194,9 @@
                     </div>
                 </div>
 
-                <!-- Domestic Pricing Section -->
                 <div class="form-section domestic-pricing-section">
                     <div class="section-header">
-                        <h2><i class="fas fa-calculator"></i> Tính phí</h2>
+                        <h2>Tính phí</h2>
                     </div>
                     <div class="pricing-formula">
                         <h4>Công thức tính phí</h4>
@@ -235,7 +225,6 @@
                     </div>
                 </div>
 
-                <!-- International Pricing Section -->
                 <div class="form-section international-pricing-section">
                     <div class="section-header">
                         <h2><i class="fas fa-calculator"></i> Tính phí</h2>
@@ -308,20 +297,16 @@
                         </div>
                     </div>                 
                 </div>
-                <!-- Action Buttons -->
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-plus"></i>
                         Tạo sản phẩm
                     </button>
                     <button type="button" class="btn btn-secondary btn-calculate">
-                        <i class="fas fa-calculator"></i>
                         Tính phí
                     </button>
                 </div>
 
-                <!-- Hidden inputs for form submission -->
-                <input type="hidden" name="price" class="price"> <!-- input ẩn chứa giá trị gốc của sản phẩm-->
+                <input type="hidden" name="price" class="price">
                 <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate">
                 <input type="hidden" name="international_rate_1_7" class="international_rate_1_7">
                 <input type="hidden" name="international_rate_8_30" class="international_rate_8_30">
@@ -331,25 +316,22 @@
 
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    // --- 1. Khai báo DOM Elements ---
                     const domesticOption = document.querySelector('input[value="domestic"]');
                     const internationalOption = document.querySelector('input[value="international"]');
                     const domesticSection = document.querySelector('.domestic-section');
                     const internationalSection = document.querySelector('.international-section');
-                    const domesticPricingSection = document.querySelector('.domestic-pricing-section'); //Phần công thức và tính phí trong nước
-                    const internationalPricingSection = document.querySelector('.international-pricing-section'); //Phần công thức và tính phí ngoài nước
-                    const calculateBtn = document.querySelector('.btn-calculate'); //Nút tính phí
+                    const domesticPricingSection = document.querySelector('.domestic-pricing-section');
+                    const internationalPricingSection = document.querySelector('.international-pricing-section');
+                    const calculateBtn = document.querySelector('.btn-calculate');
                     const form = document.querySelector('form');
-                    const priceField = document.querySelector('.price'); // Hidden input cho giá sản phẩm cuối cùng (Base Price)
+                    const priceField = document.querySelector('.price');
 
-                    // --- 2. Logic Hiển Thị Khu Vực ---
                     function toggleSections() {
                         if (domesticOption.checked) {
                             domesticSection.style.display = 'block';
                             internationalSection.style.display = 'none';
                             domesticPricingSection.style.display = 'block';
                             internationalPricingSection.style.display = 'none';
-                            // Reset giá International khi chuyển sang Domestic
                             if (priceField)
                                 priceField.value = '0';
                         } else {
@@ -357,7 +339,6 @@
                             internationalSection.style.display = 'block';
                             domesticPricingSection.style.display = 'none';
                             internationalPricingSection.style.display = 'block';
-                            // Reset giá Domestic khi chuyển sang International
                             if (priceField)
                                 priceField.value = '0';
                         }
@@ -366,10 +347,8 @@
                     domesticOption.addEventListener('change', toggleSections);
                     internationalOption.addEventListener('change', toggleSections);
 
-                    // Khởi tạo trạng thái
                     toggleSections();
 
-                    // --- 3. Logic Tính Phí ---
                     if (calculateBtn) {
                         calculateBtn.addEventListener('click', function (e) {
                             e.preventDefault();
@@ -377,7 +356,7 @@
                         });
                     }
 
-                    function calculateFee() { // Kiểm tra bên chọn trong nước nước và ngoài ngoài để tính phí phù hợp.
+                    function calculateFee() {
                         if (domesticOption && domesticOption.checked) {
                             calculateDomesticFee();
                         } else if (internationalOption && internationalOption.checked) {
@@ -387,7 +366,6 @@
                         }
                     }
 
-                    // Tính phí trong nước
                     function calculateDomesticFee() {
                         const coefficient = domesticPricingSection.querySelector('.coefficient-input');
                         const days = domesticPricingSection.querySelector('input[placeholder="Nhập vào số ngày...."]');
@@ -411,8 +389,7 @@
 
                             const value20 = Number(days.value) || 1;
                             const value21 = Number(people.value) || 1;
-                            const coefficient_value_1 = Number(coefficient.value) || 0; 
-                            //Kiểm tra xem đã nhập quyền lợi chưa
+                            const coefficient_value_1 = Number(coefficient.value) || 0;
                             const hasValidBenefit = value1 > 0 || value2 > 0 || value3 > 0 || value4 > 0 || value5 > 0 || value6 > 0;
 
                             let actualCoefficient = coefficient_value_1;
@@ -425,12 +402,11 @@
                                             (coefficient_value_1 >= 1 && coefficient_value_1 <= 10))) {
 
                                 let max = Math.max(value1, value2, value3, value4, value5, value6);
-                                const base_price = actualCoefficient * max; //Giá trị gốc
+                                const base_price = actualCoefficient * max;
                                 const fee_preview = base_price * value20 * value21;
 
                                 result.textContent = fee_preview.toLocaleString('vi-VN');
 
-                                // Gán giá trị BASE PRICE vào trường ẩn 'price' (Domestic)
                                 if (priceField)
                                     priceField.value = base_price.toFixed(2);
 
@@ -441,17 +417,15 @@
                                 alert('Vui lòng nhập ít nhất một quyền lợi bảo hiểm và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10%!');
                                 result.textContent = '0';
                                 if (priceField)
-                                    priceField.value = '0'; // Reset giá trị
+                                    priceField.value = '0';
                             }
                         } else {
                             alert('Vui lòng nhập đầy đủ thông tin: hệ số, số ngày, số người');
                         }
                     }
 
-             // Tính phí ngoài
             function calculateInternationalFee() {
             const rate1_7 = document.querySelector('input[name="international_rate_1_7"]');
-            // Lấy các Rate khác
             const days = internationalPricingSection.querySelector('input[placeholder="Nhập vào số ngày...."]');
             const people = internationalPricingSection.querySelector('input[placeholder="Nhập vào số người...."]');
             const result = internationalPricingSection.querySelector('.result0');
@@ -460,7 +434,7 @@
                 try {
                     const daysValue = parseInt(days.value) || 0;
                     const peopleValue = parseInt(people.value) || 0;
-                    const rate = parseFloat(rate1_7.value) || 0; // Lấy Rate cơ bản nhất để làm Base Price
+                    const rate = parseFloat(rate1_7.value) || 0;
 
                     if (daysValue < 1 || daysValue > 180 || peopleValue < 1 || peopleValue > 100 || rate <= 0) {
                         alert('Vui lòng kiểm tra lại thông số đầu vào: Số ngày (1-180), Số người (1-100), Biểu phí (phải lớn hơn 0).');
@@ -469,12 +443,10 @@
                         return;
                     }
 
-                    // Tính phí dự kiến (Chỉ dùng để hiển thị Preview)
                     const fee_preview = rate * daysValue * peopleValue;
                     result.textContent = fee_preview.toLocaleString('vi-VN');
                     
-                    // SỬA LỖI: Gán Biểu phí theo ngày (Base Rate) vào trường ẩn 'priceField'
-                    if (priceField) priceField.value = rate.toFixed(2); // Gán Base Rate (giá/ngày)
+                    if (priceField) priceField.value = rate.toFixed(2);
 
                 } catch (error) {
                     console.error('An unexpected error occurred during calculation:', error);
@@ -485,16 +457,13 @@
             }
         }
 
-                    // --- 4. Logic Xử lý Submit Form ---
                     form.addEventListener("submit", (e) => {
-                        // Luôn tính phí lần cuối trước khi submit để cập nhật trường hidden 'price'
                         if (domesticOption.checked) {
                             calculateDomesticFee();
                         } else if (internationalOption.checked) {
                             calculateInternationalFee();
                         }
 
-                        // Kiểm tra giá: Domestic phải có Base Price > 0, International được set là 1 (tượng trưng)
                         if (Number(priceField.value) <= 0) {
                             e.preventDefault();
                             alert('Vui lòng tính phí và đảm bảo giá sản phẩm (Base Rate) lớn hơn 0 trước khi tạo!');

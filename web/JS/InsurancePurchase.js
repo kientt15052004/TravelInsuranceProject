@@ -98,7 +98,7 @@ function validateBirthDate(birthDate) {
     selectedDate.setHours(0, 0, 0, 0);
 
     if (selectedDate > today) {
-        alert('Date of birth cannot be in the future');
+        alert('Ngày sinh không thể là ngày tương lai');
         return false;
     }
 
@@ -179,10 +179,10 @@ function validateDates() {
         const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
 
         if (diffDays > 180) {
-            alert('Insurance period cannot exceed 180 days');
+            alert('Thời hạn bảo hiểm không được vượt quá 180 ngày');
             return false;
         } else if (diffDays < 0) {
-            alert('End date must be after start date');
+            alert('Ngày kết thúc phải sau ngày bắt đầu');
             return false;
         }
     }
@@ -271,7 +271,7 @@ function handleBack() {
     } else if (currentStep === 5) {
         moveToStep(4);
     } else if (currentStep === 1) {
-        if (confirm('Are you sure you want to go back? Selected information will be lost.')) {
+        if (confirm('Bạn có chắc muốn quay lại? Thông tin đã chọn sẽ bị mất.')) {
             window.history.back();
         }
     }
@@ -338,12 +338,12 @@ function updateProgressIndicator(step) {
 
 function validateStep1() {
     if (!state.startDate) {
-        alert('Please select insurance start date');
+        alert('Vui lòng chọn ngày bắt đầu bảo hiểm');
         return false;
     }
 
     if (!state.endDate) {
-        alert('Please select insurance end date');
+        alert('Vui lòng chọn ngày kết thúc bảo hiểm');
         return false;
     }
 
@@ -352,7 +352,7 @@ function validateStep1() {
     }
 
     if (!state.selectedPackage) {
-        alert('Please select an insurance package');
+        alert('Vui lòng chọn gói bảo hiểm');
         return false;
     }
 
@@ -371,7 +371,7 @@ function validateStep2() {
         const address = document.getElementById('address').value.trim();
 
         if (!idNumber || !fullName || !birthDate || !phoneNumber || !email || !address) {
-            alert('Please fill in all required fields (*)');
+            alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
             return false;
         }
 
@@ -381,20 +381,20 @@ function validateStep2() {
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert('Invalid email address');
+            alert('Địa chỉ email không hợp lệ');
             return false;
         }
 
         const phoneRegex = /^(0|\+84)[0-9]{9}$/;
         if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
-            alert('Invalid phone number');
+            alert('Số điện thoại không hợp lệ');
             return false;
         }
     } else {
         const inputs = document.getElementById('organizationForm').querySelectorAll('.form-input');
         for (let input of inputs) {
             if (!input.value.trim()) {
-                alert('Please fill in all required fields (*)');
+                alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
                 return false;
             }
         }
@@ -434,7 +434,7 @@ function saveBuyerInfo() {
 
 function validateStep3() {
     if (state.insuredPersons.length === 0) {
-        alert('Please add at least one insured person');
+        alert('Vui lòng thêm ít nhất một người được bảo hiểm');
         return false;
     }
     return true;
@@ -447,17 +447,17 @@ function validateStep5() {
     const cvv = document.getElementById('cvv').value;
 
     if (!cardholderName) {
-        alert('Please enter cardholder name');
+        alert('Vui lòng nhập tên chủ thẻ');
         return false;
     }
 
     if (cardNumber.length !== 16 || isNaN(cardNumber)) {
-        alert('Please enter a valid 16-digit card number');
+        alert('Vui lòng nhập số thẻ 16 chữ số hợp lệ');
         return false;
     }
 
     if (!expiryDate || expiryDate.length !== 5) {
-        alert('Please enter expiry date in MM/YY format');
+        alert('Vui lòng nhập ngày hết hạn theo định dạng MM/YY');
         return false;
     }
 
@@ -465,12 +465,12 @@ function validateStep5() {
     const expiry = new Date(2000 + parseInt(year), parseInt(month) - 1);
     const today = new Date();
     if (expiry <= today) {
-        alert('Card has expired');
+        alert('Thẻ đã hết hạn');
         return false;
     }
 
     if (cvv.length !== 3 || isNaN(cvv)) {
-        alert('Please enter a valid 3-digit CVV');
+        alert('Vui lòng nhập CVV 3 chữ số hợp lệ');
         return false;
     }
 
@@ -505,7 +505,7 @@ function saveInsuredPerson() {
     const email = document.getElementById('personEmail').value.trim();
 
     if (!fullName || !idNumber || !birthDate || !phoneNumber || !email) {
-        alert('Please fill in all required fields (*)');
+        alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
         return;
     }
 
@@ -530,7 +530,7 @@ function saveInsuredPerson() {
 }
 
 function removeInsuredPerson(id) {
-    if (confirm('Are you sure you want to remove this person?')) {
+    if (confirm('Bạn có chắc muốn xóa người này?')) {
         state.insuredPersons = state.insuredPersons.filter(p => p.id !== id);
         renderInsuredPersonsList();
         updateTotalAmount();
@@ -541,7 +541,7 @@ function renderInsuredPersonsList() {
     const container = document.getElementById('insuredPersonsList');
 
     if (state.insuredPersons.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">No insured persons yet. Click "Add Insured Person" button to add.</p>';
+        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Chưa có người được bảo hiểm. Nhấn nút "Thêm Người Được Bảo Hiểm" để thêm.</p>';
         return;
     }
 
@@ -557,19 +557,19 @@ function renderInsuredPersonsList() {
             </div>
             <div class="person-details">
                 <div class="detail-row">
-                    <span class="detail-label">Gender:</span>
+                    <span class="detail-label">Giới Tính:</span>
                     <span class="detail-value">${person.gender}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">ID Number:</span>
+                    <span class="detail-label">Số CCCD:</span>
                     <span class="detail-value">${person.idNumber}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Date of Birth:</span>
+                    <span class="detail-label">Ngày Sinh:</span>
                     <span class="detail-value">${person.birthDate}</span>
                 </div>
                 <div class="detail-row">
-                    <span class="detail-label">Phone Number:</span>
+                    <span class="detail-label">Số Điện Thoại:</span>
                     <span class="detail-value">${person.phoneNumber}</span>
                 </div>
                 <div class="detail-row">
@@ -586,38 +586,38 @@ function renderConfirmation() {
     const container = document.getElementById('confirmationContent');
 
     const buyerInfoHtml = state.buyerInfo.type === 'individual' ? `
-        <div class="detail-row"><span class="detail-label">Full Name:</span><span class="detail-value">${state.buyerInfo.fullName}</span></div>
-        <div class="detail-row"><span class="detail-label">Gender:</span><span class="detail-value">${state.buyerInfo.gender}</span></div>
-        <div class="detail-row"><span class="detail-label">ID Number:</span><span class="detail-value">${state.buyerInfo.idNumber}</span></div>
-        <div class="detail-row"><span class="detail-label">Date of Birth:</span><span class="detail-value">${state.buyerInfo.birthDate}</span></div>
-        <div class="detail-row"><span class="detail-label">Phone Number:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
+        <div class="detail-row"><span class="detail-label">Họ và Tên:</span><span class="detail-value">${state.buyerInfo.fullName}</span></div>
+        <div class="detail-row"><span class="detail-label">Giới Tính:</span><span class="detail-value">${state.buyerInfo.gender}</span></div>
+        <div class="detail-row"><span class="detail-label">Số CCCD:</span><span class="detail-value">${state.buyerInfo.idNumber}</span></div>
+        <div class="detail-row"><span class="detail-label">Ngày Sinh:</span><span class="detail-value">${state.buyerInfo.birthDate}</span></div>
+        <div class="detail-row"><span class="detail-label">Số Điện Thoại:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${state.buyerInfo.email}</span></div>
-        <div class="detail-row"><span class="detail-label">Address:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
+        <div class="detail-row"><span class="detail-label">Địa Chỉ:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
     ` : `
-        <div class="detail-row"><span class="detail-label">Organization Name:</span><span class="detail-value">${state.buyerInfo.orgName}</span></div>
-        <div class="detail-row"><span class="detail-label">Tax Code:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
-        <div class="detail-row"><span class="detail-label">Representative:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
-        <div class="detail-row"><span class="detail-label">Phone Number:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
+        <div class="detail-row"><span class="detail-label">Tên Tổ Chức:</span><span class="detail-value">${state.buyerInfo.orgName}</span></div>
+        <div class="detail-row"><span class="detail-label">Mã Số Thuế:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
+        <div class="detail-row"><span class="detail-label">Người Đại Diện:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
+        <div class="detail-row"><span class="detail-label">Số Điện Thoại:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${state.buyerInfo.email}</span></div>
-        <div class="detail-row"><span class="detail-label">Address:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
+        <div class="detail-row"><span class="detail-label">Địa Chỉ:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
     `;
 
     container.innerHTML = `
         <div class="confirmation-section">
-            <h3 class="section-title">Insurance Package Information</h3>
-            <div class="detail-row"><span class="detail-label">Package Name:</span><span class="detail-value">${state.selectedPackage.name}</span></div>
-            <div class="detail-row"><span class="detail-label">Start Date:</span><span class="detail-value">${state.startDate}</span></div>
-            <div class="detail-row"><span class="detail-label">End Date:</span><span class="detail-value">${state.endDate}</span></div>
-            <div class="detail-row"><span class="detail-label">Fee/Person:</span><span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span></div>
+            <h3 class="section-title">Thông Tin Gói Bảo Hiểm</h3>
+            <div class="detail-row"><span class="detail-label">Tên Gói:</span><span class="detail-value">${state.selectedPackage.name}</span></div>
+            <div class="detail-row"><span class="detail-label">Ngày Bắt Đầu:</span><span class="detail-value">${state.startDate}</span></div>
+            <div class="detail-row"><span class="detail-label">Ngày Kết Thúc:</span><span class="detail-value">${state.endDate}</span></div>
+            <div class="detail-row"><span class="detail-label">Phí/Người:</span><span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span></div>
         </div>
         
         <div class="confirmation-section">
-            <h3 class="section-title">Insurance Buyer Information</h3>
+            <h3 class="section-title">Thông Tin Người Mua Bảo Hiểm</h3>
             ${buyerInfoHtml}
         </div>
         
         <div class="confirmation-section">
-            <h3 class="section-title">Insured Persons List (${state.insuredPersons.length})</h3>
+            <h3 class="section-title">Danh Sách Người Được Bảo Hiểm (${state.insuredPersons.length})</h3>
             ${state.insuredPersons.map((person, index) => `
                 <div class="insured-summary">
                     <strong>${index + 1}. ${person.fullName}</strong> - ${person.gender} - ${person.idNumber}
@@ -635,25 +635,25 @@ function renderPaymentSummary() {
 
     container.innerHTML = `
         <div class="payment-summary-section">
-            <h3 class="section-title">Order Summary</h3>
+            <h3 class="section-title">Tóm Tắt Đơn Hàng</h3>
             <div class="detail-row">
-                <span class="detail-label">Package:</span>
+                <span class="detail-label">Gói:</span>
                 <span class="detail-value">${state.selectedPackage.name}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Number of Travelers:</span>
+                <span class="detail-label">Số Lượng Người Đi:</span>
                 <span class="detail-value">${state.insuredPersons.length}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Number of Days:</span>
+                <span class="detail-label">Số Ngày:</span>
                 <span class="detail-value">${days}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Price per Person:</span>
+                <span class="detail-label">Giá Mỗi Người:</span>
                 <span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span>
             </div>
             <div class="detail-row" style="border-top: 2px solid #e74c3c; padding-top: 12px; margin-top: 12px;">
-                <span class="detail-label" style="font-weight: 600; font-size: 15px;">Total Amount:</span>
+                <span class="detail-label" style="font-weight: 600; font-size: 15px;">Tổng Tiền:</span>
                 <span class="detail-value" style="font-weight: 600; font-size: 16px; color: #e74c3c;">${formatCurrency(totalPrice)} VNĐ</span>
             </div>
         </div>
@@ -665,7 +665,7 @@ function submitForm() {
     const insuranceId = urlParams.get('insuranceId') || urlParams.get('id');
 
     if (!insuranceId) {
-        alert('Insurance ID not found');
+        alert('Không tìm thấy ID bảo hiểm');
         return;
     }
 

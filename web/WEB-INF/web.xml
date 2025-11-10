@@ -165,6 +165,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <servlet-class>Controller.AdminDashboardServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminDashboardServlet</servlet-name>
+        <url-pattern>/admin/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>UserRoleManagementServlet</servlet-name>
         <servlet-class>Controller.UserRoleManagementServlet</servlet-class>
     </servlet>

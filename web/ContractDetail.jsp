@@ -13,16 +13,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Top Header -->
     <jsp:include page="component/staff-header.jsp"/>
 
     <div class="container">
-        <!-- Sidebar -->
         <jsp:include page="component/staff-sidebar.jsp">
             <jsp:param name="activePage" value="contract-management"/>
         </jsp:include>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="content-header">
                 <div class="header-actions">
@@ -43,10 +40,8 @@
                 <p>Thông tin chi tiết về hợp đồng bảo hiểm</p>
             </div>
 
-            <!-- Contract Information -->
             <div class="contract-detail-section">
                 <div class="detail-grid">
-                    <!-- Contract Basic Info -->
                     <div class="detail-card">
                         <div class="card-header">
                             <h3><i class="fas fa-file-contract"></i> Thông tin hợp đồng</h3>
@@ -73,7 +68,6 @@
                         </div>
                     </div>
 
-                    <!-- Buyer Info -->
                     <c:if test="${not empty buyer}">
                     <div class="detail-card">
                         <div class="card-header">
@@ -150,11 +144,10 @@
                     </div>
                     </c:if>
 
-                    <!-- Product Info -->
                     <c:if test="${not empty product}">
                     <div class="detail-card">
                         <div class="card-header">
-                            <h3><i class="fas fa-shield-alt"></i> Thông tin sản phẩm</h3>
+                            <h3>Thông tin sản phẩm</h3>
                         </div>
                         <div class="card-content">
                             <div class="info-row">
@@ -180,7 +173,6 @@
                 </div>
             </div>
 
-                    <!-- Application Travelers Info -->
         <c:if test="${not empty travelers}">
             <div class="travelers-section">
                 <h3><i class="fas fa-users"></i> Danh sách khách hàng</h3>
@@ -213,7 +205,6 @@
             </div>
             </c:if>
 
-            <!-- Claims Section -->
             <c:if test="${not empty claims}">
                 <div class="claims-section">
                     <h3><i class="fas fa-exclamation-triangle"></i> Danh sách yêu cầu bồi thường</h3>
