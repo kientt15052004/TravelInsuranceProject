@@ -309,4 +309,24 @@
         <servlet-name>CreateClaimServlet</servlet-name>
         <url-pattern>/create-claim</url-pattern>
     </servlet-mapping>
+    
+    <!-- My Claim Detail Servlet (customer) -->
+    <servlet>
+        <servlet-name>MyClaimDetailServlet</servlet-name>
+        <servlet-class>Controller.MyClaimDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyClaimDetailServlet</servlet-name>
+        <url-pattern>/my-claim-detail</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Customer Reply Servlet (customer) -->
+    <servlet>
+        <servlet-name>CustomerReplyServlet</servlet-name>
+        <servlet-class>Controller.CustomerReplyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CustomerReplyServlet</servlet-name>
+        <url-pattern>/customer-reply</url-pattern>
+    </servlet-mapping>
 </web-app>

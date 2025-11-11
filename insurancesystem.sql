@@ -1,7 +1,7 @@
 -- =====================================
 -- RESET + SEED DATABASE insuranceSystem
 -- =====================================
-
+SET SQL_SAFE_UPDATES = 0;
 DROP DATABASE IF EXISTS insuranceSystem;
 CREATE DATABASE insuranceSystem CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE insuranceSystem;
@@ -913,8 +913,6 @@ MODIFY COLUMN createDate DATETIME DEFAULT CURRENT_TIMESTAMP;
 -- Verify the changes
 DESCRIBE claimsres;
 
-ALTER TABLE claimsres DROP COLUMN status;
-
 -- =====================================
 -- MIGRATION SCRIPT: Add compensation_amount column to Claims table
 -- =====================================
@@ -1004,3 +1002,15 @@ WHERE cl.claim_status = 'rejected' AND cr.action_type = 'review';
 
 -- Verify the changes
 DESCRIBE claimsres;
+
+CREATE TABLE ClaimStatusHistory (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  claim_id INT NOT NULL,
+  old_status VARCHAR(50),
+  new_status VARCHAR(50) NOT NULL,
+  changed_by INT, -- user/staff id (nullable)
+  note TEXT,
+  changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (claim_id) REFERENCES Claims(id)
+);
+
