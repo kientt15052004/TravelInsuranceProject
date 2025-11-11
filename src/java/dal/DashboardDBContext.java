@@ -13,9 +13,7 @@ import java.util.Map;
 
 public class DashboardDBContext extends DBContext {
 
-    /**
-     * Tổng hợp đồng đang có hiệu lực
-     */
+    /*Tổng hợp đồng đang có hiệu lực*/
     public int getActiveContractsCount() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -35,9 +33,7 @@ public class DashboardDBContext extends DBContext {
         return 0;
     }
 
-    /**
-     * Doanh thu theo sản phẩm
-     */
+    /*Doanh thu theo sản phẩm*/
     public List<Map<String, Object>> getRevenueByProduct(int limit) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -73,9 +69,7 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Tổng doanh thu
-     */
+    /*Tổng doanh thu*/
     public BigDecimal getTotalRevenue() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -98,9 +92,7 @@ public class DashboardDBContext extends DBContext {
         return BigDecimal.ZERO;
     }
 
-    /**
-     * Tổng số tiền đã đền bù cho khách hàng
-     */
+    /*Tổng số tiền đã đền bù cho khách hàng*/
     public BigDecimal getTotalCompensationAmount() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -124,9 +116,7 @@ public class DashboardDBContext extends DBContext {
         return BigDecimal.ZERO;
     }
 
-    /**
-     * Claim theo 30 ngày qua
-     */
+    /*Claim theo 30 ngày qua*/
     public int getClaimsLast30Days() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -148,9 +138,7 @@ public class DashboardDBContext extends DBContext {
         return 0;
     }
 
-    /**
-     * Tỷ lệ Approved/Rejected
-     */
+    /*Tỷ lệ Approved/Rejected*/
     public Map<String, Object> getApprovedRejectedRatio() {
         Map<String, Object> result = new HashMap<>();
         
@@ -183,18 +171,12 @@ public class DashboardDBContext extends DBContext {
         return result;
     }
 
-    /**
-     * Claim được đền bù số tiền lớn - các claim đã approved có compensation_amount
-     * Sắp xếp theo số tiền đền bù từ cao đến thấp
-     */
+    /*Claim được đền bù số tiền lớn - các claim đã approved có compensation_amount, Sắp xếp theo số tiền đền bù từ cao đến thấp*/
     public List<Claims> getFraudAlertClaims(int limit) {
         return getHighCompensationClaims(limit);
     }
     
-    /**
-     * Claim được đền bù số tiền lớn - các claim đã approved có compensation_amount
-     * Sắp xếp theo số tiền đền bù từ cao đến thấp
-     */
+    /*Claim được đền bù số tiền lớn - các claim đã approved có compensation_amount, Sắp xếp theo số tiền đền bù từ cao đến thấp*/
     public List<Claims> getHighCompensationClaims(int limit) {
         List<Claims> claims = new ArrayList<>();
         
@@ -225,9 +207,7 @@ public class DashboardDBContext extends DBContext {
         return claims;
     }
 
-    /**
-     * Claim của hợp đồng lớn bất thường (top 10% theo giá trị)
-     */
+    /*Claim của hợp đồng lớn bất thường (top 10% theo giá trị)*/
     public List<Claims> getUnusualLargeContractClaims(int limit) {
         List<Claims> claims = new ArrayList<>();
         
@@ -260,10 +240,7 @@ public class DashboardDBContext extends DBContext {
         return claims;
     }
 
-    /**
-     * Staff chấp nhận nhiều claim trong khoảng thời gian
-     * Chỉ đếm quyết định cuối cùng (mới nhất) cho mỗi claim để tránh đếm trùng khi thay đổi quyết định
-     */
+    /*Staff chấp nhận nhiều claim trong khoảng thời gian, Chỉ đếm quyết định cuối cùng (mới nhất) cho mỗi claim để tránh đếm trùng khi thay đổi quyết định*/
     public List<Map<String, Object>> getStaffApprovalStats(Date from, Date to) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -313,9 +290,6 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Danh sách claim theo staff đã duyệt
-     */
     public List<Claims> getClaimsByStaff(int staffId, Date from, Date to) {
         List<Claims> claims = new ArrayList<>();
         
@@ -324,39 +298,46 @@ public class DashboardDBContext extends DBContext {
             return claims;
         }
 
+        // Fix: Handle DATETIME comparison properly
+        // createDate is DATETIME, so we need to compare date part only or use proper range
         String sql = "SELECT DISTINCT cl.* "
                 + "FROM Claims cl "
                 + "JOIN ClaimsRes cr ON cl.id = cr.claim_id "
                 + "WHERE cr.user_id = ? "
-                + "AND cr.createDate BETWEEN ? AND ? "
+                + "AND DATE(cr.createDate) >= DATE(?) "
+                + "AND DATE(cr.createDate) <= DATE(?) "
                 + "ORDER BY cl.requestDate DESC";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, staffId);
             ps.setDate(2, from);
             ps.setDate(3, to);
+            System.out.println("Executing getClaimsByStaff query for staffId: " + staffId + ", from: " + from + ", to: " + to);
             ResultSet rs = ps.executeQuery();
+            int count = 0;
             while (rs.next()) {
                 Claims claim = mapClaimFromResultSet(rs);
                 claims.add(claim);
+                count++;
             }
+            System.out.println("Found " + count + " claims for staff " + staffId);
         } catch (SQLException e) {
+            System.err.println("SQL Error in getClaimsByStaff: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Vendor Error: " + e.getErrorCode());
             e.printStackTrace();
-            System.err.println("SQL Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error in getClaimsByStaff: " + e.getMessage());
+            e.printStackTrace();
         }
         return claims;
     }
 
-    /**
-     * Claim khách mới mua < 7 ngày (rủi ro cao)
-     */
+    /*Claim khách mới mua < 7 ngày (rủi ro cao)*/
     public List<Claims> getNewCustomerRiskClaims(int limit) {
         return getFraudAlertClaims(limit); // Same logic
     }
 
-    /**
-     * Sản phẩm bán chạy (số lượng hợp đồng)
-     */
     public List<Map<String, Object>> getTopSellingProducts(int limit) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -392,9 +373,7 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Sản phẩm bị claim nhiều nhất
-     */
+    /*Sản phẩm bị claim nhiều nhất*/
     public List<Map<String, Object>> getProductsWithMostClaims(int limit) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -430,9 +409,6 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Tỷ lệ claim/hợp đồng theo sản phẩm
-     */
     public List<Map<String, Object>> getClaimRateByProduct(int limit) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -449,6 +425,7 @@ public class DashboardDBContext extends DBContext {
                 + "LEFT JOIN applications a ON p.id = a.product_id "
                 + "LEFT JOIN Contract c ON a.id = c.application_id "
                 + "LEFT JOIN Claims cl ON c.contract_id = cl.contract_id "
+                + "AND cl.claim_status IN ('approved', 'rejected', 'paid') "
                 + "GROUP BY p.id, p.name "
                 + "HAVING totalContracts > 0 "
                 + "ORDER BY claimRate DESC "
@@ -473,9 +450,7 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Top khách hàng rủi ro (nhiều claim, nhiều claim bị reject)
-     */
+    /*Top khách hàng rủi ro (nhiều claim, nhiều claim bị reject)*/
     public List<Map<String, Object>> getTopRiskCustomers(int minClaims, int minRejectedClaims, int limit) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -518,16 +493,12 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Sản phẩm có doanh thu cao nhất
-     */
+    /*Sản phẩm có doanh thu cao nhất*/
     public List<Map<String, Object>> getTopRevenueProducts(int limit) {
         return getRevenueByProduct(limit);
     }
 
-    /**
-     * Khách hàng mới mua nhiều hợp đồng trong thời gian ngắn
-     */
+    /*Khách hàng mới mua nhiều hợp đồng trong thời gian ngắn*/
     public List<Map<String, Object>> getCustomersWithManyContracts(int minContracts, int days) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -567,9 +538,7 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /**
-     * Helper method to map ResultSet to Claims object
-     */
+    /*Helper method to map ResultSet to Claims object*/
     private Claims mapClaimFromResultSet(ResultSet rs) throws SQLException {
         Claims claim = new Claims();
         claim.setId(rs.getInt("id"));

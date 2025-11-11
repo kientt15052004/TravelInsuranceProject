@@ -12,6 +12,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Format percentages
     formatPercentages();
+    
+    // Scroll to claims result if exists (after form submission)
+    scrollToClaimsResult();
 });
 
 /**
@@ -124,6 +127,7 @@ document.addEventListener('submit', function(e) {
 
 /**
  * Initialize table pagination for all tables
+ * Note: This is now simplified - server already limits the data, so we just display what's loaded
  */
 function initTablePagination() {
     const tables = document.querySelectorAll('.stats-table');
@@ -141,126 +145,56 @@ function initTablePagination() {
         const limitSelect = table.closest('.table-section').querySelector('.table-limit-select');
         if (!limitSelect) return;
         
-        let currentPage = 1;
-        let pageSize = parseInt(limitSelect.value) || 5;
-        let start = 0;
-        let end = 0;
+        // Show all rows (server already limited the data)
+        rows.forEach(row => row.style.display = '');
         
-        function renderTable() {
-            // Hide all rows
-            rows.forEach(row => row.style.display = 'none');
-            
-            // Show rows for current page
-            start = (currentPage - 1) * pageSize;
-            end = start + pageSize;
-            rows.slice(start, end).forEach(row => row.style.display = '');
-            
-            renderPagination();
-        }
+        // Display info text only (no pagination controls needed since server handles limiting)
+        paginationContainer.innerHTML = `<span class="pagination-info">Hiển thị ${rows.length} kết quả</span>`;
         
-        function renderPagination() {
-            const totalPages = Math.ceil(rows.length / pageSize);
-            paginationContainer.innerHTML = '';
-            
-            if (totalPages <= 1) {
-                paginationContainer.innerHTML = `<span class="pagination-info">Hiển thị ${rows.length} kết quả</span>`;
-                return;
-            }
-            
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.textContent = '‹';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                }
-            });
-            paginationContainer.appendChild(prevBtn);
-            
-            // Page numbers
-            const startPage = Math.max(1, currentPage - 2);
-            const endPage = Math.min(totalPages, currentPage + 2);
-            
-            if (startPage > 1) {
-                const firstBtn = document.createElement('button');
-                firstBtn.className = 'page-btn';
-                firstBtn.textContent = '1';
-                firstBtn.addEventListener('click', () => {
-                    currentPage = 1;
-                    renderTable();
-                });
-                paginationContainer.appendChild(firstBtn);
-                
-                if (startPage > 2) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.textContent = '...';
-                    ellipsis.style.padding = '0 8px';
-                    paginationContainer.appendChild(ellipsis);
-                }
-            }
-            
-            for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = 'page-btn';
-                if (i === currentPage) pageBtn.classList.add('active');
-                pageBtn.textContent = i;
-                pageBtn.addEventListener('click', () => {
-                    currentPage = i;
-                    renderTable();
-                });
-                paginationContainer.appendChild(pageBtn);
-            }
-            
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    const ellipsis = document.createElement('span');
-                    ellipsis.textContent = '...';
-                    ellipsis.style.padding = '0 8px';
-                    paginationContainer.appendChild(ellipsis);
-                }
-                
-                const lastBtn = document.createElement('button');
-                lastBtn.className = 'page-btn';
-                lastBtn.textContent = totalPages;
-                lastBtn.addEventListener('click', () => {
-                    currentPage = totalPages;
-                    renderTable();
-                });
-                paginationContainer.appendChild(lastBtn);
-            }
-            
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.textContent = '›';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.addEventListener('click', () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTable();
-                }
-            });
-            paginationContainer.appendChild(nextBtn);
-            
-            // Info text
-            const info = document.createElement('span');
-            info.className = 'pagination-info';
-            info.textContent = `Hiển thị ${start + 1}-${Math.min(end, rows.length)} trong ${rows.length} kết quả`;
-            paginationContainer.appendChild(info);
-        }
-        
-        // Handle limit change
+        // Handle limit change - Reload page with new limit parameter
         limitSelect.addEventListener('change', function() {
-            pageSize = parseInt(this.value) || 10;
-            currentPage = 1;
-            renderTable();
+            const newLimit = parseInt(this.value) || 5;
+            const currentUrl = new URL(window.location.href);
+            
+            // Update URL with the new limit
+            currentUrl.searchParams.set('limit', newLimit);
+            
+            // Preserve other parameters (fromDate, toDate, staffId, etc.)
+            const urlParams = new URLSearchParams(window.location.search);
+            ['fromDate', 'toDate', 'staffId', 'action'].forEach(param => {
+                if (urlParams.has(param)) {
+                    currentUrl.searchParams.set(param, urlParams.get(param));
+                }
+            });
+            
+            // Reload page with new limit
+            window.location.href = currentUrl.toString();
         });
-        
-        // Initial render
-        renderTable();
     });
+}
+
+/**
+ * Scroll to claims result section if it exists
+ * This happens after form submission when claimsByStaff is loaded
+ */
+function scrollToClaimsResult() {
+    const claimsResultSection = document.getElementById('claimsByStaffResult');
+    if (claimsResultSection) {
+        // Add a highlight animation
+        claimsResultSection.style.animation = 'highlight 2s ease-in-out';
+        
+        // Scroll to the section with smooth behavior
+        setTimeout(() => {
+            claimsResultSection.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 100);
+        
+        // Remove animation after it completes
+        setTimeout(() => {
+            claimsResultSection.style.animation = '';
+        }, 2000);
+    }
 }
 

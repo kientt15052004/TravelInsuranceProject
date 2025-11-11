@@ -271,12 +271,13 @@ function handleBack() {
     } else if (currentStep === 5) {
         moveToStep(4);
     } else if (currentStep === 1) {
-        if (confirm('Bạn có chắc muốn quay lại? Thông tin đã chọn sẽ bị mất.')) {
+        if (confirm('Bạn Có Chắc Chắn Muốn Quay Lại Không? Thông Tin Đã Chọn Sẽ Bị Mất.')) {
             window.history.back();
         }
     }
 }
 
+//Modify validate step 4
 function handleContinue() {
     if (currentStep === 1 && validateStep1()) {
         moveToStep(2);
@@ -286,7 +287,7 @@ function handleContinue() {
     } else if (currentStep === 3 && validateStep3()) {
         renderConfirmation();
         moveToStep(4);
-    } else if (currentStep === 4) {
+    } else if (currentStep === 4 && validateStep4()) {
         renderPaymentSummary();
         moveToStep(5);
     } else if (currentStep === 5 && validateStep5()) {
@@ -294,6 +295,7 @@ function handleContinue() {
         submitForm();
     }
 }
+
 
 function moveToStep(step) {
     for (let i = 1; i <= 5; i++) {
@@ -338,12 +340,12 @@ function updateProgressIndicator(step) {
 
 function validateStep1() {
     if (!state.startDate) {
-        alert('Vui lòng chọn ngày bắt đầu bảo hiểm');
+        alert('Vui Lòng Chọn Ngày Bắt Đầu Bảo Hiểm');
         return false;
     }
 
     if (!state.endDate) {
-        alert('Vui lòng chọn ngày kết thúc bảo hiểm');
+        alert('Vui Lòng Chọn Ngày Kết Thúc Bảo Hiểm');
         return false;
     }
 
@@ -352,7 +354,7 @@ function validateStep1() {
     }
 
     if (!state.selectedPackage) {
-        alert('Vui lòng chọn gói bảo hiểm');
+        alert('Vui Lòng Chọn Gói Bảo Hiểm');
         return false;
     }
 
@@ -371,7 +373,7 @@ function validateStep2() {
         const address = document.getElementById('address').value.trim();
 
         if (!idNumber || !fullName || !birthDate || !phoneNumber || !email || !address) {
-            alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
+            alert('Vui Lòng Điền Vào Tất Cả Các Trường Bắt Buộc (*)');
             return false;
         }
 
@@ -381,20 +383,20 @@ function validateStep2() {
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert('Địa chỉ email không hợp lệ');
+            alert('Địa Chỉ Email Không Hợp Lệ');
             return false;
         }
 
         const phoneRegex = /^(0|\+84)[0-9]{9}$/;
         if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
-            alert('Số điện thoại không hợp lệ');
+            alert('Số Điện Thoại Không Hợp Lệ');
             return false;
         }
     } else {
         const inputs = document.getElementById('organizationForm').querySelectorAll('.form-input');
         for (let input of inputs) {
             if (!input.value.trim()) {
-                alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
+                alert('Vui Lòng Điền Vào Tất Cả Các Trường Bắt Buộc (*)');
                 return false;
             }
         }
@@ -434,7 +436,17 @@ function saveBuyerInfo() {
 
 function validateStep3() {
     if (state.insuredPersons.length === 0) {
-        alert('Vui lòng thêm ít nhất một người được bảo hiểm');
+        alert('Vui Lòng Thêm Ít Nhất Một Người Được Bảo Hiểm');
+        return false;
+    }
+    return true;
+}
+
+//Validate policy
+function validateStep4() {
+    const agreeTerms = document.getElementById('agreeTerms');
+    if (!agreeTerms || !agreeTerms.checked) {
+        alert('Vui lòng đồng ý với Chính sách bảo vệ dữ liệu cá nhân của trang để tiếp tục');
         return false;
     }
     return true;
@@ -452,7 +464,7 @@ function validateStep5() {
     }
 
     if (cardNumber.length !== 16 || isNaN(cardNumber)) {
-        alert('Vui lòng nhập số thẻ 16 chữ số hợp lệ');
+        alert('Vui lòng nhập số thẻ hợp lệ gồm 16 chữ số');
         return false;
     }
 
@@ -470,7 +482,7 @@ function validateStep5() {
     }
 
     if (cvv.length !== 3 || isNaN(cvv)) {
-        alert('Vui lòng nhập CVV 3 chữ số hợp lệ');
+        alert('Vui lòng nhập mã CVV 3 chữ số hợp lệ');
         return false;
     }
 
@@ -505,7 +517,7 @@ function saveInsuredPerson() {
     const email = document.getElementById('personEmail').value.trim();
 
     if (!fullName || !idNumber || !birthDate || !phoneNumber || !email) {
-        alert('Vui lòng điền đầy đủ các trường bắt buộc (*)');
+        alert('Vui lòng điền vào tất cả các trường bắt buộc (*)');
         return;
     }
 
@@ -530,7 +542,7 @@ function saveInsuredPerson() {
 }
 
 function removeInsuredPerson(id) {
-    if (confirm('Bạn có chắc muốn xóa người này?')) {
+    if (confirm('Bạn có chắc chắn muốn xóa người này không?')) {
         state.insuredPersons = state.insuredPersons.filter(p => p.id !== id);
         renderInsuredPersonsList();
         updateTotalAmount();
@@ -586,7 +598,7 @@ function renderConfirmation() {
     const container = document.getElementById('confirmationContent');
 
     const buyerInfoHtml = state.buyerInfo.type === 'individual' ? `
-        <div class="detail-row"><span class="detail-label">Họ và Tên:</span><span class="detail-value">${state.buyerInfo.fullName}</span></div>
+        <div class="detail-row"><span class="detail-label">Họ Và Tên:</span><span class="detail-value">${state.buyerInfo.fullName}</span></div>
         <div class="detail-row"><span class="detail-label">Giới Tính:</span><span class="detail-value">${state.buyerInfo.gender}</span></div>
         <div class="detail-row"><span class="detail-label">Số CCCD:</span><span class="detail-value">${state.buyerInfo.idNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Ngày Sinh:</span><span class="detail-value">${state.buyerInfo.birthDate}</span></div>
@@ -596,7 +608,7 @@ function renderConfirmation() {
     ` : `
         <div class="detail-row"><span class="detail-label">Tên Tổ Chức:</span><span class="detail-value">${state.buyerInfo.orgName}</span></div>
         <div class="detail-row"><span class="detail-label">Mã Số Thuế:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
-        <div class="detail-row"><span class="detail-label">Người Đại Diện:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
+        <div class="detail-row"><span class="detail-label">Đại Diện:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
         <div class="detail-row"><span class="detail-label">Số Điện Thoại:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${state.buyerInfo.email}</span></div>
         <div class="detail-row"><span class="detail-label">Địa Chỉ:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
@@ -641,11 +653,11 @@ function renderPaymentSummary() {
                 <span class="detail-value">${state.selectedPackage.name}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Số Lượng Người Đi:</span>
+                <span class="detail-label">Số Lượng Khách Du Lịch:</span>
                 <span class="detail-value">${state.insuredPersons.length}</span>
             </div>
             <div class="detail-row">
-                <span class="detail-label">Số Ngày:</span>
+                    <span class="detail-label">Số Ngày:</span>
                 <span class="detail-value">${days}</span>
             </div>
             <div class="detail-row">
@@ -653,7 +665,7 @@ function renderPaymentSummary() {
                 <span class="detail-value">${formatCurrency(state.selectedPackage.price)} VNĐ</span>
             </div>
             <div class="detail-row" style="border-top: 2px solid #e74c3c; padding-top: 12px; margin-top: 12px;">
-                <span class="detail-label" style="font-weight: 600; font-size: 15px;">Tổng Tiền:</span>
+                <span class="detail-label" style="font-weight: 600; font-size: 15px;">Tổng Số Tiền:</span>
                 <span class="detail-value" style="font-weight: 600; font-size: 16px; color: #e74c3c;">${formatCurrency(totalPrice)} VNĐ</span>
             </div>
         </div>

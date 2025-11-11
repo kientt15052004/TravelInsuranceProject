@@ -82,7 +82,7 @@
                             <div class="table-header-with-filter">
                                 <h3>Doanh thu theo sản phẩm</h3>
                                 <select class="table-limit-select" data-table="revenueByProduct">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''} selected>5</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
                                     <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
                                     <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
                                     <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
@@ -122,7 +122,7 @@
                             <div class="table-header-with-filter">
                                 <h3>Tỷ lệ claim/hợp đồng theo sản phẩm</h3>
                                 <select class="table-limit-select" data-table="claimRateByProduct">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''} selected>5</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
                                     <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
                                     <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
                                     <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
@@ -174,10 +174,10 @@
                             <div class="table-header-with-filter">
                                 <h3>Claim được đền bù số tiền lớn</h3>
                                 <select class="table-limit-select" data-table="fraudAlertClaims">
-                                    <option value="5" selected>5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
                                 </select>
                             </div>
                             <div class="stats-table-container">
@@ -226,10 +226,10 @@
                             <div class="table-header-with-filter">
                                 <h3>Claim của hợp đồng lớn bất thường</h3>
                                 <select class="table-limit-select" data-table="unusualLargeContractClaims">
-                                    <option value="5" selected>5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
                                 </select>
                             </div>
                             <div class="stats-table-container">
@@ -272,7 +272,7 @@
                             <div class="table-header-with-filter">
                                 <h3>Top khách hàng rủi ro</h3>
                                 <select class="table-limit-select" data-table="topRiskCustomers">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''} selected>5</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
                                     <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
                                     <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
                                     <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
@@ -324,10 +324,10 @@
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm bán chạy</h3>
                                 <select class="table-limit-select" data-table="topSellingProducts">
-                                    <option value="5" selected>5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
                                 </select>
                             </div>
                             <div class="stats-table-container">
@@ -364,10 +364,10 @@
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm bị claim nhiều nhất</h3>
                                 <select class="table-limit-select" data-table="productsWithMostClaims">
-                                    <option value="5" selected>5</option>
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="50">50</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
                                 </select>
                             </div>
                             <div class="stats-table-container">
@@ -404,7 +404,7 @@
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm có doanh thu cao nhất</h3>
                                 <select class="table-limit-select" data-table="topRevenueProducts">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''} selected>5</option>
+                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
                                     <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
                                     <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
                                     <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
@@ -510,7 +510,7 @@
                     </div>
 
                     <c:if test="${not empty claimsByStaff}">
-                        <div class="table-section">
+                        <div class="table-section" id="claimsByStaffResult">
                             <h3>Danh sách claim theo staff đã chọn</h3>
                             <div class="stats-table-container">
                                 <table class="stats-table">
