@@ -76,7 +76,6 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("user", user);
         session.setAttribute("loginMessage", "Chào mừng, " + user.getFullname() + "!");
 
-        // Redirect based on user role
         if ("staff".equals(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/staff");
         } else if ("admin".equals(user.getRole())) {

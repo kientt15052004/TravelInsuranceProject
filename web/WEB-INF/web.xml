@@ -155,6 +155,16 @@
     <session-config>
         <session-timeout>120</session-timeout>
     </session-config>
+    
+    <!-- Error pages -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error-handler</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error-handler</location>
+    </error-page>
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>Controller.AdminServlet</servlet-class>

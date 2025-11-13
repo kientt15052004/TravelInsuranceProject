@@ -16,32 +16,30 @@
         <!-- CSS riêng cho trang này -->
         <link rel="stylesheet" href="./CSS/styleindex.css"/>
 
-
-
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <h1>Du lịch tự tin,</h1>
-                        <h1 class="subtitle">Được bảo hiểm an toàn</h1>
-                        <p>Bảo hiểm du lịch toàn diện cho sự an tâm của bạn. Từ các trường hợp cấp cứu y tế đến hủy chuyến đi, chúng tôi bảo vệ bạn trên toàn thế giới.</p>
-                        <button class="btn btn-instant" onclick="window.location.href = 'InsuranceList'">Mua Bảo Hiểm</button>
-                        <button class="btn btn-learn" onclick="window.location.href = 'InsuranceList'">Tìm Hiểu Thêm</button>
-                    </div>
-                    <div class="col-lg-6">
-                        <img src="./Image/img_home.png" alt="Bảo Hiểm Du Lịch" class="img-fluid hero-image">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <h1>Du lịch tự tin,</h1>
+                            <h1 class="subtitle">Được bảo hiểm an toàn</h1>
+                            <p>Bảo hiểm du lịch toàn diện cho sự an tâm của bạn. Từ các trường hợp cấp cứu y tế đến hủy chuyến đi, chúng tôi bảo vệ bạn trên toàn thế giới.</p>
+                            <button class="btn btn-instant" onclick="window.location.href = 'InsuranceList'">Mua Bảo Hiểm</button>
+                            <button class="btn btn-learn" onclick="window.location.href = 'InsuranceList'">Tìm Hiểu Thêm</button>
+                        </div>
+                        <div class="col-lg-6">
+                            <img src="./Image/img_home.png" alt="Bảo Hiểm Du Lịch" class="img-fluid hero-image">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- Products Section -->
-        <section class="products-section">
-            <div class="container">
-                <h2>Sản phẩm bán chạy</h2>
-                <p class="subtitle-text">Chọn gói bảo hiểm hoàn hảo cho chuyến phiêu lưu tiếp theo của bạn</p>
-                <div class="row g-4 justify-content-center">
+            <!-- Products Section -->
+            <section class="products-section">
+                <div class="container">
+                    <h2>Sản phẩm bán chạy</h2>
+                    <p class="subtitle-text">Chọn gói bảo hiểm hoàn hảo cho chuyến phiêu lưu tiếp theo của bạn</p>
+                    <div class="row g-4 justify-content-center">
                     <%
                         ArrayList<Model.InsuranceProduct> products = (ArrayList<Model.InsuranceProduct>) request.getAttribute("products");
                         if (products != null && !products.isEmpty()) {
@@ -174,111 +172,6 @@
             </div>
         </section>
 
-        <!-- Profile Modal -->
-        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg"> 
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="profileModalLabel">Hồ Sơ</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data"> <!-- multipart nếu upload avatar/CCCD -->
-                        <div class="modal-body">
-                            <div class="row g-3">
-                                <!-- Avatar -->
-                                <div class="col-md-3 text-center">
-                                    <label class="form-label fw-semibold d-block mb-2">Ảnh đại diện</label>
-                                    <c:if test="${not empty user.avatar}">
-                                        <img id="avatarPreview" src="<c:out value='${user.avatar}' />" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2">
-                                    </c:if>
-                                    <c:if test="${empty user.avatar}">
-                                        <img id="avatarPreview" src="" alt="Ảnh đại diện" class="img-fluid avatar-image mb-2" style="display: none;">
-                                    </c:if>
-                                    <input type="file" name="avatar" class="form-control mt-1" accept="image/*" onchange="previewImage(this, 'avatarPreview')">
-                                </div>
-
-                                <div class="col-md-9">
-                                    <input type="hidden" name="id" value="<c:out value='${user.id}' />">
-
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Họ và Tên:</label>
-                                        <input type="text" class="form-control" name="fullname" value="<c:out value='${user.fullname}' />" required>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Email:</label>
-                                        <input type="email" class="form-control" name="mail" value="<c:out value='${user.mail}' />" required>
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Ngày Sinh:</label>
-                                        <input type="date" class="form-control" name="dob" value="<c:out value='${user.dob}' />">
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Địa Chỉ:</label>
-                                        <input type="text" class="form-control" name="address" value="<c:out value='${user.address}' />">
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Số Điện Thoại:</label>
-                                        <input type="text" class="form-control" name="phone" value="<c:out value='${user.phone}' />">
-                                    </div>
-
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Số CCCD:</label>
-                                        <input type="text" class="form-control" name="cccd" value="<c:out value='${user.cccd}' />">
-                                    </div>
-
-                                    <!-- CCCD Image -->
-                                    <div class="mb-2">
-                                        <label class="form-label fw-semibold">Ảnh CCCD:</label>
-                                        <c:if test="${not empty user.cccd_img}">
-                                            <img id="cccdPreview" src="<c:out value='${user.cccd_img}' />" alt="Ảnh CCCD" class="img-fluid mt-1 mb-1">
-                                        </c:if>
-                                        <input type="file" name="cccd_img" class="form-control mt-1" onchange="previewImage(this, 'cccdPreview')">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary">Cập Nhật Hồ Sơ</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Change Password Modal -->
-        <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="changePasswordModalLabel">Đổi Mật Khẩu</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="ChangePasswordServlet" method="post">
-                            <div class="mb-3">
-                                <label class="form-label">Mật Khẩu Hiện Tại</label>
-                                <input type="password" class="form-control" name="currentPassword" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Mật Khẩu Mới</label>
-                                <input type="password" class="form-control" name="newPassword" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Xác Nhận Mật Khẩu Mới</label>
-                                <input type="password" class="form-control" name="confirmPassword" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         <jsp:include page="./component/footer.jsp"></jsp:include>
 
@@ -290,41 +183,25 @@
 
         <c:if test="${not empty swalMessage}">
             <script>
-                                            Swal.fire({
-                                                icon: '<c:out value="${swalIcon}" />',
-                                                title: '<c:out value="${swalMessage}" />',
-                                                showConfirmButton: true,
-                                                timer: 3000
-                                            });
+                    Swal.fire({
+                        icon: '<c:out value="${swalIcon}" />',
+                        title: '<c:out value="${swalMessage}" />',
+                        showConfirmButton: true,
+                        timer: 3000
+                    });
 
-                                            // Nếu thất bại ở modal nào đó, mở lại modal tương ứng
+                    // Nếu thất bại ở modal nào đó, mở lại modal tương ứng
                 <c:choose>
                     <c:when test="${swalIcon == 'error' && swalMessage == 'Current password is incorrect!' || swalMessage == 'New password and confirm password do not match!'}">
-                                            var changeModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
-                                            changeModal.show();
+                    var changeModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+                    changeModal.show();
                     </c:when>
                     <c:when test="${swalIcon == 'error' && swalMessage == 'Failed to update profile. Please try again.'}">
-                                            var profileModal = new bootstrap.Modal(document.getElementById('profileModal'));
-                                            profileModal.show();
+                    var profileModal = new bootstrap.Modal(document.getElementById('profileModal'));
+                    profileModal.show();
                     </c:when>
                 </c:choose>
             </script>
         </c:if>
-
-
-        <script>
-            function previewImage(input, previewId) {
-                const file = input.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        const previewImg = document.getElementById(previewId);
-                        previewImg.src = e.target.result;
-                        previewImg.style.display = 'block';
-                    }
-                    reader.readAsDataURL(file);
-                }
-            }
-        </script>
     </body>
 </html>

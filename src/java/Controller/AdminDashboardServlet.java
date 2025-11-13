@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,19 +59,19 @@ public class AdminDashboardServlet extends HttpServlet {
 
         List<Map<String, Object>> claimRateByProduct = dashboardDB.getClaimRateByProduct(defaultLimit);
 
-        List<Claims> fraudAlertClaims = dashboardDB.getFraudAlertClaims(5);
+        List<Claims> fraudAlertClaims = dashboardDB.getFraudAlertClaims(defaultLimit);
 
-        List<Claims> unusualLargeContractClaims = dashboardDB.getUnusualLargeContractClaims(5);
+        List<Claims> unusualLargeContractClaims = dashboardDB.getUnusualLargeContractClaims(defaultLimit);
 
         List<Map<String, Object>> topRiskCustomers = dashboardDB.getTopRiskCustomers(2, 1, defaultLimit);
 
-        List<Map<String, Object>> topSellingProducts = dashboardDB.getTopSellingProducts(5);
+        List<Map<String, Object>> topSellingProducts = dashboardDB.getTopSellingProducts(defaultLimit);
 
-        List<Map<String, Object>> productsWithMostClaims = dashboardDB.getProductsWithMostClaims(5);
+        List<Map<String, Object>> productsWithMostClaims = dashboardDB.getProductsWithMostClaims(defaultLimit);
 
-        List<Map<String, Object>> topRevenueProducts = dashboardDB.getTopRevenueProducts(5);
+        List<Map<String, Object>> topRevenueProducts = dashboardDB.getTopRevenueProducts(defaultLimit);
 
-        List<Claims> newCustomerRiskClaims = dashboardDB.getNewCustomerRiskClaims(5);
+        List<Claims> newCustomerRiskClaims = dashboardDB.getNewCustomerRiskClaims(defaultLimit);
 
         Date defaultFromDate = new Date(System.currentTimeMillis() - 30L * 24 * 60 * 60 * 1000);
         Date defaultToDate = new Date(System.currentTimeMillis());
@@ -162,10 +163,26 @@ public class AdminDashboardServlet extends HttpServlet {
                 try {
                     int staffId = Integer.parseInt(staffIdStr);
                     List<Claims> claimsByStaff = dashboardDB.getClaimsByStaff(staffId, fromDate, toDate);
-                    request.setAttribute("claimsByStaff", claimsByStaff);
-                    request.setAttribute("selectedStaffId", staffId);
+                    // Null safety check
+                    if (claimsByStaff != null) {
+                        request.setAttribute("claimsByStaff", claimsByStaff);
+                        request.setAttribute("selectedStaffId", staffId);
+                        System.out.println("Successfully loaded " + claimsByStaff.size() + " claims for staff " + staffId);
+                    } else {
+                        System.err.println("getClaimsByStaff returned null for staffId: " + staffId);
+                        request.setAttribute("claimsByStaff", new ArrayList<Claims>());
+                        request.setAttribute("selectedStaffId", staffId);
+                    }
                 } catch (NumberFormatException e) {
+                    System.err.println("Invalid staffId format: " + staffIdStr);
                     e.printStackTrace();
+                    request.setAttribute("error", "ID nhân viên không hợp lệ: " + staffIdStr);
+                } catch (Exception e) {
+                    System.err.println("Error getting claims by staff: " + e.getMessage());
+                    e.printStackTrace();
+                    request.setAttribute("error", "Lỗi khi tải danh sách claim: " + e.getMessage());
+                    // Set empty list to prevent null pointer
+                    request.setAttribute("claimsByStaff", new ArrayList<Claims>());
                 }
             }
 

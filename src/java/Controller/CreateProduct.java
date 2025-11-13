@@ -38,9 +38,7 @@ public class CreateProduct extends HttpServlet {
             return;
         }
 
-        request.setAttribute("page", "create_product.jsp");
-        request.setAttribute("activePage", "product-management");
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/create_product.jsp").forward(request, response);
     }
 
     @Override
@@ -84,9 +82,7 @@ public class CreateProduct extends HttpServlet {
             boolean success = insuranceDAO.createProduct(product);
 
             setSuccessAttributes(request, product, relativePath);
-//            response.sendRedirect(request.getContextPath() + "/navigate?page=create");
-            request.setAttribute("page", "create_product.jsp");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/create_product.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

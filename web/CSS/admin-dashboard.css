@@ -477,3 +477,23 @@ body {
     }
 }
 
+/* Animation for highlighting claims result section */
+@keyframes highlight {
+    0% {
+        background-color: rgba(255, 215, 0, 0.3);
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
+    }
+    50% {
+        background-color: rgba(255, 215, 0, 0.5);
+        box-shadow: 0 0 20px 10px rgba(255, 215, 0, 0.3);
+    }
+    100% {
+        background-color: transparent;
+        box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+    }
+}
+
+#claimsByStaffResult {
+    transition: background-color 0.3s ease;
+}
+

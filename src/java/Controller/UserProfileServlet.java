@@ -20,10 +20,7 @@ import java.io.File;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 
-/**
- *
- * @author FPTSHOP
- */
+
 @WebServlet(name = "UserProfileServlet", urlPatterns = {"/UpdateProfileServlet"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
@@ -66,7 +63,7 @@ public class UserProfileServlet extends HttpServlet {
                 avatarPart.write(uploadPath + File.separator + avatarFileName);
                 user.setAvatar("uploads/avatars/" + avatarFileName);
             } else {
-                request.setAttribute("swalMessage", "Avatar file must be an image!");
+                request.setAttribute("swalMessage", "Tệp ảnh đại diện phải là hình ảnh!");
                 request.setAttribute("swalIcon", "error");
                 request.getRequestDispatcher("home.jsp").forward(request, response);
                 return;
@@ -87,7 +84,7 @@ public class UserProfileServlet extends HttpServlet {
                 cccdPart.write(uploadPath + File.separator + cccdFileName);
                 user.setCccd_img("uploads/cccd/" + cccdFileName);
             } else {
-                request.setAttribute("swalMessage", "CCCD file must be an image!");
+                request.setAttribute("swalMessage", "Tệp CCCD phải là hình ảnh!");
                 request.setAttribute("swalIcon", "error");
                 request.getRequestDispatcher("home.jsp").forward(request, response);
                 return;
@@ -100,10 +97,10 @@ public class UserProfileServlet extends HttpServlet {
 
         if (success) {
             session.setAttribute("user", user); // cập nhật session
-            request.setAttribute("swalMessage", "Profile updated successfully!");
+            request.setAttribute("swalMessage", "Hồ sơ được cập nhật thành công!");
             request.setAttribute("swalIcon", "success");
         } else {
-            request.setAttribute("swalMessage", "Failed to update profile. Please try again.");
+            request.setAttribute("swalMessage", "Không cập nhật được hồ sơ. Vui lòng thử lại.");
             request.setAttribute("swalIcon", "error");
         }
         request.getRequestDispatcher("home.jsp").forward(request, response);
