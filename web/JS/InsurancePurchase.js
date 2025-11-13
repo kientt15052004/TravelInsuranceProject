@@ -4,7 +4,7 @@ let state = {
     selectedPackage: {
         price: 5000,
         benefit: 50,
-        name: 'Car'
+        name: 'Gói 2'
     },
     startDate: '',
     endDate: '',
@@ -98,7 +98,7 @@ function validateBirthDate(birthDate) {
     selectedDate.setHours(0, 0, 0, 0);
 
     if (selectedDate > today) {
-        alert('Ngày sinh không thể là ngày tương lai');
+        alert('Ngày sinh không thể ở tương lai');
         return false;
     }
 
@@ -271,13 +271,12 @@ function handleBack() {
     } else if (currentStep === 5) {
         moveToStep(4);
     } else if (currentStep === 1) {
-        if (confirm('Bạn Có Chắc Chắn Muốn Quay Lại Không? Thông Tin Đã Chọn Sẽ Bị Mất.')) {
+        if (confirm('Bạn có chắc chắn muốn quay lại không? Thông tin đã chọn sẽ bị mất.')) {
             window.history.back();
         }
     }
 }
 
-//Modify validate step 4
 function handleContinue() {
     if (currentStep === 1 && validateStep1()) {
         moveToStep(2);
@@ -295,7 +294,6 @@ function handleContinue() {
         submitForm();
     }
 }
-
 
 function moveToStep(step) {
     for (let i = 1; i <= 5; i++) {
@@ -340,12 +338,12 @@ function updateProgressIndicator(step) {
 
 function validateStep1() {
     if (!state.startDate) {
-        alert('Vui Lòng Chọn Ngày Bắt Đầu Bảo Hiểm');
+        alert('Vui lòng chọn ngày bắt đầu bảo hiểm');
         return false;
     }
 
     if (!state.endDate) {
-        alert('Vui Lòng Chọn Ngày Kết Thúc Bảo Hiểm');
+        alert('Vui lòng chọn ngày kết thúc bảo hiểm');
         return false;
     }
 
@@ -354,7 +352,7 @@ function validateStep1() {
     }
 
     if (!state.selectedPackage) {
-        alert('Vui Lòng Chọn Gói Bảo Hiểm');
+        alert('Vui lòng chọn gói bảo hiểm');
         return false;
     }
 
@@ -373,7 +371,7 @@ function validateStep2() {
         const address = document.getElementById('address').value.trim();
 
         if (!idNumber || !fullName || !birthDate || !phoneNumber || !email || !address) {
-            alert('Vui Lòng Điền Vào Tất Cả Các Trường Bắt Buộc (*)');
+            alert('Vui lòng điền vào tất cả các trường bắt buộc (*)');
             return false;
         }
 
@@ -383,20 +381,20 @@ function validateStep2() {
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            alert('Địa Chỉ Email Không Hợp Lệ');
+            alert('Địa chỉ email không hợp lệ');
             return false;
         }
 
         const phoneRegex = /^(0|\+84)[0-9]{9}$/;
         if (!phoneRegex.test(phoneNumber.replace(/\s/g, ''))) {
-            alert('Số Điện Thoại Không Hợp Lệ');
+            alert('Số điện thoại không hợp lệ');
             return false;
         }
     } else {
         const inputs = document.getElementById('organizationForm').querySelectorAll('.form-input');
         for (let input of inputs) {
             if (!input.value.trim()) {
-                alert('Vui Lòng Điền Vào Tất Cả Các Trường Bắt Buộc (*)');
+                alert('Vui lòng điền vào tất cả các trường bắt buộc (*)');
                 return false;
             }
         }
@@ -436,7 +434,7 @@ function saveBuyerInfo() {
 
 function validateStep3() {
     if (state.insuredPersons.length === 0) {
-        alert('Vui Lòng Thêm Ít Nhất Một Người Được Bảo Hiểm');
+        alert('Vui lòng thêm ít nhất một người được bảo hiểm');
         return false;
     }
     return true;
@@ -446,7 +444,7 @@ function validateStep3() {
 function validateStep4() {
     const agreeTerms = document.getElementById('agreeTerms');
     if (!agreeTerms || !agreeTerms.checked) {
-        alert('Vui lòng đồng ý với Chính sách bảo vệ dữ liệu cá nhân của trang để tiếp tục');
+        alert('Vui lòng đồng ý với Chính sách bảo vệ dữ liệu cá nhân của Trang để tiếp tục');
         return false;
     }
     return true;
@@ -515,16 +513,64 @@ function saveInsuredPerson() {
     const birthDate = document.getElementById('personBirthDate').value;
     const phoneNumber = document.getElementById('personPhoneNumber').value.trim();
     const email = document.getElementById('personEmail').value.trim();
-
-    if (!fullName || !idNumber || !birthDate || !phoneNumber || !email) {
-        alert('Vui lòng điền vào tất cả các trường bắt buộc (*)');
+    
+    // Biểu thức regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const numberRegex = /^[0-9]+$/;
+    const phoneRegex = /^[0-9]{10,11}$/; // Số điện thoại 10-11 chữ số
+    
+    // Xóa tất cả lỗi cũ
+    clearAllErrors();
+    
+    let hasError = false;
+    
+    // Kiểm tra từng trường và hiển thị lỗi cụ thể
+    if (!fullName) {
+        showFieldError('personFullName', 'Vui lòng nhập họ và tên');
+        hasError = true;
+    }
+    
+    if (!idNumber) {
+        showFieldError('personIdNumber', 'Vui lòng nhập số CCCD');
+        hasError = true;
+    } else if (!numberRegex.test(idNumber)) {
+        showFieldError('personIdNumber', 'Số CCCD phải là số!');
+        hasError = true;
+    } else if (idNumber.length !== 9 && idNumber.length !== 12) {
+        showFieldError('personIdNumber', 'Số CCCD phải có 9 hoặc 12 chữ số');
+        hasError = true;
+    }
+    
+    if (!birthDate) {
+        showFieldError('personBirthDate', 'Vui lòng chọn ngày sinh');
+        hasError = true;
+    } else if (typeof validateBirthDate === 'function' && !validateBirthDate(birthDate)) {
+        showFieldError('personBirthDate', 'Ngày sinh không hợp lệ');
+        hasError = true;
+    }
+    
+    if (!phoneNumber) {
+        showFieldError('personPhoneNumber', 'Vui lòng nhập số điện thoại');
+        hasError = true;
+    } else if (!phoneRegex.test(phoneNumber)) {
+        showFieldError('personPhoneNumber', 'Số điện thoại phải là 10-11 chữ số!');
+        hasError = true;
+    }
+    
+    if (!email) {
+        showFieldError('personEmail', 'Vui lòng nhập email');
+        hasError = true;
+    } else if (!emailRegex.test(email)) {
+        showFieldError('personEmail', 'Email không đúng định dạng!');
+        hasError = true;
+    }
+    
+    // Nếu có lỗi, dừng lại
+    if (hasError) {
         return;
     }
-
-    if (!validateBirthDate(birthDate)) {
-        return;
-    }
-
+    
+    // Nếu hợp lệ => thêm vào danh sách
     const person = {
         id: Date.now(),
         fullName,
@@ -534,11 +580,106 @@ function saveInsuredPerson() {
         phoneNumber,
         email
     };
-
+    
     state.insuredPersons.push(person);
     renderInsuredPersonsList();
     closeAddPersonModal();
     updateTotalAmount();
+}
+
+// Hàm hiển thị lỗi cho từng field
+function showFieldError(inputId, message) {
+    const input = document.getElementById(inputId);
+    const formGroup = input.closest('.form-group');
+    
+    // Thêm class error vào input
+    input.classList.add('error');
+    
+    // Tạo hoặc cập nhật thông báo lỗi
+    let errorMsg = formGroup.querySelector('.error-message');
+    if (!errorMsg) {
+        errorMsg = document.createElement('div');
+        errorMsg.className = 'error-message';
+        formGroup.appendChild(errorMsg);
+    }
+    errorMsg.textContent = message;
+    
+    // Focus vào field đầu tiên có lỗi
+    if (!document.querySelector('.form-input.error:focus')) {
+        input.focus();
+    }
+}
+
+// Hàm xóa tất cả lỗi
+function clearAllErrors() {
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.classList.remove('error');
+    });
+    document.querySelectorAll('.error-message').forEach(msg => {
+        msg.remove();
+    });
+}
+
+// Xóa lỗi khi người dùng bắt đầu nhập
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = ['personFullName', 'personIdNumber', 'personBirthDate', 'personPhoneNumber', 'personEmail'];
+    
+    inputs.forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                const errorMsg = this.closest('.form-group').querySelector('.error-message');
+                if (errorMsg) {
+                    errorMsg.remove();
+                }
+            });
+        }
+    });
+});
+
+// CSS để hiển thị lỗi đẹp hơn
+if (!document.getElementById('form-validation-styles')) {
+    const style = document.createElement('style');
+    style.id = 'form-validation-styles';
+    style.textContent = `
+        .form-input.error {
+            border: 2px solid #e74c3c !important;
+            background-color: #fff5f5;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .error-message::before {
+            content: "⚠️";
+            margin-right: 5px;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-input.error:focus {
+            outline: none;
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 function removeInsuredPerson(id) {
@@ -553,7 +694,7 @@ function renderInsuredPersonsList() {
     const container = document.getElementById('insuredPersonsList');
 
     if (state.insuredPersons.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Chưa có người được bảo hiểm. Nhấn nút "Thêm Người Được Bảo Hiểm" để thêm.</p>';
+        container.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Chưa có người được bảo hiểm. Nhấp vào nút "Thêm người được bảo hiểm" để thêm.</p>';
         return;
     }
 
@@ -607,8 +748,8 @@ function renderConfirmation() {
         <div class="detail-row"><span class="detail-label">Địa Chỉ:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
     ` : `
         <div class="detail-row"><span class="detail-label">Tên Tổ Chức:</span><span class="detail-value">${state.buyerInfo.orgName}</span></div>
-        <div class="detail-row"><span class="detail-label">Mã Số Thuế:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
-        <div class="detail-row"><span class="detail-label">Đại Diện:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
+        <div class="detail-row"><span class="detail-label">Mã số thuế:</span><span class="detail-value">${state.buyerInfo.taxCode}</span></div>
+        <div class="detail-row"><span class="detail-label">Người Đại Diện:</span><span class="detail-value">${state.buyerInfo.representative}</span></div>
         <div class="detail-row"><span class="detail-label">Số Điện Thoại:</span><span class="detail-value">${state.buyerInfo.phoneNumber}</span></div>
         <div class="detail-row"><span class="detail-label">Email:</span><span class="detail-value">${state.buyerInfo.email}</span></div>
         <div class="detail-row"><span class="detail-label">Địa Chỉ:</span><span class="detail-value">${state.buyerInfo.address}</span></div>
@@ -657,7 +798,7 @@ function renderPaymentSummary() {
                 <span class="detail-value">${state.insuredPersons.length}</span>
             </div>
             <div class="detail-row">
-                    <span class="detail-label">Số Ngày:</span>
+                <span class="detail-label">Số Ngày:</span>
                 <span class="detail-value">${days}</span>
             </div>
             <div class="detail-row">
@@ -677,7 +818,7 @@ function submitForm() {
     const insuranceId = urlParams.get('insuranceId') || urlParams.get('id');
 
     if (!insuranceId) {
-        alert('Không tìm thấy ID bảo hiểm');
+        alert('Không Tìm Thấy ID Bảo Hiểm');
         return;
     }
 
