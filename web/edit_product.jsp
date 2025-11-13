@@ -292,10 +292,19 @@
                 }
             </style>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/admin.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/productmanagement.css">
         </head>
 
         <body>
+            <jsp:include page="component/admin-header.jsp"/>
+
             <div class="container">
+                <jsp:include page="component/admin-sidebar.jsp">
+                    <jsp:param name="activePage" value="view-products"/>
+                </jsp:include>
+
+                <div class="main-content">
                 <div class="page-header">
                     <h1>Chỉnh Sửa Sản Phẩm</h1>
                     <p class="subtitle">Cập nhật thông tin sản phẩm bảo hiểm du lịch</p>
@@ -938,5 +947,7 @@
                     }
                 });
             </script>
+                </div>
+            </div>
         </body>
     </html>

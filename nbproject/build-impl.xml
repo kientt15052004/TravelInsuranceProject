@@ -170,7 +170,10 @@
                 </not>
             </and>
         </condition>
-        <property name="source.encoding" value="${file.encoding}"/>
+        <condition property="source.encoding" value="${file.encoding}">
+            <isset property="file.encoding"/>
+        </condition>
+        <property name="source.encoding" value="UTF-8"/>
         <condition property="javadoc.encoding.used" value="${javadoc.encoding}">
             <and>
                 <isset property="javadoc.encoding"/>

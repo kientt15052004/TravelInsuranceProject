@@ -3,8 +3,24 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html>
 <html lang="vi">
-    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tạo Sản Phẩm - Hệ thống quản lý bảo hiểm</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/admin.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/productmanagement.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/createproduct.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </head>
     <body>
+        <jsp:include page="component/admin-header.jsp"/>
+
+        <div class="container">
+            <jsp:include page="component/admin-sidebar.jsp">
+                <jsp:param name="activePage" value="product-management"/>
+            </jsp:include>
+
+            <div class="main-content">
         <div class="content-header">
             <h1>Tạo Sản Phẩm Bảo Hiểm Du Lịch</h1>
             <p>Tạo sản phẩm bảo hiểm du lịch mới với đầy đủ thông tin và quyền lợi</p>
@@ -473,5 +489,7 @@
 
                 });
             </script>
+            </div>
+        </div>
     </body>
 </html>
