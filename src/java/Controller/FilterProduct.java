@@ -32,31 +32,26 @@ public class FilterProduct extends HttpServlet {
         if (filter.equals("all")) {
             ArrayList<InsuranceProduct> products = insuranceDAO.getAll();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
-            request.setAttribute("page", "view_product.jsp");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/view_product.jsp").forward(request, response);
 
         } else if (filter.equals("domestic")) {
             ArrayList<InsuranceProduct> products = insuranceDAO.getDomesticProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
-            request.setAttribute("page", "view_product.jsp");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/view_product.jsp").forward(request, response);
 
         } else if (filter.equals("international")) {
             ArrayList<InsuranceProduct> products = insuranceDAO.getInternationalProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
-            request.setAttribute("page", "view_product.jsp");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/view_product.jsp").forward(request, response);
 
         } else if (filter.equals("nonactive")) {
             ArrayList<InsuranceProduct> products = insuranceDAO.getNonActiveProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
-            request.setAttribute("page", "view_product.jsp");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/view_product.jsp").forward(request, response);
         } else if (filter.equals("active")) {
             ArrayList<InsuranceProduct> products = insuranceDAO.getActiveProducts();
             request.setAttribute("products", products); //Trả về danh sách sản phẩm còn tồn tại
-            request.setAttribute("page", "view_product.jsp");
-            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/view_product.jsp").forward(request, response);
         }
     }
 

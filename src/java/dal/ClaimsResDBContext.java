@@ -19,7 +19,7 @@ public class ClaimsResDBContext extends DBContext {
         }
         
         String sql = "SELECT cr.*, u.username as user_name, u.fullname as user_fullname " +
-                     "FROM claimsres cr " +
+                     "FROM ClaimsRes cr " +
                      "LEFT JOIN users u ON cr.user_id = u.id " +
                      "WHERE cr.claim_id = ? " +
                      "ORDER BY cr.createDate ASC, cr.id ASC";
@@ -99,6 +99,7 @@ public class ClaimsResDBContext extends DBContext {
             }
             ps.setString(7, actionType);
             
+            // Execute the insert
             int rowsAffected = ps.executeUpdate();
             System.out.println("Added claim response. Rows affected: " + rowsAffected);
             

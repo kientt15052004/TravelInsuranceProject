@@ -19,7 +19,7 @@ public class ClaimsDBContext extends DBContext {
             return claims;
         }
 
-        String sql = "SELECT * FROM claims WHERE contract_id = ? ORDER BY CASE claim_status "
+        String sql = "SELECT * FROM Claims WHERE contract_id = ? ORDER BY CASE claim_status "
                 + "WHEN 'pending' THEN 1 WHEN 'in_progress' THEN 2 WHEN 'need_info' THEN 3 "
                 + "WHEN 'approved' THEN 4 WHEN 'paid' THEN 5 WHEN 'rejected' THEN 6 ELSE 7 END, requestDate ASC";
 
@@ -77,7 +77,7 @@ public class ClaimsDBContext extends DBContext {
         }
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT c.* FROM claims c ");
+        sql.append("SELECT c.* FROM Claims c ");
         sql.append("WHERE 1=1 ");
 
         List<Object> parameters = new ArrayList<>();
@@ -154,7 +154,7 @@ public class ClaimsDBContext extends DBContext {
             return claimTypes;
         }
 
-        String sql = "SELECT DISTINCT claim_type FROM claims WHERE claim_type IS NOT NULL ORDER BY claim_type";
+        String sql = "SELECT DISTINCT claim_type FROM Claims WHERE claim_type IS NOT NULL ORDER BY claim_type";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -179,12 +179,12 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
 
-        String sql = "UPDATE claims SET claim_status = ? WHERE id = ?";
+        String sql = "UPDATE Claims SET claim_status = ? WHERE id = ?";
 
         try {
             // Read old status
             String oldStatus = null;
-            String selectSql = "SELECT claim_status FROM claims WHERE id = ?";
+            String selectSql = "SELECT claim_status FROM Claims WHERE id = ?";
             try (PreparedStatement sel = connection.prepareStatement(selectSql)) {
                 sel.setInt(1, claimId);
                 ResultSet rs = sel.executeQuery();
@@ -236,12 +236,12 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
 
-        String sql = "UPDATE claims SET claim_status = ? WHERE id = ?";
+        String sql = "UPDATE Claims SET claim_status = ? WHERE id = ?";
 
         try {
             // Read old status
             String oldStatus = null;
-            String selectSql = "SELECT claim_status FROM claims WHERE id = ?";
+            String selectSql = "SELECT claim_status FROM Claims WHERE id = ?";
             try (PreparedStatement sel = connection.prepareStatement(selectSql)) {
                 sel.setInt(1, claimId);
                 ResultSet rs = sel.executeQuery();
@@ -295,7 +295,7 @@ public class ClaimsDBContext extends DBContext {
             return claim;
         }
 
-        String sql = "SELECT * FROM claims WHERE id = ?";
+        String sql = "SELECT * FROM Claims WHERE id = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimId);
@@ -349,7 +349,7 @@ public class ClaimsDBContext extends DBContext {
 
     public boolean testConnection() {
         try {
-            String sql = "SELECT COUNT(*) FROM claims";
+            String sql = "SELECT COUNT(*) FROM Claims";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -370,7 +370,7 @@ public class ClaimsDBContext extends DBContext {
             return 0;
         }
 
-        String sql = "SELECT COUNT(*) FROM claims";
+        String sql = "SELECT COUNT(*) FROM Claims";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -389,7 +389,7 @@ public class ClaimsDBContext extends DBContext {
             return 0;
         }
 
-        String sql = "SELECT COUNT(*) FROM claims WHERE claim_status = ?";
+        String sql = "SELECT COUNT(*) FROM Claims WHERE claim_status = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, status);
             ResultSet rs = ps.executeQuery();
@@ -410,7 +410,7 @@ public class ClaimsDBContext extends DBContext {
         }
 
         // Lấy số lượng bồi thường mới trong X ngày vừa qua
-        String sql = "SELECT COUNT(*) FROM claims WHERE requestDate >= DATE_SUB(CURDATE(), INTERVAL ? DAY)";
+        String sql = "SELECT COUNT(*) FROM Claims WHERE requestDate >= DATE_SUB(CURDATE(), INTERVAL ? DAY)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, days);
             ResultSet rs = ps.executeQuery();
@@ -432,7 +432,7 @@ public class ClaimsDBContext extends DBContext {
             return claims;
         }
 
-        String sql = "SELECT * FROM claims ORDER BY CASE claim_status WHEN 'pending' THEN 1 WHEN 'in_progress' THEN 2 WHEN 'need_info' THEN 3 "
+        String sql = "SELECT * FROM Claims ORDER BY CASE claim_status WHEN 'pending' THEN 1 WHEN 'in_progress' THEN 2 WHEN 'need_info' THEN 3 "
                 + "WHEN 'approved' THEN 4 WHEN 'paid' THEN 5 WHEN 'rejected' THEN 6 ELSE 7 END, requestDate DESC LIMIT ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -490,7 +490,7 @@ public class ClaimsDBContext extends DBContext {
             return claims;
         }
 
-        String sql = "SELECT * FROM claims WHERE claim_status = 'pending' ORDER BY requestDate DESC LIMIT ?";
+        String sql = "SELECT * FROM Claims WHERE claim_status = 'pending' ORDER BY requestDate DESC LIMIT ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, limit);
@@ -548,8 +548,8 @@ public class ClaimsDBContext extends DBContext {
         }
 
         String sql = "SELECT c.*, COALESCE(a.total_price, 0) as contract_total_price "
-                + "FROM claims c "
-                + "INNER JOIN contract ct ON c.contract_id = ct.contract_id "
+                + "FROM Claims c "
+                + "INNER JOIN Contract ct ON c.contract_id = ct.contract_id "
                 + "INNER JOIN applications a ON ct.application_id = a.id "
                 + "WHERE c.claim_status = 'pending' "
                 + "ORDER BY COALESCE(a.total_price, 0) DESC, c.requestDate ASC";
@@ -779,13 +779,18 @@ public class ClaimsDBContext extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, claimId);
             ps.setInt(2, customerId);
+            System.out.println("Checking ownership: claimId=" + claimId + ", customerId=" + customerId);
+            System.out.println("SQL: " + sql);
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0;
+                int count = rs.getInt(1);
+                System.out.println("Ownership check result: " + count);
+                return count > 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            System.err.println("SQL Error checking claim ownership: " + e.getMessage());
         }
 
         return false;
@@ -831,7 +836,7 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
         
-        String sql = "UPDATE claims SET compensation_amount = ? WHERE id = ?";
+        String sql = "UPDATE Claims SET compensation_amount = ? WHERE id = ?";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             if (compensationAmount != null) {
@@ -859,7 +864,7 @@ public class ClaimsDBContext extends DBContext {
             return false;
         }
         
-        String sql = "UPDATE claims SET claim_status = ?, compensation_amount = ? WHERE id = ?";
+        String sql = "UPDATE Claims SET claim_status = ?, compensation_amount = ? WHERE id = ?";
         
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, newStatus);

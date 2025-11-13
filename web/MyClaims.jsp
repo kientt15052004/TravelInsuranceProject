@@ -108,7 +108,7 @@
                                             </span>
                                         </td>
                                         <td class="text-end td-actions">
-                                            <a href="claim-detail?id=${claim.id}" class="action-icon me-1" title="Xem chi tiết">
+                                            <a href="my-claim-detail?id=${claim.id}" class="action-icon me-1" title="Xem chi tiết">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             <c:if test="${claim.claim_status == 'pending' || claim.claim_status == 'need_info'}">
