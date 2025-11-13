@@ -1,4 +1,4 @@
-<!--CT= 0,01% * STBH * số ngày * số người-->
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -15,7 +15,7 @@
     <body>
         <!-- Header -->
         <jsp:include page="component/header.jsp" />
-        
+
         <div class="container">
 
             <!-- Progress Indicator -->
@@ -51,6 +51,7 @@
                 <!-- Left Panel - Purchase Form -->
                 <div class="card purchase-card">
                     <h2 class="card-title">
+                        <span class="icon">🛡️</span>
                         ${requestScope.insurance.name}
                         <span data-insurance-price="${requestScope.insurance.price}" style="display: none;"></span>
                     </h2>
@@ -302,7 +303,7 @@
                     <div class="form-group">
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                             <input type="checkbox" id="agreeTerms" style="width: 20px; height: 20px; cursor: pointer; accent-color: #e74c3c;">
-                            <span>Tôi đồng ý với <a href="#" style="color: #e74c3c; text-decoration: none;">Chính Sách Bảo Vệ Dữ Liệu Cá Nhân của Trang</a></span>
+                            <span>Tôi đồng ý với <a href="#" style="color: #e74c3c; text-decoration: none;">Chính Sách Bảo Vệ Dữ Liệu Cá Nhân của MIC</a></span>
                         </label>
                     </div>
                     <p style="font-size: 13px; color: #666; margin-top: 15px; line-height: 1.6;">
@@ -391,7 +392,7 @@
                         <button class="modal-close" onclick="closeAddPersonModal()">×</button>
                     </div>
 
-                    <form id="personForm" class="buyer-form">
+                    <form id="personForm" class="buyer-form needs-validation" novalidate>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Họ và Tên*</label>
@@ -465,7 +466,7 @@
 
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        
+
         <script src="./JS/InsurancePurchase.js"></script>
     </body>
 </html>
