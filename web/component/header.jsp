@@ -461,10 +461,9 @@
             %>
 
             <div class="dropdown">
-                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center" 
+                <button class="btn btn-link text-decoration-none p-0 d-flex align-items-center dropdown-toggle" 
                         type="button" 
                         id="userDropdown" 
-                        data-bs-toggle="dropdown" 
                         aria-expanded="false"
                         style="color: #666; font-weight: 500;">
                     <% if (user.getAvatar() != null && !user.getAvatar().isEmpty()) { %>
@@ -644,7 +643,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const dropdownBtn = document.querySelector('#userDropdown');
-        const dropdownMenu = document.querySelector('#userDropdown + .dropdown-menu');
+        // Fix selector: dropdown-menu is in the same parent .dropdown, not a sibling
+        const dropdownMenu = dropdownBtn ? dropdownBtn.closest('.dropdown').querySelector('.dropdown-menu') : null;
 
         if (dropdownBtn && dropdownMenu) {
             dropdownBtn.addEventListener('click', function (e) {
@@ -653,10 +653,14 @@
 
                 const isShown = dropdownMenu.classList.contains('show');
 
+                // Close all other dropdowns
                 document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
-                    menu.classList.remove('show');
+                    if (menu !== dropdownMenu) {
+                        menu.classList.remove('show');
+                    }
                 });
 
+                // Toggle current dropdown
                 if (!isShown) {
                     dropdownMenu.classList.add('show');
                     dropdownBtn.setAttribute('aria-expanded', 'true');
@@ -666,8 +670,10 @@
                 }
             });
 
+            // Close dropdown when clicking outside
             document.addEventListener('click', function (e) {
-                if (!dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                const dropdown = dropdownBtn.closest('.dropdown');
+                if (dropdown && !dropdown.contains(e.target)) {
                     dropdownMenu.classList.remove('show');
                     dropdownBtn.setAttribute('aria-expanded', 'false');
                 }
