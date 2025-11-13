@@ -49,13 +49,15 @@ public class CreateContractServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        // Use exact same logic as StaffServlet
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
+        
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+        if (!"staff".equals(currentUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
@@ -80,12 +82,124 @@ public class CreateContractServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login.jsp");
             return;
         }
+        
         User currentUser = (User) session.getAttribute("user");
-        if (currentUser.getRole() == null || !"staff".equalsIgnoreCase(currentUser.getRole())) {
+        // Use exact same logic as StaffServlet
+        if (!"staff".equals(currentUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
         try {
+            // Check for special actions (add/remove traveler)
+            String action = request.getParameter("action");
+            
+            if ("addTraveler".equals(action)) {
+                // Just forward back to JSP with all existing parameters
+                // JSP will handle rendering with +1 traveler field
+                List<InsuranceProduct> insuranceProducts = insuranceDB.getAll();
+                request.setAttribute("insuranceProducts", insuranceProducts);
+                request.getRequestDispatcher("CreateContract.jsp").forward(request, response);
+                return;
+            }
+            
+            if ("removeTraveler".equals(action)) {
+                // Get removeIndex parameter
+                String removeIndexStr = request.getParameter("removeIndex");
+                if (removeIndexStr != null) {
+                    try {
+                        int removeIndex = Integer.parseInt(removeIndexStr);
+                        
+                        // Get current arrays
+                        String[] travelerNames = request.getParameterValues("travelerName");
+                        String[] travelerIds = request.getParameterValues("travelerId");
+                        String[] travelerPhones = request.getParameterValues("travelerPhone");
+                        String[] travelerEmails = request.getParameterValues("travelerEmail");
+                        String[] travelerGenders = request.getParameterValues("travelerGender");
+                        String[] travelerBirthDates = request.getParameterValues("travelerBirthDate");
+                        
+                        // Remove element at removeIndex
+                        if (travelerNames != null && removeIndex >= 0 && removeIndex < travelerNames.length) {
+                            // Create new arrays without the removed element
+                            String[] newTravelerNames = removeArrayElement(travelerNames, removeIndex);
+                            String[] newTravelerIds = removeArrayElement(travelerIds, removeIndex);
+                            String[] newTravelerPhones = removeArrayElement(travelerPhones, removeIndex);
+                            String[] newTravelerEmails = removeArrayElement(travelerEmails, removeIndex);
+                            String[] newTravelerGenders = removeArrayElement(travelerGenders, removeIndex);
+                            String[] newTravelerBirthDates = removeArrayElement(travelerBirthDates, removeIndex);
+                            
+                            // Set new arrays as request parameters (by setting attributes and forwarding)
+                            // We'll pass them through request attributes since we can't modify parameters
+                            request.setAttribute("travelerNames", newTravelerNames);
+                            request.setAttribute("travelerIds", newTravelerIds);
+                            request.setAttribute("travelerPhones", newTravelerPhones);
+                            request.setAttribute("travelerEmails", newTravelerEmails);
+                            request.setAttribute("travelerGenders", newTravelerGenders);
+                            request.setAttribute("travelerBirthDates", newTravelerBirthDates);
+                            
+                            // Also preserve other form data
+                            request.setAttribute("buyerName", request.getParameter("buyerName"));
+                            request.setAttribute("buyerId", request.getParameter("buyerId"));
+                            request.setAttribute("buyerPhone", request.getParameter("buyerPhone"));
+                            request.setAttribute("buyerEmail", request.getParameter("buyerEmail"));
+                            request.setAttribute("buyerAddress", request.getParameter("buyerAddress"));
+                            request.setAttribute("insuranceProductId", request.getParameter("insuranceProductId"));
+                            request.setAttribute("startDate", request.getParameter("startDate"));
+                            request.setAttribute("endDate", request.getParameter("endDate"));
+                            request.setAttribute("destination", request.getParameter("destination"));
+                            request.setAttribute("contractDescription", request.getParameter("contractDescription"));
+                        }
+                    } catch (NumberFormatException e) {
+                        // Invalid removeIndex, just forward with existing data
+                    }
+                }
+                
+                List<InsuranceProduct> insuranceProducts = insuranceDB.getAll();
+                request.setAttribute("insuranceProducts", insuranceProducts);
+                request.getRequestDispatcher("CreateContract.jsp").forward(request, response);
+                return;
+            }
+            
+            if ("calculatePrice".equals(action)) {
+                // Preserve all form data as attributes for JSP to calculate total price
+                request.setAttribute("buyerName", request.getParameter("buyerName"));
+                request.setAttribute("buyerId", request.getParameter("buyerId"));
+                request.setAttribute("buyerPhone", request.getParameter("buyerPhone"));
+                request.setAttribute("buyerEmail", request.getParameter("buyerEmail"));
+                request.setAttribute("buyerAddress", request.getParameter("buyerAddress"));
+                
+                // Preserve traveler arrays
+                String[] travelerNames = request.getParameterValues("travelerName");
+                String[] travelerIds = request.getParameterValues("travelerId");
+                String[] travelerPhones = request.getParameterValues("travelerPhone");
+                String[] travelerEmails = request.getParameterValues("travelerEmail");
+                String[] travelerGenders = request.getParameterValues("travelerGender");
+                String[] travelerBirthDates = request.getParameterValues("travelerBirthDate");
+                
+                if (travelerNames != null) {
+                    request.setAttribute("travelerNames", travelerNames);
+                    request.setAttribute("travelerIds", travelerIds);
+                    request.setAttribute("travelerPhones", travelerPhones);
+                    request.setAttribute("travelerEmails", travelerEmails);
+                    request.setAttribute("travelerGenders", travelerGenders);
+                    request.setAttribute("travelerBirthDates", travelerBirthDates);
+                }
+                
+                // Preserve contract information
+                request.setAttribute("insuranceProductId", request.getParameter("insuranceProductId"));
+                request.setAttribute("startDate", request.getParameter("startDate"));
+                request.setAttribute("endDate", request.getParameter("endDate"));
+                request.setAttribute("destination", request.getParameter("destination"));
+                request.setAttribute("contractDescription", request.getParameter("contractDescription"));
+                
+                // Load products list
+                List<InsuranceProduct> insuranceProducts = insuranceDB.getAll();
+                request.setAttribute("insuranceProducts", insuranceProducts);
+                
+                // Forward back to JSP (JSP will calculate and display total)
+                request.getRequestDispatcher("CreateContract.jsp").forward(request, response);
+                return;
+            }
+            
             // Get form parameters - Buyer Information
             String buyerName = request.getParameter("buyerName");
             String buyerId = request.getParameter("buyerId");
@@ -94,12 +208,23 @@ public class CreateContractServlet extends HttpServlet {
             String buyerAddress = request.getParameter("buyerAddress");
             
             // Get form parameters - Travelers Information
-            String[] travelerNames = request.getParameterValues("travelerName");
-            String[] travelerIds = request.getParameterValues("travelerId");
-            String[] travelerPhones = request.getParameterValues("travelerPhone");
-            String[] travelerEmails = request.getParameterValues("travelerEmail");
-            String[] travelerGenders = request.getParameterValues("travelerGender");
-            String[] travelerBirthDates = request.getParameterValues("travelerBirthDate");
+            // Check if we have traveler data from attributes (from removeTraveler action)
+            String[] travelerNames = (String[]) request.getAttribute("travelerNames");
+            String[] travelerIds = (String[]) request.getAttribute("travelerIds");
+            String[] travelerPhones = (String[]) request.getAttribute("travelerPhones");
+            String[] travelerEmails = (String[]) request.getAttribute("travelerEmails");
+            String[] travelerGenders = (String[]) request.getAttribute("travelerGenders");
+            String[] travelerBirthDates = (String[]) request.getAttribute("travelerBirthDates");
+            
+            // If not from attributes, get from parameters
+            if (travelerNames == null) {
+                travelerNames = request.getParameterValues("travelerName");
+                travelerIds = request.getParameterValues("travelerId");
+                travelerPhones = request.getParameterValues("travelerPhone");
+                travelerEmails = request.getParameterValues("travelerEmail");
+                travelerGenders = request.getParameterValues("travelerGender");
+                travelerBirthDates = request.getParameterValues("travelerBirthDate");
+            }
             
             // Get form parameters - Contract Information
             String insuranceProductId = request.getParameter("insuranceProductId");
@@ -410,6 +535,19 @@ public class CreateContractServlet extends HttpServlet {
             return null;
         }
         return array[index];
+    }
+    
+    private String[] removeArrayElement(String[] array, int index) {
+        if (array == null || index < 0 || index >= array.length) {
+            return array;
+        }
+        String[] newArray = new String[array.length - 1];
+        for (int i = 0, j = 0; i < array.length; i++) {
+            if (i != index) {
+                newArray[j++] = array[i];
+            }
+        }
+        return newArray;
     }
 
     private String normalizeGender(String input) {

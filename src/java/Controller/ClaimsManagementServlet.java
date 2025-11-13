@@ -38,6 +38,7 @@ public class ClaimsManagementServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
+        
         try {
             String searchTerm = request.getParameter("search");
             String statusFilter = request.getParameter("status");
@@ -74,7 +75,7 @@ public class ClaimsManagementServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
-        // Redirect về GET để tránh duplicate submission
+
         response.sendRedirect(request.getContextPath() + "/ClaimsManagementServlet");
     }
 }
