@@ -37,54 +37,102 @@
 
     /* ===== HEADER NAVBAR STYLES ===== */
     .navbar {
-        background-color: #fff;
-        border-bottom: 1px solid #e0e0e0;
-        padding: 1rem 0;
+        background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
+        border-bottom: 2px solid var(--brand-yellow);
+        padding: 1.25rem 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
     }
 
     .navbar-brand {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #ff9800 !important;
+        font-size: 1.75rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #ff9800 0%, #ff6b00 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         text-decoration: none;
+        letter-spacing: -0.5px;
+        transition: all 0.3s ease;
     }
 
     .navbar-brand:hover {
-        color: #e68900 !important;
+        transform: scale(1.05);
+        filter: brightness(1.1);
     }
 
     .nav-link {
-        color: #666 !important;
-        font-weight: 500;
-        transition: color 0.3s;
+        color: #555 !important;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 0.5rem 1rem !important;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: var(--brand-yellow);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
     }
 
     .nav-link:hover {
         color: #ff9800 !important;
+        background-color: rgba(255, 184, 0, 0.1);
+    }
+
+    .nav-link:hover::after {
+        width: 80%;
     }
 
     .btn-sign-in {
-        background-color: var(--brand-yellow);
-        border: 1px solid var(--brand-yellow);
+        background: linear-gradient(135deg, var(--brand-yellow) 0%, #ffc107 100%);
+        border: none;
         color: #000;
-        font-weight: 600;
-        padding: 0.5rem 1.5rem;
-        transition: all 0.3s;
+        font-weight: 700;
+        padding: 0.65rem 2rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+        text-transform: uppercase;
+        font-size: 14px;
+        letter-spacing: 0.5px;
     }
 
     .btn-sign-in:hover {
-        background-color: #e68900;
-        border-color: #e68900;
-        color: #000;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(255, 184, 0, 0.4);
+        background: linear-gradient(135deg, #ffc107 0%, var(--brand-yellow) 100%);
     }
 
     .dropdown-toggle {
-        color: #666 !important;
-        font-weight: 500;
+        color: #444 !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem !important;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
 
     .dropdown-toggle:hover {
         color: #ff9800 !important;
+        background: rgba(255, 184, 0, 0.1);
+        border-color: var(--brand-yellow);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     
     /* Dropdown CSS thuần - không cần JavaScript */
@@ -400,10 +448,60 @@
         position: absolute;
         z-index: 1050 !important;
         pointer-events: auto !important;
+        min-width: 220px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 8px 0;
+        margin-top: 8px;
+        overflow: hidden;
+        animation: dropdownFadeIn 0.2s ease;
+    }
+
+    @keyframes dropdownFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .dropdown-menu.show {
         display: block !important;
+    }
+
+    .dropdown-menu .dropdown-item {
+        padding: 12px 20px;
+        color: #444;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background: linear-gradient(90deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0.05) 100%);
+        color: #ff9800;
+        padding-left: 24px;
+    }
+
+    .dropdown-menu .dropdown-item i {
+        width: 18px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .dropdown-menu .dropdown-divider {
+        height: 1px;
+        margin: 8px 0;
+        background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
+        border: none;
     }
 
     .dropdown-toggle {
@@ -414,6 +512,49 @@
     .navbar-right {
         position: relative;
         z-index: 1040;
+    }
+
+    /* Avatar styling */
+    .navbar-right img.rounded-circle {
+        border: 2px solid var(--brand-yellow) !important;
+        box-shadow: 0 2px 8px rgba(255, 184, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+
+    .navbar-right .dropdown:hover img.rounded-circle {
+        box-shadow: 0 4px 12px rgba(255, 184, 0, 0.5);
+        transform: scale(1.05);
+    }
+
+    .navbar-right .bi-person-circle {
+        color: var(--brand-yellow);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 991px) {
+        .navbar {
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            font-size: 14px;
+            padding: 0.4rem 0.8rem !important;
+        }
+
+        .btn-sign-in {
+            padding: 0.5rem 1.5rem;
+            font-size: 13px;
+        }
+
+        .dropdown-toggle {
+            padding: 0.4rem 0.8rem !important;
+            font-size: 14px;
+        }
     }
 
     @media (min-width: 1200px) {
@@ -472,7 +613,6 @@
                     <i class="bi bi-person-circle me-2" style="font-size: 32px;"></i>
                     <% } %>
                     <span><%= user.getFullname() %></span>
-                    <i class="bi bi-chevron-down ms-2"></i>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">
