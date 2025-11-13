@@ -34,8 +34,7 @@ public class EditProduct extends HttpServlet {
             if (product != null) {
                 System.out.println("DEBUG: Product loaded - package_type: " + product.getPackage_type());
                 request.setAttribute("product", product);
-                request.setAttribute("page", "edit_product.jsp");
-                request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                request.getRequestDispatcher("/edit_product.jsp").forward(request, response);
             } else {
                 request.getSession().setAttribute("error", "Không tìm thấy sản phẩm!");
                 response.sendRedirect(request.getContextPath() + "/view_product");
