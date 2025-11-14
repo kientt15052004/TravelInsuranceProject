@@ -37,7 +37,7 @@
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
                             <input id="q" name="q" class="form-control border-start-0" type="search"
-                                   value="${searchTerm}" placeholder="Tìm kiếm..." aria-label="Search">
+                                   value="${searchTerm}" placeholder="Tìm kiếm theo mã khiếu nại ..." aria-label="Search">
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">

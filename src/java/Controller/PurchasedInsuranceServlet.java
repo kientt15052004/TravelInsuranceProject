@@ -42,7 +42,7 @@ public class PurchasedInsuranceServlet extends HttpServlet {
         User currentUser = (User) session.getAttribute("user");
 
         // Chỉ cho phép customer truy cập
-        if (!"customer".equalsIgnoreCase(currentUser.getRole())) {
+        if (currentUser.getRole() == null || !"customer".equalsIgnoreCase(currentUser.getRole())) {
             response.sendRedirect(request.getContextPath() + "/home");
             return;
         }
