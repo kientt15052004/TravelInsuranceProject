@@ -192,7 +192,7 @@
 
                     // Nếu thất bại ở modal nào đó, mở lại modal tương ứng
                 <c:choose>
-                    <c:when test="${swalIcon == 'error' && swalMessage == 'Current password is incorrect!' || swalMessage == 'New password and confirm password do not match!'}">
+                    <c:when test="${swalIcon == 'error' && swalMessage == 'Mật khẩu hiện tại sai!' || swalMessage == 'mật khẩu mới xác nhận không khớp!'}">
                     var changeModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
                     changeModal.show();
                     </c:when>
