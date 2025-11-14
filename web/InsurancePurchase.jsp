@@ -150,11 +150,6 @@
                             <div class="benefit-amount" data-base="${benefit.lost_or_damaged_golf_equipment}">${benefit.lost_or_damaged_golf_equipment} VNĐ</div>
                         </div>
                     </div>
-
-                    <a href="#" class="view-summary">
-                        <span>📄</span>
-                        Xem Tóm Tắt Quyền Lợi
-                    </a>
                 </div>
             </div>
 
