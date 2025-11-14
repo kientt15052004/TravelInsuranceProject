@@ -83,10 +83,20 @@ public class ClaimsDBContext extends DBContext {
         List<Object> parameters = new ArrayList<>();
 
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-            sql.append("AND (c.contract_id LIKE ? OR c.description LIKE ?) ");
             String searchPattern = "%" + searchTerm.trim() + "%";
-            parameters.add(searchPattern);
-            parameters.add(searchPattern);
+            // Try to parse as integer for exact ID match, otherwise use LIKE
+            try {
+                int claimId = Integer.parseInt(searchTerm.trim());
+                sql.append("AND (c.id = ? OR c.contract_id LIKE ? OR c.description LIKE ?) ");
+                parameters.add(claimId);
+                parameters.add(searchPattern);
+                parameters.add(searchPattern);
+            } catch (NumberFormatException e) {
+                // Not a number, search in contract_id and description only
+                sql.append("AND (c.contract_id LIKE ? OR c.description LIKE ?) ");
+                parameters.add(searchPattern);
+                parameters.add(searchPattern);
+            }
         }
 
         if (statusFilter != null && !statusFilter.trim().isEmpty()) {

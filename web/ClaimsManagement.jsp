@@ -32,7 +32,7 @@
                         <div class="search-group">
                             <label for="search">Tìm kiếm:</label>
                             <input type="text" id="search" name="search" value="${searchTerm}" 
-                                   placeholder="Tìm theo Contract ID hoặc mô tả...">
+                                   placeholder="Tìm theo Claim ID, Contract ID hoặc mô tả...">
                         </div>
                         
                         <div class="filter-group">
@@ -59,11 +59,9 @@
                         
                         <div class="button-group">
                             <button type="submit" class="btn btn-search">
-                                <i class="fas fa-search"></i>
                                 Tìm kiếm
                             </button>
                             <a href="${pageContext.request.contextPath}/ClaimsManagementServlet" class="btn btn-clear">
-                                <i class="fas fa-times"></i>
                                 Xóa bộ lọc
                             </a>
                         </div>
