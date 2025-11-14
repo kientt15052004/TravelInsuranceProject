@@ -151,10 +151,7 @@
                         </div>
                     </div>
 
-                    <a href="#" class="view-summary">
-                        <span>📄</span>
-                        Xem Tóm Tắt Quyền Lợi
-                    </a>
+                    
                 </div>
             </div>
 
