@@ -312,3 +312,113 @@
 .btn-secondary:disabled:hover {
     transform: none;
 }
+
+/* Total Price Section */
+.total-price-section {
+    background: linear-gradient(135deg, #FFD700 0%, #ffed4e 100%);
+    border: 2px solid #FFD700;
+    border-radius: 8px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.total-price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.total-price-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+}
+
+.total-price-label i {
+    font-size: 24px;
+    color: #000;
+}
+
+.total-price-amount {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.total-price-amount .price-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #000;
+    font-family: 'Arial', sans-serif;
+}
+
+.total-price-amount .currency {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.total-price-actions {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.btn-calculate-price {
+    background-color: #000;
+    color: #FFD700;
+    border: 2px solid #FFD700;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-calculate-price:hover {
+    background-color: #FFD700;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-calculate-price:active {
+    transform: translateY(0);
+}
+
+.btn-calculate-price i {
+    font-size: 16px;
+}
+
+.total-price-breakdown {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.breakdown-text {
+    color: #333;
+    font-size: 13px;
+    line-height: 1.6;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .total-price-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .total-price-amount .price-value {
+        font-size: 28px;
+    }
+}

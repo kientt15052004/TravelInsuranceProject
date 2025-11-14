@@ -96,8 +96,7 @@ public class AddClaimResponseServlet extends HttpServlet {
             handleApproveReject(request, response, claimId, submitType, description, compensationAmount, currentUser, session);
             return;
         }
-        
-        // Handle update compensation amount separately (for approved claims)
+
         if (compensationAmountStr != null && !compensationAmountStr.trim().isEmpty()) {
             try {
                 BigDecimal compensationAmount = new BigDecimal(compensationAmountStr.trim());
@@ -124,8 +123,7 @@ public class AddClaimResponseServlet extends HttpServlet {
                 return;
             }
         }
-        
-        // Handle regular reply
+
         if (description == null || description.trim().isEmpty()) {
             session.setAttribute("error", "Vui lòng nhập nội dung phản hồi");
             response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);
@@ -133,21 +131,19 @@ public class AddClaimResponseServlet extends HttpServlet {
         }
         
         try {
-            // Handle file uploads
-            String relatedImgPath = handleFileUpload(request, "related_img", true); // image only
-            String relatedFilePath = handleFileUpload(request, "related_file", false); // any file
-            
-            // Create ClaimsRes object for regular reply
+
+            String relatedImgPath = handleFileUpload(request, "related_img", true);
+            String relatedFilePath = handleFileUpload(request, "related_file", false);
+
             ClaimsRes claimRes = new ClaimsRes();
             claimRes.setClaim_id(claimId);
-            claimRes.setUser_id(currentUser.getId()); // Set user from session
+            claimRes.setUser_id(currentUser.getId());
             claimRes.setCreateDate(new Date());
             claimRes.setDescription(description);
             claimRes.setRelated_img(relatedImgPath);
             claimRes.setRelated_file(relatedFilePath);
-            claimRes.setAction_type("review"); // Regular reply is just a review
-            
-            // Insert to database
+            claimRes.setAction_type("review");
+
             ClaimsResDBContext claimsResDB = new ClaimsResDBContext();
             boolean success = claimsResDB.addClaimResponse(claimRes);
             
@@ -156,8 +152,7 @@ public class AddClaimResponseServlet extends HttpServlet {
             } else {
                 session.setAttribute("error", "Có lỗi xảy ra khi gửi phản hồi");
             }
-            
-            // Redirect to claim detail page with scroll parameter
+
             response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId + "&scrollToBottom=true");
             
         } catch (Exception e) {

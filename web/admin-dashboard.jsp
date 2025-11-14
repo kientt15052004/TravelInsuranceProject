@@ -81,12 +81,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Doanh thu theo sản phẩm</h3>
-                                <select class="table-limit-select" data-table="revenueByProduct">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="revenueByProduct">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -121,12 +124,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Tỷ lệ claim/hợp đồng theo sản phẩm</h3>
-                                <select class="table-limit-select" data-table="claimRateByProduct">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="claimRateByProduct">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -173,12 +179,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Claim được đền bù số tiền lớn</h3>
-                                <select class="table-limit-select" data-table="fraudAlertClaims">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="fraudAlertClaims">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -225,12 +234,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Claim của hợp đồng lớn bất thường</h3>
-                                <select class="table-limit-select" data-table="unusualLargeContractClaims">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="unusualLargeContractClaims">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -271,12 +283,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Top khách hàng rủi ro</h3>
-                                <select class="table-limit-select" data-table="topRiskCustomers">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="topRiskCustomers">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -323,12 +338,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm bán chạy</h3>
-                                <select class="table-limit-select" data-table="topSellingProducts">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="topSellingProducts">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -363,12 +381,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm bị claim nhiều nhất</h3>
-                                <select class="table-limit-select" data-table="productsWithMostClaims">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="productsWithMostClaims">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -403,12 +424,15 @@
                         <div class="table-section">
                             <div class="table-header-with-filter">
                                 <h3>Sản phẩm có doanh thu cao nhất</h3>
-                                <select class="table-limit-select" data-table="topRevenueProducts">
-                                    <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
-                                    <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
-                                </select>
+                                <form method="GET" action="${pageContext.request.contextPath}/admin/dashboard" style="display: inline;">
+                                    <input type="hidden" name="table" value="topRevenueProducts">
+                                    <select class="table-limit-select" name="limit" onchange="this.form.submit()">
+                                        <option value="5" ${defaultLimit == 5 ? 'selected' : ''}>5</option>
+                                        <option value="10" ${defaultLimit == 10 ? 'selected' : ''}>10</option>
+                                        <option value="20" ${defaultLimit == 20 ? 'selected' : ''}>20</option>
+                                        <option value="50" ${defaultLimit == 50 ? 'selected' : ''}>50</option>
+                                    </select>
+                                </form>
                             </div>
                             <div class="stats-table-container">
                             <table class="stats-table">
@@ -556,7 +580,7 @@
                     </c:if>
                 </div>
 
-                <div class="section">
+<!--                <div class="section">
                     <div class="section-header">
                         <h2>Phân tích rủi ro khách hàng</h2>
                     </div>
@@ -614,12 +638,11 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
 
-    <script src="${pageContext.request.contextPath}/JS/admin-dashboard.js"></script>
 </body>
 </html>
 
