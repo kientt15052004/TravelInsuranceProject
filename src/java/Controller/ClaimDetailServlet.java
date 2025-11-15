@@ -114,14 +114,14 @@ public class ClaimDetailServlet extends HttpServlet {
             return;
         }
         User currentUser = (User) session.getAttribute("user");
-        // Allow both admin and staff to view claim details
+
         if (currentUser.getRole() == null || 
             (!"staff".equalsIgnoreCase(currentUser.getRole()) && !"admin".equalsIgnoreCase(currentUser.getRole()))) {
             response.sendRedirect(request.getContextPath() + "/home.jsp");
             return;
         }
         try {
-            // Lấy thông báo thành công/lỗi từ AddClaimResponseServlet
+
             String success = request.getParameter("success");
             String error = request.getParameter("error");
             
@@ -131,7 +131,7 @@ public class ClaimDetailServlet extends HttpServlet {
             }
             
             if (claimId != null) {
-                // Forward về GET để hiển thị lại trang
+
                 request.setAttribute("success", success);
                 request.setAttribute("error", error);
                 response.sendRedirect(request.getContextPath() + "/ClaimDetailServlet?id=" + claimId);

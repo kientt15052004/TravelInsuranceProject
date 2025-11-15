@@ -2,9 +2,10 @@
 let state = {
     passengers: 1,
     selectedPackage: {
-        price: 5000,
-        benefit: 50,
-        name: 'Gói 2'
+        price: 0,
+        benefitId: null,
+        productId: null,
+        name: ''
     },
     startDate: '',
     endDate: '',
@@ -16,6 +17,22 @@ let currentStep = 1;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function () {
+    // Khởi tạo selectedPackage từ gói được chọn ban đầu
+    const selectedCard = document.querySelector('.package-card.selected');
+    if (selectedCard && !selectedCard.classList.contains('disabled')) {
+        const price = parseFloat(selectedCard.getAttribute('data-price')) || 0;
+        const benefitId = selectedCard.getAttribute('data-benefit-id');
+        const productId = selectedCard.getAttribute('data-product-id');
+        const packageName = selectedCard.querySelector('.package-name')?.textContent || '';
+        
+        state.selectedPackage = {
+            price: price,
+            benefitId: benefitId,
+            productId: productId,
+            name: packageName
+        };
+    }
+    
     initPackageSelection();
     initPassengerInput();
     initDateInputs();
@@ -117,23 +134,30 @@ function initPackageSelection() {
 }
 
 function selectPackage(selectedCard) {
+    // Không cho phép chọn gói disabled
+    if (selectedCard.classList.contains('disabled')) {
+        return;
+    }
+    
     document.querySelectorAll('.package-card').forEach(card => {
         card.classList.remove('selected');
     });
 
     selectedCard.classList.add('selected');
 
-    const price = parseInt(selectedCard.getAttribute('data-price'));
-    const benefit = parseInt(selectedCard.getAttribute('data-benefit'));
+    const price = parseFloat(selectedCard.getAttribute('data-price')) || 0;
+    const benefitId = selectedCard.getAttribute('data-benefit-id');
+    const productId = selectedCard.getAttribute('data-product-id');
 
     state.selectedPackage = {
         price: price,
-        benefit: benefit,
+        benefitId: benefitId,
+        productId: productId,
         name: selectedCard.querySelector('.package-name').textContent
     };
 
     updateTotalAmount();
-    updateBenefitsDisplay();
+    // Không cần update benefits display vì benefits đã đúng từ database
 }
 
 // Passenger Input
@@ -210,13 +234,9 @@ function updateTotalAmount() {
 }
 
 function updateBenefitsDisplay() {
-    const benefitAmounts = document.querySelectorAll('.benefit-amount');
-
-    benefitAmounts.forEach(el => {
-        const baseAmount = parseFloat(el.getAttribute('data-base')) || 0;
-        const newAmount = baseAmount * state.selectedPackage.benefit;
-        el.textContent = formatCurrency(newAmount) + ' VNĐ';
-    });
+    // Benefits đã được hiển thị đúng từ database, không cần nhân thêm
+    // Hàm này giữ lại để tương thích với code hiện tại nhưng không làm gì
+    // Nếu cần update benefits khi chọn gói mới, cần reload page hoặc load qua AJAX
 }
 
 function formatCurrency(amount) {
@@ -814,11 +834,11 @@ function renderPaymentSummary() {
 }
 
 function submitForm() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const insuranceId = urlParams.get('insuranceId') || urlParams.get('id');
-
-    if (!insuranceId) {
-        alert('Không Tìm Thấy ID Bảo Hiểm');
+    // Sử dụng productId từ selectedPackage thay vì lấy từ URL
+    const productId = state.selectedPackage.productId;
+    
+    if (!productId) {
+        alert('Vui lòng chọn gói bảo hiểm');
         return;
     }
 
@@ -826,9 +846,9 @@ function submitForm() {
     form.method = 'POST';
     form.action = 'purchase-insurance';
 
-    addHiddenField(form, 'insuranceId', insuranceId);
+    addHiddenField(form, 'insuranceId', productId);
     addHiddenField(form, 'type', INSURANCE_TYPE);
-    addHiddenField(form, 'benefit-id', BENEFIT_ID);
+    addHiddenField(form, 'benefit-id', state.selectedPackage.benefitId || BENEFIT_ID);
     addHiddenField(form, 'startDate', state.startDate);
     addHiddenField(form, 'endDate', state.endDate);
 
@@ -894,9 +914,10 @@ function resetForm() {
     state = {
         passengers: 1,
         selectedPackage: {
-            price: 5000,
-            benefit: 50,
-            name: 'Car'
+            price: 0,
+            benefitId: null,
+            productId: null,
+            name: ''
         },
         startDate: '',
         endDate: '',

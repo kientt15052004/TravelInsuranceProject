@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class DashboardDBContext extends DBContext {
 
-    /*Tổng hợp đồng đang có hiệu lực*/
     public int getActiveContractsCount() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -33,7 +32,6 @@ public class DashboardDBContext extends DBContext {
         return 0;
     }
 
-    /*Doanh thu theo sản phẩm*/
     public List<Map<String, Object>> getRevenueByProduct(int limit) {
         List<Map<String, Object>> results = new ArrayList<>();
         
@@ -69,7 +67,6 @@ public class DashboardDBContext extends DBContext {
         return results;
     }
 
-    /*Tổng doanh thu*/
     public BigDecimal getTotalRevenue() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -92,7 +89,6 @@ public class DashboardDBContext extends DBContext {
         return BigDecimal.ZERO;
     }
 
-    /*Tổng số tiền đã đền bù cho khách hàng*/
     public BigDecimal getTotalCompensationAmount() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -116,7 +112,6 @@ public class DashboardDBContext extends DBContext {
         return BigDecimal.ZERO;
     }
 
-    /*Claim theo 30 ngày qua*/
     public int getClaimsLast30Days() {
         if (connection == null) {
             System.err.println("Database connection is null!");
@@ -138,7 +133,6 @@ public class DashboardDBContext extends DBContext {
         return 0;
     }
 
-    /*Tỷ lệ Approved/Rejected*/
     public Map<String, Object> getApprovedRejectedRatio() {
         Map<String, Object> result = new HashMap<>();
         
@@ -507,12 +501,15 @@ public class DashboardDBContext extends DBContext {
             return results;
         }
 
+        // Sửa query: JOIN với bảng Contract để chỉ đếm những applications đã có Contract
+        // Sử dụng ngày startDate của application để xác định thời gian
         String sql = "SELECT u.id as customerId, u.fullname as customerName, "
-                + "COUNT(*) as contractCount, "
+                + "COUNT(DISTINCT c.contract_id) as contractCount, "
                 + "MIN(a.startDate) as firstContractDate, "
                 + "MAX(a.startDate) as lastContractDate "
                 + "FROM users u "
                 + "JOIN applications a ON u.id = a.purchaser_id "
+                + "JOIN Contract c ON a.id = c.application_id "
                 + "WHERE a.startDate >= DATE_SUB(CURDATE(), INTERVAL ? DAY) "
                 + "GROUP BY u.id, u.fullname "
                 + "HAVING contractCount >= ? "
@@ -521,7 +518,9 @@ public class DashboardDBContext extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, days);
             ps.setInt(2, minContracts);
+            System.out.println("Executing getCustomersWithManyContracts: minContracts=" + minContracts + ", days=" + days);
             ResultSet rs = ps.executeQuery();
+            int count = 0;
             while (rs.next()) {
                 Map<String, Object> customer = new HashMap<>();
                 customer.put("customerId", rs.getInt("customerId"));
@@ -530,10 +529,14 @@ public class DashboardDBContext extends DBContext {
                 customer.put("firstContractDate", rs.getDate("firstContractDate"));
                 customer.put("lastContractDate", rs.getDate("lastContractDate"));
                 results.add(customer);
+                count++;
             }
+            System.out.println("Found " + count + " customers with many contracts");
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("SQL Error: " + e.getMessage());
+            System.err.println("SQL Error in getCustomersWithManyContracts: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState());
+            System.err.println("Vendor Error: " + e.getErrorCode());
         }
         return results;
     }

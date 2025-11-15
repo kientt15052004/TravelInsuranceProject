@@ -5,13 +5,8 @@
 package dal;
 
 import Model.Application;
-import Model.Application;
-import Model.ApplicationTraveler;
 import Model.ApplicationTraveler;
 import Model.Contract;
-import Model.Contract;
-import Model.InsuranceProduct;
-import Model.Invoice;
 import Model.Invoice;
 import java.sql.PreparedStatement;
 import java.sql.*;
@@ -247,5 +242,32 @@ public class InvoiceDBContext extends DBContext {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    /**
+     * Lấy invoice theo contract_id
+     */
+    public Invoice getInvoiceByContractId(int contractId) {
+        String sql = "SELECT * FROM invoices WHERE contract_id = ? LIMIT 1";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, contractId);
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                Invoice invoice = new Invoice();
+                invoice.setId(rs.getInt("id"));
+                invoice.setContract_id(rs.getInt("contract_id"));
+                invoice.setBase_amount(rs.getBigDecimal("base_amount"));
+                invoice.setTax_rate(rs.getBigDecimal("tax_rate"));
+                invoice.setPayment_method(rs.getString("payment_method"));
+                invoice.setPayment_code(rs.getString("payment_code"));
+                invoice.setNotes(rs.getString("notes"));
+                invoice.setCreated_at(rs.getTimestamp("created_at"));
+                return invoice;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

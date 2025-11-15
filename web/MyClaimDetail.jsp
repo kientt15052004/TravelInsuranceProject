@@ -138,17 +138,26 @@
                                     <span>${claim.payment_bank != null ? claim.payment_bank : 'Chưa cập nhật'}</span>
                                 </div>
                                 <div class="info-row">
-                                    <label>Số tài khoản:</label>
+                                    <label>Số tài khoản (STK):</label>
                                     <span>${claim.payment_number != null ? claim.payment_number : 'Chưa cập nhật'}</span>
                                 </div>
-                                <c:if test="${claim.claim_amount != null}">
-                                    <div class="info-row">
-                                        <label>Số tiền bồi thường:</label>
-                                        <span class="amount text-success fw-bold">
-                                            <fmt:formatNumber value="${claim.claim_amount}" type="currency" currencyCode="VND"/>
-                                        </span>
-                                    </div>
-                                </c:if>
+                                <div class="info-row">
+                                    <label>Tên tài khoản:</label>
+                                    <span>${sessionScope.user.fullname != null ? sessionScope.user.fullname : 'Chưa cập nhật'}</span>
+                                </div>
+                                <div class="info-row">
+                                    <label>Số tiền được đền bù:</label>
+                                    <c:choose>
+                                        <c:when test="${claim.compensation_amount != null}">
+                                            <span class="amount text-success fw-bold">
+                                                <fmt:formatNumber value="${claim.compensation_amount}" type="currency" currencyCode="VND"/>
+                                            </span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="text-muted">Chưa cập nhật</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                             </div>
                         </div>
                     </div>

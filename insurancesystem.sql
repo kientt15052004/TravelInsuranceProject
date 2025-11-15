@@ -156,6 +156,37 @@ CREATE TABLE ClaimsRes (
 SET @old_foreign_key_checks = @@FOREIGN_KEY_CHECKS;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- Mở rộng DECIMAL để lưu giá trị lớn hơn (chạy trước khi seed)
+ALTER TABLE insurance_benefits
+    MODIFY death_or_permanent_disability DECIMAL(15,2),
+    MODIFY death_due_to_illness DECIMAL(15,2),
+    MODIFY third_party_liability DECIMAL(15,2),
+    MODIFY lost_bank_card DECIMAL(15,2),
+    MODIFY kidnap_and_hostage DECIMAL(15,2),
+    MODIFY lost_or_damaged_golf_equipment DECIMAL(15,2),
+    MODIFY medical_cost DECIMAL(15,2),
+    MODIFY emergency_transport DECIMAL(15,2),
+    MODIFY repatriation_vn DECIMAL(15,2),
+    MODIFY repatriation_abroad DECIMAL(15,2),
+    MODIFY hospital_visit DECIMAL(15,2),
+    MODIFY funeral_arrangement DECIMAL(15,2),
+    MODIFY child_care DECIMAL(15,2),
+    MODIFY hospital_allowance DECIMAL(15,2),
+    MODIFY accident_death_injury DECIMAL(15,2),
+    MODIFY trip_cancellation DECIMAL(15,2),
+    MODIFY companion_support DECIMAL(15,2),
+    MODIFY delayed_baggage DECIMAL(15,2),
+    MODIFY travel_documents DECIMAL(15,2),
+    MODIFY trip_delay DECIMAL(15,2);
+
+ALTER TABLE products
+    MODIFY domestic_percentage_rate DECIMAL(15,2),
+    MODIFY international_rate_1_7 DECIMAL(15,2),
+    MODIFY international_rate_8_30 DECIMAL(15,2),
+    MODIFY international_rate_31_90 DECIMAL(15,2),
+    MODIFY international_rate_91_365 DECIMAL(15,2),
+    MODIFY price DECIMAL(15,2);
+
 TRUNCATE TABLE ClaimsRes;
 TRUNCATE TABLE Claims;
 TRUNCATE TABLE invoices;
@@ -200,11 +231,23 @@ CALL seed_users()$$
 DROP PROCEDURE IF EXISTS seed_users$$
 
 -- 2️⃣ INSURANCE BENEFITS
+-- Giá trị quyền lợi thực tế cho bảo hiểm du lịch (đơn vị: VNĐ)
 DROP PROCEDURE IF EXISTS seed_benefits$$
 CREATE PROCEDURE seed_benefits()
 BEGIN
   DECLARE i INT DEFAULT 1;
-  WHILE i <= 120 DO
+  DECLARE package_multiplier DECIMAL(3,2);
+  
+  -- Chỉ tạo 4 benefits: Basic, Standard, Advanced, Comprehensive
+  WHILE i <= 4 DO
+    -- Xác định hệ số nhân dựa trên package (Basic=1.0, Standard=1.5, Advanced=2.0, Comprehensive=2.5)
+    SET package_multiplier = CASE i
+      WHEN 1 THEN 1.0    -- Basic
+      WHEN 2 THEN 1.5    -- Standard
+      WHEN 3 THEN 2.0    -- Advanced
+      ELSE 2.5           -- Comprehensive
+    END;
+    
     INSERT INTO insurance_benefits (
       death_or_permanent_disability, death_due_to_illness, third_party_liability,
       lost_bank_card, kidnap_and_hostage, lost_or_damaged_golf_equipment, is_deleted,
@@ -213,27 +256,47 @@ BEGIN
       accident_death_injury, trip_cancellation, companion_support, delayed_baggage, travel_documents, trip_delay
     )
     VALUES (
-      ROUND(100000 + RAND()*900000,2),
-      ROUND(50000 + RAND()*400000,2),
-      ROUND(50000 + RAND()*300000,2),
-      ROUND(100 + RAND()*1000,2),
-      ROUND(1000 + RAND()*50000,2),
-      ROUND(500 + RAND()*10000,2),
+      -- Tử vong hoặc thương tật vĩnh viễn: 500 triệu - 2 tỷ
+      ROUND(500000000 * package_multiplier, 2),
+      -- Tử vong do bệnh: 300 triệu - 1.5 tỷ
+      ROUND(300000000 * package_multiplier, 2),
+      -- Trách nhiệm dân sự: 100 triệu - 500 triệu
+      ROUND(100000000 * package_multiplier, 2),
+      -- Mất thẻ ngân hàng: 2 triệu - 5 triệu
+      ROUND(2000000 * package_multiplier, 2),
+      -- Bắt cóc và con tin: 50 triệu - 200 triệu
+      ROUND(50000000 * package_multiplier, 2),
+      -- Mất hoặc hư hỏng dụng cụ golf: 5 triệu - 20 triệu
+      ROUND(5000000 * package_multiplier, 2),
       FALSE,
-      ROUND(1000 + RAND()*200000,2),
-      ROUND(500 + RAND()*50000,2),
-      ROUND(1000 + RAND()*50000,2),
-      ROUND(2000 + RAND()*100000,2),
-      ROUND(100 + RAND()*10000,2),
-      ROUND(500 + RAND()*20000,2),
-      ROUND(300 + RAND()*10000,2),
-      ROUND(50 + RAND()*2000,2),
-      ROUND(10000 + RAND()*300000,2),
-      ROUND(100 + RAND()*50000,2),
-      ROUND(100 + RAND()*50000,2),
-      ROUND(50 + RAND()*5000,2),
-      ROUND(50 + RAND()*3000,2),
-      ROUND(50 + RAND()*2000,2)
+      -- Chi phí y tế: 50 triệu - 500 triệu
+      ROUND(50000000 * package_multiplier, 2),
+      -- Vận chuyển khẩn cấp: 20 triệu - 100 triệu
+      ROUND(20000000 * package_multiplier, 2),
+      -- Hồi hương trong nước: 10 triệu - 50 triệu
+      ROUND(10000000 * package_multiplier, 2),
+      -- Hồi hương nước ngoài: 50 triệu - 200 triệu
+      ROUND(50000000 * package_multiplier, 2),
+      -- Thăm viếng bệnh viện: 1 triệu - 5 triệu
+      ROUND(1000000 * package_multiplier, 2),
+      -- Sắp xếp tang lễ: 10 triệu - 50 triệu
+      ROUND(10000000 * package_multiplier, 2),
+      -- Chăm sóc trẻ em: 5 triệu - 20 triệu
+      ROUND(5000000 * package_multiplier, 2),
+      -- Trợ cấp bệnh viện: 500k - 2 triệu/ngày
+      ROUND(500000 * package_multiplier, 2),
+      -- Tử vong/thương tích do tai nạn: 200 triệu - 1 tỷ
+      ROUND(200000000 * package_multiplier, 2),
+      -- Hủy chuyến: 5 triệu - 50 triệu
+      ROUND(5000000 * package_multiplier, 2),
+      -- Hỗ trợ người đi cùng: 10 triệu - 50 triệu
+      ROUND(10000000 * package_multiplier, 2),
+      -- Hành lý bị trễ: 1 triệu - 5 triệu
+      ROUND(1000000 * package_multiplier, 2),
+      -- Giấy tờ du lịch: 500k - 3 triệu
+      ROUND(500000 * package_multiplier, 2),
+      -- Trễ chuyến: 500k - 2 triệu
+      ROUND(500000 * package_multiplier, 2)
     );
     SET i = i + 1;
   END WHILE;
@@ -241,12 +304,43 @@ END$$
 CALL seed_benefits()$$
 DROP PROCEDURE IF EXISTS seed_benefits$$
 
--- 3️⃣ PRODUCTS (với package_type enum và ảnh random)
+-- 3️⃣ PRODUCTS (với giá và tỷ lệ thực tế)
 DROP PROCEDURE IF EXISTS seed_products$$
 CREATE PROCEDURE seed_products()
 BEGIN
   DECLARE i INT DEFAULT 1;
-  WHILE i <= 120 DO
+  DECLARE base_price DECIMAL(15,2);
+  DECLARE package_type_val VARCHAR(20);
+  DECLARE product_type_val VARCHAR(20);
+  DECLARE benefit_id_val INT;
+  
+  -- Tạo 8 products: 2 type (domestic, international) × 4 package_type
+  WHILE i <= 8 DO
+    -- Xác định type: 1-4 = domestic, 5-8 = international
+    SET product_type_val = CASE 
+      WHEN i <= 4 THEN 'domestic'
+      ELSE 'international'
+    END;
+    
+    -- Xác định package_type: 1,5=Basic; 2,6=Standard; 3,7=Advanced; 4,8=Comprehensive
+    SET package_type_val = CASE ((i - 1) % 4) + 1
+      WHEN 1 THEN 'Basic'
+      WHEN 2 THEN 'Standard'
+      WHEN 3 THEN 'Advanced'
+      ELSE 'Comprehensive'
+    END;
+    
+    -- benefit_id tương ứng với package_type (1=Basic, 2=Standard, 3=Advanced, 4=Comprehensive)
+    SET benefit_id_val = ((i - 1) % 4) + 1;
+    
+    -- Giá cơ bản theo package (VNĐ)
+    SET base_price = CASE package_type_val
+      WHEN 'Basic' THEN 200000
+      WHEN 'Standard' THEN 350000
+      WHEN 'Advanced' THEN 500000
+      ELSE 750000  -- Comprehensive
+    END;
+    
     INSERT INTO products (
       benefit_id, type, name, img, description, package_type, price,
       domestic_percentage_rate, international_rate_1_7,
@@ -254,23 +348,59 @@ BEGIN
       international_rate_91_365, is_active, is_delete
     )
     VALUES (
-      i,
-      CASE WHEN i % 2 = 0 THEN 'international' ELSE 'domestic' END,
-      CONCAT(CASE WHEN i % 2 = 0 THEN 'International Travel Plan ' ELSE 'Domestic Travel Plan ' END, LPAD(i,3,'0')),
-      CONCAT('https://picsum.photos/id/', FLOOR(1 + RAND()*1000), '/200/300'),
-      CONCAT('Gói bảo hiểm ', CASE WHEN i % 2 = 0 THEN 'quốc tế' ELSE 'nội địa' END, ' số ', i),
-      CASE (i % 4)
-        WHEN 0 THEN 'Basic'
-        WHEN 1 THEN 'Standard'
-        WHEN 2 THEN 'Advanced'
-        ELSE 'Comprehensive'
+      benefit_id_val,
+      product_type_val,
+      CONCAT(
+        CASE WHEN product_type_val = 'international' THEN 'Bảo hiểm Du lịch Quốc tế ' ELSE 'Bảo hiểm Du lịch Nội địa ' END,
+        package_type_val, ' - Gói 001'
+      ),
+      CASE 
+        WHEN product_type_val = 'domestic' THEN '/Image/domestic_travel.jpg'
+        ELSE '/Image/global_travel.jpg'
       END,
-      ROUND(300000 + RAND()*5000000,2),
-      ROUND(5 + RAND()*25,2),
-      ROUND(0.5 + RAND()*5,2),
-      ROUND(1 + RAND()*6,2),
-      ROUND(2 + RAND()*8,2),
-      ROUND(3 + RAND()*10,2),
+      CONCAT(
+        'Gói bảo hiểm du lịch ', 
+        CASE WHEN product_type_val = 'international' THEN 'quốc tế' ELSE 'nội địa' END,
+        ' - ', package_type_val,
+        '. Bảo vệ toàn diện cho chuyến đi của bạn với các quyền lợi phù hợp.'
+      ),
+      package_type_val,
+      base_price,
+      -- Tỷ lệ % cho bảo hiểm nội địa (5% - 15% giá gốc)
+      CASE package_type_val
+        WHEN 'Basic' THEN 5.00
+        WHEN 'Standard' THEN 8.00
+        WHEN 'Advanced' THEN 12.00
+        ELSE 15.00
+      END,
+      -- Tỷ lệ cho quốc tế 1-7 ngày (0.5% - 2% giá gốc/ngày)
+      CASE package_type_val
+        WHEN 'Basic' THEN 0.50
+        WHEN 'Standard' THEN 0.80
+        WHEN 'Advanced' THEN 1.20
+        ELSE 2.00
+      END,
+      -- Tỷ lệ cho quốc tế 8-30 ngày (0.8% - 2.5% giá gốc/ngày)
+      CASE package_type_val
+        WHEN 'Basic' THEN 0.80
+        WHEN 'Standard' THEN 1.20
+        WHEN 'Advanced' THEN 1.80
+        ELSE 2.50
+      END,
+      -- Tỷ lệ cho quốc tế 31-90 ngày (1.2% - 3.5% giá gốc/ngày)
+      CASE package_type_val
+        WHEN 'Basic' THEN 1.20
+        WHEN 'Standard' THEN 1.80
+        WHEN 'Advanced' THEN 2.50
+        ELSE 3.50
+      END,
+      -- Tỷ lệ cho quốc tế 91-365 ngày (2% - 5% giá gốc/ngày)
+      CASE package_type_val
+        WHEN 'Basic' THEN 2.00
+        WHEN 'Standard' THEN 3.00
+        WHEN 'Advanced' THEN 4.00
+        ELSE 5.00
+      END,
       TRUE,
       FALSE
     );
@@ -799,36 +929,6 @@ UNION ALL SELECT 'Contract', COUNT(*) FROM `Contract`
 UNION ALL SELECT 'invoices', COUNT(*) FROM invoices
 UNION ALL SELECT 'Claims', COUNT(*) FROM Claims
 UNION ALL SELECT 'ClaimsRes', COUNT(*) FROM ClaimsRes;
-
-ALTER TABLE insurance_benefits
-    MODIFY death_or_permanent_disability DECIMAL(15,2),
-    MODIFY death_due_to_illness DECIMAL(15,2),
-    MODIFY third_party_liability DECIMAL(15,2),
-    MODIFY lost_bank_card DECIMAL(15,2),
-    MODIFY kidnap_and_hostage DECIMAL(15,2),
-    MODIFY lost_or_damaged_golf_equipment DECIMAL(15,2),
-    MODIFY medical_cost DECIMAL(15,2),
-    MODIFY emergency_transport DECIMAL(15,2),
-    MODIFY repatriation_vn DECIMAL(15,2),
-    MODIFY repatriation_abroad DECIMAL(15,2),
-    MODIFY hospital_visit DECIMAL(15,2),
-    MODIFY funeral_arrangement DECIMAL(15,2),
-    MODIFY child_care DECIMAL(15,2),
-    MODIFY hospital_allowance DECIMAL(15,2),
-    MODIFY accident_death_injury DECIMAL(15,2),
-    MODIFY trip_cancellation DECIMAL(15,2),
-    MODIFY companion_support DECIMAL(15,2),
-    MODIFY delayed_baggage DECIMAL(15,2),
-    MODIFY travel_documents DECIMAL(15,2),
-    MODIFY trip_delay DECIMAL(15,2);
-    
-        ALTER TABLE products
-    modify domestic_percentage_rate decimal(15,2),
-    modify international_rate_1_7 decimal(15,2),
-    modify international_rate_8_30 decimal(15,2),
-    modify international_rate_31_90 decimal(15,2),
-    modify international_rate_91_365 decimal(15,2),
-    modify price decimal(15,2);
 
     -- =====================================
 -- MIGRATION SCRIPT: Add user_id column to ClaimsRes table

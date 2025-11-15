@@ -37,14 +37,25 @@
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
                             <input id="q" name="q" class="form-control border-start-0" type="search"
-                                   value="${searchTerm}" placeholder="Tìm kiếm..." aria-label="Search">
+                                   value="${searchTerm}" placeholder="Tìm kiếm theo mã khiếu nại ..." aria-label="Search">
                         </div>
                     </div>
                     <div class="col-6 col-lg-3">
                         <select id="type" name="type" class="form-select">
                             <option value="">Tất cả loại</option>
                             <c:forEach var="claimType" items="${claimTypes}">
-                                <option value="${claimType}" ${typeFilter == claimType ? 'selected' : ''}>${claimType}</option>
+                                <option value="${claimType}" ${typeFilter == claimType ? 'selected' : ''}>
+                                    <c:choose>
+                                        <c:when test="${claimType == 'medical'}">Y tế cấp cứu</c:when>
+                                        <c:when test="${claimType == 'lost_baggage'}">Hành lý thất lạc</c:when>
+                                        <c:when test="${claimType == 'flight_delay'}">Chậm chuyến bay</c:when>
+                                        <c:when test="${claimType == 'trip_cancellation'}">Hủy chuyến</c:when>
+                                        <c:when test="${claimType == 'third_party'}">Tai nạn / trách nhiệm thứ ba</c:when>
+                                        <c:when test="${claimType == 'theft'}">Trộm cắp</c:when>
+                                        <c:when test="${claimType == 'other'}">Khác</c:when>
+                                        <c:otherwise>${claimType}</c:otherwise>
+                                    </c:choose>
+                                </option>
                             </c:forEach>
                         </select>
                     </div>
@@ -87,6 +98,8 @@
                                                     <c:when test="${claim.claim_type == 'flight_delay'}">Chậm chuyến bay</c:when>
                                                     <c:when test="${claim.claim_type == 'trip_cancellation'}">Hủy chuyến</c:when>
                                                     <c:when test="${claim.claim_type == 'third_party'}">Tai nạn</c:when>
+                                                    <c:when test="${claim.claim_type == 'theft'}">Trộm cắp</c:when>
+                                                    <c:when test="${claim.claim_type == 'other'}">Khác</c:when>
                                                     <c:otherwise>${claim.claim_type}</c:otherwise>
                                                 </c:choose>
                                             </span>
@@ -111,12 +124,6 @@
                                             <a href="my-claim-detail?id=${claim.id}" class="action-icon me-1" title="Xem chi tiết">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <c:if test="${claim.claim_status == 'pending' || claim.claim_status == 'need_info'}">
-                                                <a href="#" class="action-icon" title="Chỉnh sửa" 
-                                                   onclick="editClaim(${claim.id})">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -296,6 +303,10 @@
                                 <div class="step-header">
                                     <span class="step-number">4</span>
                                     <h6 class="step-title">Tài liệu chứng minh</h6>
+                                </div>
+                                <div class="alert alert-info py-2 mb-3">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    Vui lòng tải lên các giấy tờ liên quan như hóa đơn viện phí, vé máy bay, biên bản của hãng vận chuyển, báo cáo công an hoặc các ảnh chụp hiện trường để chứng minh cho yêu cầu bồi thường.
                                 </div>
                                 <div class="upload-area">
                                     <div class="upload-zone" id="uploadZone">
