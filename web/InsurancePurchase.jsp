@@ -449,7 +449,7 @@
                 </button>
             </div>
         </div>
-
+                        <jsp:include page="./component/footer.jsp"></jsp:include>
         <script>
 // Khai báo biến global trước khi load file JS
             const INSURANCE_TYPE = '${requestScope.insurance.type}';
