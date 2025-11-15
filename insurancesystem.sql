@@ -238,12 +238,13 @@ BEGIN
   DECLARE i INT DEFAULT 1;
   DECLARE package_multiplier DECIMAL(3,2);
   
-  WHILE i <= 120 DO
+  -- Chỉ tạo 4 benefits: Basic, Standard, Advanced, Comprehensive
+  WHILE i <= 4 DO
     -- Xác định hệ số nhân dựa trên package (Basic=1.0, Standard=1.5, Advanced=2.0, Comprehensive=2.5)
-    SET package_multiplier = CASE (i % 4)
-      WHEN 0 THEN 1.0    -- Basic
-      WHEN 1 THEN 1.5    -- Standard
-      WHEN 2 THEN 2.0    -- Advanced
+    SET package_multiplier = CASE i
+      WHEN 1 THEN 1.0    -- Basic
+      WHEN 2 THEN 1.5    -- Standard
+      WHEN 3 THEN 2.0    -- Advanced
       ELSE 2.5           -- Comprehensive
     END;
     
@@ -311,15 +312,26 @@ BEGIN
   DECLARE base_price DECIMAL(15,2);
   DECLARE package_type_val VARCHAR(20);
   DECLARE product_type_val VARCHAR(20);
+  DECLARE benefit_id_val INT;
   
-  WHILE i <= 120 DO
-    SET product_type_val = CASE WHEN i % 2 = 0 THEN 'international' ELSE 'domestic' END;
-    SET package_type_val = CASE (i % 4)
-      WHEN 0 THEN 'Basic'
-      WHEN 1 THEN 'Standard'
-      WHEN 2 THEN 'Advanced'
+  -- Tạo 8 products: 2 type (domestic, international) × 4 package_type
+  WHILE i <= 8 DO
+    -- Xác định type: 1-4 = domestic, 5-8 = international
+    SET product_type_val = CASE 
+      WHEN i <= 4 THEN 'domestic'
+      ELSE 'international'
+    END;
+    
+    -- Xác định package_type: 1,5=Basic; 2,6=Standard; 3,7=Advanced; 4,8=Comprehensive
+    SET package_type_val = CASE ((i - 1) % 4) + 1
+      WHEN 1 THEN 'Basic'
+      WHEN 2 THEN 'Standard'
+      WHEN 3 THEN 'Advanced'
       ELSE 'Comprehensive'
     END;
+    
+    -- benefit_id tương ứng với package_type (1=Basic, 2=Standard, 3=Advanced, 4=Comprehensive)
+    SET benefit_id_val = ((i - 1) % 4) + 1;
     
     -- Giá cơ bản theo package (VNĐ)
     SET base_price = CASE package_type_val
@@ -336,11 +348,11 @@ BEGIN
       international_rate_91_365, is_active, is_delete
     )
     VALUES (
-      i,
+      benefit_id_val,
       product_type_val,
       CONCAT(
         CASE WHEN product_type_val = 'international' THEN 'Bảo hiểm Du lịch Quốc tế ' ELSE 'Bảo hiểm Du lịch Nội địa ' END,
-        package_type_val, ' - Gói ', LPAD(i,3,'0')
+        package_type_val, ' - Gói 001'
       ),
       CASE 
         WHEN product_type_val = 'domestic' THEN '/Image/domestic_travel.jpg'
