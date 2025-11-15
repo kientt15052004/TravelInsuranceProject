@@ -272,7 +272,6 @@
                     <div class="contract-info-card">
                         <div class="card-header">
                             <h2>
-                                <i class="fas fa-file-contract"></i>
                                 Thông tin Contract liên quan
                             </h2>
                             <a href="${pageContext.request.contextPath}/ContractDetailServlet?id=${contract.contract_id}" 
@@ -316,7 +315,6 @@
                 <div class="claim-responses-card">
                     <div class="card-header">
                         <h2>
-                            <i class="fas fa-comments"></i>
                             Phản hồi và Theo dõi
                         </h2>
                         <div class="responses-count">
@@ -526,9 +524,6 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="chat-empty">
-                                    <div class="empty-icon">
-                                        <i class="fas fa-comments"></i>
-                                    </div>
                                     <h3>Chưa có phản hồi nào</h3>
                                     <p>Claim này chưa có phản hồi hoặc theo dõi nào từ phía nhân viên.</p>
                                     

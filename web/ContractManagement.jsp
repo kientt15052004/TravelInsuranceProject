@@ -92,14 +92,12 @@
                 
                 <c:if test="${not empty requestScope.error}">
                     <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i>
                         ${requestScope.error}
                     </div>
                 </c:if>
                 
                 <c:if test="${not empty requestScope.success}">
                     <div class="alert alert-success">
-                        <i class="fas fa-check-circle"></i>
                         ${requestScope.success}
                     </div>
                 </c:if>
@@ -165,7 +163,6 @@
                         </c:when>
                         <c:otherwise>
                             <div class="no-data">
-                                <i class="fas fa-file-contract"></i>
                                 <h3>Không có hợp đồng nào</h3>
                                 <p>Không tìm thấy hợp đồng nào phù hợp với tiêu chí tìm kiếm.</p>
                             </div>

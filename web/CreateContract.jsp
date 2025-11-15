@@ -33,7 +33,6 @@
                 if (successFlag != null && successFlag && request.getAttribute("contractId") != null) { 
             %>
             <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i>
                 <strong>Thành công!</strong> Hợp đồng bảo hiểm đã được tạo thành công.
                 <div class="success-info">
                     <strong>Mã hợp đồng:</strong> #<%= request.getAttribute("contractId") %><br>
@@ -58,14 +57,12 @@
 
             <% if (request.getAttribute("error") != null) { %>
             <div class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle"></i>
                 <strong>Lỗi!</strong> <%= request.getAttribute("error") %>
             </div>
             <% } %>
 
             <% if (request.getAttribute("errors") != null) { %>
             <div class="alert alert-danger">
-                <i class="fas fa-exclamation-triangle"></i>
                 <strong>Có lỗi xảy ra:</strong>
                 <ul style="margin: 10px 0 0 20px;">
                     <% for (String error : (List<String>) request.getAttribute("errors")) { %>
@@ -289,7 +286,6 @@
 
                     <div class="traveler-actions">
                         <button type="submit" name="action" value="addTraveler" class="btn-add-traveler" formnovalidate>
-                            <i class="fas fa-user-plus"></i>
                             Thêm người được bảo hiểm
                         </button>
                     </div>
@@ -337,7 +333,7 @@
                         </select>
                         <% if (request.getAttribute("insuranceProducts") == null) { %>
                             <small style="color: #dc3545; display: block; margin-top: 5px;">
-                                <i class="fas fa-exclamation-triangle"></i> Không thể tải danh sách gói bảo hiểm. Vui lòng tải lại trang.
+                                Không thể tải danh sách gói bảo hiểm. Vui lòng tải lại trang.
                             </small>
                         <% } %>
                     </div>

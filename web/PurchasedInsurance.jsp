@@ -157,7 +157,6 @@
                                 <tr>
                                     <td colspan="10" class="text-center py-5">
                                         <div class="text-muted">
-                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
                                             <h5>Chưa có hợp đồng bảo hiểm nào</h5>
                                             <p>Bạn chưa mua bảo hiểm du lịch nào. <a href="InsuranceList" class="text-decoration-none">Khám phá các gói bảo hiểm</a></p>
                                         </div>
@@ -264,7 +263,7 @@
                         <div id="contractDetailContent" class="d-none">
                             <!-- Thông tin hợp đồng -->
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-file-earmark-text me-2"></i>Thông tin hợp đồng</h6>
+                                <h6 class="fw-bold mb-3">Thông tin hợp đồng</h6>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="text-muted small">Mã hợp đồng</label>
@@ -283,7 +282,7 @@
 
                             <!-- Thông tin sản phẩm -->
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-box-seam me-2"></i>Thông tin sản phẩm</h6>
+                                <h6 class="fw-bold mb-3">Thông tin sản phẩm</h6>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="text-muted small">Tên gói bảo hiểm</label>
@@ -306,7 +305,7 @@
 
                             <!-- Thông tin chuyến đi -->
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-geo-alt me-2"></i>Thông tin chuyến đi</h6>
+                                <h6 class="fw-bold mb-3">Thông tin chuyến đi</h6>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="text-muted small">Điểm đến</label>
@@ -333,7 +332,7 @@
 
                             <!-- Thông tin người mua -->
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-person me-2"></i>Thông tin người mua</h6>
+                                <h6 class="fw-bold mb-3">Thông tin người mua</h6>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <label class="text-muted small">Họ và tên</label>
@@ -360,7 +359,7 @@
 
                             <!-- Danh sách người được bảo hiểm -->
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-people me-2"></i>Danh sách người được bảo hiểm</h6>
+                                <h6 class="fw-bold mb-3">Danh sách người được bảo hiểm</h6>
                                 <div class="table-responsive">
                                     <table class="table table-sm table-bordered">
                                         <thead>
@@ -383,14 +382,14 @@
 
                             <!-- Thông tin quyền lợi -->
                             <div class="mb-4">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-shield-check me-2"></i>Quyền lợi bảo hiểm</h6>
+                                <h6 class="fw-bold mb-3">Quyền lợi bảo hiểm</h6>
                                 <div class="row g-3" id="benefitsContent">
                                 </div>
                             </div>
 
                             <!-- Thông tin thanh toán -->
                             <div class="mb-4" id="invoiceSection">
-                                <h6 class="fw-bold mb-3"><i class="bi bi-receipt me-2"></i>Thông tin thanh toán</h6>
+                                <h6 class="fw-bold mb-3">Thông tin thanh toán</h6>
                                 <div class="row g-3" id="invoiceContent">
                                 </div>
                             </div>

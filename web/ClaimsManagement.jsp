@@ -89,7 +89,6 @@
                 
                 <c:if test="${not empty error}">
                     <div class="alert alert-error">
-                        <i class="fas fa-exclamation-circle"></i>
                         ${error}
                     </div>
                 </c:if>
@@ -168,7 +167,6 @@
                         </c:when>
                         <c:otherwise>
                             <div class="no-data">
-                                <i class="fas fa-file-medical"></i>
                                 <h3>Không có yêu cầu bồi thường nào</h3>
                                 <p>Không tìm thấy yêu cầu bồi thường nào phù hợp với tiêu chí tìm kiếm.</p>
                             </div>

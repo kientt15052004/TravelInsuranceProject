@@ -279,7 +279,7 @@
 
                         <div class="form-section international-pricing-section">
                             <div class="section-header">
-                                <h2><i class="fas fa-calculator"></i> Tính giá sản phẩm</h2>
+                                <h2>Tính giá sản phẩm</h2>
                             </div>
                             <div class="pricing-formula">
                                 <h4>Công thức tính giá sản phẩm</h4>
@@ -287,7 +287,7 @@
                             </div>
                             <div class="form-section international-pricing-section">
                                 <div class="section-header">
-                                    <h2><i class="fas fa-calculator"></i> Bảng phí ngoài nước</h2>
+                                    <h2>Bảng phí ngoài nước</h2>
                                 </div>
 
                                 <div class="pricing-table table-responsive">

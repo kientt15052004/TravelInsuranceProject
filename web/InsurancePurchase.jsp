@@ -176,7 +176,6 @@
             <div class="content-grid" id="step2Content" style="display: none;">
                 <div class="card info-card">
                     <h2 class="card-title">
-                        <span class="icon">👤</span>
                         Thông Tin Người Mua Bảo Hiểm
                         <span class="subtitle">(thông tin hóa đơn)</span>
                     </h2>
@@ -184,7 +183,6 @@
                     <!-- Tab Selection -->
                     <div class="tab-container">
                         <button class="tab-btn active" data-tab="individual">
-                            <span class="tab-icon">👤</span>
                             Cá Nhân
                         </button>
                     </div>
@@ -290,7 +288,6 @@
                 <div class="card info-card">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                         <h2 class="card-title" style="margin-bottom: 0;">
-                            <span class="icon">👥</span>
                             Thông Tin Người Được Bảo Hiểm
                         </h2>
                         <button class="add-person-btn" onclick="openAddPersonModal()">
@@ -335,7 +332,6 @@
                     <!-- Left Panel - Payment Form -->
                     <div class="card payment-card">
                         <h2 class="card-title">
-                            <span class="icon">💳</span>
                             Thông Tin Thanh Toán
                         </h2>
 
@@ -372,7 +368,6 @@
                     <!-- Right Panel - Payment Summary -->
                     <div class="card payment-summary-card">
                         <h2 class="card-title">
-                            <span class="icon">📋</span>
                             Tóm Tắt Đơn Hàng
                         </h2>
                         <div id="paymentSummaryContent"></div>

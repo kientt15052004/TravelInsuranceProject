@@ -219,7 +219,6 @@
                         </c:when>
                         <c:otherwise>
                             <div class="no-data">
-                                <i class="fas fa-cube"></i>
                                 <h3>Không có sản phẩm nào</h3>
                                 <p>Không tìm thấy sản phẩm nào phù hợp với tiêu chí tìm kiếm.</p>
                             </div>

@@ -44,7 +44,7 @@
                 <div class="detail-grid">
                     <div class="detail-card">
                         <div class="card-header">
-                            <h3><i class="fas fa-file-contract"></i> Thông tin hợp đồng</h3>
+                            <h3>Thông tin hợp đồng</h3>
                         </div>
                         <div class="card-content">
                             <div class="info-row">
@@ -71,7 +71,7 @@
                     <c:if test="${not empty buyer}">
                     <div class="detail-card">
                         <div class="card-header">
-                            <h3><i class="fas fa-user"></i> Thông tin người mua</h3>
+                            <h3>Thông tin người mua</h3>
                         </div>
                         <div class="card-content">
                             <div class="info-row">
@@ -113,7 +113,7 @@
                     <c:if test="${not empty application}">
                     <div class="detail-card">
                         <div class="card-header">
-                            <h3><i class="fas fa-clipboard-list"></i> Thông tin đơn đăng ký</h3>
+                            <h3>Thông tin đơn đăng ký</h3>
                         </div>
                         <div class="card-content">
                             <div class="info-row">
@@ -175,7 +175,7 @@
 
         <c:if test="${not empty travelers}">
             <div class="travelers-section">
-                <h3><i class="fas fa-users"></i> Danh sách khách hàng</h3>
+                <h3>Danh sách khách hàng</h3>
                 <p><strong>Tổng số người:</strong> ${travelers.size()} người</p>
                 
                 <div class="travelers-table">
@@ -207,7 +207,7 @@
 
             <c:if test="${not empty claims}">
                 <div class="claims-section">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Danh sách yêu cầu bồi thường</h3>
+                    <h3>Danh sách yêu cầu bồi thường</h3>
                     <p><strong>Tổng số yêu cầu:</strong> ${claims.size()} yêu cầu</p>
                     
                     <div class="claims-table">

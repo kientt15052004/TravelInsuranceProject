@@ -81,36 +81,24 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
-                            <div class="feature-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
                             <h4>Bảo hiểm tức thì</h4>
                             <p>Nhận bảo hiểm du lịch ngay lập tức với quy trình đăng ký đơn giản</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
-                            <div class="feature-icon">
-                                <i class="fas fa-globe"></i>
-                            </div>
                             <h4>Bảo vệ toàn cầu</h4>
                             <p>Được bảo vệ trên toàn thế giới với mạng lưới toàn diện của chúng tôi</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
-                            <div class="feature-icon">
-                                <i class="fas fa-headset"></i>
-                            </div>
                             <h4>Hỗ trợ 24/7</h4>
                             <p>Hỗ trợ liên tục bất cứ khi nào và ở đâu bạn cần</p>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <div class="feature-box">
-                            <div class="feature-icon">
-                                <i class="fas fa-bolt"></i>
-                            </div>
                             <h4>Giải quyết nhanh chóng</h4>
                             <p>Xử lý khiếu nại nhanh chóng và dễ dàng với nộp đơn kỹ thuật số</p>
                         </div>

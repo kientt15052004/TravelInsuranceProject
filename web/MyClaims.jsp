@@ -25,7 +25,6 @@
                     <p class="subtitle mb-0">Quản lý các yêu cầu bồi thường bảo hiểm của bạn.</p>
                 </div>
                 <button class="btn btn-create-claim" data-bs-toggle="modal" data-bs-target="#createClaimModal">
-                    <i class="bi bi-plus-circle me-2"></i>
                     Tạo Khiếu Nại
                 </button>
             </div>
@@ -132,11 +131,9 @@
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
                                         <div class="empty-state">
-                                            <i class="bi bi-clipboard-x fs-1 text-muted mb-3"></i>
                                             <h5 class="text-muted">Chưa có khiếu nại nào</h5>
                                             <p class="text-muted mb-3">Bạn chưa tạo khiếu nại bồi thường nào.</p>
                                             <button class="btn btn-create-claim" data-bs-toggle="modal" data-bs-target="#createClaimModal">
-                                                <i class="bi bi-plus-circle me-2"></i>
                                                 Tạo Khiếu Nại Đầu Tiên
                                             </button>
                                         </div>
@@ -224,7 +221,6 @@
                                 </select>
                                 <c:if test="${empty activeContracts}">
                                     <div class="alert alert-warning mt-2">
-                                        <i class="bi bi-exclamation-triangle me-2"></i>
                                         Bạn không có hợp đồng đang hoạt động nào để tạo khiếu nại.
                                         <a href="purchased-insurance" class="alert-link">Xem hợp đồng của bạn</a>
                                     </div>
@@ -241,42 +237,36 @@
                                     <div class="claim-type-option">
                                         <input type="radio" id="medical" name="claimType" value="medical" class="form-check-input">
                                         <label for="medical" class="claim-type-label">
-                                            <i class="bi bi-heart-pulse"></i>
                                             <span>Y tế cấp cứu</span>
                                         </label>
                                     </div>
                                     <div class="claim-type-option">
                                         <input type="radio" id="lost_baggage" name="claimType" value="lost_baggage" class="form-check-input">
                                         <label for="lost_baggage" class="claim-type-label">
-                                            <i class="bi bi-suitcase"></i>
                                             <span>Hành lý thất lạc</span>
                                         </label>
                                     </div>
                                     <div class="claim-type-option">
                                         <input type="radio" id="trip_cancellation" name="claimType" value="trip_cancellation" class="form-check-input">
                                         <label for="trip_cancellation" class="claim-type-label">
-                                            <i class="bi bi-x-circle"></i>
                                             <span>Hủy chuyến</span>
                                         </label>
                                     </div>
                                     <div class="claim-type-option">
                                         <input type="radio" id="flight_delay" name="claimType" value="flight_delay" class="form-check-input">
                                         <label for="flight_delay" class="claim-type-label">
-                                            <i class="bi bi-airplane"></i>
                                             <span>Chậm chuyến bay</span>
                                         </label>
                                     </div>
                                     <div class="claim-type-option">
                                         <input type="radio" id="third_party" name="claimType" value="third_party" class="form-check-input">
                                         <label for="third_party" class="claim-type-label">
-                                            <i class="bi bi-exclamation-triangle"></i>
                                             <span>Tai nạn</span>
                                         </label>
                                     </div>
                                     <div class="claim-type-option">
                                         <input type="radio" id="other" name="claimType" value="other" class="form-check-input">
                                         <label for="other" class="claim-type-label">
-                                            <i class="bi bi-three-dots"></i>
                                             <span>Khác</span>
                                         </label>
                                     </div>

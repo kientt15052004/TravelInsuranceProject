@@ -89,7 +89,6 @@
                 <c:choose>
                     <c:when test="${empty users}">
                         <div class="no-data">
-                            <i class="fas fa-users"></i>
                             <p>Không tìm thấy user nào</p>
                         </div>
                     </c:when>

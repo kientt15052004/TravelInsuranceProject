@@ -57,12 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (productName) {
             const insuranceTitle = document.querySelector('.purchase-card .card-title');
             if (insuranceTitle) {
-                const iconSpan = insuranceTitle.querySelector('.icon');
-                if (iconSpan) {
-                    insuranceTitle.innerHTML = '<span class="icon">🛡️</span>' + productName;
-                } else {
-                    insuranceTitle.textContent = productName;
-                }
+                insuranceTitle.textContent = productName;
             }
         }
         
@@ -209,12 +204,7 @@ function selectPackage(selectedCard) {
     // Cập nhật tên gói hiển thị
     const insuranceTitle = document.querySelector('.purchase-card .card-title');
     if (insuranceTitle && productName) {
-        const iconSpan = insuranceTitle.querySelector('.icon');
-        if (iconSpan) {
-            insuranceTitle.innerHTML = '<span class="icon">🛡️</span>' + productName;
-        } else {
-            insuranceTitle.textContent = productName;
-        }
+        insuranceTitle.textContent = productName;
     }
 
     // Cập nhật quyền lợi bảo hiểm

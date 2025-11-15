@@ -85,7 +85,6 @@
     </head>
     <body>
         <div class="register-container">
-            <div class="register-icon"><i class="fa fa-user"></i></div>
             <div class="register-title">Tạo tài khoản mới</div>
             <div class="register-text">Điền thông tin để đăng ký tài khoản</div>
             <form action="${pageContext.request.contextPath}/register" method="POST">
@@ -159,7 +158,7 @@
                 <% } %>
                 
                 <button class="btn btn-yellow btn-block mb-2 btn-register" type="submit">
-                    <i class="fa fa-user-plus mr-1"></i> Đăng ký
+                    Đăng ký
                 </button>
                 <div class="text-center mt-2" style="font-size: 14px;">
                     Đã có tài khoản?

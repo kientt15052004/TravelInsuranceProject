@@ -32,13 +32,11 @@
 
             <c:if test="${param.success == 'true'}">
                 <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i>
                     Cập nhật thông tin thành công!
                 </div>
             </c:if>
             <c:if test="${param.error == 'true'}">
                 <div class="alert alert-error">
-                    <i class="fas fa-exclamation-circle"></i>
                     Có lỗi xảy ra khi cập nhật thông tin!
                 </div>
             </c:if>
@@ -162,13 +160,12 @@
 
                 <div class="section">
                     <div class="section-header">
-                        <h2><i class="fas fa-file-contract"></i> Lịch sử Mua Bảo Hiểm</h2>
+                        <h2>Lịch sử Mua Bảo Hiểm</h2>
                     </div>
                     
                     <c:choose>
                         <c:when test="${empty applications && empty contracts}">
                             <div class="no-data">
-                                <i class="fas fa-file-contract"></i>
                                 <p>Chưa có hợp đồng hoặc đơn mua hàng nào</p>
                             </div>
                         </c:when>

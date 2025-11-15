@@ -34,7 +34,6 @@
         <!-- Error/Success Messages -->
         <c:if test="${not empty error}">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-circle me-2"></i>
                 ${error}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -42,7 +41,6 @@
 
         <c:if test="${not empty success}">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
                 ${success}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -50,7 +48,6 @@
 
         <c:if test="${empty claim}">
             <div class="alert alert-warning" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
                 <strong>Không tìm thấy khiếu nại!</strong>
                 <p class="mb-0 mt-2">Khiếu nại bạn đang tìm kiếm không tồn tại hoặc bạn không có quyền xem.</p>
                 <a href="my-claims" class="btn btn-outline-primary mt-3">
@@ -295,7 +292,6 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center">
                         <h2 class="mb-0">
-                            <i class="bi bi-chat-dots me-2"></i>
                             Phản hồi và Theo dõi
                         </h2>
                         <div class="responses-count">
@@ -408,9 +404,6 @@
                         </c:when>
                         <c:otherwise>
                             <div class="chat-empty">
-                                <div class="empty-icon">
-                                    <i class="bi bi-chat-dots"></i>
-                                </div>
                                 <h3>Chưa có phản hồi nào</h3>
                                 <p>Claim này chưa có phản hồi hoặc theo dõi nào từ phía nhân viên.</p>
                             </div>

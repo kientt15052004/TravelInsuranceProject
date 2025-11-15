@@ -27,13 +27,11 @@
 
             <c:if test="${not empty roleUpdateMessage}">
                 <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i>
                     ${roleUpdateMessage}
                 </div>
             </c:if>
             <c:if test="${not empty roleUpdateError}">
                 <div class="alert alert-error">
-                    <i class="fas fa-exclamation-circle"></i>
                     ${roleUpdateError}
                 </div>
             </c:if>
@@ -102,7 +100,6 @@
                 <c:choose>
                     <c:when test="${empty users}">
                         <div class="no-data">
-                            <i class="fas fa-users"></i>
                             <p>Không tìm thấy user nào</p>
                         </div>
                     </c:when>
