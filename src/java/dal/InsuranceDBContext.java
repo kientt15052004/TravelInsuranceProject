@@ -554,8 +554,12 @@ public class InsuranceDBContext extends DBContext {
         }
     }
 
-    public boolean deleteProduct(int id) {
-        String sql = "UPDATE products SET is_delete = true WHERE id = ?";
+public boolean deleteProduct(int id) {
+        String sql
+                = "UPDATE products "
+                + "SET is_active = CASE WHEN is_active = 1 THEN 0 ELSE 1 END "
+                + "WHERE id = ?";
+
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, id);
             int rowsAffected = stm.executeUpdate();
