@@ -1,6 +1,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -82,30 +83,26 @@
                     <!-- Insurance Packages -->
                     <h3 class="section-title">Chọn Gói Bảo Hiểm</h3>
                     <div class="packages-grid">
-                        <div class="package-card" data-price="1000" data-benefit="1">
-                            <div class="package-icon">🚲</div>
-                            <div class="package-name">Gói 1</div>
-                            <div class="package-price">1,000 VNĐ/người</div>
-                            <div class="package-benefit">Quyền lợi lên đến 10 triệu</div>
-                        </div>
-                        <div class="package-card selected" data-price="5000" data-benefit="5">
-                            <div class="package-icon">🚗</div>
-                            <div class="package-name">Gói 2</div>
-                            <div class="package-price">5,000 VNĐ/người</div>
-                            <div class="package-benefit">Quyền lợi lên đến 50 triệu</div>
-                        </div>
-                        <div class="package-card" data-price="12000" data-benefit="12">
-                            <div class="package-icon">🚆</div>
-                            <div class="package-name">Gói 3</div>
-                            <div class="package-price">12,000 VNĐ/người</div>
-                            <div class="package-benefit">Quyền lợi lên đến 120 triệu</div>
-                        </div>
-                        <div class="package-card" data-price="20000" data-benefit="20">
-                            <div class="package-icon">✈️</div>
-                            <div class="package-name">Gói 4</div>
-                            <div class="package-price">20,000 VNĐ/người</div>
-                            <div class="package-benefit">Quyền lợi lên đến 200 triệu</div>
-                        </div>
+                        <c:set var="currentInsurance" value="${requestScope.insurance}"/>
+                        <c:if test="${currentInsurance != null && currentInsurance.package_type != null}">
+                            <c:set var="productPrice" value="${currentInsurance.price}"/>
+                            <c:set var="productBenefit" value="${currentInsurance.benefit}"/>
+                            <c:set var="maxBenefit" value="${productBenefit.death_or_permanent_disability}"/>
+                            
+                            <div class="package-card selected" 
+                                 data-price="${productPrice}" 
+                                 data-benefit-id="${currentInsurance.benefit_id}"
+                                 data-product-id="${currentInsurance.id}">
+                                <div class="package-name">${currentInsurance.package_type}</div>
+                                <div class="package-price">
+                                    <fmt:formatNumber value="${productPrice}" type="number" maxFractionDigits="0"/> VNĐ
+                                </div>
+                                <div class="package-benefit">
+                                    Quyền lợi lên đến 
+                                    <fmt:formatNumber value="${maxBenefit}" type="number" maxFractionDigits="0"/> VNĐ
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
 
