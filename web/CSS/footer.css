@@ -23,9 +23,6 @@
     text-decoration: none;
 }
 
-.footer ul li a:hover {
-    color: var(--primary-yellow);
-}
 
 .social-icons a {
     color: white;

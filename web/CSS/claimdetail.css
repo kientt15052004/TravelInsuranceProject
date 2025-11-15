@@ -70,20 +70,12 @@
     color: white;
 }
 
-.btn-secondary:hover {
-    background: #4b5563;
-    transform: translateY(-1px);
-}
 
 .btn-primary {
     background: #3b82f6;
     color: white;
 }
 
-.btn-primary:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
-}
 
 /* Contract Info Card Button */
 .contract-info-card .card-header .btn-primary {
@@ -187,10 +179,6 @@
     font-weight: 500;
 }
 
-.contract-link:hover {
-    color: #1d4ed8;
-    text-decoration: underline;
-}
 
 /* Amount */
 .amount {
@@ -289,9 +277,6 @@
     transition: transform 0.2s ease;
 }
 
-.claim-image:hover {
-    transform: scale(1.05);
-}
 
 /* File Download */
 .file-download {
@@ -306,9 +291,6 @@
     transition: background 0.2s ease;
 }
 
-.file-download:hover {
-    background: #2563eb;
-}
 
 /* No Attachments */
 .no-attachments {
@@ -364,9 +346,6 @@
     z-index: 1001;
 }
 
-.close:hover {
-    color: #ccc;
-}
 
 /* Header Actions */
 .header-actions {
@@ -394,10 +373,6 @@
     gap: 6px;
 }
 
-.btn-approve:hover {
-    background: #059669;
-    transform: translateY(-1px);
-}
 
 .btn-reject {
     background: #ef4444;
@@ -412,10 +387,6 @@
     gap: 6px;
 }
 
-.btn-reject:hover {
-    background: #dc2626;
-    transform: translateY(-1px);
-}
 
 /* Approval Modal */
 .approval-modal {
@@ -499,9 +470,6 @@
     color: white;
 }
 
-.modal-footer .btn-secondary:hover {
-    background: #4b5563;
-}
 
 /* Alert Styles */
 .alert {
@@ -711,9 +679,6 @@
     transition: transform 0.2s ease;
 }
 
-.response-image:hover {
-    transform: scale(1.05);
-}
 
 /* No Responses */
 .no-responses {
@@ -775,10 +740,6 @@
     gap: 6px;
 }
 
-.btn-status-update:hover {
-    background: #7c3aed;
-    transform: translateY(-1px);
-}
 
 /* Status Update Modal */
 .status-update-modal {
@@ -886,18 +847,12 @@
     color: white;
 }
 
-.btn-sm.btn-success:hover {
-    background: #059669;
-}
 
 .btn-sm.btn-secondary {
     background: #6b7280;
     color: white;
 }
 
-.btn-sm.btn-secondary:hover {
-    background: #4b5563;
-}
 
 .btn-edit-status {
     background: #f3f4f6;
@@ -911,10 +866,6 @@
     justify-content: center;
 }
 
-.btn-edit-status:hover {
-    background: #e5e7eb;
-    color: #374151;
-}
 
 /* Chat Style for Responses */
 .chat-container {
@@ -942,9 +893,6 @@
     background: #9ca3af;
 }
 
-.chat-messages-container::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
-}
 
 .chat-container::-webkit-scrollbar {
     width: 8px;
@@ -958,9 +906,6 @@
     background: #9ca3af;
 }
 
-.chat-container::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
-}
 
 .chat-messages {
     display: flex;
@@ -1066,9 +1011,6 @@
     transition: transform 0.2s ease;
 }
 
-.attachment-preview img:hover {
-    transform: scale(1.05);
-}
 
 .attachment-file {
     background: #f3f4f6;
@@ -1086,9 +1028,6 @@
     transition: color 0.2s ease;
 }
 
-.file-link:hover {
-    color: #2563eb;
-}
 
 .file-link i {
     font-size: 1.2rem;
@@ -1209,9 +1148,6 @@
     gap: 8px;
 }
 
-.btn-send:hover {
-    transform: translateY(-2px);
-}
 
 .btn-send:active {
     transform: translateY(0);
@@ -1235,9 +1171,6 @@
     gap: 8px;
 }
 
-.btn-approve:hover {
-    transform: translateY(-2px);
-}
 
 .btn-approve:active {
     transform: translateY(0);
@@ -1260,9 +1193,6 @@
     gap: 8px;
 }
 
-.btn-reject:hover {
-    transform: translateY(-2px);
-}
 
 .btn-reject:active {
     transform: translateY(0);

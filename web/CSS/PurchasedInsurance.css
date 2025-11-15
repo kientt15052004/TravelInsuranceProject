@@ -130,10 +130,6 @@ main {
     text-decoration: none;
 }
 
-.action-icon:hover{
-    background:#f8f9fa;
-    color:#111;
-}
 
 /* Table responsive cards for mobile */
 @media (max-width: 992px){

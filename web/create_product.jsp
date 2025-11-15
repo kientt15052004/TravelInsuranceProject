@@ -29,7 +29,7 @@
                 <c:if test="${not empty notification && not empty img_src 
                               && not empty name && not empty type
                               && not empty package_type && not empty description && not empty price}">
-                      <div class="alert alert-success">
+                      <div class="alert alert-success" id="successAlert">
                           <div class="alert-content">
                               <div class="alert-icon">
                               </div>
@@ -47,10 +47,17 @@
                                       </div>
                                   </div>
                               </div>
-                              <button type="button" onclick="this.parentElement.parentElement.style.display = 'none'">
+                              <button type="button" onclick="closeSuccessAlert()">
                               </button>
                           </div>
                       </div>
+                      <c:remove var="notification" scope="session"/>
+                      <c:remove var="img_src" scope="session"/>
+                      <c:remove var="name" scope="session"/>
+                      <c:remove var="type" scope="session"/>
+                      <c:remove var="package_type" scope="session"/>
+                      <c:remove var="description" scope="session"/>
+                      <c:remove var="price" scope="session"/>
                 </c:if>
 
                 <div class="form-container">
@@ -81,13 +88,32 @@
                                 <div class="form-group col-package">
                                     <label for="package_type">Chọn gói <span class="required">*</span></label>
                                     <div class="select-wrapper">
-                                        <select name="package_type" class="form-control form-select">
+                                        <select name="package_type" id="package_type_select" class="form-control form-select">
                                             <option value="basic">Cơ bản</option>
                                             <option value="standard">Tiêu chuẩn</option>
                                             <option value="advanced">Nâng cao</option>
                                             <option value="comprehensive">Toàn diện</option>
+                                            <c:if test="${packageTypes != null && !empty packageTypes}">
+                                                <c:forEach items="${packageTypes}" var="pkgType">
+                                                    <c:if test="${pkgType != 'Basic' && pkgType != 'Standard' && pkgType != 'Advanced' && pkgType != 'Comprehensive'}">
+                                                        <option value="${pkgType}">${pkgType}</option>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </c:if>
+                                            <option value="other">Khác</option>
                                         </select>
                                         <i class="fas fa-chevron-down select-arrow"></i>
+                                    </div>
+                                    <div id="custom_package_type_wrapper" style="display: none; margin-top: 10px;">
+                                        <input type="text" 
+                                               name="custom_package_type" 
+                                               id="custom_package_type" 
+                                               class="form-control" 
+                                               placeholder="Nhập tên gói mới (ví dụ: Premium, Ultimate...)"
+                                               maxlength="50"
+                                               pattern="[a-zA-Z0-9\\s]+"
+                                               title="Chỉ chứa chữ cái, số và khoảng trắng">
+                                        <small class="form-text text-muted">Tối đa 50 ký tự, chỉ chứa chữ cái, số và khoảng trắng</small>
                                     </div>
                                 </div>
                             </div>
@@ -222,11 +248,11 @@
 
                         <div class="form-section domestic-pricing-section">
                             <div class="section-header">
-                                <h2>Tính phí</h2>
+                                <h2>Tính giá sản phẩm</h2>
                             </div>
                             <div class="pricing-formula">
-                                <h4>Công thức tính phí</h4>
-                                <p>Phí = <input class="form-control coefficient-input" name="coefficient_1" placeholder="Nhập vào hệ số....">% × STBH × Số ngày × Số người</p>
+                                <h4>Công thức tính giá sản phẩm</h4>
+                                <p>Giá sản phẩm = <input class="form-control coefficient-input" name="coefficient_1" placeholder="Nhập vào hệ số....">% × Số tiền bảo hiểm × Số ngày × Số người</p>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-6">
@@ -240,7 +266,7 @@
                             </div>
                             <div class="pricing-result">
                                 <div class="result-item">
-                                    <label>Phí dự kiến</label>
+                                    <label>Giá sản phẩm dự kiến</label>
                                     <p><span class="result">0</span> VNĐ</p>
                                 </div>
                                 <div class="result-details">
@@ -253,10 +279,10 @@
 
                         <div class="form-section international-pricing-section">
                             <div class="section-header">
-                                <h2><i class="fas fa-calculator"></i> Tính phí</h2>
+                                <h2><i class="fas fa-calculator"></i> Tính giá sản phẩm</h2>
                             </div>
                             <div class="pricing-formula">
-                                <h4>Công thức tính phí</h4>
+                                <h4>Công thức tính giá sản phẩm</h4>
                                 <p>Phí bảo hiểm = Biểu phí theo ngày x số ngày x số người</p>
                             </div>
                             <div class="form-section international-pricing-section">
@@ -312,7 +338,7 @@
                                 </div>
                                 <div class="pricing-result">
                                     <div class="result-item">
-                                        <label>Phí dự kiến</label>
+                                        <label>Giá sản phẩm dự kiến</label>
                                         <p><span class="result0">0</span> VNĐ</p>
                                     </div>
                                     <div class="result-details">
@@ -328,7 +354,7 @@
                                 Tạo sản phẩm
                             </button>
                             <button type="button" class="btn btn-secondary btn-calculate">
-                                Tính phí
+                                Tính giá sản phẩm
                             </button>
                         </div>
 
@@ -451,30 +477,67 @@
                             }
 
                             function calculateInternationalFee() {
-                                const rate1_7 = document.querySelector('input[name="international_rate_1_7"]');
+                                const coefficient_1_7 = document.querySelector('input[name="international_rate_1_7"]');
+                                const coefficient_8_30 = document.querySelector('input[name="international_rate_8_30"]');
+                                const coefficient_31_90 = document.querySelector('input[name="international_rate_31_90"]');
+                                const coefficient_91_180 = document.querySelector('input[name="international_rate_91_180"]');
                                 const days = internationalPricingSection.querySelector('input[placeholder="Nhập vào số ngày...."]');
                                 const people = internationalPricingSection.querySelector('input[placeholder="Nhập vào số người...."]');
-                                const result = internationalPricingSection.querySelector('.result0');
+                                const result0 = internationalPricingSection.querySelector('.result0');
+                                const result4 = internationalPricingSection.querySelector('.result4');
+                                const result5 = internationalPricingSection.querySelector('.result5');
+                                const result6 = internationalPricingSection.querySelector('.result6');
 
-                                if (days && people && result && rate1_7) {
+                                if (days && people && result0 && coefficient_1_7) {
                                     try {
-                                        const daysValue = parseInt(days.value) || 0;
-                                        const peopleValue = parseInt(people.value) || 0;
-                                        const rate = parseFloat(rate1_7.value) || 0;
+                                        const value22 = Number(days.value) || 1;
+                                        const value23 = Number(people.value) || 1;
 
-                                        if (daysValue < 1 || daysValue > 180 || peopleValue < 1 || peopleValue > 100 || rate <= 0) {
-                                            alert('Vui lòng kiểm tra lại thông số đầu vào: Số ngày (1-180), Số người (1-100), Biểu phí (phải lớn hơn 0).');
-                                            result.textContent = '0';
-                                            if (priceField)
-                                                priceField.value = '0';
-                                            return;
+                                        let per_day_premium = 0;
+
+                                        if (value22 >= 1 && value22 <= 7) {
+                                            per_day_premium = Number(coefficient_1_7.value) || 0;
+                                        } else if (value22 >= 8 && value22 <= 30) {
+                                            per_day_premium = Number(coefficient_8_30.value) || 0;
+                                        } else if (value22 >= 31 && value22 <= 90) {
+                                            per_day_premium = Number(coefficient_31_90.value) || 0;
+                                        } else if (value22 >= 91 && value22 <= 180) {
+                                            per_day_premium = Number(coefficient_91_180.value) || 0;
                                         }
 
-                                        const fee_preview = rate * daysValue * peopleValue;
-                                        result.textContent = fee_preview.toLocaleString('vi-VN');
+                                        const fee_preview = per_day_premium * value22 * value23;
 
-                                        if (priceField)
-                                            priceField.value = rate.toFixed(2);
+                                        // Cập nhật các hidden fields cho các rate
+                                        const international_rate_1_7_field = document.querySelector('.international_rate_1_7');
+                                        const international_rate_8_30_field = document.querySelector('.international_rate_8_30');
+                                        const international_rate_31_90_field = document.querySelector('.international_rate_31_90');
+                                        const international_rate_91_180_field = document.querySelector('.international_rate_91_180');
+
+                                        if (international_rate_1_7_field) international_rate_1_7_field.value = coefficient_1_7.value;
+                                        if (international_rate_8_30_field) international_rate_8_30_field.value = coefficient_8_30 ? coefficient_8_30.value : '0';
+                                        if (international_rate_31_90_field) international_rate_31_90_field.value = coefficient_31_90 ? coefficient_31_90.value : '0';
+                                        if (international_rate_91_180_field) international_rate_91_180_field.value = coefficient_91_180 ? coefficient_91_180.value : '0';
+
+                                        if (per_day_premium > 0 && value22 <= 180 && value22 > 0 && value23 > 0 && value23 <= 100) {
+                                            result0.textContent = fee_preview.toLocaleString('vi-VN');
+                                            if (result4) result4.innerText = `Biểu phí theo ngày/người: ` + per_day_premium.toLocaleString('vi-VN') + ' VNĐ';
+                                            if (result5) result5.textContent = `Số ngày: ` + value22.toLocaleString('vi-VN');
+                                            if (result6) result6.textContent = `Số người đi: ` + value23.toLocaleString('vi-VN');
+                                            
+                                            // Price luôn = international_rate_1_7 (giá mặc định cho 1-7 ngày)
+                                            // để nhất quán với seed data và logic hiển thị
+                                            if (priceField && coefficient_1_7) {
+                                                priceField.value = Number(coefficient_1_7.value).toFixed(2);
+                                            }
+                                        } else {
+                                            alert('Vui lòng nhập đầy đủ các trường và đảm bảo số ngày từ 1-180, số người từ 1-100, Các hệ số phải lớn hơn 0');
+                                            result0.textContent = '0';
+                                            if (result4) result4.textContent = '';
+                                            if (result5) result5.textContent = '';
+                                            if (result6) result6.textContent = '';
+                                            if (priceField)
+                                                priceField.value = '0';
+                                        }
 
                                     } catch (error) {
                                         console.error('An unexpected error occurred during calculation:', error);
@@ -494,11 +557,62 @@
 
                                 if (Number(priceField.value) <= 0) {
                                     e.preventDefault();
-                                    alert('Vui lòng tính phí và đảm bảo giá sản phẩm (Base Rate) lớn hơn 0 trước khi tạo!');
+                                    alert('Vui lòng tính giá sản phẩm và đảm bảo giá sản phẩm (Base Rate) lớn hơn 0 trước khi tạo!');
                                 }
                             });
 
                         });
+
+                        // Toggle custom package type input
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const packageTypeSelect = document.getElementById('package_type_select');
+                            const customPackageTypeWrapper = document.getElementById('custom_package_type_wrapper');
+                            const customPackageTypeInput = document.getElementById('custom_package_type');
+                            
+                            if (packageTypeSelect && customPackageTypeWrapper && customPackageTypeInput) {
+                                packageTypeSelect.addEventListener('change', function() {
+                                    if (this.value === 'other') {
+                                        customPackageTypeWrapper.style.display = 'block';
+                                        customPackageTypeInput.setAttribute('required', 'required');
+                                    } else {
+                                        customPackageTypeWrapper.style.display = 'none';
+                                        customPackageTypeInput.removeAttribute('required');
+                                        customPackageTypeInput.value = '';
+                                    }
+                                });
+                                
+                                // Validate custom package type on form submit
+                                const form = document.querySelector('form[action*="create_product"]');
+                                if (form) {
+                                    form.addEventListener('submit', function(e) {
+                                        if (packageTypeSelect.value === 'other') {
+                                            const customValue = customPackageTypeInput.value.trim();
+                                            if (!customValue) {
+                                                e.preventDefault();
+                                                alert('Vui lòng nhập tên gói mới!');
+                                                customPackageTypeInput.focus();
+                                                return false;
+                                            }
+                                            // Validate format
+                                            if (!/^[a-zA-Z0-9\s]{1,50}$/.test(customValue)) {
+                                                e.preventDefault();
+                                                alert('Tên gói chỉ được chứa chữ cái, số và khoảng trắng, tối đa 50 ký tự!');
+                                                customPackageTypeInput.focus();
+                                                return false;
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        // Hàm đóng thông báo thành công
+                        function closeSuccessAlert() {
+                            const alert = document.getElementById('successAlert');
+                            if (alert) {
+                                alert.style.display = 'none';
+                            }
+                        }
                     </script>
                 </div>
             </div>

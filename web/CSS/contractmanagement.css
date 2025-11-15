@@ -229,9 +229,6 @@
     transition: 0.2s;
 }
 
-.pagination button:hover {
-    background: #ddd;
-}
 
 .pagination button.active {
     background: #007bff;
@@ -297,9 +294,6 @@
     transition: background-color 0.2s ease;
 }
 
-.contracts-table th:hover {
-    background-color: #e9ecef;
-}
 
 /* Chỉ hiển thị cursor pointer cho các cột có thể sort */
 .contracts-table th:nth-child(1), /* ID Hợp đồng */

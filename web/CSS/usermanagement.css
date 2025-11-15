@@ -229,9 +229,6 @@
     transition: 0.2s;
 }
 
-.pagination button:hover {
-    background: #ddd;
-}
 
 .pagination button.active {
     background: #007bff;
@@ -297,9 +294,6 @@
     transition: background-color 0.2s ease;
 }
 
-.users-table th:hover {
-    background-color: #e9ecef;
-}
 
 /* Chỉ hiển thị cursor pointer cho các cột có thể sort */
 .users-table th:nth-child(1), /* ID User */
@@ -423,33 +417,18 @@
     color: white;
 }
 
-.btn-info:hover {
-    background-color: #138496;
-    color: white;
-    text-decoration: none;
-}
 
 .btn-warning {
     background-color: #ffc107;
     color: #212529;
 }
 
-.btn-warning:hover {
-    background-color: #e0a800;
-    color: #212529;
-    text-decoration: none;
-}
 
 .btn-danger {
     background-color: #dc3545;
     color: white;
 }
 
-.btn-danger:hover {
-    background-color: #c82333;
-    color: white;
-    text-decoration: none;
-}
 
 .no-data {
     text-align: center;

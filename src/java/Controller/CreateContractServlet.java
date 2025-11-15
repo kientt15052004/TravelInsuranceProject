@@ -573,26 +573,27 @@ public class CreateContractServlet extends HttpServlet {
         
         // Apply rate based on product type and duration
         if ("domestic".equalsIgnoreCase(product.getType())) {
-            // Domestic insurance - use percentage rate
-            BigDecimal rate = product.getDomestic_percentage_rate();
-            if (rate != null) {
-                return basePrice.multiply(rate).multiply(new BigDecimal(days));
-            }
+            // Domestic insurance - basePrice đã là giá cuối cùng (max benefit × rate)
+            // Công thức: Phí = basePrice × số ngày
+            // Không nhân thêm rate vì basePrice đã tính sẵn
+            return basePrice.multiply(new BigDecimal(days));
         } else if ("international".equalsIgnoreCase(product.getType())) {
-            // International insurance - use different rates based on duration
-            BigDecimal rate;
+            // International insurance - use different prices per day based on duration
+            // Công thức: Phí = Biểu phí theo ngày x số ngày
+            BigDecimal perDayPrice;
             if (days <= 7) {
-                rate = product.getInternational_rate_1_7();
+                perDayPrice = product.getInternational_rate_1_7();
             } else if (days <= 30) {
-                rate = product.getInternational_rate_8_30();
+                perDayPrice = product.getInternational_rate_8_30();
             } else if (days <= 90) {
-                rate = product.getInternational_rate_31_90();
+                perDayPrice = product.getInternational_rate_31_90();
             } else {
-                rate = product.getInternational_rate_91_365();
+                perDayPrice = product.getInternational_rate_91_365();
             }
             
-            if (rate != null) {
-                return basePrice.multiply(rate).multiply(new BigDecimal(days));
+            if (perDayPrice != null && perDayPrice.compareTo(BigDecimal.ZERO) > 0) {
+                // Phí = Biểu phí theo ngày x số ngày (không nhân với basePrice)
+                return perDayPrice.multiply(new BigDecimal(days));
             }
         }
         

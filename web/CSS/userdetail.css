@@ -39,12 +39,6 @@
     transition: all 0.3s ease;
 }
 
-.btn-back:hover {
-    background: #545b62;
-    transform: translateY(-1px);
-    text-decoration: none;
-    color: white;
-}
 
 /* Alert Messages */
 .alert {
@@ -110,10 +104,6 @@
     transition: all 0.3s ease;
 }
 
-.btn-edit-toggle:hover {
-    background: #218838;
-    transform: translateY(-1px);
-}
 
 /* User Info Grid */
 .user-info-grid {
@@ -219,20 +209,12 @@
     color: white;
 }
 
-.btn-save:hover {
-    background: #0056b3;
-    transform: translateY(-1px);
-}
 
 .btn-cancel {
     background: #6c757d;
     color: white;
 }
 
-.btn-cancel:hover {
-    background: #545b62;
-    transform: translateY(-1px);
-}
 
 /* Role & Status text */
 .role-text,
@@ -314,9 +296,6 @@
     vertical-align: middle;
 }
 
-.combined-table tbody tr:hover {
-    background: #f8f9fa;
-}
 
 /* Action Buttons */
 .btn-detail {
@@ -334,12 +313,6 @@
     cursor: pointer;
 }
 
-.btn-detail:hover {
-    background: #0056b3;
-    color: white;
-    text-decoration: none;
-    transform: translateY(-1px);
-}
 
 .btn-detail i {
     font-size: 11px;
@@ -368,9 +341,6 @@
     vertical-align: middle;
 }
 
-.claims-table tbody tr:hover {
-    background: #f8f9fa;
-}
 
 /* Claims specific styles */
 .description-cell {

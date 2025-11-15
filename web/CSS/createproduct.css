@@ -311,10 +311,6 @@
     cursor: pointer;
 }
 
-.btn-create:hover {
-    background-color: #ffed4e;
-    transform: translateY(-2px);
-}
 
 .btn-secondary {
     background-color: #6c757d;
@@ -327,10 +323,6 @@
     cursor: pointer;
 }
 
-.btn-secondary:hover {
-    background-color: #5a6268;
-    transform: translateY(-2px);
-}
 
 .button-container {
     text-align: center;
@@ -556,20 +548,12 @@
     color: #333;
 }
 
-.btn-primary:hover {
-    background: #FFC107;
-    transform: translateY(-2px);
-}
 
 .btn-secondary {
     background: #6c757d;
     color: white;
 }
 
-.btn-secondary:hover {
-    background: #5a6268;
-    transform: translateY(-2px);
-}
 
 /* Responsive */
 @media (max-width: 768px) {

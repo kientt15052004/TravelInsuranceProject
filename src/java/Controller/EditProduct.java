@@ -33,6 +33,9 @@ public class EditProduct extends HttpServlet {
             InsuranceProduct product = insuranceDAO.getByIdWithBenefit(id);
             if (product != null) {
                 System.out.println("DEBUG: Product loaded - package_type: " + product.getPackage_type());
+                // Load all package types from database for dropdown
+                java.util.ArrayList<String> packageTypes = insuranceDAO.getAllPackageTypes();
+                request.setAttribute("packageTypes", packageTypes);
                 request.setAttribute("product", product);
                 request.getRequestDispatcher("/edit_product.jsp").forward(request, response);
             } else {

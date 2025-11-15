@@ -46,7 +46,6 @@ body {
     transition: color 0.3s;
 }
 
-.navbar-center .nav-link:hover,
 .navbar-center .nav-link.active {
     color: #F59E0B !important;
 }
@@ -68,7 +67,6 @@ body {
 }
 
 /* Bỏ hover effect cho nút đăng nhập */
-.btn-sign-in:hover,
 .btn-sign-in:focus,
 .btn-sign-in:active {
     background-color: #ff9800;
@@ -149,10 +147,6 @@ body {
     transition: all 0.2s ease;
 }
 
-.navbar-right .dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: #F59E0B;
-}
 
 .navbar-right .dropdown-divider {
     margin: 8px 0;
@@ -224,9 +218,6 @@ body {
         font-weight: 500;
     }
 
-    .navbar-center .nav-link:hover {
-        color: #F59E0B !important;
-    }
 }
 
 /* Hero Section - tận dụng hết chiều rộng */
@@ -348,10 +339,6 @@ body {
     height: 100%;
 }
 
-/* Hiệu ứng hover cho card - nâng lên và tăng bóng */
-.product-card:hover {
-    transform: translateY(-10px); /* Nâng card lên */
-}
 
 .product-image {
     width: 100%;
@@ -375,10 +362,6 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* Hover cho button - màu vàng đậm hơn */
-.btn-select-plan:hover {
-    background-color: #e0a010;
-}
 
 /* Why Choose Section */
 .why-choose-section {
@@ -451,9 +434,6 @@ body {
     transition: all 0.3s ease;
 }
 
-.faq-item:hover {
-    border-color: var(--primary-yellow);
-}
 .faq-question {
     display: flex;
     justify-content: space-between;

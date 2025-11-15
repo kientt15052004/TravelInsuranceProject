@@ -164,9 +164,9 @@ body {
 .sidebar .nav-link { transition: none !important; }
 /* Forcefully disable any hover/focus background/border from external styles */
 .sidebar * { transition: none !important; box-shadow: none !important; }
-.sidebar .nav-item:hover,
-.sidebar .nav-item:hover .nav-link,
-.sidebar .nav-link:hover,
+.sidebar .nav-item,
+.sidebar .nav-item .nav-link,
+.sidebar .nav-link,
 .sidebar .nav-link:focus,
 .sidebar .nav-link:active {
     background-color: transparent !important;

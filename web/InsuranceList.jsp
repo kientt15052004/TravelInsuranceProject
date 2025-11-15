@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>InsureTravel - Danh Sách Bảo Hiểm</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </head>
     <body>
         <jsp:include page="component/header.jsp" />
@@ -20,21 +21,19 @@
 
             <div class="filter-section">
                 <form action="InsuranceList" method="GET" class="filter-form">
-         <!--1-->   <!-- Search by name -->
-
+                    <!-- Search by name -->
                     <div class="form-group">
                         <label>Tìm kiếm theo tên</label>
                         <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Nhập tên bảo hiểm...">
                     </div>
 
-         <!--2-->   <!-- Filter by type -->
+                    <!-- Filter by type -->
                     <div class="form-group">
                         <label>Lọc theo loại</label>
                         <select class="form-select" name="searchType">
                             <option value="">Tất cả loại</option>
                             <c:forEach var="t" items="${types}">
                                 <option value="${t}" ${param.searchType == t ? 'selected' : ''}>${t}</option>
-                                <!--Lặp qua tất cả loại bảo hiểm và đánh dấu loại mà người dùng đã chọn-->
                             </c:forEach>
                         </select>
                     </div>
@@ -42,14 +41,13 @@
                     <div class="form-group price-filter">
                         <label>Lọc theo giá (USD)</label>
                         <div class="price-range">
-         <!--3-->           <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Tối thiểu" min="0" step="1">
+                            <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Tối thiểu" min="0" step="1">
                             <span>-</span>
-         <!--4-->       <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Tối đa" min="0" step="1">
+                            <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Tối đa" min="0" step="1">
                         </div>
                     </div>
-         <!-- => Truy vấn đến db -> Trả kết quả mới -->              
+                      
                     <!-- Buttons -->
-
                     <div class="form-buttons">
                         <button type="submit" class="search-btn">Tìm kiếm</button>
                         <a href="InsuranceList" class="search-btn">Xóa bộ lọc</a>
@@ -57,87 +55,32 @@
                 </form>
             </div>
 
-            <div class="results-info">
-                <div class="results-count">
-                    <c:set var="startIndex" value="${(currentPage - 1) * pageSize + 1}" />
-                    <c:set var="endIndex" value="${currentPage * pageSize > totalRecords ? totalRecords : currentPage * pageSize}" />
-                    Hiển thị <strong>${totalRecords > 0 ? startIndex : 0}-${endIndex}</strong> trong tổng số <strong>${totalRecords}</strong> kết quả
-                </div>
+            <!-- Insurance Grid - Only 2 cards -->
+            <div class="insurance-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 1000px; margin: 0 auto;">
+                <a href="purchase-insurance?type=domestic" class="insurance-card">
+                    <div class="insurance-icon">
+                        <img src="https://5.imimg.com/data5/SELLER/Default/2021/10/JQ/QS/XB/8956187/2-1-5-1-domestic-travel-insurance-500x500.jpg" alt="Bảo Hiểm Du Lịch Nội Địa">
+                    </div>
+                    <span class="insurance-type">bảo hiểm nội địa</span>
+                    <div class="insurance-name">Bảo Hiểm Du Lịch Nội Địa</div>
+                    <div class="insurance-description">
+                        Bảo vệ toàn diện cho chuyến du lịch trong nước với các quyền lợi phù hợp cho hành trình nội địa. Bảo hiểm bao gồm tử vong, thương tật, trách nhiệm cá nhân và nhiều quyền lợi khác.
+                    </div>
+                    <button class="view-details-btn">Mua Ngay</button>
+                </a>
+
+                <a href="purchase-insurance?type=international" class="insurance-card">
+                    <div class="insurance-icon">
+                        <img src="https://mma.prnewswire.com/media/1453034/Travel_Insured_Intl_Logo.jpg?p=twitter" alt="Bảo Hiểm Du Lịch Ngoại Địa">
+                    </div>
+                    <span class="insurance-type">bảo hiểm ngoại địa</span>
+                    <div class="insurance-name">Bảo Hiểm Du Lịch Ngoại Địa</div>
+                    <div class="insurance-description">
+                        Bảo vệ toàn diện cho chuyến du lịch quốc tế với các quyền lợi mở rộng cho hành trình nước ngoài. Bao gồm chi phí y tế, hồi hương, hủy chuyến đi và nhiều quyền lợi khác.
+                    </div>
+                    <button class="view-details-btn">Mua Ngay</button>
+                </a>
             </div>
-
-            <!-- Insurance Grid -->
-            
-            <!-- Thông báo “không có kết quả” khi nhập vào dữ liệu không có trong infor gói -->
-            <div class="insurance-grid">
-                <c:choose>
-                    <c:when test="${empty insurances}">
-                        <div class="empty-state">
-                            <h3>Không tìm thấy kết quả</h3>
-                            <p>Vui lòng điều chỉnh tiêu chí tìm kiếm hoặc bộ lọc</p>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach items="${insurances}" var="insurance"> <!-- lặp từng sản phẩm bảo hiểm và hiển thị thông tin:  -->
-                            <a href="purchase-insurance?id=${insurance.id}" class="insurance-card">
-                                <div class="insurance-icon">
-                                    <img src="${insurance.img.startsWith('http') ? insurance.img : pageContext.request.contextPath.concat('/').concat(insurance.img)}" 
-                                         alt="${insurance.name}" class="insurance-img"/>
-                                </div>
-                                <span class="insurance-type">${insurance.type}</span>
-                                <div class="insurance-name">${insurance.name}</div>
-                                <div class="insurance-description">${insurance.description}</div>
-
-                                <!-- Added Price Display -->
-                                <div class="insurance-price">
-                                    Giá: <strong>$${insurance.price}</strong>
-                                </div>
-
-                                <button class="view-details-btn">Mua Ngay</button>
-                            </a>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <!-- Pagination -->
-            <c:if test="${totalPages > 1}"> <!-- Chỉ hiển thị phân trang nếu có hơn 1 trang dữ liệu -->
-                <div class="pagination">
-                    <!-- Previous Button -->
-                    <c:choose>
-                        <c:when test="${currentPage > 1}">
-                            <a href="InsuranceList?page=${currentPage - 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                               class="page-btn">← Trước</a>
-                        </c:when>
-                        <c:otherwise>
-                            <span class="page-btn disabled">← Trước</span>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <!-- Page Numbers -->
-                    <c:forEach begin="1" end="${totalPages}" var="i">
-                        <c:choose>
-                            <c:when test="${i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1)}">
-                                <a href="InsuranceList?page=${i}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                                   class="page-btn ${i == currentPage ? 'active' : ''}">${i}</a> <!--Tất cả link trang đều gắn lại các tham số-->
-                            </c:when>
-                            <c:when test="${i == currentPage - 2 || i == currentPage + 2}">
-                                <span class="pagination-ellipsis">...</span>
-                            </c:when>
-                        </c:choose>
-                    </c:forEach>
-
-                    <!-- Next Button -->
-                    <c:choose>
-                        <c:when test="${currentPage < totalPages}">
-                            <a href="InsuranceList?page=${currentPage + 1}&searchName=${param.searchName}&searchType=${param.searchType}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}" 
-                               class="page-btn">Sau →</a>  <!--Tất cả link trang đều gắn lại các tham số-->
-                        </c:when>
-                        <c:otherwise>
-                            <span class="page-btn disabled">Sau →</span>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </c:if>
         </div>
                 <jsp:include page="./component/footer.jsp"></jsp:include>
         <!-- Bootstrap JS -->

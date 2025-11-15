@@ -2,11 +2,11 @@
 
 /* Navigation hover effects */
 .sidebar .nav-link { transition: none; }
-.sidebar .nav-link:hover { background-color: inherit; transform: none; border-left-color: transparent; }
+.sidebar .nav-link { background-color: inherit; transform: none; border-left-color: transparent; }
 .sidebar * { transition: none; box-shadow: none; }
-.sidebar .nav-item:hover,
-.sidebar .nav-item:hover .nav-link,
-.sidebar .nav-link:hover,
+.sidebar .nav-item,
+.sidebar .nav-item .nav-link,
+.sidebar .nav-link,
 .sidebar .nav-link:focus,
 .sidebar .nav-link:active {
     background-color: transparent;
@@ -204,7 +204,7 @@ button:disabled {
     transform: none;
 }
 
-button:disabled:hover {
+button:disabled {
     transform: none;
 }
 * {
@@ -593,9 +593,6 @@ body {
     transition: opacity 0.3s ease;
 }
 
-.metric-card:hover::before {
-    opacity: 1 !important;
-}
 
 .metric-header {
     margin-bottom: 15px !important;

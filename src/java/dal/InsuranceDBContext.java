@@ -252,6 +252,76 @@ public class InsuranceDBContext extends DBContext {
         return insurance;
     }
 
+    public ArrayList<InsuranceProduct> getProductsByTypeWithBenefit(String type) {
+        String sql = "SELECT p.id AS product_id, p.benefit_id, p.name, p.img, p.type, p.description, p.package_type, "
+                + "p.price, p.domestic_percentage_rate, p.international_rate_1_7, p.international_rate_8_30, "
+                + "p.international_rate_31_90, p.international_rate_91_365, p.is_active, p.is_delete, "
+                + "b.id AS benefit_id, b.death_or_permanent_disability, b.death_due_to_illness, "
+                + "b.third_party_liability, b.lost_bank_card, b.kidnap_and_hostage, "
+                + "b.lost_or_damaged_golf_equipment, "
+                + "b.medical_cost, b.emergency_transport, b.repatriation_vn, b.repatriation_abroad, "
+                + "b.hospital_visit, b.funeral_arrangement, b.child_care, b.hospital_allowance, "
+                + "b.accident_death_injury, b.trip_cancellation, b.companion_support, "
+                + "b.delayed_baggage, b.travel_documents, b.trip_delay "
+                + "FROM products p "
+                + "LEFT JOIN insurance_benefits b ON p.benefit_id = b.id "
+                + "WHERE p.type = ? AND p.is_active = 1 AND p.is_delete = 0";
+
+        ArrayList<InsuranceProduct> products = new ArrayList<>();
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setString(1, type);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                InsuranceProduct product = new InsuranceProduct();
+                product.setId(rs.getInt("product_id"));
+                product.setBenefit_id(rs.getInt("benefit_id"));
+                product.setName(rs.getString("name"));
+                product.setImg(rs.getString("img"));
+                product.setType(rs.getString("type"));
+                product.setDescription(rs.getString("description"));
+                product.setPackage_type(rs.getString("package_type"));
+                product.setPrice(rs.getBigDecimal("price"));
+                product.setDomestic_percentage_rate(rs.getBigDecimal("domestic_percentage_rate"));
+                product.setInternational_rate_1_7(rs.getBigDecimal("international_rate_1_7"));
+                product.setInternational_rate_8_30(rs.getBigDecimal("international_rate_8_30"));
+                product.setInternational_rate_31_90(rs.getBigDecimal("international_rate_31_90"));
+                product.setInternational_rate_91_365(rs.getBigDecimal("international_rate_91_365"));
+                product.setIs_active(rs.getBoolean("is_active"));
+                product.setIs_delete(rs.getBoolean("is_delete"));
+
+                int benefitId = rs.getInt("benefit_id");
+                if (benefitId > 0) {
+                    InsuranceBenefit benefit = mapResultSetToInsuranceBenefit(rs);
+                    product.setBenefit(benefit);
+                }
+
+                products.add(product);
+            }
+            
+            // Sort packages: Standard types first (Basic, Standard, Advanced, Comprehensive), then others alphabetically
+            products.sort((p1, p2) -> {
+                int order1 = utils.PackageType.getDisplayOrder(p1.getPackage_type());
+                int order2 = utils.PackageType.getDisplayOrder(p2.getPackage_type());
+                
+                if (order1 != order2) {
+                    return Integer.compare(order1, order2);
+                }
+                
+                // If both are custom packages (order = 999), sort alphabetically
+                if (order1 == 999) {
+                    return p1.getPackage_type().compareToIgnoreCase(p2.getPackage_type());
+                }
+                
+                return 0;
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
     public ArrayList<String> getAllType() {
         ArrayList<String> types = new ArrayList<>();
         String sql = "SELECT DISTINCT type FROM products";
@@ -266,6 +336,25 @@ public class InsuranceDBContext extends DBContext {
         }
 
         return types;
+    }
+
+    public ArrayList<String> getAllPackageTypes() {
+        ArrayList<String> packageTypes = new ArrayList<>();
+        String sql = "SELECT DISTINCT package_type FROM products WHERE package_type IS NOT NULL AND package_type != '' ORDER BY package_type";
+
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                String packageType = rs.getString("package_type");
+                if (packageType != null && !packageType.trim().isEmpty()) {
+                    packageTypes.add(packageType);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error in getAllPackageTypes(): " + e.getMessage());
+        }
+
+        return packageTypes;
     }
 
     public User login(String username, String password) {
@@ -477,6 +566,12 @@ public class InsuranceDBContext extends DBContext {
             return rowsAffected > 0;
         } catch (Exception e) {
             System.out.println("Error creating product: " + e.getMessage());
+            e.printStackTrace();
+            // Log chi tiết lỗi để debug
+            if (e.getMessage() != null && e.getMessage().contains("package_type")) {
+                System.out.println("ERROR: Package type issue. Current package_type value: " + product.getPackage_type());
+                System.out.println("NOTE: If using custom package_type, make sure database column is VARCHAR, not ENUM.");
+            }
             return false;
         }
     }
@@ -554,12 +649,8 @@ public class InsuranceDBContext extends DBContext {
         }
     }
 
-public boolean deleteProduct(int id) {
-        String sql
-                = "UPDATE products "
-                + "SET is_active = CASE WHEN is_active = 1 THEN 0 ELSE 1 END "
-                + "WHERE id = ?";
-
+    public boolean deleteProduct(int id) {
+        String sql = "UPDATE products SET is_delete = true WHERE id = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setInt(1, id);
             int rowsAffected = stm.executeUpdate();

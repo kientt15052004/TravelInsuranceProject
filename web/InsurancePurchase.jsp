@@ -52,7 +52,6 @@
                 <!-- Left Panel - Purchase Form -->
                 <div class="card purchase-card">
                     <h2 class="card-title">
-                        <span class="icon">🛡️</span>
                         ${requestScope.insurance.name}
                         <span data-insurance-price="${requestScope.insurance.price}" style="display: none;"></span>
                     </h2>
@@ -76,7 +75,6 @@
 
                     <!-- Warning Message -->
                     <div class="warning-box">
-                        <span class="warning-icon">⚠️</span>
                         <span>Thời hạn bảo hiểm cho mỗi chuyến đi không quá 180 ngày</span>
                     </div>
 
@@ -84,24 +82,49 @@
                     <h3 class="section-title">Chọn Gói Bảo Hiểm</h3>
                     <div class="packages-grid">
                         <c:set var="currentInsurance" value="${requestScope.insurance}"/>
-                        <c:if test="${currentInsurance != null && currentInsurance.package_type != null}">
-                            <c:set var="productPrice" value="${currentInsurance.price}"/>
-                            <c:set var="productBenefit" value="${currentInsurance.benefit}"/>
-                            <c:set var="maxBenefit" value="${productBenefit.death_or_permanent_disability}"/>
-                            
-                            <div class="package-card selected" 
-                                 data-price="${productPrice}" 
-                                 data-benefit-id="${currentInsurance.benefit_id}"
-                                 data-product-id="${currentInsurance.id}">
-                                <div class="package-name">${currentInsurance.package_type}</div>
-                                <div class="package-price">
-                                    <fmt:formatNumber value="${productPrice}" type="number" maxFractionDigits="0"/> VNĐ
+                        <c:set var="packagesList" value="${requestScope.packages}"/>
+                        <c:if test="${packagesList != null && !empty packagesList}">
+                            <c:forEach items="${packagesList}" var="packageItem">
+                                <c:set var="packagePrice" value="${packageItem.price}"/>
+                                <c:set var="packageBenefit" value="${packageItem.benefit}"/>
+                                <c:set var="maxBenefit" value="${packageBenefit.death_or_permanent_disability}"/>
+                                <c:set var="isSelected" value="${packageItem.id == currentInsurance.id}"/>
+                                
+                                <div class="package-card ${isSelected ? 'selected' : ''}" 
+                                     data-price="${packagePrice}" 
+                                     data-benefit-id="${packageItem.benefit_id}"
+                                     data-product-id="${packageItem.id}"
+                                     data-product-name="${packageItem.name}"
+                                     data-product-type="${packageItem.type}"
+                                     data-domestic-rate="${packageItem.domestic_percentage_rate != null ? packageItem.domestic_percentage_rate : ''}"
+                                     data-international-rate-1-7="${packageItem.international_rate_1_7 != null ? packageItem.international_rate_1_7 : ''}"
+                                     data-international-rate-8-30="${packageItem.international_rate_8_30 != null ? packageItem.international_rate_8_30 : ''}"
+                                     data-international-rate-31-90="${packageItem.international_rate_31_90 != null ? packageItem.international_rate_31_90 : ''}"
+                                     data-international-rate-91-365="${packageItem.international_rate_91_365 != null ? packageItem.international_rate_91_365 : ''}"
+                                     data-death-or-permanent-disability="${packageBenefit.death_or_permanent_disability}"
+                                     data-death-due-to-illness="${packageBenefit.death_due_to_illness}"
+                                     data-third-party-liability="${packageBenefit.third_party_liability}"
+                                     data-lost-bank-card="${packageBenefit.lost_bank_card}"
+                                     data-kidnap-and-hostage="${packageBenefit.kidnap_and_hostage}"
+                                     data-lost-or-damaged-golf-equipment="${packageBenefit.lost_or_damaged_golf_equipment}">
+                                    <div class="package-name">
+                                        <c:choose>
+                                            <c:when test="${packageItem.package_type == 'Basic'}">Cơ bản</c:when>
+                                            <c:when test="${packageItem.package_type == 'Standard'}">Tiêu chuẩn</c:when>
+                                            <c:when test="${packageItem.package_type == 'Advanced'}">Nâng cao</c:when>
+                                            <c:when test="${packageItem.package_type == 'Comprehensive'}">Toàn diện</c:when>
+                                            <c:otherwise>${packageItem.package_type}</c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="package-price">
+                                        <fmt:formatNumber value="${packagePrice}" type="number" maxFractionDigits="0"/> VNĐ
+                                    </div>
+                                    <div class="package-benefit">
+                                        Quyền lợi lên đến 
+                                        <fmt:formatNumber value="${maxBenefit}" type="number" maxFractionDigits="0"/> VNĐ
+                                    </div>
                                 </div>
-                                <div class="package-benefit">
-                                    Quyền lợi lên đến 
-                                    <fmt:formatNumber value="${maxBenefit}" type="number" maxFractionDigits="0"/> VNĐ
-                                </div>
-                            </div>
+                            </c:forEach>
                         </c:if>
                     </div>
                 </div>
@@ -109,7 +132,6 @@
                 <!-- Right Panel - Benefits -->
                 <div class="card benefits-card">
                     <h2 class="card-title">
-                        <span class="icon">🎯</span>
                         Quyền Lợi Bảo Hiểm
                     </h2>
                     <c:set var="benefit" value="${requestScope.insurance.benefit}" scope="request"/>
@@ -174,12 +196,12 @@
                             <div class="form-group">
                                 <label>Số CCCD*</label>
                                 <input type="text" placeholder="Nhập" class="form-input" id="idNumber"
-                                       value="${sessionScope.user.cccd}">
+                                       value="${sessionScope.user.cccd}" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Họ và Tên*</label>
                                 <input type="text" placeholder="Nhập" class="form-input" id="fullName"
-                                       value="${sessionScope.user.fullname}">
+                                       value="${sessionScope.user.fullname}" readonly>
                             </div>
                         </div>
 
@@ -188,11 +210,11 @@
                                 <label>Giới Tính*</label>
                                 <div class="radio-group">
                                     <label class="radio-label">
-                                        <input type="radio" name="gender" value="male" checked>
+                                        <input type="radio" name="gender" value="male" checked disabled>
                                         <span>Nam</span>
                                     </label>
                                     <label class="radio-label">
-                                        <input type="radio" name="gender" value="female">
+                                        <input type="radio" name="gender" value="female" disabled>
                                         <span>Nữ</span>
                                     </label>
                                 </div>
@@ -200,7 +222,7 @@
                             <div class="form-group">
                                 <label>Ngày Sinh*</label>
                                 <input type="date" class="form-input" id="birthDate"
-                                       value="${sessionScope.user.dob}">
+                                       value="${sessionScope.user.dob}" readonly>
                             </div>
                         </div>
 
@@ -208,19 +230,19 @@
                             <div class="form-group">
                                 <label>Số Điện Thoại*</label>
                                 <input type="tel" placeholder="Nhập" class="form-input" id="phoneNumber"
-                                       value="${sessionScope.user.phone}">
+                                       value="${sessionScope.user.phone}" readonly>
                             </div>
                             <div class="form-group">
                                 <label>Email*</label>
                                 <input type="email" placeholder="Nhập" class="form-input" id="email"
-                                       value="${sessionScope.user.mail}">
+                                       value="${sessionScope.user.mail}" readonly>
                             </div>
                         </div>
 
                         <div class="form-group full-width">
                             <label>Địa Chỉ*</label>
                             <input type="text" placeholder="Nhập" class="form-input" id="address"
-                                   value="${sessionScope.user.address}">
+                                   value="${sessionScope.user.address}" readonly>
                         </div>
                     </div>
 
@@ -449,7 +471,7 @@
                 </button>
             </div>
         </div>
-                        <jsp:include page="./component/footer.jsp"></jsp:include>
+
         <script>
 // Khai báo biến global trước khi load file JS
             const INSURANCE_TYPE = '${requestScope.insurance.type}';

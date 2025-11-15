@@ -261,8 +261,28 @@ public class UpdateProduct extends HttpServlet {
         product.setName(request.getParameter("name"));
         product.setImg(imgPath);
         product.setDescription(request.getParameter("description"));
-        product.setPackage_type(request.getParameter("package_type"));
-        System.out.println("DEBUG: package_type parameter = " + request.getParameter("package_type"));
+        
+        // Handle package_type: check if it's "other" (custom) or standard
+        String packageType = request.getParameter("package_type");
+        String customPackageType = request.getParameter("custom_package_type");
+        
+        if ("other".equals(packageType) && customPackageType != null && !customPackageType.trim().isEmpty()) {
+            // Use custom package type
+            String normalized = utils.PackageType.normalize(customPackageType);
+            if (!utils.PackageType.isValidFormat(normalized)) {
+                throw new IllegalArgumentException("Package type không hợp lệ. Chỉ được chứa chữ cái, số và khoảng trắng, tối đa 50 ký tự.");
+            }
+            product.setPackage_type(normalized);
+            System.out.println("DEBUG: package_type parameter (custom) = " + normalized);
+        } else if (packageType != null && !packageType.trim().isEmpty()) {
+            // Use standard package type
+            String normalized = utils.PackageType.normalize(packageType);
+            product.setPackage_type(normalized);
+            System.out.println("DEBUG: package_type parameter = " + normalized);
+        } else {
+            throw new IllegalArgumentException("Package type không được để trống");
+        }
+        
         product.setPrice(parseBigDecimal(request.getParameter("price")));
         product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")).multiply(new BigDecimal("100")));
         product.setInternational_rate_1_7(parseBigDecimal(request.getParameter("international_rate_1_7")));

@@ -26,9 +26,6 @@
     transition: color 0.3s;
 }
 
-.nav-link:hover {
-    color: #ff9800;
-}
 
 .user-icon {
     color: #666;

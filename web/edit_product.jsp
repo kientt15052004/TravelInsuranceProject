@@ -2,298 +2,15 @@
     <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="vi">
         <head>
-            <style>
-                :root {
-                    --primary-yellow: #FFD700;
-                    --light-yellow: #FFF9C4;
-                    --dark-yellow: #FFC107;
-                    --white: #FFFFFF;
-                    --text-dark: #333333;
-                    --success-green: #28a745;
-                    --danger-red: #dc3545;
-                }
-
-                body {
-                    background: linear-gradient(135deg, var(--light-yellow) 0%, var(--white) 100%);
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    color: var(--text-dark);
-                    padding: 0;
-                    margin: 0;
-                    min-height: 100vh;
-                }
-
-                .container {
-                    max-width: 100%;
-                }
-                .main-content{
-                    padding: 0;
-                }
-                .page-header {
-                    text-align: center;
-                    margin-bottom: 30px;
-                    padding: 20px;
-                }
-
-                .page-header h1 {
-                    color: var(--text-dark);
-                    font-weight: 700;
-                    margin: 0;
-                    font-size: 2.5rem;
-                    text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
-                }
-
-                .page-header .subtitle {
-                    color: var(--text-dark);
-                    font-size: 1.1rem;
-                    margin-top: 10px;
-                    opacity: 0.9;
-                }
-
-                .section-wrapper {
-                    background: var(--white);
-                    padding: 30px;
-                    margin-bottom: 25px;
-                    border-left: 4px solid var(--primary-yellow);
-                    transition: transform 0.3s ease;
-                }
-
-                .section-wrapper:hover {
-                    transform: translateY(-2px);
-                }
-
-                .section-title {
-                    color: var(--dark-yellow);
-                    font-weight: 700;
-                    margin-bottom: 25px;
-                    padding-bottom: 15px;
-                    border-bottom: 2px solid var(--light-yellow);
-                    font-size: 1.5rem;
-                    display: flex;
-                    align-items: center;
-                }
-
-                .section-title i {
-                    margin-right: 10px;
-                    font-size: 1.3rem;
-                }
-
-                .form-control {
-                    border: 2px solid #E0E0E0;
-                    padding: 12px 15px;
-                    transition: all 0.3s;
-                    font-size: 15px;
-                }
-
-                .form-control:focus, .form-select:focus {
-                    border-color: var(--primary-yellow);
-                    transform: scale(1.02);
-                }
-
-                .form-label {
-                    font-weight: 600;
-                    color: var(--text-dark);
-                    margin-bottom: 8px;
-                    font-size: 15px;
-                }
-
-                .required-star {
-                    color: var(--danger-red);
-                }
-
-                .radio-group-custom {
-                    display: flex;
-                    gap: 20px;
-                    flex-wrap: wrap;
-                }
-
-                .radio-group-custom input[type="radio"] {
-                    display: none;
-                }
-
-                .radio-group-custom label {
-                    padding: 12px 25px;
-                    border: 2px solid #E0E0E0;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    font-weight: 500;
-                    background: var(--white);
-                    min-width: 120px;
-                    text-align: center;
-                }
-
-                .radio-group-custom input[type="radio"]:checked + label {
-                    border-color: var(--primary-yellow);
-                    background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--light-yellow) 100%);
-                    color: var(--text-dark);
-                    font-weight: 600;
-                    transform: scale(1.05);
-                }
-
-                .btn-custom {
-                    background: linear-gradient(135deg, var(--dark-yellow) 0%, var(--primary-yellow) 100%);
-                    border: none;
-                    padding: 14px 30px;
-                    font-weight: 600;
-                    color: var(--text-dark);
-                    transition: all 0.3s;
-                    font-size: 16px;
-                    min-width: 160px;
-                }
-
-                .btn-custom:hover {
-                    transform: translateY(-3px);
-                }
-
-                .btn-success {
-                    background: linear-gradient(135deg, var(--success-green) 0%, #20c997 100%);
-                }
-
-                .btn-success:hover {
-                }
-
-                .btn-danger {
-                    background: linear-gradient(135deg, var(--danger-red) 0%, #c82333 100%);
-                }
-
-                .btn-danger:hover {
-                }
-
-                .table-custom {
-                    overflow: hidden;
-                    background: var(--white);
-                }
-
-                .table-custom thead th {
-                    background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--dark-yellow) 100%);
-                    color: var(--text-dark);
-                    font-weight: 700;
-                    border: none;
-                    padding: 15px;
-                    text-align: center;
-                    font-size: 15px;
-                }
-
-                .table-custom tbody td {
-                    padding: 12px 15px;
-                    vertical-align: middle;
-                    border-color: #f0f0f0;
-                    background: var(--white);
-                }
-
-                .current-image-container {
-                    text-align: center;
-                    margin: 15px 0;
-                    padding: 15px;
-                    background: var(--light-yellow);
-                    border: 2px dashed var(--primary-yellow);
-                }
-
-                .current-image {
-                    max-width: 200px;
-                    max-height: 200px;
-                }
-
-                .coefficient-input {
-                    width: 150px;
-                    display: inline-block;
-                    margin: 0 5px;
-                    text-align: center;
-                }
-
-                .formula-box {
-                    background: var(--light-yellow);
-                    padding: 20px;
-                    margin-bottom: 20px;
-                    border-left: 4px solid var(--primary-yellow);
-                    text-align: center;
-                }
-
-                .formula-box h4 {
-                    color: var(--dark-yellow);
-                    margin-bottom: 15px;
-                    font-weight: 600;
-                }
-
-                .action-buttons {
-                    display: flex;
-                    justify-content: space-around;
-                    gap: 20px;
-                    margin-top: 30px;
-                    padding: 20px;
-                    background: var(--white);
-                }
-
-                .preview-box {
-                    background-color: var(--light-yellow);
-                    padding: 20px;
-                    margin-top: 15px;
-                }
-
-                @media (max-width: 768px) {
-                    .container {
-                        padding: 10px;
-                    }
-
-                    .section-wrapper {
-                        padding: 20px;
-                    }
-
-                    .radio-group-custom {
-                        flex-direction: column;
-                        gap: 10px;
-                    }
-
-                    .radio-group-custom label {
-                        min-width: auto;
-                    }
-
-                    .action-buttons {
-                        flex-direction: column;
-                        gap: 15px;
-                    }
-
-                    .btn-custom {
-                        min-width: auto;
-                        width: 100%;
-                    }
-                }
-
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-
-                .section-wrapper {
-                    animation: fadeInUp 0.5s ease forwards;
-                }
-
-                .section-wrapper:nth-child(1) {
-                    animation-delay: 0.1s;
-                }
-                .section-wrapper:nth-child(2) {
-                    animation-delay: 0.2s;
-                }
-                .section-wrapper:nth-child(3) {
-                    animation-delay: 0.3s;
-                }
-                .section-wrapper:nth-child(4) {
-                    animation-delay: 0.4s;
-                }
-                .section-wrapper:nth-child(5) {
-                    animation-delay: 0.5s;
-                }
-            </style>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Chỉnh Sửa Sản Phẩm - Hệ thống quản lý bảo hiểm</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/admin.css">
             <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/productmanagement.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/createproduct.css">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
         </head>
 
         <body>
@@ -305,12 +22,13 @@
                 </jsp:include>
 
                 <div class="main-content">
-                <div class="page-header">
-                    <h1>Chỉnh Sửa Sản Phẩm</h1>
-                    <p class="subtitle">Cập nhật thông tin sản phẩm bảo hiểm du lịch</p>
+                    <div class="content-header">
+                        <h1>Chỉnh Sửa Sản Phẩm Bảo Hiểm Du Lịch</h1>
+                        <p>Cập nhật thông tin sản phẩm bảo hiểm du lịch</p>
                 </div>
 
-                <form class="form" action="${pageContext.request.contextPath}/update_product" enctype="multipart/form-data" method="POST" style="background: transparent;">
+                    <div class="form-container">
+                        <form id="updateForm" action="${pageContext.request.contextPath}/update_product" enctype="multipart/form-data" method="POST">
                     <input type="hidden" name="product_id" value="${product.id}">
                     <input type="hidden" name="benefit_id" value="${product.benefit_id}">
                     <input type="hidden" name="original_deathOrDisability" value="${product.benefit.death_or_permanent_disability}">
@@ -334,71 +52,130 @@
                     <input type="hidden" name="original_travel_documents" value="${product.benefit.travel_documents}">
                     <input type="hidden" name="original_trip_delay" value="${product.benefit.trip_delay}">
 
-                    <div class="section-wrapper">
-                        <h2 class="section-title">Thông tin cơ bản</h2>
-                        <div class="row">
-                            <div class="col-md-9 mb-4">
-                                <label class="form-label" for="name">Tên sản phẩm <span class="required-star">*</span></label>
+                    <div class="form-section">
+                        <div class="section-header">
+                            <h2>Thông tin cơ bản</h2>
+                        </div>
+                        <div class="form-row-custom">
+                            <div class="form-group col-name">
+                                <label for="name">Tên sản phẩm <span class="required">*</span></label>
                                 <input name="name" type="text" class="form-control" id="name" 
                                        value="${product.name}" placeholder="Nhập tên sản phẩm..." required>
                             </div>
-
-                            <div class="col-md-3 mb-4">
-                                <label class="form-label">Chọn gói <span class="required-star">*</span></label>
-                                <select name="package_type" class="form-select">
+                            <div class="form-group col-type">
+                                <label>Loại sản phẩm <span class="required">*</span></label>
+                                <div class="radio-group-horizontal">
+                                    <div class="radio-item">
+                                        <input type="radio" name="choose" id="option1" value="domestic" ${product.type == 'domestic' ? 'checked' : ''}>
+                                        <label for="option1">Trong nước</label>
+                                    </div>
+                                    <div class="radio-item">
+                                        <input type="radio" name="choose" id="option2" value="international" ${product.type == 'international' ? 'checked' : ''}>
+                                        <label for="option2">Ngoài nước</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-package">
+                                <label for="package_type">Chọn gói <span class="required">*</span></label>
+                                <div class="select-wrapper">
+                                    <select name="package_type" id="package_type_select" class="form-control form-select">
                                     <option value="basic" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'basic' ? 'selected' : ''}>Cơ bản</option>
                                     <option value="standard" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'standard' ? 'selected' : ''}>Tiêu chuẩn</option>
                                     <option value="advanced" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'advanced' ? 'selected' : ''}>Nâng cao</option>
                                     <option value="comprehensive" ${product.package_type != null && product.package_type.trim().toLowerCase() == 'comprehensive' ? 'selected' : ''}>Toàn diện</option>
+                                        <c:if test="${packageTypes != null && !empty packageTypes}">
+                                            <c:forEach items="${packageTypes}" var="pkgType">
+                                                <c:if test="${pkgType != 'Basic' && pkgType != 'Standard' && pkgType != 'Advanced' && pkgType != 'Comprehensive'}">
+                                                    <c:choose>
+                                                        <c:when test="${product.package_type != null && product.package_type.equalsIgnoreCase(pkgType)}">
+                                                            <option value="${pkgType}" selected>${pkgType}</option>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <option value="${pkgType}">${pkgType}</option>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
+                                        <c:set var="isCustomPackage" value="false" />
+                                        <c:if test="${product.package_type != null}">
+                                            <c:set var="pkgTypeLower" value="${product.package_type.trim().toLowerCase()}" />
+                                            <c:if test="${pkgTypeLower != 'basic' && pkgTypeLower != 'standard' && pkgTypeLower != 'advanced' && pkgTypeLower != 'comprehensive'}">
+                                                <c:set var="foundInList" value="false" />
+                                                <c:if test="${packageTypes != null && !empty packageTypes}">
+                                                    <c:forEach items="${packageTypes}" var="pkgType">
+                                                        <c:if test="${pkgType != null && pkgType.equalsIgnoreCase(product.package_type)}">
+                                                            <c:set var="foundInList" value="true" />
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${!foundInList}">
+                                                    <c:set var="isCustomPackage" value="true" />
+                                                </c:if>
+                                            </c:if>
+                                        </c:if>
+                                        <option value="other" ${isCustomPackage ? 'selected' : ''}>Khác</option>
                                 </select>
+                                    <i class="fas fa-chevron-down select-arrow"></i>
+                            </div>
+                                <div id="custom_package_type_wrapper" style="display: none; margin-top: 10px;">
+                                    <input type="text" 
+                                           name="custom_package_type" 
+                                           id="custom_package_type" 
+                                           class="form-control" 
+                                           placeholder="Nhập tên gói mới (ví dụ: Premium, Ultimate...)"
+                                           <c:if test='${isCustomPackage}'>value="${product.package_type}"</c:if>
+                                           maxlength="50"
+                                           pattern="[a-zA-Z0-9\\s]+"
+                                           title="Chỉ chứa chữ cái, số và khoảng trắng">
+                                    <small class="form-text text-muted">Tối đa 50 ký tự, chỉ chứa chữ cái, số và khoảng trắng</small>
+                        </div>
+                                <c:if test='${isCustomPackage}'>
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const wrapper = document.getElementById('custom_package_type_wrapper');
+                                            const select = document.getElementById('package_type_select');
+                                            if (wrapper && select) {
+                                                wrapper.style.display = 'block';
+                                                select.value = 'other';
+                                            }
+                                        });
+                                    </script>
+                                </c:if>
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label">Loại sản phẩm <span class="required-star">*</span></label>
-                            <div class="radio-group-custom">
-                                <div>
-                                    <input type="radio" name="choose" id="option1" value="domestic" ${product.type == 'domestic' ? 'checked' : ''}>
-                                    <label for="option1">Trong nước</label>
-                                </div>
-                                <div>
-                                    <input type="radio" name="choose" id="option2" value="international" ${product.type == 'international' ? 'checked' : ''}>
-                                    <label for="option2">Ngoài nước</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="textarea" class="form-label">Mô tả sản phẩm <span class="required-star">*</span></label>
-                            <textarea name="description" class="form-control" rows='6' id="textarea" 
+                        <div class="form-group">
+                            <label for="textarea">Mô tả sản phẩm <span class="required">*</span></label>
+                            <textarea name="description" class="form-control" rows="6" id="textarea" 
                                       placeholder="Nhập mô tả cho sản phẩm..." required>${product.description}</textarea>
                         </div>
 
-                        <div>
-                            <label class="form-label" for="formFile">Hình ảnh sản phẩm</label>
-
+                        <div class="form-group">
+                            <label for="formFile">Hình ảnh sản phẩm</label>
                             <c:if test="${not empty product.img}">
                                 <div class="current-image-container">
                                     <p class="form-label">Ảnh hiện tại:</p>
                                     <img src="${product.img}" class="current-image" alt="Current product image">
                                 </div>
                             </c:if>
-
-                            <input name="img" class="form-control" type="file" id="formFile" accept='image/png, image/jpeg, image/gif'>
+                            <input name="img" class="form-control" type="file" id="formFile" accept="image/png, image/jpeg, image/gif">
                             <div class="form-text">Hỗ trợ JPG, PNG, GIF (tối đa 5MB). Để trống nếu không muốn thay đổi ảnh.</div>
                         </div>
                         
-                        <div class="mt-4">
-                            <label class="form-label">Trạng thái hoạt động</label>
-                            <select class="active form-select" name="active">
+                        <div class="form-group">
+                            <label>Trạng thái hoạt động</label>
+                            <select class="active form-select form-control" name="active">
                                 <option value="true" ${product.is_active ? 'selected' : ""}>Hoạt động</option>
                                 <option value="false" ${!product.is_active ? 'selected' : ""}>Chờ duyệt</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="section-wrapper domestic-section">
-                        <h2 class="section-title">Quyền lợi bảo hiểm trong nước</h2>
+                    <div class="form-section domestic-section">
+                        <div class="section-header">
+                            <h2>Cấu hình quyền lợi bảo hiểm trong nước</h2>
+                        </div>
 
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
@@ -455,8 +232,10 @@
                         </div>
                     </div>
 
-                    <div class="section-wrapper international-section">
-                        <h2 class="section-title">Quyền lợi bảo hiểm ngoài nước</h2>
+                    <div class="form-section international-section">
+                        <div class="section-header">
+                            <h2>Cấu hình quyền lợi bảo hiểm ngoài nước</h2>
+                        </div>
 
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
@@ -585,11 +364,13 @@
                         </div>
                     </div>
 
-                    <div class="section-wrapper domestic_preview">
-                        <h2 class="section-title">Tính phí trong nước</h2>
+                    <div class="form-section domestic_preview">
+                        <div class="section-header">
+                            <h2>Tính giá sản phẩm trong nước</h2>
+                        </div>
                         <div class="formula-box text-center">
-                            <h4>Công thức tính phí</h4>
-                            <p>Phí = <input class="coefficient_1 form-control coefficient-input" name="domestic_percentage_rate" placeholder="Nhập vào hệ số...." value="${product.domestic_percentage_rate}">% × STBH × Số ngày × Số người</p>
+                            <h4>Công thức tính giá sản phẩm</h4>
+                            <p>Giá sản phẩm = <input class="coefficient_1 form-control coefficient-input" name="domestic_percentage_rate" placeholder="Nhập vào hệ số...." value="${product.domestic_percentage_rate}">% × Số tiền bảo hiểm × Số ngày × Số người</p>
                         </div>
 
                         <div class="row mt-4">
@@ -604,7 +385,7 @@
                             </div>
 
                             <div class="col-12 mt-3 text-black">
-                                <label class="form-label text-primary fw-bold">Phí dự kiến</label>
+                                <label class="form-label text-primary fw-bold">Giá sản phẩm dự kiến</label>
                                 <p><span class="result">0</span> VNĐ</p>
                                 <label class="form-label text-primary fw-bold">Các mục: </label>
                                 <p class="result1"></p>
@@ -614,10 +395,12 @@
                         </div>
                     </div>
 
-                    <div class="section-wrapper international_preview">
-                        <h2 class="section-title">Tính phí ngoài nước</h2>
+                    <div class="form-section international_preview">
+                        <div class="section-header">
+                            <h2>Tính giá sản phẩm ngoài nước</h2>
+                        </div>
                         <div class="formula-box text-center">
-                            <h4>Công thức tính phí</h4>
+                            <h4>Công thức tính giá sản phẩm</h4>
                             <p>Phí bảo hiểm = Biểu phí theo ngày x số ngày x số người</p>
                         </div>
 
@@ -682,7 +465,7 @@
                             </div>
 
                             <div class="col-12 mt-3 text-black">
-                                <label class="form-label text-primary fw-bold">Phí dự kiến</label>
+                                <label class="form-label text-primary fw-bold">Giá sản phẩm dự kiến</label>
                                 <p><span class="result0">0</span> VNĐ</p>
                                 <label class="form-label text-primary fw-bold">Các mục: </label>
                                 <p class="result4"></p>
@@ -692,28 +475,26 @@
                         </div>
                     </div>
 
-                    <div class="action-buttons">
-                        <button type="submit" class="btn btn-custom btn-success">
-                            Cập Nhật Sản Phẩm
-                        </button>
-
-                        <button type="button" class="btn btn-custom btn-danger" onclick="window.history.back()">
-                            Huỷ
-                        </button>
-
-                        <button type="button" class="btn-result btn btn-custom fw-bold">
-                            Tính phí
-                        </button>
+                            <input type="hidden" name="price" class="price" value="${product.price}">
+                            <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate" value="${product.domestic_percentage_rate}">
+                            <input type="hidden" name="international_rate_1_7" class="international_rate_1_7" value="${product.international_rate_1_7}">
+                            <input type="hidden" name="international_rate_8_30" class="international_rate_8_30" value="${product.international_rate_8_30}">
+                            <input type="hidden" name="international_rate_31_90" class="international_rate_31_90" value="${product.international_rate_31_90}">
+                            <input type="hidden" name="international_rate_91_180" class="international_rate_91_180" value="${product.international_rate_91_365}">
+                        </form>
                     </div>
 
-                    <input type="hidden" name="price" class="price" value="${product.price}">
-                    <input type="hidden" name="domestic_percentage_rate" class="domestic_percentage_rate" value="${product.domestic_percentage_rate}">
-                    <input type="hidden" name="international_rate_1_7" class="international_rate_1_7" value="${product.international_rate_1_7}">
-                    <input type="hidden" name="international_rate_8_30" class="international_rate_8_30" value="${product.international_rate_8_30}">
-                    <input type="hidden" name="international_rate_31_90" class="international_rate_31_90" value="${product.international_rate_31_90}">
-                    <input type="hidden" name="international_rate_91_180" class="international_rate_91_180" value="${product.international_rate_91_365}">
-                    <input type="hidden" name="original_deathOrDisability" value="${product.benefit.death_or_permanent_disability}">
-                    <input type="hidden" name="original_deathByIllness" value="${product.benefit.death_due_to_illness}">
+                    <div class="form-actions">
+                        <button type="submit" form="updateForm" class="btn btn-primary">
+                            Cập Nhật Sản Phẩm
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                            Huỷ
+                        </button>
+                        <button type="button" class="btn btn-secondary btn-result">
+                            Tính giá sản phẩm
+                        </button>
+                    </div>
                     <input type="hidden" name="original_thirdPartyLiability" value="${product.benefit.third_party_liability}">
                     <input type="hidden" name="original_lostBankCard" value="${product.benefit.lost_bank_card}">
                     <input type="hidden" name="original_kidnapHostage" value="${product.benefit.kidnap_and_hostage}">
@@ -784,6 +565,30 @@
                     console.log('Page loaded - package_type selectedIndex:', packageSelect.selectedIndex);
                     console.log('Page loaded - package_type options:', Array.from(packageSelect.options).map(opt => opt.value + ':' + opt.selected));
                     toggleSections();
+                    
+                    // Initialize custom package type toggle
+                    const packageTypeSelect = document.getElementById('package_type_select');
+                    const customPackageTypeWrapper = document.getElementById('custom_package_type_wrapper');
+                    const customPackageTypeInput = document.getElementById('custom_package_type');
+                    
+                    if (packageTypeSelect && customPackageTypeWrapper && customPackageTypeInput) {
+                        // Check initial state
+                        if (packageTypeSelect.value === 'other') {
+                            customPackageTypeWrapper.style.display = 'block';
+                            customPackageTypeInput.setAttribute('required', 'required');
+                        }
+                        
+                        packageTypeSelect.addEventListener('change', function() {
+                            if (this.value === 'other') {
+                                customPackageTypeWrapper.style.display = 'block';
+                                customPackageTypeInput.setAttribute('required', 'required');
+                            } else {
+                                customPackageTypeWrapper.style.display = 'none';
+                                customPackageTypeInput.removeAttribute('required');
+                                customPackageTypeInput.value = '';
+                            }
+                        });
+                    }
                 };
 
                 function formatNumber(num) {
@@ -838,9 +643,15 @@
                     }
                 }
 
+                if (package_type) {
                 package_type.addEventListener('change', togglePackages);
+                }
+                if (domestic_option) {
                 domestic_option.addEventListener('change', toggleSections);
+                }
+                if (international_option) {
                 international_option.addEventListener('change', toggleSections);
+                }
 
                 function calculate() {
                     if (domestic_option.checked) {
@@ -881,7 +692,7 @@
                             fee = actualCoefficient * max * value20 * value21;
                             base_price = actualCoefficient * max;                        
                             result.textContent = formatNumber(fee);
-                            result1.innerText = `Số tiền bảo hiểm(STBH): ` + formatNumber(max) + ' VNĐ';
+                            result1.innerText = `Số tiền bảo hiểm(Số tiền bảo hiểm): ` + formatNumber(max) + ' VNĐ';
                             result2.textContent = `Số ngày: ` + formatNumber(value20);
                             result3.textContent = `Số người đi: ` + formatNumber(value21);
                         } else {
@@ -946,6 +757,31 @@
                         alert('Vui lòng nhập ít nhất một quyền lợi bảo hiểm và đảm bảo số ngày từ 1-180, số người từ 1-100, hệ số từ 0.01% - 10% (hoặc 0.0001 - 0.1)!');
                     }
                 });
+
+                // Validate custom package type on form submit
+                const updateForm = document.getElementById('updateForm');
+                if (updateForm) {
+                    updateForm.addEventListener('submit', function(e) {
+                        const packageTypeSelect = document.getElementById('package_type_select');
+                        const customPackageTypeInput = document.getElementById('custom_package_type');
+                        if (packageTypeSelect && customPackageTypeInput && packageTypeSelect.value === 'other') {
+                            const customValue = customPackageTypeInput.value.trim();
+                            if (!customValue) {
+                                e.preventDefault();
+                                alert('Vui lòng nhập tên gói mới!');
+                                customPackageTypeInput.focus();
+                                return false;
+                            }
+                            // Validate format
+                            if (!/^[a-zA-Z0-9\s]{1,50}$/.test(customValue)) {
+                                e.preventDefault();
+                                alert('Tên gói chỉ được chứa chữ cái, số và khoảng trắng, tối đa 50 ký tự!');
+                                customPackageTypeInput.focus();
+                                return false;
+                            }
+                        }
+                    });
+                }
             </script>
                 </div>
             </div>

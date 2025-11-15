@@ -53,10 +53,6 @@
         transition: all 0.3s ease;
     }
 
-    .navbar-brand:hover {
-        transform: scale(1.05);
-        filter: brightness(1.1);
-    }
 
     .nav-link {
         color: #555 !important;
@@ -80,14 +76,6 @@
         transform: translateX(-50%);
     }
 
-    .nav-link:hover {
-        color: #ff9800 !important;
-        background-color: rgba(255, 184, 0, 0.1);
-    }
-
-    .nav-link:hover::after {
-        width: 80%;
-    }
 
     .btn-sign-in {
         background: linear-gradient(135deg, var(--brand-yellow) 0%, #ffc107 100%);
@@ -103,11 +91,6 @@
         letter-spacing: 0.5px;
     }
 
-    .btn-sign-in:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(255, 184, 0, 0.4);
-        background: linear-gradient(135deg, #ffc107 0%, var(--brand-yellow) 100%);
-    }
 
     /* ===== DROPDOWN THU?N CSS/JS ===== */
     .user-dropdown {
@@ -129,11 +112,6 @@
         text-decoration: none;
     }
 
-    .dropdown-trigger:hover {
-        background: #e9ecef;
-        border-color: #ff9800;
-        color: #ff9800;
-    }
 
     .dropdown-trigger.active {
         background: #e9ecef;
@@ -185,10 +163,6 @@
         transition: all 0.2s ease;
     }
 
-    .dropdown-menu-custom .dropdown-item-custom:hover {
-        background-color: #f8f9fa;
-        color: #ff9800;
-    }
 
     .dropdown-menu-custom .dropdown-item-custom i {
         margin-right: 8px;
@@ -209,10 +183,6 @@
         color:#000;
         font-weight:600;
         transition: all 0.3s;
-    }
-    .btn-brand:hover{
-        filter: brightness(0.95);
-        color:#000;
     }
 
     /* ===== COMMON TABLE STYLES ===== */
@@ -385,9 +355,6 @@
         transition: color 0.3s;
     }
 
-    .modal-close:hover {
-        color: #000;
-    }
 
     .modal-body-custom {
         padding: 1.25rem;

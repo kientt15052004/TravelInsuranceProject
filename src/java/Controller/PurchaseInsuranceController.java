@@ -65,6 +65,7 @@ public class PurchaseInsuranceController extends HttpServlet {
         }
 
         String idRaw = request.getParameter("id");
+        String typeParam = request.getParameter("type");
         Integer id = Validation.validInt(idRaw);
 
         ArrayList<InsuranceProduct> insurances = new ArrayList<>();
@@ -74,18 +75,31 @@ public class PurchaseInsuranceController extends HttpServlet {
         insurances = insuranceDB.getAllWithBenefit();
         benefits = insuranceBenefitDB.getAll();
 
-        if (id != null) {
+        // Nếu có parameter type, lấy sản phẩm đầu tiên của type đó
+        if (typeParam != null && !typeParam.trim().isEmpty() && (typeParam.equals("domestic") || typeParam.equals("international"))) {
+            ArrayList<InsuranceProduct> packagesByType = insuranceDB.getProductsByTypeWithBenefit(typeParam);
+            if (packagesByType != null && !packagesByType.isEmpty()) {
+                insurance = packagesByType.get(0); // Lấy sản phẩm đầu tiên
+            }
+        } else if (id != null) {
             insurance = insuranceDB.getByIdWithBenefit(id);
         }
 
-        if (!insurance.getIs_active()) {
+        if (insurance == null || insurance.getId() == 0 || !insurance.getIs_active()) {
             response.sendRedirect("./InsuranceList");
             return;
+        }
+
+        // Lấy tất cả các packages cùng type với insurance đã chọn
+        ArrayList<InsuranceProduct> packages = new ArrayList<>();
+        if (insurance.getType() != null && !insurance.getType().isEmpty()) {
+            packages = insuranceDB.getProductsByTypeWithBenefit(insurance.getType());
         }
 
         request.setAttribute("insurances", insurances);
         request.setAttribute("benefits", benefits);
         request.setAttribute("insurance", insurance);
+        request.setAttribute("packages", packages);
 
         request.getRequestDispatcher("InsurancePurchase.jsp").forward(request, response);
     }

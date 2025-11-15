@@ -5,7 +5,14 @@ let state = {
         price: 0,
         benefitId: null,
         productId: null,
-        name: ''
+        name: '',
+        type: '',
+        basePrice: 0,
+        domesticRate: null,
+        internationalRate1_7: null,
+        internationalRate8_30: null,
+        internationalRate31_90: null,
+        internationalRate91_365: null
     },
     startDate: '',
     endDate: '',
@@ -20,17 +27,47 @@ document.addEventListener('DOMContentLoaded', function () {
     // Khởi tạo selectedPackage từ gói được chọn ban đầu
     const selectedCard = document.querySelector('.package-card.selected');
     if (selectedCard && !selectedCard.classList.contains('disabled')) {
-        const price = parseFloat(selectedCard.getAttribute('data-price')) || 0;
+        const basePrice = parseFloat(selectedCard.getAttribute('data-price')) || 0;
         const benefitId = selectedCard.getAttribute('data-benefit-id');
         const productId = selectedCard.getAttribute('data-product-id');
         const packageName = selectedCard.querySelector('.package-name')?.textContent || '';
+        const productName = selectedCard.getAttribute('data-product-name') || '';
+        const productType = selectedCard.getAttribute('data-product-type') || '';
+        const domesticRate = parseFloat(selectedCard.getAttribute('data-domestic-rate')) || null;
+        const intRate1_7 = parseFloat(selectedCard.getAttribute('data-international-rate-1-7')) || null;
+        const intRate8_30 = parseFloat(selectedCard.getAttribute('data-international-rate-8-30')) || null;
+        const intRate31_90 = parseFloat(selectedCard.getAttribute('data-international-rate-31-90')) || null;
+        const intRate91_365 = parseFloat(selectedCard.getAttribute('data-international-rate-91-365')) || null;
         
         state.selectedPackage = {
-            price: price,
+            price: basePrice,
+            basePrice: basePrice,
             benefitId: benefitId,
             productId: productId,
-            name: packageName
+            name: packageName,
+            type: productType,
+            domesticRate: domesticRate,
+            internationalRate1_7: intRate1_7,
+            internationalRate8_30: intRate8_30,
+            internationalRate31_90: intRate31_90,
+            internationalRate91_365: intRate91_365
         };
+        
+        // Cập nhật tên gói hiển thị từ package được chọn ban đầu
+        if (productName) {
+            const insuranceTitle = document.querySelector('.purchase-card .card-title');
+            if (insuranceTitle) {
+                const iconSpan = insuranceTitle.querySelector('.icon');
+                if (iconSpan) {
+                    insuranceTitle.innerHTML = '<span class="icon">🛡️</span>' + productName;
+                } else {
+                    insuranceTitle.textContent = productName;
+                }
+            }
+        }
+        
+        // Cập nhật benefits từ package được chọn ban đầu
+        updateBenefitsFromPackage(selectedCard);
     }
     
     initPackageSelection();
@@ -53,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Update initial display
     updateTotalAmount();
-    updateBenefitsDisplay();
 });
 
 // Initialize payment form
@@ -145,19 +181,91 @@ function selectPackage(selectedCard) {
 
     selectedCard.classList.add('selected');
 
-    const price = parseFloat(selectedCard.getAttribute('data-price')) || 0;
+    const basePrice = parseFloat(selectedCard.getAttribute('data-price')) || 0;
     const benefitId = selectedCard.getAttribute('data-benefit-id');
     const productId = selectedCard.getAttribute('data-product-id');
+    const productName = selectedCard.getAttribute('data-product-name') || '';
+    const productType = selectedCard.getAttribute('data-product-type') || '';
+    const domesticRate = parseFloat(selectedCard.getAttribute('data-domestic-rate')) || null;
+    const intRate1_7 = parseFloat(selectedCard.getAttribute('data-international-rate-1-7')) || null;
+    const intRate8_30 = parseFloat(selectedCard.getAttribute('data-international-rate-8-30')) || null;
+    const intRate31_90 = parseFloat(selectedCard.getAttribute('data-international-rate-31-90')) || null;
+    const intRate91_365 = parseFloat(selectedCard.getAttribute('data-international-rate-91-365')) || null;
 
     state.selectedPackage = {
-        price: price,
+        price: basePrice,
+        basePrice: basePrice,
         benefitId: benefitId,
         productId: productId,
-        name: selectedCard.querySelector('.package-name').textContent
+        name: selectedCard.querySelector('.package-name').textContent,
+        type: productType,
+        domesticRate: domesticRate,
+        internationalRate1_7: intRate1_7,
+        internationalRate8_30: intRate8_30,
+        internationalRate31_90: intRate31_90,
+        internationalRate91_365: intRate91_365
     };
 
+    // Cập nhật tên gói hiển thị
+    const insuranceTitle = document.querySelector('.purchase-card .card-title');
+    if (insuranceTitle && productName) {
+        const iconSpan = insuranceTitle.querySelector('.icon');
+        if (iconSpan) {
+            insuranceTitle.innerHTML = '<span class="icon">🛡️</span>' + productName;
+        } else {
+            insuranceTitle.textContent = productName;
+        }
+    }
+
+    // Cập nhật quyền lợi bảo hiểm
+    updateBenefitsFromPackage(selectedCard);
+
     updateTotalAmount();
-    // Không cần update benefits display vì benefits đã đúng từ database
+}
+
+function updateBenefitsFromPackage(selectedCard) {
+    // Lấy các giá trị benefit từ data attributes
+    const deathOrPermanentDisability = parseFloat(selectedCard.getAttribute('data-death-or-permanent-disability')) || 0;
+    const deathDueToIllness = parseFloat(selectedCard.getAttribute('data-death-due-to-illness')) || 0;
+    const thirdPartyLiability = parseFloat(selectedCard.getAttribute('data-third-party-liability')) || 0;
+    const lostBankCard = parseFloat(selectedCard.getAttribute('data-lost-bank-card')) || 0;
+    const kidnapAndHostage = parseFloat(selectedCard.getAttribute('data-kidnap-and-hostage')) || 0;
+    const lostOrDamagedGolfEquipment = parseFloat(selectedCard.getAttribute('data-lost-or-damaged-golf-equipment')) || 0;
+
+    // Cập nhật từng benefit amount
+    const benefitAmounts = document.querySelectorAll('.benefit-amount');
+    if (benefitAmounts.length >= 6) {
+        // Benefit 1: Tử vong, thương tật vĩnh viễn, thương tật tạm thời
+        if (benefitAmounts[0]) {
+            benefitAmounts[0].setAttribute('data-base', deathOrPermanentDisability);
+            benefitAmounts[0].textContent = formatCurrency(deathOrPermanentDisability) + ' VNĐ';
+        }
+        // Benefit 2: Tử vong do bệnh tật
+        if (benefitAmounts[1]) {
+            benefitAmounts[1].setAttribute('data-base', deathDueToIllness);
+            benefitAmounts[1].textContent = formatCurrency(deathDueToIllness) + ' VNĐ';
+        }
+        // Benefit 3: Trách nhiệm cá nhân đối với bên thứ ba
+        if (benefitAmounts[2]) {
+            benefitAmounts[2].setAttribute('data-base', thirdPartyLiability);
+            benefitAmounts[2].textContent = formatCurrency(thirdPartyLiability) + ' VNĐ';
+        }
+        // Benefit 4: Mất thẻ ngân hàng
+        if (benefitAmounts[3]) {
+            benefitAmounts[3].setAttribute('data-base', lostBankCard);
+            benefitAmounts[3].textContent = formatCurrency(lostBankCard) + ' VNĐ';
+        }
+        // Benefit 5: Bắt cóc và con tin
+        if (benefitAmounts[4]) {
+            benefitAmounts[4].setAttribute('data-base', kidnapAndHostage);
+            benefitAmounts[4].textContent = formatCurrency(kidnapAndHostage) + ' VNĐ';
+        }
+        // Benefit 6: Mất hoặc hư hỏng dụng cụ golf
+        if (benefitAmounts[5]) {
+            benefitAmounts[5].setAttribute('data-base', lostOrDamagedGolfEquipment);
+            benefitAmounts[5].textContent = formatCurrency(lostOrDamagedGolfEquipment) + ' VNĐ';
+        }
+    }
 }
 
 // Passenger Input
@@ -229,7 +337,46 @@ function updateTotalAmount() {
     const totalElement = document.getElementById('totalAmount');
     const days = calculateDays();
     const numberOfPeople = state.insuredPersons.length > 0 ? state.insuredPersons.length : 1;
-    const total = state.selectedPackage.price * numberOfPeople * days;
+    
+    let pricePerPerson = 0;
+    
+    // Tính giá theo loại sản phẩm và số ngày
+    if (state.selectedPackage.type === 'international') {
+        // Sản phẩm quốc tế - chọn giá theo ngày từ bảng phí
+        // Công thức: Phí = Biểu phí theo ngày x số ngày x số người
+        let perDayPrice = null;
+        if (days <= 7) {
+            perDayPrice = state.selectedPackage.internationalRate1_7;
+        } else if (days <= 30) {
+            perDayPrice = state.selectedPackage.internationalRate8_30;
+        } else if (days <= 90) {
+            perDayPrice = state.selectedPackage.internationalRate31_90;
+        } else {
+            perDayPrice = state.selectedPackage.internationalRate91_365;
+        }
+        
+        if (perDayPrice != null && perDayPrice > 0) {
+            // Phí cho 1 người = Biểu phí theo ngày x số ngày
+            pricePerPerson = perDayPrice * days;
+        } else {
+            // Fallback - dùng base price nếu không có giá theo ngày
+            pricePerPerson = state.selectedPackage.basePrice * days;
+        }
+    } else if (state.selectedPackage.type === 'domestic') {
+        // Sản phẩm nội địa - basePrice đã là giá cuối cùng (max benefit × rate)
+        // Công thức: Phí = basePrice × số ngày
+        // Không nhân thêm rate vì basePrice đã tính sẵn
+        pricePerPerson = state.selectedPackage.basePrice * days;
+    } else {
+        // Fallback - dùng base price
+        pricePerPerson = state.selectedPackage.basePrice * days;
+    }
+    
+    // Cập nhật price trong state để hiển thị (đã bao gồm số ngày)
+    state.selectedPackage.price = pricePerPerson;
+    
+    // Tổng phí = Phí cho 1 người x số người
+    const total = pricePerPerson * numberOfPeople;
     totalElement.textContent = formatCurrency(total) + ' VNĐ';
 }
 
@@ -678,7 +825,7 @@ if (!document.getElementById('form-validation-styles')) {
         }
         
         .error-message::before {
-            content: "⚠️";
+            content: "";
             margin-right: 5px;
         }
         
@@ -804,7 +951,8 @@ function renderConfirmation() {
 function renderPaymentSummary() {
     const container = document.getElementById('paymentSummaryContent');
     const days = calculateDays();
-    const totalPrice = state.selectedPackage.price * state.insuredPersons.length * days;
+    // state.selectedPackage.price đã bao gồm số ngày rồi, chỉ cần nhân với số người
+    const totalPrice = state.selectedPackage.price * state.insuredPersons.length;
 
     container.innerHTML = `
         <div class="payment-summary-section">
@@ -853,7 +1001,8 @@ function submitForm() {
     addHiddenField(form, 'endDate', state.endDate);
 
     const days = calculateDays();
-    const totalPrice = state.selectedPackage.price * state.insuredPersons.length * days;
+    // state.selectedPackage.price đã bao gồm số ngày rồi, chỉ cần nhân với số người
+    const totalPrice = state.selectedPackage.price * state.insuredPersons.length;
     addHiddenField(form, 'totalPrice', totalPrice);
 
     if (state.buyerInfo.type === 'individual') {

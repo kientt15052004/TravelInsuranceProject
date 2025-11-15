@@ -38,6 +38,11 @@ public class CreateProduct extends HttpServlet {
             return;
         }
 
+        // Lấy tất cả package types từ database để hiển thị trong dropdown
+        InsuranceDBContext insuranceDAO = new InsuranceDBContext();
+        java.util.ArrayList<String> packageTypes = insuranceDAO.getAllPackageTypes();
+        request.setAttribute("packageTypes", packageTypes);
+
         request.getRequestDispatcher("/create_product.jsp").forward(request, response);
     }
 
@@ -80,6 +85,10 @@ public class CreateProduct extends HttpServlet {
             // Tạo InsuranceProduct
             InsuranceProduct product = createInsuranceProduct(request, benefitId, relativePath);
             boolean success = insuranceDAO.createProduct(product);
+            
+            if (!success) {
+                throw new Exception("Không thể tạo sản phẩm. Có thể do package_type không hợp lệ hoặc lỗi database.");
+            }
 
             setSuccessAttributes(request, product, relativePath);
             request.getRequestDispatcher("/create_product.jsp").forward(request, response);
@@ -160,14 +169,55 @@ private String handleFileUpload(HttpServletRequest request) throws IOException, 
         product.setName(request.getParameter("name"));
         product.setImg(imgPath);
         product.setDescription(request.getParameter("description"));
-        product.setPackage_type(request.getParameter("package_type"));
+        
+        // Handle package_type: check if it's "other" (custom) or from dropdown
+        String packageType = request.getParameter("package_type");
+        String customPackageType = request.getParameter("custom_package_type");
+        
+        if ("other".equals(packageType) && customPackageType != null && !customPackageType.trim().isEmpty()) {
+            // Use custom package type (từ input "Khác")
+            String normalized = utils.PackageType.normalize(customPackageType);
+            if (!utils.PackageType.isValidFormat(normalized)) {
+                throw new IllegalArgumentException("Package type không hợp lệ. Chỉ được chứa chữ cái, số và khoảng trắng, tối đa 50 ký tự.");
+            }
+            product.setPackage_type(normalized);
+        } else if (packageType != null && !packageType.trim().isEmpty() && !"other".equals(packageType)) {
+            // Use package type từ dropdown (có thể là standard hoặc từ database như "Vip")
+            // Kiểm tra xem có phải là standard type không
+            String normalized = utils.PackageType.normalize(packageType);
+            
+            // Nếu không phải standard type, có thể là package type từ database (như "Vip")
+            // Cần kiểm tra trong database xem có tồn tại không
+            InsuranceDBContext insuranceDAO = new InsuranceDBContext();
+            java.util.ArrayList<String> existingPackageTypes = insuranceDAO.getAllPackageTypes();
+            
+            // Nếu normalized không có trong existingPackageTypes, có thể là giá trị mới
+            // Nhưng vì đã được chọn từ dropdown, nên nó phải tồn tại trong database
+            // Hoặc nếu không, normalize và sử dụng
+            boolean found = false;
+            for (String existingType : existingPackageTypes) {
+                if (existingType.equalsIgnoreCase(normalized)) {
+                    product.setPackage_type(existingType); // Sử dụng giá trị từ database (đúng case)
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found) {
+                // Nếu không tìm thấy, sử dụng normalized value
+                product.setPackage_type(normalized);
+            }
+        } else {
+            throw new IllegalArgumentException("Package type không được để trống");
+        }
+        
         product.setPrice(parseBigDecimal(request.getParameter("price")));
         product.setDomestic_percentage_rate(parseBigDecimal(request.getParameter("domestic_percentage_rate")).multiply(new BigDecimal("100")));
         product.setInternational_rate_1_7(parseBigDecimal(request.getParameter("international_rate_1_7")));
         product.setInternational_rate_8_30(parseBigDecimal(request.getParameter("international_rate_8_30")));
         product.setInternational_rate_31_90(parseBigDecimal(request.getParameter("international_rate_31_90")));
         product.setInternational_rate_91_365(parseBigDecimal(request.getParameter("international_rate_91_180")));
-        product.setIs_active(false); // Mặc định non active khi tạo mới
+        product.setIs_active(true); // Mặc định active khi tạo mới để hiển thị ngay trong danh sách
         product.setIs_delete(false);
 
         return product;

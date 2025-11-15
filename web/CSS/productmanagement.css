@@ -245,9 +245,6 @@
     text-align: center;
 }
 
-.products-table thead th:hover {
-    background-color: #e9ecef;
-}
 
 .products-table thead th.sorted-asc::after {
     content: " ↑";
@@ -271,9 +268,6 @@
     background-color: white;
 }
 
-.products-table tbody tr:hover {
-    background: #e9ecef !important;
-}
 
 /* Product Info */
 .product-info {
@@ -379,20 +373,12 @@
     color: white;
 }
 
-.btn-info:hover {
-    background: #138496;
-    transform: translateY(-1px);
-}
 
 .btn-danger {
     background: #dc3545;
     color: white;
 }
 
-.btn-danger:hover {
-    background: #c82333;
-    transform: translateY(-1px);
-}
 
 /* No Data */
 .no-data {
@@ -432,9 +418,6 @@
     transition: all 0.3s ease;
 }
 
-.page-btn:hover {
-    background: #e9ecef;
-}
 
 .page-btn.active {
     background: #007bff;

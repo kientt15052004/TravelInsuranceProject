@@ -220,10 +220,6 @@ body > .container {
     transition: all 0.3s;
 }
 
-.package-card:hover {
-    border-color: #ff9800;
-    transform: translateY(-2px);
-}
 
 .package-card.selected {
     background: #fff8e1;
@@ -272,8 +268,6 @@ body > .container {
     transition: all 0.3s;
 }
 
-.benefit-item:hover {
-}
 
 .benefit-number {
     width: 28px;
@@ -311,10 +305,6 @@ body > .container {
     transition: all 0.3s;
 }
 
-.view-summary:hover {
-    text-decoration: underline;
-    color: #f57c00;
-}
 
 /* Info Card - Step 2 (Full width) */
 .info-card {
@@ -354,10 +344,6 @@ body > .container {
     font-family: inherit;
 }
 
-.tab-btn:hover {
-    color: #e74c3c;
-    background: #fff5f5;
-}
 
 .tab-btn.active {
     color: #e74c3c;
@@ -407,9 +393,6 @@ body > .container {
     width: 100%;
 }
 
-.form-input:hover {
-    border-color: #ccc;
-}
 
 .form-input:focus {
     outline: none;
@@ -437,9 +420,6 @@ body > .container {
     transition: color 0.3s;
 }
 
-.radio-label:hover {
-    color: #e74c3c;
-}
 
 .radio-label input[type="radio"] {
     width: 18px;
@@ -475,10 +455,6 @@ body > .container {
     font-weight: 500;
 }
 
-.back-btn:hover {
-    background: #f5f5f5;
-    border-color: #bbb;
-}
 
 .total-section {
     display: flex;
@@ -510,10 +486,6 @@ body > .container {
     font-family: inherit;
 }
 
-.continue-btn:hover {
-    background: #f57c00;
-    transform: translateY(-1px);
-}
 
 .continue-btn:active {
     transform: translateY(0);
@@ -535,10 +507,6 @@ body > .container {
     font-family: inherit;
 }
 
-.add-person-btn:hover {
-    background: #229954;
-    transform: translateY(-1px);
-}
 
 /* Insured Persons List */
 #insuredPersonsList {
@@ -582,10 +550,6 @@ body > .container {
     transition: all 0.3s;
 }
 
-.remove-person-btn:hover {
-    background: #c0392b;
-    transform: scale(1.1);
-}
 
 .person-details {
     display: flex;
@@ -668,10 +632,6 @@ body > .container {
     transition: all 0.3s;
 }
 
-.modal-close:hover {
-    color: #e74c3c;
-    transform: scale(1.2);
-}
 
 .modal-actions {
     display: flex;
@@ -698,9 +658,6 @@ body > .container {
     color: white;
 }
 
-.btn-primary:hover {
-    background: #229954;
-}
 
 .btn-secondary {
     background: white;
@@ -708,9 +665,6 @@ body > .container {
     border: 1px solid #ddd;
 }
 
-.btn-secondary:hover {
-    background: #f5f5f5;
-}
 
 /* Confirmation Section */
 .confirmation-section {

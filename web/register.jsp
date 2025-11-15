@@ -19,10 +19,6 @@
                 padding: 35px 28px 22px 28px;
                 transition: all 0.3s ease;
             }
-            .register-container:hover {
-                transform: translateY(-5px);
-                background: #fffef5;
-            }
             .register-icon {
                 width: 48px;
                 height: 48px;
@@ -53,11 +49,6 @@
                 color: #000;
                 font-weight: 600;
                 transition: all 0.3s ease;
-            }
-            .btn-yellow:hover {
-                background: #e6b800;
-                color: #fff;
-                transform: translateY(-2px);
             }
             .social-divider {
                 text-align: center;

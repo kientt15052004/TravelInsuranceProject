@@ -256,8 +256,8 @@ BEGIN
       accident_death_injury, trip_cancellation, companion_support, delayed_baggage, travel_documents, trip_delay
     )
     VALUES (
-      -- Tử vong hoặc thương tật vĩnh viễn: 500 triệu - 2 tỷ
-      ROUND(500000000 * package_multiplier, 2),
+      -- Tử vong hoặc thương tật vĩnh viễn: 50 triệu - 300 triệu (giảm để giá hợp lý hơn)
+      ROUND(50000000 * package_multiplier, 2),
       -- Tử vong do bệnh: 300 triệu - 1.5 tỷ
       ROUND(300000000 * package_multiplier, 2),
       -- Trách nhiệm dân sự: 100 triệu - 500 triệu
@@ -333,7 +333,9 @@ BEGIN
     -- benefit_id tương ứng với package_type (1=Basic, 2=Standard, 3=Advanced, 4=Comprehensive)
     SET benefit_id_val = ((i - 1) % 4) + 1;
     
-    -- Giá cơ bản theo package (VNĐ)
+    -- Giá cơ bản theo package (VNĐ) - chỉ dùng cho nội địa
+    -- Max benefit = death_or_permanent_disability = 500,000,000 × package_multiplier
+    -- package_multiplier: Basic=1.0, Standard=1.5, Advanced=2.0, Comprehensive=2.5
     SET base_price = CASE package_type_val
       WHEN 'Basic' THEN 200000
       WHEN 'Standard' THEN 350000
@@ -365,41 +367,60 @@ BEGIN
         '. Bảo vệ toàn diện cho chuyến đi của bạn với các quyền lợi phù hợp.'
       ),
       package_type_val,
-      base_price,
-      -- Tỷ lệ % cho bảo hiểm nội địa (5% - 15% giá gốc)
-      CASE package_type_val
-        WHEN 'Basic' THEN 5.00
-        WHEN 'Standard' THEN 8.00
-        WHEN 'Advanced' THEN 12.00
-        ELSE 15.00
+      -- Price: Đối với nội địa = max benefit × rate, Đối với quốc tế = international_rate_1_7 (giá theo ngày cho 1-7 ngày)
+      -- Max benefit = death_or_permanent_disability = 50,000,000 × package_multiplier (đã giảm để giá hợp lý)
+      -- package_multiplier: Basic=1.0 (max=50M), Standard=1.5 (max=75M), Advanced=2.0 (max=100M), Comprehensive=2.5 (max=125M)
+      -- Rate: Basic=0.05%, Standard=0.06%, Advanced=0.08%, Comprehensive=0.10% (đã chia 100 để giá hợp lý)
+      -- Price nội địa = max × rate: Basic=25,000, Standard=45,000, Advanced=80,000, Comprehensive=125,000
+      CASE 
+        WHEN product_type_val = 'domestic' THEN 
+          CASE package_type_val
+            WHEN 'Basic' THEN 25000         -- 50M × 0.05% = 25,000
+            WHEN 'Standard' THEN 45000      -- 75M × 0.06% = 45,000
+            WHEN 'Advanced' THEN 80000      -- 100M × 0.08% = 80,000
+            ELSE 125000                     -- 125M × 0.10% = 125,000 (Comprehensive)
+          END
+        ELSE CASE package_type_val
+          WHEN 'Basic' THEN 50000
+          WHEN 'Standard' THEN 80000
+          WHEN 'Advanced' THEN 120000
+          ELSE 200000
+        END
       END,
-      -- Tỷ lệ cho quốc tế 1-7 ngày (0.5% - 2% giá gốc/ngày)
+      -- Tỷ lệ % cho bảo hiểm nội địa (0.05% - 0.10% giá gốc, đã chia 100 để giá hợp lý)
       CASE package_type_val
-        WHEN 'Basic' THEN 0.50
-        WHEN 'Standard' THEN 0.80
-        WHEN 'Advanced' THEN 1.20
-        ELSE 2.00
+        WHEN 'Basic' THEN 0.05
+        WHEN 'Standard' THEN 0.06
+        WHEN 'Advanced' THEN 0.08
+        ELSE 0.10  -- Comprehensive
       END,
-      -- Tỷ lệ cho quốc tế 8-30 ngày (0.8% - 2.5% giá gốc/ngày)
+      -- Biểu phí theo ngày cho quốc tế 1-7 ngày (VNĐ/ngày) - Giá trị này cũng được dùng làm price cho sản phẩm quốc tế
       CASE package_type_val
-        WHEN 'Basic' THEN 0.80
-        WHEN 'Standard' THEN 1.20
-        WHEN 'Advanced' THEN 1.80
-        ELSE 2.50
+        WHEN 'Basic' THEN 50000
+        WHEN 'Standard' THEN 80000
+        WHEN 'Advanced' THEN 120000
+        ELSE 200000
       END,
-      -- Tỷ lệ cho quốc tế 31-90 ngày (1.2% - 3.5% giá gốc/ngày)
+      -- Biểu phí theo ngày cho quốc tế 8-30 ngày (VNĐ/ngày)
       CASE package_type_val
-        WHEN 'Basic' THEN 1.20
-        WHEN 'Standard' THEN 1.80
-        WHEN 'Advanced' THEN 2.50
-        ELSE 3.50
+        WHEN 'Basic' THEN 80000
+        WHEN 'Standard' THEN 120000
+        WHEN 'Advanced' THEN 180000
+        ELSE 300000
       END,
-      -- Tỷ lệ cho quốc tế 91-365 ngày (2% - 5% giá gốc/ngày)
+      -- Biểu phí theo ngày cho quốc tế 31-90 ngày (VNĐ/ngày)
       CASE package_type_val
-        WHEN 'Basic' THEN 2.00
-        WHEN 'Standard' THEN 3.00
-        WHEN 'Advanced' THEN 4.00
-        ELSE 5.00
+        WHEN 'Basic' THEN 120000
+        WHEN 'Standard' THEN 180000
+        WHEN 'Advanced' THEN 250000
+        ELSE 400000
+      END,
+      -- Biểu phí theo ngày cho quốc tế 91-365 ngày (VNĐ/ngày)
+      CASE package_type_val
+        WHEN 'Basic' THEN 200000
+        WHEN 'Standard' THEN 300000
+        WHEN 'Advanced' THEN 400000
+        ELSE 500000
       END,
       TRUE,
       FALSE
@@ -1113,4 +1134,44 @@ CREATE TABLE ClaimStatusHistory (
   changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (claim_id) REFERENCES Claims(id)
 );
+
+USE insurancesystem;
+
+-- Step 1: Change ENUM to VARCHAR
+ALTER TABLE products 
+MODIFY COLUMN package_type VARCHAR(50) NOT NULL;
+
+-- Step 2: Verify the change
+DESCRIBE products;
+
+-- Step 3: Check existing data
+SELECT id, name, type, package_type FROM products;
+
+-- Script để cập nhật price cho các sản phẩm quốc tế = international_rate_1_7
+-- Chạy script này nếu price và international_rate_1_7 không khớp
+
+USE insurancesystem;
+
+-- Cập nhật price = international_rate_1_7 cho tất cả sản phẩm quốc tế
+UPDATE products
+SET price = international_rate_1_7
+WHERE type = 'international' 
+  AND international_rate_1_7 IS NOT NULL 
+  AND international_rate_1_7 > 0;
+
+-- Kiểm tra kết quả
+SELECT 
+    id,
+    name,
+    type,
+    package_type,
+    price,
+    international_rate_1_7,
+    CASE 
+        WHEN price = international_rate_1_7 THEN 'OK' 
+        ELSE 'KHÔNG KHỚP' 
+    END AS status
+FROM products
+WHERE type = 'international'
+ORDER BY id;
 
