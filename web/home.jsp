@@ -37,7 +37,7 @@
             <!-- Products Section -->
             <section class="products-section">
                 <div class="container">
-                    <h2>Sản phẩm bán chạy</h2>
+                    <h2>Sản phẩm hệ thống đang bán</h2>
                     <p class="subtitle-text">Chọn gói bảo hiểm hoàn hảo cho chuyến phiêu lưu tiếp theo của bạn</p>
                     <div class="row g-4 justify-content-center">
                     <%

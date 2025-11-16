@@ -124,12 +124,6 @@
                                             <a href="my-claim-detail?id=${claim.id}" class="action-icon me-1" title="Xem chi tiết">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <c:if test="${claim.claim_status == 'pending' || claim.claim_status == 'need_info'}">
-                                                <a href="#" class="action-icon" title="Chỉnh sửa" 
-                                                   onclick="editClaim(${claim.id})">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                            </c:if>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -404,7 +398,7 @@
                 let searchTimeout;
                 searchInput.addEventListener('input', function() {
                     clearTimeout(searchTimeout);
-                    searchTimeout = setTimeout(performSearch, 500);
+                    searchTimeout = setTimeout(performSearch, 2000);
                 });
             }
 
