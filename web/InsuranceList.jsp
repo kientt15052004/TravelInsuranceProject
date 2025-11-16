@@ -36,12 +36,12 @@
 
                             <option value="domestic" 
                                     ${param.searchType == 'domestic' ? 'selected' : ''}>
-                                Bảo Hiểm Nội Địa
+                                domestic
                             </option>
 
                             <option value="international" 
                                     ${param.searchType == 'international' ? 'selected' : ''}>
-                                Bảo Hiểm Ngoại Địa
+                                international
                             </option>
                         </select>
                     </div>
