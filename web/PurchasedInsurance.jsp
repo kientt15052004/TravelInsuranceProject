@@ -719,7 +719,7 @@
                     let searchTimeout;
                     searchInput.addEventListener('input', function () {
                         clearTimeout(searchTimeout);
-                        searchTimeout = setTimeout(performSearch, 500);
+                        searchTimeout = setTimeout(performSearch, 2000);
                     });
 
                     // Enter key
