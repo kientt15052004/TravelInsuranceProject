@@ -27,16 +27,23 @@
                         <input type="text" class="form-input" name="searchName" value="${param.searchName}" placeholder="Nhập tên bảo hiểm...">
                     </div>
 
-                    <!-- Filter by type -->
                     <div class="form-group">
                         <label>Lọc theo loại</label>
                         <select class="form-select" name="searchType">
                             <option value="">Tất cả loại</option>
-                            <c:forEach var="t" items="${types}">
-                                <option value="${t}" ${param.searchType == t ? 'selected' : ''}>${t}</option>
-                            </c:forEach>
+
+                            <option value="domestic" 
+                                    ${param.searchType == 'domestic' ? 'selected' : ''}>
+                                Bảo Hiểm Nội Địa
+                            </option>
+
+                            <option value="international" 
+                                    ${param.searchType == 'international' ? 'selected' : ''}>
+                                Bảo Hiểm Ngoại Địa
+                            </option>
                         </select>
                     </div>
+
 
                     <div class="form-group price-filter">
                         <label>Lọc theo giá (USD)</label>

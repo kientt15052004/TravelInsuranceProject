@@ -194,12 +194,12 @@
                             <div class="form-group">
                                 <label>Số CCCD*</label>
                                 <input type="text" placeholder="Nhập" class="form-input" id="idNumber"
-                                       value="${sessionScope.user.cccd}" readonly>
+                                       value="${sessionScope.user.cccd}" >
                             </div>
                             <div class="form-group">
                                 <label>Họ và Tên*</label>
                                 <input type="text" placeholder="Nhập" class="form-input" id="fullName"
-                                       value="${sessionScope.user.fullname}" readonly>
+                                       value="${sessionScope.user.fullname}" >
                             </div>
                         </div>
 
@@ -208,11 +208,11 @@
                                 <label>Giới Tính*</label>
                                 <div class="radio-group">
                                     <label class="radio-label">
-                                        <input type="radio" name="gender" value="male" checked disabled>
+                                        <input type="radio" name="gender" value="male" checked >
                                         <span>Nam</span>
                                     </label>
                                     <label class="radio-label">
-                                        <input type="radio" name="gender" value="female" disabled>
+                                        <input type="radio" name="gender" value="female" >
                                         <span>Nữ</span>
                                     </label>
                                 </div>
@@ -220,7 +220,7 @@
                             <div class="form-group">
                                 <label>Ngày Sinh*</label>
                                 <input type="date" class="form-input" id="birthDate"
-                                       value="${sessionScope.user.dob}" readonly>
+                                       value="${sessionScope.user.dob}" >
                             </div>
                         </div>
 
@@ -228,19 +228,19 @@
                             <div class="form-group">
                                 <label>Số Điện Thoại*</label>
                                 <input type="tel" placeholder="Nhập" class="form-input" id="phoneNumber"
-                                       value="${sessionScope.user.phone}" readonly>
+                                       value="${sessionScope.user.phone}" >
                             </div>
                             <div class="form-group">
                                 <label>Email*</label>
                                 <input type="email" placeholder="Nhập" class="form-input" id="email"
-                                       value="${sessionScope.user.mail}" readonly>
+                                       value="${sessionScope.user.mail}" >
                             </div>
                         </div>
 
                         <div class="form-group full-width">
                             <label>Địa Chỉ*</label>
                             <input type="text" placeholder="Nhập" class="form-input" id="address"
-                                   value="${sessionScope.user.address}" readonly>
+                                   value="${sessionScope.user.address}" >
                         </div>
                     </div>
 
@@ -465,6 +465,7 @@
                     Tiếp Tục →
                 </button>
             </div>
+            
         </div>
 
         <script>
