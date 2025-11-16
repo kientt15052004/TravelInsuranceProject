@@ -37,15 +37,6 @@
                             </c:forEach>
                         </select>
                     </div>
-
-                    <div class="form-group price-filter">
-                        <label>Lọc theo giá (USD)</label>
-                        <div class="price-range">
-                            <input type="number" class="form-input" name="minPrice" value="${param.minPrice}" placeholder="Tối thiểu" min="0" step="1">
-                            <span>-</span>
-                            <input type="number" class="form-input" name="maxPrice" value="${param.maxPrice}" placeholder="Tối đa" min="0" step="1">
-                        </div>
-                    </div>
                       
                     <!-- Buttons -->
                     <div class="form-buttons">
