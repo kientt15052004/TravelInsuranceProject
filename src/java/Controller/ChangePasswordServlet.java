@@ -41,7 +41,7 @@ public class ChangePasswordServlet extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
 
         if (!newPassword.equals(confirmPassword)) {
-            request.setAttribute("swalMessage", "New password and confirm password do not match!");
+            request.setAttribute("swalMessage", "Mật khẩu mới và mật khẩu xác nhận không khớp!");
             request.setAttribute("swalIcon", "error");
             request.getRequestDispatcher("home.jsp").forward(request, response);
             return;
@@ -55,10 +55,10 @@ public class ChangePasswordServlet extends HttpServlet {
             user.setPassword(newPassword); // cập nhật session
             session.setAttribute("user", user);
 
-            request.setAttribute("swalMessage", "Password changed successfully!");
+            request.setAttribute("swalMessage", "Đổi mật khẩu thành công!");
             request.setAttribute("swalIcon", "success");
         } else {
-            request.setAttribute("swalMessage", "Current password is incorrect!");
+            request.setAttribute("swalMessage", "Mật khẩu hiện tại không đúng!");
             request.setAttribute("swalIcon", "error");
         }
 
